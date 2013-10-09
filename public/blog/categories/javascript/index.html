@@ -1,0 +1,107 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="Hi there!  I'm Nathan LeClaire, a business consultant and solutions delivery expert.  I help people and organizations leverage the power of technology." name="description">
+		<meta content="Nathan LeClaire" name="author">
+		
+		<title>Category: javascript &mdash; Nathan LeClaire</title>
+		
+		<!-- Styles -->
+		<link href="/stylesheets/main.css" rel="stylesheet">
+		
+		<!-- Google webfonts -->
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Sorts+Mill+Goudy">
+		
+		<!-- jQuery and plugins -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		
+		<!-- Syntax highlighter -->
+		<link href="/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="/js/prettify.js"></script>
+		
+		<!--<link href="http://feeds.feedburner.com/turkeltaub" rel="alternate" title="Nathan LeClaire" type="application/rss+xml" />-->
+		
+	</head>
+	<body onload="prettyPrint()">
+	
+		<div class="wrap">
+	
+			<header>
+				<div class="title">Nathan LeClaire</div>
+				
+				<div class="navi">
+					<ul>
+						<li><a href="/">Blog</a></li>
+						<li><a href="/blog/archives">Archives</a></li>
+					<ul>
+				</div> <!-- // .navi -->
+			</header>
+		
+				<!-- START OF _layouts/page.html -->
+<article>
+<header>
+	
+			<h1 class="center">Category: javascript</h1>
+	
+</header>
+<!-- BEGIN _layouts/category_index.html -->
+
+
+
+
+
+  
+	<div class="cat-year">2013</div>
+
+
+
+  
+	<div class="cat-month">February</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<a class="title-listing" href="/blog/2013/02/06/learn-node-dot-js-the-troll-way/">Learn Node.js The Troll Way</a><br>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+<!-- _layouts/category_index.html -->
+
+</article>
+<!-- END OF _layouts/page.html -->
+
+		
+			<footer>
+				Copyright &copy; 2013
+
+	Nathan LeClaire
+
+
+			</footer>
+			
+		</div> <!-- // .wrap -->
+	</body>
+	<script>
+		$(document).ready(function() {
+			// Make images center
+			$('p:has(img)').css('text-align', 'center');
+			
+			// Add the image's title attribute as a caption
+			$('p:has(img)').append(function () {
+				return '<div class="caption">' + $('img', this).attr('title') + '</div>';
+			});
+			
+			// Prettify code
+			$('code').addClass('prettyprint');
+			
+		});
+	</script>
+</html>
+<!-- END OF _layouts/default.html -->

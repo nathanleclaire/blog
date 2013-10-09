@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+	<title><![CDATA[Nathan LeClaire]]></title>
+	<link href="nathanleclaire.com/atom.xml" rel="self"/>
+	<link href="nathanleclaire.com/"/>
+	<updated>2013-10-08T22:33:43-04:00</updated>
+	<id>nathanleclaire.com/</id>
+	<author>
+		<name><![CDATA[Nathan LeClaire]]></name>
+		
+	</author>
+	<generator uri="http://octopress.org/">Octopress</generator>
+
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Starting a Band For Fun &amp; For Profit]]></title>
+		
+		<link href="nathanleclaire.com/blog/2013/02/07/starting-a-band-for-fun-and-for-profit/"/>
+		<updated>2013-02-07T23:59:00-05:00</updated>
+		<id>nathanleclaire.com/blog/2013/02/07/starting-a-band-for-fun-and-for-profit</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>I imagine it&#8217;s something that a lot of people fantasize about,
+being in a band, traveling and playing for thousands of adoring fans.<br/>
+But being in a band is not all picnics and groupies.  Even though you are
+doing something you love, it can often be difficult to make money.
+That&#8217;s why I wanted to write a small series of articles about common pitfalls
+I&#8217;ve seen bands make over the years, and oftentimes that we made ourselves
+when we were playing out.</p>
+
+<p>The number one piece of advice I would give to young bands truly interested in
+their own survival is:</p>
+
+<blockquote><p>Get yourselves a spreadsheet, ASAP.</p></blockquote>
+
+<p>A lot of bands don&#8217;t realize how far they are going into the red.  I know that
+we didn&#8217;t.  Think about it for a moment.  Guitar strings, gas, and Jimmy
+John&#8217;s sandwiches all add up to be a lot, especially over time.  Meanwhile, the ROI
+that bands are getting off of gigs, even (especially?) if they have an agent
+and various other middlemen involved is rather questionable.</p>
+
+<p>If your average business ran their expenses the way the average band does, they&#8217;d be sunk
+within a week.  A particularly malevolent form of this lack of consideration for
+opportunity costs and liabilities preys on the young, naive, and meek in the form of bands agreeing to play for free
+for &#8220;invaluable&#8221; exposure.</p>
+
+<p>Mark my words: If you&#8217;re bringing in tons of people like good beer salespeople,
+you should be getting paid for it.  And all of the inflows and outflows of cash should
+be recorded meticulously in your spreadsheet.  It&#8217;s a fantastic way to avoid confusion,
+resentment, and unfairness later on down the line.</p>
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Learn Node.js The Troll Way]]></title>
+		
+		<link href="nathanleclaire.com/blog/2013/02/06/learn-node-dot-js-the-troll-way/"/>
+		<updated>2013-02-06T20:31:00-05:00</updated>
+		<id>nathanleclaire.com/blog/2013/02/06/learn-node-dot-js-the-troll-way</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<h2>Server Side JavaScript?</h2>
+
+<p>As many of you are probably aware, <a href="http://nodejs.org/">Node.js</a> is all the rage with the kids these days.  It&#8217;s so popular that users even have the nerve to <a href="http://code.google.com/p/v8/issues/detail?id=847#c15">gall Google developers</a>, insisting that the V8 JavaScript engine is important for things outside of mere Chrome.  Node has rapidly been evolving and maturing into the new hotness of the web development community.  Its core is driven by the idea of asynchronous input and output,
+a way to manage the latency inherent in developing applications for the web.  With Node, you gain the ability to write JavaScript which runs on the server-side of an application- and the somewhat eyebrow-raising ability to create a server within JavaScript itself.</p>
+
+<p>Throw in a sweet package manager for every sort of JS voodoo you can imagine (<a href="https://npmjs.org/">npm</a>), and you&#8217;ve suddenly opened up the door to a whole new world of handy tools and tricks, accessible to many developers due to the ubiquitous nature of JavaScript on the modern web.  The V8 JavaScript engine on which it is based is has performed pretty well for a web-based language in <a href="http://shootout.alioth.debian.org/u32/which-programming-languages-are-fastest.php">benchmarks</a>.  We all know that benchmarks are even worse dirty lies than statistics, so what I personally think is really cool about Node is that it mandates one to approach concurrency with a direct focus from the start of application development.  Surely there&#8217;s a lot to be said for not having to rip off and reinvent the wheel of horizontal scalability.  But I digress.</p>
+
+<h2>Screen Scraping With Node.js</h2>
+
+<p><img src="nathanleclaire.com/images/skyrim-guard.jpg" title="Go cast your fancy JavaScript somewhere else!" ></p>
+
+<p>The purpose of this article is to give a quick flyby example, in which I will be demonstrating Node.js by constructing a screen-scraping bot to troll my brother on Reddit.  I had an idea to build an application which uses the Reddit API, to spam my brother&#8217;s account with Skyrim quotes/dialogue in comments for entertainment purposes.  If he ever were to reply, bewildered, my bot would ping back: <em>&#8220;Problem, theonewhoquestions?&#8221;</em></p>
+
+<p>Naturally, in order to do this, I needed to gather the Skyrim intel (quotes) first.  Originally I set out to write the crawler in Python as I have some experience with the venerable <a href="http://www.crummy.com/software/BeautifulSoup/">BeautifulSoup</a> Module.  But I was already using Node a bit as a result of Twitter&#8217;s Bootstrap framework, and I was curious to challenge myself to actually build something with it for fun and comprehensive learning.  So, I decided to investigate.</p>
+
+<p>Turns out there are a few modules that come in handy for a task like this in Node.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">jsdom</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;jsdom&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is the idiomatic way to import modules in Node.  The jsdom module for Node enables us to simulate a DOM environment which many of us familiar with (working with client side code) for use in our Node script.  And naturally, it&#8217;s as easy as one, two, callback!</p>
+
+<p>Since I am familiar with using jQuery to parse the DOM, I opted to use it to extract the quotes from <a href="http://www.uesp.net/wiki/Skyrim:Guard">this website</a>, where they are contained within table cells ripe for the picking.  To do this with the jsdom module, you call the <code>jsdom.env</code> method.  As arguments we pass in the address of the HTML we wish to parse.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">jsdom</span><span class="p">.</span><span class="nx">env</span><span class="p">(</span><span class="s1">&#39;http://www.uesp.net/wiki/Skyrim:Guard&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">[</span> <span class="s1">&#39;http://code.jquery.com/jquery.min.js&#39;</span> <span class="p">],</span>
+</span><span class='line'>  <span class="kd">function</span><span class="p">(</span><span class="nx">errors</span><span class="p">,</span> <span class="nb">window</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">$</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">$</span> <span class="o">=</span> <span class="nx">stripTags</span><span class="p">(</span><span class="nx">$</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">$skyrim_quotes</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;tr td&#39;</span><span class="p">).</span><span class="nx">filter</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">array</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="nx">$</span><span class="p">(</span><span class="nx">index</span><span class="p">).</span><span class="nx">html</span><span class="p">().</span><span class="nx">match</span><span class="p">(</span><span class="sr">/^&quot;.*&quot;$/</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>          <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">$skyrim_quotes</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">$scopedElem</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="nx">$scopedElem</span><span class="p">.</span><span class="nx">html</span><span class="p">().</span><span class="nx">stripHTMLSpecialChars</span><span class="p">().</span><span class="nx">stripDoubleQuotes</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">content</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There&#8217;s a lot going on here that merits explanation, so I will take a second to break down in more detail what is going on in this chunk of code.  We have an instance of the <code>jsdom</code> object so we can call the <code>env</code> method to bootstrap up a DOM to parse.  The first argument to this method (<code>'http://www.uesp.net/wiki/Skyrim:Guard'</code>) is the URL to query for the HTML to instantiate this DOM with.  You can also just pass in plain old HTML as a string if you happen to have some of that laying around in dire need of parsing.</p>
+
+<p>The second argument to the <code>env</code> method is a list of scripts to be included in the virtual window (DOM).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">[</span> <span class="s1">&#39;http://code.jquery.com/jquery.min.js&#39;</span> <span class="p">],</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this instance and many of the examples given on the <code>jsdom</code> <a href="https://github.com/tmpvar/jsdom">Github page</a>, we include the jQuery library.  If one wanted to use Mootools or Underscore.js, I imagine that is also totally doable, although I have no anecdotal evidence to support this hypothesis.  For my purposes, jQuery was a comfortable and effective fit.</p>
+
+<p>The <em>third</em> argument to the <code>jsdom.env</code> method, and arguably the most critical, is a callback function to be executed once the response has been received from the server (or immediately, in the case of passing in your own HTML).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>  <span class="kd">function</span><span class="p">(</span><span class="nx">errors</span><span class="p">,</span> <span class="nb">window</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// ...</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It takes two arguments:  The first is called <code>errors</code> and is an list of errors which you can inspect if something in the <code>env</code> method goes wonky (in the code I&#8217;ve presented here <code>errors</code> is ignored, although you still need to have it in the definition of your callback function).  The second is called <code>window</code> and it is the coup de grâce of what we are seeking: a bootstrapped, &#8220;invisible&#8221; DOM that our script can parse.</p>
+
+<p>It&#8217;s worth pausing for a second here to think about why the &#8220;Node way&#8221; results in what may seem to some people to result in an expansive sea of callback spaghetti (if JavaScript didn&#8217;t already appear to you to be an expansive sea of said callback spaghetti).  Any time that Node encounters a situation which otherwise might block the execution of code (such as an HTTP GET request to an external service), it simply defines a callback function to be executed when that <em>event</em> occurs (i.e. when your GET request is finished).</p>
+
+<p>But onward to the trolling we must progress!  The very first thing I do in this brave new callback where we will be doing our DOM parsing is define a few variables.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">$</span><span class="p">;</span>
+</span><span class='line'><span class="nx">$</span> <span class="o">=</span> <span class="nx">stripTags</span><span class="p">(</span><span class="nx">$</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>jsdom</code> allows access to the jQuery object through the <code>window</code> object, and as I would be accessing it often enough to justify a shorthand method of access, that is what <code>var $ = window.$;</code> is all about.  So what&#8217;s with that <code>stripTags</code> call?  Well, the values that I was after were plain text without any HTML inside, as said HTML in a Reddit comment might shatter the illusion that it could be a person typing said Skyrim quotes instead of a robot.  So, for example, some of the entries in the table cells have words <em>in italics</em> and I needed to get rid of these tags.  Ergo, my <code>stripTags</code> function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="cm">/* consumes jQuery object</span>
+</span><span class='line'><span class="cm">   returns jQuery object */</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">stripTags</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Cleaning out anchor tags, italics, and one span which is a warning not</span>
+</span><span class='line'>  <span class="c1">// to edit for nice, readable quotes</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;tr td a&#39;</span><span class="p">).</span><span class="nx">contents</span><span class="p">().</span><span class="nx">unwrap</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;tr td i&#39;</span><span class="p">).</span><span class="nx">contents</span><span class="p">().</span><span class="nx">unwrap</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">).</span><span class="nx">contents</span><span class="p">().</span><span class="nx">unwrap</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;small&#39;</span><span class="p">).</span><span class="nx">contents</span><span class="p">().</span><span class="nx">unwrap</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">$</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using <code>unwrap()</code> on client-side code willy-nilly like this would more likely than not b0rk some critical piece of functionality in your app, but I only care about the data that I am scraping so it&#8217;s not really relevant here.  It gets the job done, which is to turn quotes which in their raw form look like</p>
+
+<blockquote>&#8220;You here to see the &lt;a href=&#8221;/wiki/Skyrim:Igmund&#8221; title=&#8221;Skyrim:Igmund&#8221;&gt;Jarl&lt;/a&gt;? No sudden moves, understand?&#8221;</blockquote>
+
+
+<p>into a nice clean version that looks like this:</p>
+
+<blockquote>&#8220;You here to see the Jarl? No sudden moves, understand?&#8221;</blockquote>
+
+
+<p>Thanks to that <code>$('tr td a').contents().unwrap();</code> statement.  It&#8217;s a little bit of extra work, but trolling is serious business, and well worth the investment.  And as I said before, applying these operations globally to the DOM on a large-scale project would be overkill, but for my purposes here it was grand.</p>
+
+<p>The next step was the find the quotes themselves.  A simple little <code>$('tr td')</code> yielded very good results, mostly what I was looking for, but there happened to be a bit of extra flotsam and jetsam table cells which contained content I was not after at all.  So I needed some way to differentiate the Skyrim quotes from anything else that happened to be in a table cell which was not relevant to the task at hand.  Hm, surely I can come up with a regular expression to help with that?</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">$skyrim_quotes</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;tr td&#39;</span><span class="p">).</span><span class="nx">filter</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">array</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="nx">$</span><span class="p">(</span><span class="nx">index</span><span class="p">).</span><span class="nx">html</span><span class="p">().</span><span class="nx">match</span><span class="p">(</span><span class="sr">/^&quot;.*&quot;$/</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here we have the lovely jQuery method <code>filter</code> being used to apply the simple regexp pattern <code>/^".*"$/</code> to our selection and returning only the elements that match.  This knocks out everything which does not adhere strictly to the &#8220;quote&#8221; pattern (string&#8217;s first and last character are a double quote - <code>"</code>).</p>
+
+<p>Almost there now- still I needed to strip some HTML special characters such as <code>&amp;lt;</code> and <code>&amp;gt;</code> to get them especially clean.  And, of course, to strip the double quotes for aesthetic purposes.  I decided to bring a gun to a knife fight and add methods to <code>String</code>&#8217;s prototype.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">stripHTMLSpecialChars</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// There&#39;s a few quirks in the soup</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&amp;lt;/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&amp;gt;/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&amp;nbsp;\[sic\]/</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">str</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">stripDoubleQuotes</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The solution for <code>stripDoubleQuotes()</code> feels a little bit kludgey, so I&#8217;d be curious to hear if anyone else has a better idea (I&#8217;m sure JavaScript is capable of sed-like string manipulation antics but this was this quickest way I could think of accomplishing the goal).  <code>stripHTMLSpecialChars()</code>&#8217;s removal of these &#8220;quirks&#8221; was based on a quick grepping of the results I was getting back to see what HTML special characters were being returned.  Used in the <code>jsdom</code> callback, our &#8220;sanitizing&#8221; and printing to the console of these quotes looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$skyrim_quotes</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">$scopedElem</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="nx">$scopedElem</span><span class="p">.</span><span class="nx">html</span><span class="p">().</span><span class="nx">stripHTMLSpecialChars</span><span class="p">().</span><span class="nx">stripDoubleQuotes</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">content</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Bravo!  Now we have our hot, fresh, Skyrim quotes, eager to troll unsuspecting brothers with.  I opted to stash these quotes in a database (sqlite3) so I didn&#8217;t have to ping the Skyrim wiki&#8217;s servers every time they were needed (and also to keep track of which ones had been used already).  I won&#8217;t go into a lot of details here about how working with a database in Node.js is, but suffice it to say for my purposes it was actually fairly straightforward.  Node has a handy <code>sqlite3</code> module that made working with the database fairly simple.</p>
+
+<blockquote>&#8230; &#8230; &#8230; &#8230; &#8230; .</blockquote>
+
+
+<p>As such, Node is able to <em>continue executing code</em> instead of waiting around for that request wasting potential CPU cycles and the thread of execution will be interrupted to run the callback when the request returns.  This is the same principle that has made AJAX such an uproarius success.  This idea of non-blocking asynchronous IO has been the source of some controversy (see Tedd Ziuba&#8217;s &#8220;Node.js is Cancer&#8221;, which tragically I am unable to dig up the link to at the moment) and aesthetic concerns.  But the aesthetic concerns are easily addressed (make your callbacks named instead of anonymous functions and architect/organize them properly), and there&#8217;s no question that despite the underlying philosophical qualms it&#8217;s an interesting approach to solving the particular problem (especially within the confines of JavaScript&#8217;s single-threaded nature).  It&#8217;s hard to deny JavaScript&#8217;s ubiquity on the modern web.  Tune in next time, when we unleash the beast in the wild!!</p>
+]]>
+		</content>
+	</entry>
+	
+</feed>
