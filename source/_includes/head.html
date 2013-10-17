@@ -1,88 +1,29 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
-	<meta charset="utf-8">
-	<title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
-	<meta name="author" content="{{ site.author }}">
+  <meta charset="utf-8">
+  <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
+  <meta name="author" content="{{ site.author }}">
 
-	{% capture description %}{% if page.description %}{{ page.description }}{% else %}{{ content | raw_content }}{% endif %}{% endcapture %}
-	<meta name="description" content="{{ description | strip_html | condense_spaces | truncate:150 }}">
-	{% if page.keywords %}<meta name="keywords" content="{{ page.keywords }}">{% endif %}
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  {% capture description %}{% if page.description %}{{ page.description }}{% else %}{{ content | raw_content }}{% endif %}{% endcapture %}
+  <meta name="description" content="{{ description | strip_html | condense_spaces | truncate:150 }}">
+  {% if page.keywords %}<meta name="keywords" content="{{ page.keywords }}">{% endif %}
 
-	<link href="{{ site.subscribe_rss }}" rel="alternate" title="{{site.title}}" type="application/atom+xml">
-	<link rel="canonical" href="{{ canonical }}">
-	<link href="{{ root_url }}/favicon.png" rel="shortcut icon">
-	<link href="{{ root_url }}/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-	<style>
-		/* Custom nate css here */
-		@font-face {
-		  font-family: 'LeagueGothicRegular';
-		  src: url('{{ root_url }}/font/League_Gothic-webfont.eot');
-		  src: url('{{ root_url }}/font/League_Gothic-webfont.eot?#iefix') format('embedded-opentype'),
-		  url('{{ root_url }}/font/League_Gothic-webfont.woff') format('woff'),
-		  url('{{ root_url }}/font/League_Gothic-webfont.ttf') format('truetype'),
-		  url('{{ root_url }}/font/League_Gothic-webfont.svg#LeagueGothicRegular') format('svg');
-		  font-weight: normal;
-		  font-style: normal;
-		}     
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-		@font-face {
-		  font-family: 'Telegraphico';
-		  src: url('{{ root_url }}/fonts/telegrafico_by_ficod.ttf');
-		}
-		
-		.title {
-		  font-family: 'LeagueGothicRegular',"Impact",Charcoal,Arial Black,Gadget,Sans serif;
-		  text-transform: uppercase;
-		  line-height: .92 !important;
-		  color: rgb(34, 34, 34);
-		  font-size: 300%;
-		  font-weight: normal;
-		}
-
-		.slabtexted .slabtext {
-		  display: -moz-inline-block;
-		  display: inline-block;
-		  white-space: nowrap;
-		}
-
-		.slabtextinactive .slabtext {
-		  display: inline;
-		  white-space: normal;
-		  font-size: 1em !important;
-		  word-spacing: inherit !important;
-		  *letter-spacing: 0 !important;
-		  *word-spacing: 0 !important;
-		}
-
-		.slabtextdone .slabtext {
-		  diplay: block;
-		}
-
-		h2, p {
-			color: #000 !important;
-		}
-
-		article h2.title a {
-			color: #B45312;
-			-webkit-transition: color 400ms ease;
-			-moz-transition: color 400ms ease;
-			-ms-transition: color 400ms ease;
-			-o-transition: color 400ms ease;
-			transition: color 400ms ease;
-		}
-
-		article h2.title a:hover {
-			color: #ff992a;
-		}
-
-		.archives article {
-			padding: 40px 0px 10px 0px;
-		}
-	</style>
-	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script src="{{ root_url }}/javascripts/jquery.slabtext.js"></script>
-	{% include custom/head.html %}
+  {% capture canonical %}{{ site.url }}{% if site.permalink contains '.html' %}{{ page.url }}{% else %}{{ page.url | remove:'index.html' }}{% endif %}{% endcapture %}
+  <link rel="canonical" href="{{ canonical }}">
+  <link href="{{ root_url }}/favicon.png" rel="icon">
+  <link href="{{ root_url }}/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="{{ root_url }}/javascripts/modernizr-2.0.js"></script>
+  <script src="{{ root_url }}/javascripts/ender.js"></script>
+  <script src="{{ root_url }}/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="{{ site.subscribe_rss }}" rel="alternate" title="{{site.title}}" type="application/atom+xml">
+  {% include custom/head.html %}
+  {% include google_analytics.html %}
 </head>
