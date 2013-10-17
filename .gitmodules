@@ -1,0 +1,3 @@
+[submodule "pageburner"]
+	path = .themes/Pageturner
+	url = git://github.com/nathanleclaire/pageburner.git
