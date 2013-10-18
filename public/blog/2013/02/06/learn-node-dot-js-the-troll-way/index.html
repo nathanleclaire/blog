@@ -6,7 +6,7 @@
 		<meta charset="utf-8">
 		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
 		<meta content="width=device-width,initial-scale=1" name="viewport">
-		<meta content="Hi there!  I'm Nathan LeClaire, a business consultant and solutions delivery expert.  I help people and organizations leverage the power of technology." name="description">
+		<meta content="Hi there!  I'm Nathan LeClaire, a developer and solutions delivery expert.  I'm a friendly geek that helps people and organizations leverage the power of technology.  I'm a lifelong student and teacher." name="description">
 		<meta content="Nathan LeClaire" name="author">
 		
 		<title>Learn Node.js The Troll Way &mdash; Nathan LeClaire</title>
@@ -51,7 +51,7 @@
 		<time>06 February 2013</time>
 	</header>
 		<div class="content">
-			<h2>Server Side JavaScript?</h2>
+			<h2>Server Side JavaScript</h2>
 
 <p>As many of you are probably aware, <a href="http://nodejs.org/">Node.js</a> is all the rage with the kids these days.  It&#8217;s so popular that users even have the nerve to <a href="http://code.google.com/p/v8/issues/detail?id=847#c15">gall Google developers</a>, insisting that the V8 JavaScript engine is important for things outside of mere Chrome.  Node has rapidly been evolving and maturing into the new hotness of the web development community.  Its core is driven by the idea of asynchronous input and output,
 a way to manage the latency inherent in developing applications for the web.  With Node, you gain the ability to write JavaScript which runs on the server-side of an application- and the somewhat eyebrow-raising ability to create a server within JavaScript itself.</p>
@@ -269,12 +269,9 @@ a way to manage the latency inherent in developing applications for the web.  Wi
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Bravo!  Now we have our hot, fresh, Skyrim quotes, eager to troll unsuspecting brothers with.  I opted to stash these quotes in a database (sqlite3) so I didn&#8217;t have to ping the Skyrim wiki&#8217;s servers every time they were needed (and also to keep track of which ones had been used already).  I won&#8217;t go into a lot of details here about how working with a database in Node.js is, but suffice it to say for my purposes it was actually fairly straightforward.  Node has a handy <code>sqlite3</code> module that made working with the database fairly simple.</p>
+<p>Bravo!  Now we have our hot, fresh, Skyrim quotes, eager to troll unsuspecting brothers with.  I opted to stash these quotes in a database (sqlite3) so I didn&#8217;t have to ping the Skyrim wiki&#8217;s servers every time they were needed (and also to keep track of which ones had been used already).  I won&#8217;t go into a lot of gory details here about how working with a database in Node.js is, but suffice it to say for my purposes it was actually fairly straightforward.  Node has a handy <code>sqlite3</code> module that made working with the database fairly simple.  As it turns out, JavaScript being single-threaded-async is quite handy for tasks like this because the thread isn&#8217;t going to block on the expensive IO operations.  If you want to pick on PHP, for instance, just note how long it takes a PHP application to make, say, 25 requests to external servers versus Node&#8217;s same attempt with concurrency.</p>
 
-<blockquote>&#8230; &#8230; &#8230; &#8230; &#8230; .</blockquote>
-
-
-<p>As such, Node is able to <em>continue executing code</em> instead of waiting around for that request wasting potential CPU cycles and the thread of execution will be interrupted to run the callback when the request returns.  This is the same principle that has made AJAX such an uproarius success.  This idea of non-blocking asynchronous IO has been the source of some controversy (see Tedd Ziuba&#8217;s &#8220;Node.js is Cancer&#8221;, which tragically I am unable to dig up the link to at the moment) and aesthetic concerns.  But the aesthetic concerns are easily addressed (make your callbacks named instead of anonymous functions and architect/organize them properly), and there&#8217;s no question that despite the underlying philosophical qualms it&#8217;s an interesting approach to solving the particular problem (especially within the confines of JavaScript&#8217;s single-threaded nature).  It&#8217;s hard to deny JavaScript&#8217;s ubiquity on the modern web.  Tune in next time, when we unleash the beast in the wild!!</p>
+<p>Stay tuned for the followup where I create the actual robot to talk to my brother, and if you&#8217;re keen feel free to <a href="https://github.com/nathanleclaire/learnnodethetrollway">check out the source</a> on Github.</p>
 
 		</div>
 	<footer>
