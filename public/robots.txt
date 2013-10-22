@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: 
-
-Sitemap: nathanleclaire.com/sitemap.xml 
