@@ -6,7 +6,7 @@ comments: true
 categories: [node.js,javascript,development]
 ---
 
-## Server Side JavaScript? ##
+## Server Side JavaScript ##
 
 As many of you are probably aware, [Node.js](http://nodejs.org/) is all the rage with the kids these days.  It's so popular that users even have the nerve to [gall Google developers](http://code.google.com/p/v8/issues/detail?id=847#c15), insisting that the V8 JavaScript engine is important for things outside of mere Chrome.  Node has rapidly been evolving and maturing into the new hotness of the web development community.  Its core is driven by the idea of asynchronous input and output,
 a way to manage the latency inherent in developing applications for the web.  With Node, you gain the ability to write JavaScript which runs on the server-side of an application- and the somewhat eyebrow-raising ability to create a server within JavaScript itself.
@@ -137,8 +137,6 @@ The solution for `stripDoubleQuotes()` feels a little bit kludgey, so I'd be cur
       console.log(content);
     }
 ```
-Bravo!  Now we have our hot, fresh, Skyrim quotes, eager to troll unsuspecting brothers with.  I opted to stash these quotes in a database (sqlite3) so I didn't have to ping the Skyrim wiki's servers every time they were needed (and also to keep track of which ones had been used already).  I won't go into a lot of details here about how working with a database in Node.js is, but suffice it to say for my purposes it was actually fairly straightforward.  Node has a handy `sqlite3` module that made working with the database fairly simple.
+Bravo!  Now we have our hot, fresh, Skyrim quotes, eager to troll unsuspecting brothers with.  I opted to stash these quotes in a database (sqlite3) so I didn't have to ping the Skyrim wiki's servers every time they were needed (and also to keep track of which ones had been used already).  I won't go into a lot of gory details here about how working with a database in Node.js is, but suffice it to say for my purposes it was actually fairly straightforward.  Node has a handy `sqlite3` module that made working with the database fairly simple.  As it turns out, JavaScript being single-threaded-async is quite handy for tasks like this because the thread isn't going to block on the expensive IO operations.  If you want to pick on PHP, for instance, just note how long it takes a PHP application to make, say, 25 requests to external servers versus Node's same attempt with concurrency.
 
-<blockquote>. . . . . . . . . . . . . . . .</blockquote>
-
-As such, Node is able to *continue executing code* instead of waiting around for that request wasting potential CPU cycles and the thread of execution will be interrupted to run the callback when the request returns.  This is the same principle that has made AJAX such an uproarius success.  This idea of non-blocking asynchronous IO has been the source of some controversy (see Tedd Ziuba's "Node.js is Cancer", which tragically I am unable to dig up the link to at the moment) and aesthetic concerns.  But the aesthetic concerns are easily addressed (make your callbacks named instead of anonymous functions and architect/organize them properly), and there's no question that despite the underlying philosophical qualms it's an interesting approach to solving the particular problem (especially within the confines of JavaScript's single-threaded nature).  It's hard to deny JavaScript's ubiquity on the modern web.  Tune in next time, when we unleash the beast in the wild!!
+Stay tuned for the followup where I create the actual robot to talk to my brother, and if you're keen feel free to [check out the source](https://github.com/nathanleclaire/learnnodethetrollway) on Github.
