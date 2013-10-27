@@ -14,7 +14,7 @@ Far too long I've toiled away in silence when I could be putting my thoughts, ex
 
 It's a well noted phenomenon, too, that teaching something to other people will help you get better at it.  This is also something that I hope will benefit me if I force myself to blog regularly.  For instance, lately I've been doing a lot of coding questions and brushing up on my Java/C/C++ (I learned them long ago, then got embarassingly out of practice) and I hope to solidify some of the core concepts by writing about them.
 
-Also, I'd be geeked to get featured on [Hacker News](news.ycombinator.com), even if only a few people saw and they were their typical critical selves about it :D
+Also, I'd be geeked to get featured on [Hacker News](https://news.ycombinator.com), even if only a few people saw and they were their typical critical selves about it :D
 
 # Why Commit?
 
@@ -30,6 +30,6 @@ Last but not least, seeing my Github commit-tile graph lack so much green (altho
 
 {% img /images/jerryseinfeld.jpg It worked for him. %}
 
-Everyone by now is most likely aware (if you're not, you're about to be) of the [Jerry Seinfeld Self-Improvement Program](dontbreakthechain.com).  Essentially, it is a self-improvement technique attributed to Jerry Seinfeld where you pick a goal and make small steps every day towards meeting that goal.  Jerry Seinfeld wanted to become a better comedian, so he made it a goal to come up with a good joke every day and and marked the day off on his calender with a big black "X".  The chain of "X"es served to reinforce his sense of making progress, and also as a commitment to continue forward in spite of the possibility (or reality) of failure and disappointment.  I find that kind of tenacity extremely admirable, and I think it will help me hone various skills in a variety of ways.
+Everyone by now is most likely aware (if you're not, you're about to be) of the [Jerry Seinfeld Self-Improvement Program](http://dontbreakthechain.com).  Essentially, it is a self-improvement technique attributed to Jerry Seinfeld where you pick a goal and make small steps every day towards meeting that goal.  Jerry Seinfeld wanted to become a better comedian, so he made it a goal to come up with a good joke every day and and marked the day off on his calender with a big black "X".  The chain of "X"es served to reinforce his sense of making progress, and also as a commitment to continue forward in spite of the possibility (or reality) of failure and disappointment.  I find that kind of tenacity extremely admirable, and I think it will help me hone various skills in a variety of ways.
 
 Thanks for tuning in and I'll catch you next week, where I promise there will be much more code involved.
