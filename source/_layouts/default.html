@@ -62,6 +62,17 @@
 			
 			// Prettify code
 			$('code').addClass('prettyprint');
+
+			// Bring social media spam links online
+			$('.social-media-spam').each(function() {
+				var $this = $(this);
+				var urlHere = window.location.href;
+				var currentSubmitHref = $this.attr('href');
+				var title = $('article header h1 a').html();
+				currentSubmitHref += encodeURIComponent(title);
+				console.log(currentSubmitHref);
+				$this.attr('href', currentSubmitHref);
+			});
 			
 		});
 	</script>
@@ -74,6 +85,14 @@
 	  ga('create', 'UA-26758702-2', 'nathanleclaire.com');
 	  ga('send', 'pageview');
 
+	</script>
+	<script>
+		(function(d, t) {
+			var g = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			g.src = '//hnbutton.appspot.com/static/hn.min.js';
+			s.parentNode.insertBefore(g, s);
+		}(document, 'script'));
 	</script>
 </html>
 <!-- END OF _layouts/default.html -->
