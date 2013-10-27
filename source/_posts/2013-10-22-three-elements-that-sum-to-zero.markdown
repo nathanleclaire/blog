@@ -44,7 +44,7 @@ vector<int> three_indices_that_sum_to_zero_naive(vector<int> v)
 ```c++
 vector<int> three_vec(int i, int j, int k)
 {
-	static const int arr[] = {i, j, k};
+	int arr[] = {i, j, k};
 	vector<int> indices (arr, arr + sizeof(arr) / sizeof(arr[0]));
 	return indices;
 }
@@ -152,17 +152,18 @@ Initializing...
 
 Using naive...
 Performance: 0 ticks
-Naive : {0, 2, 168}
+Naive : {0, 1, 77}
 Using suave...
+The elements: -100 0 100
 Performance: 10000 ticks
-Suave : {0, 2, 168}
+Suave : {73045, 48974, 3270}
 ```
 
-How could this be?  My carefully crafted algorithm was getting stomped by an algorithm I knew to be inferior.  After generating and poking around at a few callgrind files attempting to track down the issue, I suddenly realized that it was right in front of my eyes, in two `#define` statements I had made and forgotten about early on:
+How could this be?  My carefully crafted algorithm was getting stomped by an algorithm I knew to be inferior.  After generating and poking around at a few callgrind files attempting to track down the issue, I suddenly realized that it was right in front of my eyes, in two constant definitions I had made and forgotten about early on:
 
 ```
-#define LOWERBOUND -100
-#define UPPERBOUND 100
+static int LOWERBOUND = -100;
+static int UPPERBOUND = 100;
 ``` 
 
 These settings were used to specify the range of the pseudorandom integers I was using to test the algorithms with, and when they were so close together the naive algorithm was outperforming the "suave" one because the additional overhead of sorting was so costly.
@@ -174,13 +175,18 @@ $ ./indices_sum_to_zero 100000
 Initializing...
 
 Using naive...
-Performance: 270000 ticks
-Naive : {0, 2036, 33585}
+Performance: 70000 ticks
+Naive : {0, 539, 31774}
 Using suave...
 Performance: 10000 ticks
-Suave : {0, 2036, 33585}
+Suave : {78891, 33850, 54525}
 ```
 
 Much closer to what we expect!  For smaller values of N, and upper/lower bounds that are closer together, the naive version seems to perform better.  As the range and value of N gets larger, the "suave" algorithm begins to get more appealing.  I'd be curious to see a more rigorous numerical analysis of why this is.
 
 Check out the [code on github](https://github.com/nathanleclaire/algorithms_and_data_structures/blob/master/indices_sum_to_zero/indices_sum_to_zero.cc) if you're so inclined.  Cheers, and I'll see you next week!
+
+*EDIT* : Based on some feedback from Reddit I have revised a few things, notably:
+
+- There was a bug in the implementation of `three_vec` that caused the returned value to be the same for suave and naive versions (fixed in [794993e01b1e0fa6154c722c4d74009b02cdef45](https://github.com/nathanleclaire/algorithms_and_data_structures/commit/794993e01b1e0fa6154c722c4d74009b02cdef45) )
+- Constant definition is now done with `static const` instead of `#define` statements
