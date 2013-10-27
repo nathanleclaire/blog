@@ -103,7 +103,7 @@ versus this one (same elements, different order) with brute force:
 {-6, -8, 0, 3, 10, -8, 18}
 ```
 
-Therefore the whole function looks like this and runs with O(_n log n + n<sup>2</sup>_) time complexity including the sort, which should outperform the O(_n<sup>3</sup>_) algorithm in most cases:
+Therefore the whole function looks like this and runs with O(_n log n + n<sup>2</sup>_) time complexity including the sort.  O(_n <sup>2</sup>_) is asymptotically larger than O(_n log n_), so this time complexity resolves to O(_n <sup>2</sup>_) (_editor's note_: thanks to Reddit user Olathe for pointing this out).  This should outperform the O(_n<sup>3</sup>_) algorithm in most cases:
 
 ```c++
 vector<int> three_indices_that_sum_to_zero_suave(vector<int> v)
