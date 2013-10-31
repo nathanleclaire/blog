@@ -9,8 +9,8 @@ categories: [unix,hacking,vi,git,bash,zsh]
 In my workflow I am always looking for ways to be more productive, and to have more fun while developing.  There's nothing quite like the feeling of flying through a sequence of commands in `bash` that you know would take your peers twice as long to execute.  Have you ever :
 
 * Raged silently at a coworker for spamming the left arrow key to get to the beginning of their terminal prompt when they could have just pressed CTRL + A ? 
-* Watched someone with frustration as they enter the same command over and over when they could have just prefaced it with `!` ?
-* Rolled your eyes as your buddy expounds at length on the virtues of IDEs when you know that you could "roflstomp" them using `vim` ?
+* Watched someone as they enter the same command over and over when they could have just prefaced it with `!` ?
+* Rolled your eyes as your buddy expounds at length on the virtues of IDEs when you know that you could "roflstomp" him or her using `vim` ?
 
 If so, then these tips might be for you.  
 
@@ -45,7 +45,11 @@ $ git commit
 $ echo "Whoops we just committed unrelated stuff.  Not very modular of us."
 ```
 
-The `-p` flag for `git add` comes in ridiculously useful in these kinds of cases.  This tells `git add` that we want to do a _partial_ add of the file, and we're presented with a nice interative menu which allows us to specify with a lovely amount of detail how much 
+The `-p` (standing for partial) flag for `git add` is ridiculously useful for these kinds of cases.  This tells `git add` that we want to do a _partial_ add of the file, and we're presented with a nice interative menu which allows us to specify with a lovely amount of detail exactly which parts of the file we want to stage.  `git` splits the changes into hunks automatically, which you can approve or reject with `y` or `n` respectively, or use `s` to split up into finer grained hunks.  If `git` can't split the hunks up the way you want automatically, you can specify as much detail as you want with the `e` (edit) option.
+
+{% img /images/five-tips/git-add-minus-p.jpg And now our commits are nice and tidy. %}
+
+See here for more details on `git add -p`: [How can I commit only part of a file in git?](http://stackoverflow.com/questions/1085162/how-can-i-commit-only-part-of-a-file-in-git)
 
 # vim's CTRL-P / CTRL-N autocomplete feature
 
@@ -55,10 +59,20 @@ You can press CTRL-N to move down the list of suggested completions when typing 
 
 CTRL-P/CTRL-N have a lot of synergy with the next tip as well, as touched upon briefly in the above paragraph.
 
+{% img /images/five-tips/ctrl-n-vim.jpg And you barely need to leave the home row. %}
+
 # ctags
+
+Everyone who uses `vim` knows that it can be a bit of a kerfluffle sometimes to open a file in a distant directory (tab completion helps ease this with `:e`, but it's still not usually instantaneous).  If you happen to be working on a team, or a very large project, the ability to do this quickly will likely be a vital part of your workflow.
+
+{% img /images/five-tips/c-tags.jpg Jump to the definition of this class, at lightning speed.  No mouse needed. %}
 
 # CTRL-R in bash and zsh
 
-# history | grep command
+{% img /images/five-tips/ctrl-r.jpg What was that IP address again? %}
+
+`history | grep $COMMAND` will treat you well too, if you just want to review all of the times you've run that command in recent times.
 
 # vim macros
+
+{% img /images/five-tips/vim-macros.jpg Who needs multiple cursors? %}
