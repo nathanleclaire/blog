@@ -75,4 +75,8 @@ Everyone who uses `vim` knows that it can be a bit of a kerfluffle sometimes to 
 
 # vim macros
 
+A lot of the time when you're writing code, or doing related tasks, you find yourself in need of a way to repeat the same editor commands over and over, perhaps with a slight variation.  Different editors provide slightly different ways of addressing this.  [Sublime Text](), for example, has a "killer feature" where you are able to place multiple cursors in various locations and edit away.  In `vim` (and in `emacs` too, but here we'll be covering the `vim` method) you record and playback keyboard macros to accomplish this.  It is a tool with an absurd amount of power and flexibility, and offers the chance to speed up productivity on repetitive editing tasks by an order of magnitude.
+
+
+
 {% img /images/five-tips/vim-macros.jpg Who needs multiple cursors? %}
