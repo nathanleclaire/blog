@@ -61,13 +61,19 @@ CTRL-P/CTRL-N have a lot of synergy with the next tip as well, as touched upon b
 
 {% img /images/five-tips/ctrl-n-vim.jpg And you barely need to leave the home row. %}
 
-# ctags
+# exuberant ctags
 
 Everyone who uses `vim` knows that it can be a bit of a kerfluffle sometimes to open a file in a distant directory (tab completion helps ease this with `:e`, but it's still not usually instantaneous).  If you happen to be working on a team, or a very large project, the ability to do this quickly will likely be a vital part of your workflow.
+
+[Exuberant Ctags](http://ctags.sourceforge.net/) is a tool that makes this worlds easier than it would be without.  With ctags, you can  you just run a command in the top directory of the project you're working on to generate a "tags" file.
+
+You can even set up a [post-commit hook in git](http://tbaggery.com/2011/08/08/effortless-ctags-with-git.html) to generate your ctags file automatically when you make a commit!  Nice.
 
 {% img /images/five-tips/c-tags.jpg Jump to the definition of this class, at lightning speed.  No mouse needed. %}
 
 # CTRL-R in bash and zsh
+
+Ever been typing in a command at the terminal, when you suddenly find yourself wishing that there was an easy way to just autofill the prompt with something that you'd entered previously so you can edit it or just run it again?  If so, then I've got good news for you:  You can!  Just press CTRL+R and start typing the thing that you are looking for.  The terminal will fill in what it thinks you are looking for, and if there is more than one option you can cycle through them by pressing CTRL+R repeatedly.  When you've found the thing you're after, you can break out of the prompt with any of the usual movement commands (CTRL+A, CTRL+E, arrow keys, etc. if you have standard `bash` keybindings).  Try it out!  Very handy if you can't remember the name of the box you want to `ssh` into.
 
 {% img /images/five-tips/ctrl-r.jpg What was that IP address again? %}
 
