@@ -65,11 +65,10 @@ CTRL-P/CTRL-N have a lot of synergy with the next tip as well, as touched upon b
 
 Everyone who uses `vim` knows that it can be a bit of a kerfluffle sometimes to open a file in a distant directory (tab completion helps ease this with `:e`, but it's still not usually instantaneous).  If you happen to be working on a team, or a very large project, the ability to do this quickly will likely be a vital part of your workflow.
 
-[Exuberant Ctags](http://ctags.sourceforge.net/) is a tool that makes this worlds easier than it would be without.  With ctags, you can  you just run a command in the top directory of the project you're working on to generate a "tags" file.
+[Exuberant Ctags](http://ctags.sourceforge.net/) is a tool that makes this worlds easier than it would be without.  With ctags, you can  you just run a command in the top directory of the project you're working on to generate a "tags" file, then you can use CTRL-] to "pop into" the definition of whatever it is your cursor is over (say, a class name).  Press CTRL+T to get back to where you were before.
 
 You can even set up a [post-commit hook in git](http://tbaggery.com/2011/08/08/effortless-ctags-with-git.html) to generate your ctags file automatically when you make a commit!  Nice.
 
-{% img /images/five-tips/c-tags.jpg Jump to the definition of this class, at lightning speed.  No mouse needed. %}
 
 # CTRL-R in bash and zsh
 
@@ -81,8 +80,12 @@ Ever been typing in a command at the terminal, when you suddenly find yourself w
 
 # vim macros
 
-A lot of the time when you're writing code, or doing related tasks, you find yourself in need of a way to repeat the same editor commands over and over, perhaps with a slight variation.  Different editors provide slightly different ways of addressing this.  [Sublime Text](), for example, has a "killer feature" where you are able to place multiple cursors in various locations and edit away.  In `vim` (and in `emacs` too, but here we'll be covering the `vim` method) you record and playback keyboard macros to accomplish this.  It is a tool with an absurd amount of power and flexibility, and offers the chance to speed up productivity on repetitive editing tasks by an order of magnitude.
+A lot of the time when you're writing code, or doing related tasks, you find yourself in need of a way to repeat the same editor commands over and over, perhaps with a slight variation.  Different editors provide slightly different ways of addressing this.  [Sublime Text](http://www.sublimetext.com/), for example, has a "killer feature" where you are able to place multiple cursors in various locations and edit away.  In `vim` (and in `emacs` too, but here we'll be covering the `vim` method) you record and playback keyboard macros to accomplish this.  It is a tool with an absurd amount of power and flexibility, and offers the chance to speed up productivity on repetitive editing tasks by an order of magnitude.
 
+To make a macro, press `q` in normal mode, then press another key to "name" the macro (usually I use `q` again).  `vim` will start recording your keystrokes.  `vim` will remember which keystrokes you make until you press `q` again to save the macro.  You can replay with `@`-letter in normal mode, so I am usually pressing `@q`.  You can also preface the `@`/replay command with a number so that you can rapidly execute your macro over and over (like much in `vim`-land, the "grammar" behaves as you would be accustomed to).  If you're accustomed to using `vim`'s fancy movement commands (for instance, using `/` search to navigate), and practice a little bit, you will soon be able to whip up thunderous macros that will leave your mouse-dependent colleagues in the dust. 
 
+{% img /images/five-tips/vim-macros.gif Who needs multiple cursors? %}
 
-{% img /images/five-tips/vim-macros.jpg Who needs multiple cursors? %}
+For more info on `vim` macros, see here: [Vim Wiki (Macros)](http://vim.wikia.com/wiki/Macros)
+
+That's all for now, folks.  Hope you enjoyed and I'll see you next week!
