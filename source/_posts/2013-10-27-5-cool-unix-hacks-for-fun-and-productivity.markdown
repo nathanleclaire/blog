@@ -45,17 +45,19 @@ $ git commit
 $ echo "Whoops we just committed unrelated stuff.  Not very modular of us."
 ```
 
-The `-p` (standing for partial) flag for `git add` is ridiculously useful for these kinds of cases.  This tells `git add` that we want to do a _partial_ add of the file, and we're presented with a nice interative menu which allows us to specify with a lovely amount of detail exactly which parts of the file we want to stage.  `git` splits the changes into hunks automatically, which you can approve or reject with `y` or `n` respectively, or use `s` to split up into finer grained hunks.  If `git` can't split the hunks up the way you want automatically, you can specify as much detail as you want with the `e` (edit) option.
+The `-p` (standing for patch) flag for `git add` is ridiculously useful for these kinds of cases.  This tells `git add` that we want to do a _partial_ add of the file, and we're presented with a nice interative menu which allows us to specify with a lovely amount of detail exactly which parts of the file we want to stage.  `git` splits the changes into hunks automatically, which you can approve or reject with `y` or `n` respectively, or use `s` to split up into finer grained hunks.  If `git` can't split the hunks up the way you want automatically, you can specify as much detail as you want with the `e` (edit) option.
 
 {% img /images/five-tips/git-add-minus-p.jpg And now our commits are nice and tidy. %}
 
 See here for more details on `git add -p`: [How can I commit only part of a file in git?](http://stackoverflow.com/questions/1085162/how-can-i-commit-only-part-of-a-file-in-git)
 
+_EDIT:_ Some commenters have pointed out that this usage of `-p` flag also works for commands such as `git checkout --`.  Therefore you could hypothetically send only part of a file back to the way it was at HEAD, and keep your other changes.  Handy!
+
 # vim's CTRL-P / CTRL-N autocomplete feature
 
 This is one of those killer features of `vim` that I am surprised to find out people (even experienced `vim` gurus) don't use more frequently.  Even if you are a casual user (hop into `vim` to edit some config files while `ssh`ed into a box) it has the potential to help you out quite a bit.  One of the reasons people claim they couldn't live without IDEs is the existence of features such as Intellisense that provide autocompletion of variable/function names.  These features are very nice since they cut down on mistakes due to misspelling properties and thereby speed up the compile/run/debug cycle a fair bit.  Many people don't seem to realize that there is an analog which comes straight out of the box in `vim`, no plugins needed. 
 
-You can press CTRL-N to move down the list of suggested completions when typing in INSERT mode (which vim draws from the current buffers, and from the `tags` file if you have one), or CTRL-P to move back up (representing "NEXT" and "PREVIOUS" if you didn't catch the pneumonic).  If there is only one possible completion, `vim` will just go ahead and insert it.  Very handy and speedy, especially in codebases with a lot of long variable / method / constant names.
+You can press CTRL-N to move down the list of suggested completions when typing in INSERT mode (which vim draws from the current buffers, and from the `tags` file if you have one), or CTRL-P to move back up (representing "NEXT" and "PREVIOUS" if you didn't catch the mnemonic).  If there is only one possible completion, `vim` will just go ahead and insert it.  Very handy and speedy, especially in codebases with a lot of long variable / method / constant names.
 
 CTRL-P/CTRL-N have a lot of synergy with the next tip as well, as touched upon briefly in the above paragraph.
 
