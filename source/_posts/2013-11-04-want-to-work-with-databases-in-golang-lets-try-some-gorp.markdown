@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Want to work with databases in Golang?  Let's try some gorp."
+title: "Want to Work With Databases In Golang?  Let's Try Some gorp."
 date: 2013-11-04 18:58
 comments: true
 categories: 
