@@ -58,7 +58,7 @@ $(document).ready(function() {
 
 ME: I see.
 
-INTERVIEWER: So we only want to call the server after the user has been typing, then stops typing for 200 milliseconds.  That will give it the illusion of being instantenous while saving a lot of load on our servers and a lot of ajax handling in the JavaScript.  How would we do that?
+INTERVIEWER: So we only want to call the server after the user has been typing, then stops typing for 200 milliseconds.  That will give it the illusion of being instantaneous while saving a lot of load on our servers and a lot of ajax handling in the JavaScript.  How would we do that?
 
 ME:  Uh...
 
