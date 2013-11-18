@@ -100,7 +100,7 @@ ME:  It'd look a little something like this...
 $(document).ready(function() {
 	$('input').keypress(function() {
 		if (this.timeoutId) 
-			window.clearInterval(this.timeoutId);
+			window.clearTimeout(this.timeoutId);
 		this.timeoutId = window.setTimeout(function () {
 			$.ajax({
 				// do some stuff
@@ -124,7 +124,7 @@ $(document).ready(function() {
 		if (!this.count)
 			this.count = 0;
 		if (this.timeoutId)
-			window.clearInterval(this.timeoutId);
+			window.clearTimeout(this.timeoutId);
 		var that = this;
 		this.timeoutId = window.setTimeout(function() {
 			that.count++;
@@ -143,3 +143,5 @@ I bombed this interview but I learned something from it.  I know I could go in m
 Thanks for reading and I'll catch you next week,
 
 Nathan
+
+*EDIT*: Some commenters have pointed out my misuse of `clearInterval` as opposed to `clearTimeout`.  It turns out that this (mostly) works to clear timeouts, but is clearly not correct (it's meant to be used with `window.setInterval`).  I have fixed this now.
