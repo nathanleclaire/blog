@@ -92,6 +92,8 @@ INTERVIEWER:  Exactly.
 
 ME:  So, I know that when you call `window.setTimeout`, you get back an ID that uniquely references the timeout.  And you can use it to cancel the timeout if need be!  So we should just store the timeout ID in the `keypress` function closure, and if the user triggers a keypress event again before the timeout function triggers, we'll just cancel it and set a new one!
 
+(*EDIT:* Some commenters have pointed out that due to the fact that `this` in jQuery callbacks refers to the DOM node in question, not the function closure, the ID is actually being stored a property of the DOM node.  They are correct.)
+
 INTERVIEWER:  Sounds great!  What would that look like in code?
 
 ME:  It'd look a little something like this...
