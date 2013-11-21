@@ -6,7 +6,7 @@ comments: true
 categories: 
 ---
 
-About a year and a half ago, I was on the hunt for my first "real" job.  I knew that I wanted to be a "web developer" (whatever *that* enatils) but I had no idea where to begin.  I knew just a smidge of PHP.  I was developing websites in Classic ASP at my current internship, but I knew that was an antiquidated technology which was unlikely to help me in the modern job market.  As I had recently begun stomping around [Hacker News](https://news.ycombinator.com), I noticed that they had a "jobs" section in their header.  So I looked into things, saw that a few companies were hiring, and sent a few e-mails to companies that looked nice.
+About a year and a half ago, I was on the hunt for my first "real" job.  I knew that I wanted to be a "web developer" (whatever *that* entails) but I had no idea where to begin.  I knew just a smidge of PHP.  I was developing websites in Classic ASP at my current internship, but I knew that was an antiquidated technology which was unlikely to help me in the modern job market.  As I had recently begun stomping around [Hacker News](https://news.ycombinator.com), I noticed that they had a "jobs" section in their header.  So I looked into things, saw that a few companies were hiring, and sent a few e-mails to companies that looked nice.
 
 {% img /images/y-comb/y-combinator-logo.gif To hack and start things up. %}
 
