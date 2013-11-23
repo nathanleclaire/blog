@@ -64,16 +64,20 @@
 			// Prettify code
 			$('code').addClass('prettyprint');
 
+
 			// Bring social media spam links online
 			$('.social-media-spam').each(function() {
 				var $this = $(this);
-				var urlHere = window.location.href;
 				var currentSubmitHref = $this.attr('href');
 				var title = $('article header h1 a').html();
 				currentSubmitHref += encodeURIComponent(title);
-				console.log(currentSubmitHref);
 				$this.attr('href', currentSubmitHref);
 			});
+
+			var urlHere = window.location.href;
+			var $pullRequestLink = $('#pull-request-link');
+			var githubUrl = 'https://github.com/nathanleclaire/blog/edit/master/source/_posts/' + urlHere.split('/').slice(4, 8).join('-') + '.markdown';
+			$pullRequestLink.attr('href', githubUrl);
 			
 		});
 	</script>
