@@ -3,7 +3,7 @@ layout: post
 title: "Want to Work With Databases In Golang?  Let's Try Some gorp."
 date: 2013-11-04 18:58
 comments: true
-categories: 
+categories: [golang,gorp,MySQL,ORM,database,go]
 ---
 
 # Google's Go

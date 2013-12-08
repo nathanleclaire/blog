@@ -3,7 +3,7 @@ layout: post
 title: "Fear and Loathing With Golang and Angular.js"
 date: 2013-11-30 14:40
 comments: true
-categories: 
+categories: [Angular,Golang,Form,Post,ParseForm,Bugs]
 ---
 
 

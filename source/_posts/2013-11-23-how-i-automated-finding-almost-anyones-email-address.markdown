@@ -8,7 +8,7 @@ categories: [growth hacking,rapportive,python,cURL,API,sales,marketing]
 
 {% img /images/autorap/demo-fast.gif A demo, complete with colors. %}
 
-EDIT:  The original article author, Rob Ousbey, has popped up on variuos social media to remind everyone to use this tool/knowledge responsibly.  I agree.  Please be resonsible.
+*EDIT:  The original article author, Rob Ousbey, has popped up on various social media sites to remind everyone to use this tool/knowledge responsibly.  I agree.  Please be responsible.*
 
 Not too long ago I came across an article on [Hacker News](https://news.ycombinator.com) called "[The cold emails that got me meetings at Twitter, LinkedIn and GitHub](http://www.startupmoon.com/how-i-got-meetings-at-twitter-linkedin-and-github-using-cold-emails/)".  It's by a woman named Iris Shoor who is a co-founder of a startup called [Takipi](http://www.takipi.com/).  In the article she describes how she used a certain technique originally presented [here](http://www.distilled.net/blog/miscellaneous/find-almost-anybodys-email-address/) to obtain access to the emails of decision makers at tech companies and cold email them to glean meetings which resulted in sales of her product.  Both of the articles are engaging reads and I highly recommend them, especially if you are interested in "growth hacking", or "sales and marketing" if you insist on using boring non-buzzwords.
 
