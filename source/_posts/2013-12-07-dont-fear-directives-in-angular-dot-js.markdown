@@ -38,7 +38,7 @@ In my opinion it's a very useful tool because it allows you to encapsulate funct
 
 Ever had this happen with jQuery? You need to do some JavaScript magic with a particular element on the page, and so you give it some arbitrary `id` so you can access it with `$('element#id')`.  Now you get to write a bunch of JavaScript that listens for the relevant events, checks the element's state to see that it is congruent with our expectations, modify its class to change how it is displayed, and so on.  It starts out as a few simple functions using a very powerful tool that soon grows into a complicated mess of callbacks, weird looking selectors, and re-render functions.  It may be strewn across several files with no rhyme or reason.
 
-Not only is it no fun, it makes it very hard for your designer friends to look at your markup and know what the expected behavior for that HTML is.  So Angular provides us with directives, which are actually pretty simple to create.  So don't be scared of them like I was.  You just have to create an Angular app:
+Not only is it no fun, it makes it very hard for your designer friends to look at your markup and know what the expected behavior for that HTML is.  So, Angular provides us with directives, which are actually pretty simple to create.  So don't be scared of them like I was.  You just have to create an Angular app:
 
 ```js
 var myApp = angular.module('myApp', []);
@@ -57,9 +57,9 @@ myApp.directive('myDirective', function() {
 
 That's all, you just created a directive!  Now, when you go looking around for some examples of directives online, it's easy to get lost in all of the Angular-specific jargon like linking functions, the "restrict" property, scope hierarchies and so on.  But I highly recommend that you try not to panic, and realize that there is meaning behind all of the weird symbols and abbreviations you see.  For instance, in the definition for the directive above, I define a `restrict: 'E'` setting.  What the heck does that mean?
 
-Well, what it means is, restrict the usage of this directive to only Elements.
+Well, what it means is, "restrict the usage of this directive to only Elements".
 
-So you can use it in HTML like this:
+So, you can use it in HTML like this:
 
 ```js
 <body ng-app="myApp">
@@ -79,7 +79,7 @@ But not like this:
 
 # Why is it useful?
 
-So other than providing a convenient way to make little repeatable bits of HTML that have their own names, why is this useful?
+So, other than providing a convenient way to make little repeatable bits of HTML that have their own names, why is this useful?
 
 Well, by default every directive has its own [isolate scope](http://www.thinkster.io/pick/KnxWvHUW64/angularjs-understanding-isolate-scope).  What this means is, it can have its own little properties that it sets on its own unique `$scope` that won't mess around with any of the other properties that you are setting in the rest of your app.  Especially if you are going to use the component in multiple places, or have it in a `ng-repeat`, this is incredibly useful.  It allows you to break things down into much more modular components than using some giant `BigBallOfMudController` (or several `BigBallOfMudController`s) to control the state of your app (which is usually the essence of what ends up happening in the "traditional jQuery" mess described above).  Instead, each directive is responsible for its own data and it works on it in isolation from the other directives.  In Angular this antipattern would look something like having a big array of objects in a central Controller, and updating individual properties of those objects in that controller instead of having a directive to modularize that kind of operation. 
 
@@ -93,7 +93,7 @@ Writing a `link` function provides even more power and flexibility, but that's a
 
 Enjoy your directives, kids, and never ever be scared of them.  [Miško](http://misko.hevery.com/)'s been up late at night so you can experience HTML as it could have been.
 
-On a more serious/philosophical note, I wanted to close with a thought that I have that creating your own directives reminds me a bit of [Metcalfe's Law](http://en.wikipedia.org/wiki/Metcalfe's_law) (by analogy of course).  Each directive that gets created increases the power and usefulness of all the other directives.  An Angular in which `ng-repeat` exists, for instance, is so much more powerful than one in which it doesn't.  So remember that they can be stacked and it makes your webapp that much better.
+On a more serious/philosophical note, I wanted to close with a thought that I have that creating your own directives reminds me a bit of [Metcalfe's Law](http://en.wikipedia.org/wiki/Metcalfe's_law) (by analogy of course).  Each directive that gets created increases the power and usefulness of all the other directives.  An Angular in which `ng-repeat` exists, for instance, is so much more powerful than one in which it doesn't.  So, remember that they can be stacked and it makes your webapp that much better.
 
 Until next time, stay sassy Internet.
 
