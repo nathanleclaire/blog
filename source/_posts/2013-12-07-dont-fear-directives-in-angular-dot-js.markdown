@@ -22,7 +22,7 @@ Ultimately I fell into learning Angular for a variety of reasons.  Partially it 
 
 One day after I had started getting interested in Angular I mentioned to a coworker that I was developing an app with the framework.
 
-"Oh yeah," he said, "I watched a presentation about making directives - seems to be where to real power of it is."
+"Oh yeah," he said, "I watched a presentation about making directives - seems to be where the real power of it is."
 
 Since I knew that the funny attributes Angular introduces such as `ng-show`, `ng-class`, and `ng-repeat` were directives, I had a feeling he was onto something.  However, I was a little bit too timid to actually tackle making my own.  After all, directives were something that smart people made, not me.  I'd have to understand that difficult link/compile stuff, right?  Remember, this was April of 2013 and, though it seems silly to say since at the time of writing only eight months have passed, the quality of documentation, tutorials, and examples for Angular.js was not as good as it is today.  I think [egghead.io](http://egghead.io) (an excellent Angular resource if you're not aware) was just getting off the ground, but I certianly hadn't heard of it.
 
