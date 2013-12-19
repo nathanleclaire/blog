@@ -3,6 +3,7 @@
 - Google Analytics Demographics?
 - Add "Share on Twitter" link ( http://www.twitter.com/share?url=http://www.nathanleclaire.com/ )
 - Research / fix blockquote usages
+- Migrate Angular.js usages to AngularJS (maintain links)
 
 # Blog Article Ideas
 
