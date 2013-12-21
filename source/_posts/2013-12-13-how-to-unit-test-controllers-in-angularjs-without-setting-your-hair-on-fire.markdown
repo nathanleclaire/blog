@@ -71,7 +71,7 @@ Which is very similar to the default configuration in [angular-seed](https://git
 You can install Karma with:
 
 ```
-npm install karma
+npm install -g karma
 ```
 
 [angular-seed](https://github.com/angular/angular-seed) provides a handy little script for starting the Karma test runner, which is in `scripts/test.sh`.  Use it!
