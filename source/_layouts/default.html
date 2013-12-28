@@ -19,134 +19,8 @@
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 
 <style>
-/* Hemisu Light */
-/* Original theme - http://noahfrederick.com/vim-color-scheme-hemisu/ */
-/* Pretty printing styles. Used with prettify.js. */
-/* SPAN elements with the classes below are added by prettyprint. */
-/* plain text */
-.pln {
-  color: #111111; }
-
-@media screen {
-  /* string content */
-  .str {
-    color: #739200; }
-
-  /* a keyword */
-  .kwd {
-    color: #739200; }
-
-  /* a comment */
-  .com {
-    color: #999999; }
-
-  /* a type name */
-  .typ {
-    color: #ff0055; }
-
-  /* a literal value */
-  .lit {
-    color: #538192; }
-
-  /* punctuation */
-  .pun {
-    color: #111111; }
-
-  /* lisp open bracket */
-  .opn {
-    color: #111111; }
-
-  /* lisp close bracket */
-  .clo {
-    color: #111111; }
-
-  /* a markup tag name */
-  .tag {
-    color: #111111; }
-
-  /* a markup attribute name */
-  .atn {
-    color: #739200; }
-
-  /* a markup attribute value */
-  .atv {
-    color: #ff0055; }
-
-  /* a declaration */
-  .dec {
-    color: #111111; }
-
-  /* a variable name */
-  .var {
-    color: #111111; }
-
-  /* a function name */
-  .fun {
-    color: #538192; } }
-/* Use higher contrast and text-weight for printable form. */
-@media print, projection {
-  .str {
-    color: #060; }
-
-  .kwd {
-    color: #006;
-    font-weight: bold; }
-
-  .com {
-    color: #600;
-    font-style: italic; }
-
-  .typ {
-    color: #404;
-    font-weight: bold; }
-
-  .lit {
-    color: #044; }
-
-  .pun, .opn, .clo {
-    color: #440; }
-
-  .tag {
-    color: #006;
-    font-weight: bold; }
-
-  .atn {
-    color: #404; }
-
-  .atv {
-    color: #060; } }
-/* Style */
-.prettyprint ol {
-        color: #ccc;
-        }
-
-/* Specify class=linenums on a pre to get line numbering */
-ol.linenums {
-  margin-top: 0;
-  margin-bottom: 0; }
-
-/* IE indents via margin-left */
-li.L0,
-li.L1,
-li.L2,
-li.L3,
-li.L4,
-li.L5,
-li.L6,
-li.L7,
-li.L8,
-li.L9 {
-  /* */ }
-
-/* Alternate shading for lines */
-li.L1,
-li.L3,
-li.L5,
-li.L7,
-li.L9 {
-  /* */ }
+.pln{color:#111}@media screen{.kwd,.str{color:#739200}.com{color:#999}.typ{color:#f05}.lit{color:#538192}.clo,.opn,.pun,.tag{color:#111}.atn{color:#739200}.atv{color:#f05}.dec,.var{color:#111}.fun{color:#538192}}@media print,projection{.str{color:#060}.kwd{color:#006;font-weight:700}.com{color:#600;font-style:italic}.typ{color:#404;font-weight:700}.lit{color:#044}.clo,.opn,.pun{color:#440}.tag{color:#006;font-weight:700}.atn{color:#404}.atv{color:#060}}.prettyprint ol{color:#ccc}ol.linenums{margin-top:0;margin-bottom:0}
 </style>
-
 		
 		<!--<link href="http://feeds.feedburner.com/turkeltaub" rel="alternate" title="{{ site.title }}" type="application/rss+xml" />-->
 		
@@ -156,7 +30,8 @@ li.L9 {
 		<div class="wrap">
 	
 			<header>
-			<div class="title"><a href="http://nathanleclaire.com">{{ site.title }}</a></div>
+			<div class="title"><a href="http://nathanleclaire.com">
+				<img src="{{ root_url }}/images/nateface.jpg" class="nateface" /> {{ site.title }}</a></div>
 				
 				<div class="navi">
 					<ul>
@@ -176,34 +51,7 @@ li.L9 {
 		</div> <!-- // .wrap -->
 	<script type="text/javascript" src="{{ root_url }}/js/prettify.js"></script>
 	<script>
-		$(document).ready(function() {
-			// Make images center
-			$('p:has(img)').css('text-align', 'center');
-			
-			// Add the image's title attribute as a caption
-			$('p:has(img)').append(function () {
-				return '<div class="caption">' + $('img', this).attr('title') + '</div>';
-			});
-			
-			// Prettify code
-			$('code').addClass('prettyprint');
-
-
-			// Bring social media spam links online
-			$('.social-media-spam').each(function() {
-				var $this = $(this);
-				var currentSubmitHref = $this.attr('href');
-				var title = $('article header h1 a').html();
-				currentSubmitHref += encodeURIComponent(title);
-				$this.attr('href', currentSubmitHref);
-			});
-
-			var urlHere = window.location.href;
-			var $pullRequestLink = $('#pull-request-link');
-			var githubUrl = 'https://github.com/nathanleclaire/blog/edit/master/source/_posts/' + urlHere.split('/').slice(4, 8).join('-') + '.markdown';
-			$pullRequestLink.attr('href', githubUrl);
-			
-		});
+$(document).ready(function(){$('p:has(img)').css('text-align','center');$('p:has(img)').append(function(){return'<div class="caption">'+$('img',this).attr('title')+'</div>'});$('code').addClass('prettyprint');$('.social-media-spam').each(function(){var $this=$(this);var currentSubmitHref=$this.attr('href');var title=$('article header h1 a').html();currentSubmitHref+=encodeURIComponent(title);$this.attr('href',currentSubmitHref)});var urlHere=window.location.href;var $pullRequestLink=$('#pull-request-link');var githubUrl='https://github.com/nathanleclaire/blog/edit/master/source/_posts/'+urlHere.split('/').slice(4,8).join('-')+'.markdown';$pullRequestLink.attr('href',githubUrl)});
 	</script>
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
