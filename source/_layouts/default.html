@@ -51,7 +51,7 @@
 		</div> <!-- // .wrap -->
 	<script type="text/javascript" src="{{ root_url }}/js/prettify.js"></script>
 	<script>
-$(document).ready(function(){$('p:has(img)').css('text-align','center');$('p:has(img)').append(function(){return'<div class="caption">'+$('img',this).attr('title')+'</div>'});$('code').addClass('prettyprint');$('.social-media-spam').each(function(){var $this=$(this);var currentSubmitHref=$this.attr('href');var title=$('article header h1 a').html();currentSubmitHref+=encodeURIComponent(title);$this.attr('href',currentSubmitHref)});var urlHere=window.location.href;var $pullRequestLink=$('#pull-request-link');var githubUrl='https://github.com/nathanleclaire/blog/edit/master/source/_posts/'+urlHere.split('/').slice(4,8).join('-')+'.markdown';$pullRequestLink.attr('href',githubUrl)});
+$(document).ready(function(){$("p:has(img)").css("text-align","center");$("p:has(img)").append(function(){var e=$("img",this).attr("title");if(e)return'<div class="caption">'+$("img",this).attr("title")+"</div>"});$("code").addClass("prettyprint");$(".social-media-spam").each(function(){var e=$(this);var t=e.attr("href");var n=$("article header h1 a").html();t+=encodeURIComponent(n);e.attr("href",t)});var e=window.location.href;var t=$("#pull-request-link");var n="https://github.com/nathanleclaire/blog/edit/master/source/_posts/"+e.split("/").slice(4,8).join("-")+".markdown";t.attr("href",n)})
 	</script>
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
