@@ -31,7 +31,6 @@ module.exports = {
 Sails uses [Waterline](https://npmjs.org/package/waterline) as its ORM, and it provides a lot of power for developing rapidly.  The `adapter` field dictates where the data will be stored, and you can mix and match, so you can have some models stored in MySQL and others in Redis, for instance.  I think this is a really cool feature.  You can set validation, etc. on them.  You can write custom methods on your models to extract "higher-order" data from them.  Best of all, just having a model gets you a ton of routes (CRUD blueprints and REST endpionts) out of the box (and they [all work with Websockets](http://sailsjs.org/#!documentation/sockets)!):
 
 ```
-# Backbone Conventions
 GET   :    /:controller                 => findAll()
 GET   :    /:controller/read/:id        => find(id)
 POST  :    /:controller/create          => create()
