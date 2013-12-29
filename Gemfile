@@ -15,6 +15,7 @@ group :development do
   gem 'liquid', '~> 2.3.0'
   gem 'yui-compressor', '~> 0.12.0'
   gem 'html_compressor', '~> 0.0.3'
+  gem 'parallel', '~> 0.9.1'
 end
 
 gem 'sinatra', '~> 1.3.3'

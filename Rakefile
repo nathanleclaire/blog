@@ -1,4 +1,5 @@
 require "rubygems"
+require "parallel"
 require "bundler/setup"
 require "stringex"
 require "yui/compressor"
@@ -393,7 +394,7 @@ desc "Minify CSS"
 task :minify_css do
   puts "## Minifying CSS"
   compressor = YUI::CssCompressor.new
-  Dir.glob("#{public_dir}/**/*.css").each do |name|
+  Parallel.map(Dir.glob("#{public_dir}/**/*.css")) do |name|
     puts "Minifying #{name}"
     input = File.read(name)
     output = File.open("#{name}", "w")
@@ -406,7 +407,7 @@ desc "Minify JS"
 task :minify_js do
   puts "## Minifying JS"
   compressor = YUI::JavaScriptCompressor.new
-  Dir.glob("#{public_dir}/**/*.js").each do |name|
+  Parallel.map(Dir.glob("#{public_dir}/**/*.js")) do |name|
     puts "Minifying #{name}"
     input = File.read(name)
     output = File.open("#{name}", "w")
@@ -419,7 +420,7 @@ desc "Minify HTML"
 task :minify_html do
   puts "## Minifying HTML"
   compressor = HtmlCompressor::HtmlCompressor.new
-  Dir.glob("#{public_dir}/**/*.html").each do |name|
+  Parallel.map(Dir.glob("#{public_dir}/**/*.html")) do |name|
     puts "Minifying #{name}"
     input = File.read(name)
     output = File.open("#{name}", "w")
