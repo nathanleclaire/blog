@@ -2,6 +2,7 @@
 layout: post
 title: "Don't Fear Directives In Angular.js"
 alias: blog/2013/12/07/dont-fear-directives-in-angular-dot-js/index.html
+title: "Don't Fear Directives In AngularJS"
 date: 2013-12-07 12:41
 comments: true
 categories: [Angular,Controllers,Directives,JavaScript]
@@ -11,7 +12,7 @@ categories: [Angular,Controllers,Directives,JavaScript]
 
 # Direct what?
 
-As I mentioned in [last week's article](http://nathanleclaire.com/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-dot-js/) I have been working with [Angular.js](http://angularjs.org/) for personal projects lately.  This was largely the result of me, approximately six or seven months ago, feeling like I was missing out on the new hotness by not knowing a client-side MV* framework.  I looked around at a lot of options, including:
+As I mentioned in [last week's article](http://nathanleclaire.com/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-dot-js/) I have been working with [AngularJS](http://angularjs.org/) for personal projects lately.  This was largely the result of me, approximately six or seven months ago, feeling like I was missing out on the new hotness by not knowing a client-side MV* framework.  I looked around at a lot of options, including:
 
 - [Backbone.js](http://backbonejs.org/) (A crowd favorite, with rock-solid online support/documentation/tutorials)
 - [Ember.js](http://emberjs.com/)
@@ -25,7 +26,7 @@ One day after I had started getting interested in Angular I mentioned to a cowor
 
 "Oh yeah," he said, "I watched a presentation about making directives - seems to be where the real power of it is."
 
-Since I knew that the funny attributes Angular introduces such as `ng-show`, `ng-class`, and `ng-repeat` were directives, I had a feeling he was onto something.  However, I was a little bit too timid to actually tackle making my own.  After all, directives were something that smart people made, not me.  I'd have to understand that difficult link/compile stuff, right?  Remember, this was April of 2013 and, though it seems silly to say since at the time of writing only eight months have passed, the quality of documentation, tutorials, and examples for Angular.js was not as good as it is today.  I think [egghead.io](http://egghead.io) (an excellent Angular resource if you're not aware) was just getting off the ground, but I certianly hadn't heard of it.
+Since I knew that the funny attributes Angular introduces such as `ng-show`, `ng-class`, and `ng-repeat` were directives, I had a feeling he was onto something.  However, I was a little bit too timid to actually tackle making my own.  After all, directives were something that smart people made, not me.  I'd have to understand that difficult link/compile stuff, right?  Remember, this was April of 2013 and, though it seems silly to say since at the time of writing only eight months have passed, the quality of documentation, tutorials, and examples for AngularJS was not as good as it is today.  I think [egghead.io](http://egghead.io) (an excellent Angular resource if you're not aware) was just getting off the ground, but I certianly hadn't heard of it.
 
 Less so through concious decision and more so through my own hesitance to learn something I was irrationally afraid of, I began slipping into the trap of creating a tangled mess that stuffed everything possible into `$scope`, used `ng-include` when I could have used directives, and relied on `$broadcast`ing down from `$rootScope` when I could have used services.
 

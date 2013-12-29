@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Fear and Loathing With Golang and Angular.js"
+title: "Fear and Loathing With Golang and AngularJS"
 alias: /blog/2013/11/30/fear-and-loathing-with-golang-and-angular-dot-js/index.html
 date: 2013-11-30 14:40
 comments: true
@@ -9,13 +9,13 @@ categories: [Angular,Golang,Form,Post,ParseForm,Bugs]
 
 {% img /images/fearandloathing/fearandloathingwithgolangular.jpg Complete and utter hyperbole. %}
 
-Recently I've been building an app to check a web page for broken links using [Golang](http://golang.org) and [Angular.js](http://angularjs.org) (it's for use with this blog, actually, as well as general public consumption).  It's pretty close to being done, except for a contact form which will allow people to send an e-mail directly to me (which has involved all manner of fun with Go's [smtp](http://golang.org/pkg/net/smtp/) library and will most likely be the subject of a future blog post) to make suggestions, send comments, flame me for creating a free tool for them to use, etc.  Though I am generally a huge fan of both of these technologies, I was tearing my hair out over a particular issue which turned out to be solvable by reading the Go source code.  This coincided with the timing of my weekly blog article.  So here I am sharing my frustration and catharsis with you, dear readers.
+Recently I've been building an app to check a web page for broken links using [Golang](http://golang.org) and [AngularJS](http://angularjs.org) (it's for use with this blog, actually, as well as general public consumption).  It's pretty close to being done, except for a contact form which will allow people to send an e-mail directly to me (which has involved all manner of fun with Go's [smtp](http://golang.org/pkg/net/smtp/) library and will most likely be the subject of a future blog post) to make suggestions, send comments, flame me for creating a free tool for them to use, etc.  Though I am generally a huge fan of both of these technologies, I was tearing my hair out over a particular issue which turned out to be solvable by reading the Go source code.  This coincided with the timing of my weekly blog article.  So here I am sharing my frustration and catharsis with you, dear readers.
 
 # What's the rub?
 
 The rub has to do with the way that Angular sends HTTP POST requests, the way that Golang handles them, and how these two interact.
 
-In Angular.js when we want to perform business logic (for example, calling out to a server to get some data to display ) we put that logic inside of a controller.  The controller sets properties on Angular's `$scope` variable that are accessible from the front end, and vice versa, providing us with two-way data binding.  If you want to make an AJAX call, you inject Angular's `$http` service (by passing it into the function where the controller is defined) and use it.  This is a little bit of a change from what most people are used to, which is usually something like `jQuery.ajax`, but it's not too unfamiliar.  Since Angular likes you to play exclusively in Anglar-land (in controllers at least), they provide you with this service to make sure that no funny business happens to interfere with Angular's apply-digest cycle.  The syntax is fairly straightforward and looks like this:
+In AngularJS when we want to perform business logic (for example, calling out to a server to get some data to display ) we put that logic inside of a controller.  The controller sets properties on Angular's `$scope` variable that are accessible from the front end, and vice versa, providing us with two-way data binding.  If you want to make an AJAX call, you inject Angular's `$http` service (by passing it into the function where the controller is defined) and use it.  This is a little bit of a change from what most people are used to, which is usually something like `jQuery.ajax`, but it's not too unfamiliar.  Since Angular likes you to play exclusively in Anglar-land (in controllers at least), they provide you with this service to make sure that no funny business happens to interfere with Angular's apply-digest cycle.  The syntax is fairly straightforward and looks like this:
 
 ```js
 function MainCtrl($scope, $http) {
