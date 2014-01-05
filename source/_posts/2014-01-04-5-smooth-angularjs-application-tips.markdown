@@ -212,14 +212,12 @@ app.factory('githubService', function($http, $q) {
 	var GITHUB_API_ENDPOINT = 'https://api.github.com';
 	return {
 		getUserAvatarUrl: function(username) {
-			var deferred = $q.defer(); 
-			$http.get(GITHUB_API_ENDPOINT + '/users/' + username).success(function(data) {
+			return $http.get(GITHUB_API_ENDPOINT + '/users/' + username).success(function(data) {
 				// Though our return value is simple here, it could easily involve searching/parsing
 				// through the response to extract some metadata, higher-order information, etc. that
 				// we really shouldn't be parsing in the controller 
-				deferred.resolve(data.avatar_url);
+				return data.avatar_url;
 			});
-			return deferred;
 		}
 	}	
 });
