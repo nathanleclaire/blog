@@ -13,4 +13,13 @@ Hi there!  My name is Nathan LeClaire and I'm a developer in the Ann Arbor, MI a
 * Machine Learning
 * Security (reverse engineering exploits and network vulnerabilities)
 
-If you want or need to contact me feel free to shoot an e-mail to nathanleclaire at gmail dot com.  Thanks for visiting!
+Though I am currently employed I am always interested in talking about other opportunities, particularly involving the interests listed above and in the following cities:
+
+* New York, NY
+* San Francisco, CA
+* Portland, OR
+* Denver, CO
+* Austin, TX
+* Berlin, Germany
+
+I enjoy getting e-mail, you should <a href="mailto:nathanleclaire@gmail.com">send me one</a>.  Thanks for visiting!
