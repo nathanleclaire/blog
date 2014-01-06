@@ -212,14 +212,15 @@ app.factory('githubService', function($http, $q) {
 	var GITHUB_API_ENDPOINT = 'https://api.github.com';
 	return {
 		getUserAvatarUrl: function(username) {
-			var deferred = $q.defer(); 
-			$http.get(GITHUB_API_ENDPOINT + '/users/' + username).success(function(data) {
+			
+			var request = $http.get(GITHUB_API_ENDPOINT + '/users/' + username);
+			//request is a special of promise. Use promise chaining to extract data we need.
+			return request.then(function(response) {
 				// Though our return value is simple here, it could easily involve searching/parsing
 				// through the response to extract some metadata, higher-order information, etc. that
 				// we really shouldn't be parsing in the controller 
-				deferred.resolve(data.avatar_url);
-			});
-			return deferred;
+				deferred.resolve(response.data.avatar_url);
+			}); //an error callback could be added here too!
 		}
 	}	
 });
