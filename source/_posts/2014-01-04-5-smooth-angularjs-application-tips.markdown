@@ -10,7 +10,7 @@ Anyone who follows my blog even a little closely can probably see that I <3 Angu
 
 * [How to Unit Test Controllers In AngularJS Without Setting Your Hair On Fire](http://nathanleclaire.com/blog/2013/12/13/how-to-unit-test-controllers-in-angularjs-without-setting-your-hair-on-fire/)
 * [Don’t Fear Directives In AngularJS](http://nathanleclaire.com/blog/2013/12/07/dont-fear-directives-in-angular-dot-js/)
-* [Fear and Loathing With Golang and AngularJS](http://nathanleclaire.com/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-dot-js/)
+* [Fear and Loathing With Golanhg and AngularJS](http://nathanleclaire.com/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-dot-js/)
 
 As I've learned more about the framework, I've come to appreciate many of the design decisions in spite of their initial (beastly) learning curve.  For example, directives provide an absurd amount of flexibility and expressiveness in writing declarative HTML that is unmatched by jQuery-style imperative DOM twiddling.  But the learning curve on them, and other bits of Angular, is weird:
 
@@ -147,7 +147,7 @@ The following plunker, a modified version of the first plunker on this page, dem
 
 # Making AJAX calls from services
 
-So what if you want to use Angular's `http` service to retrieve or set some data on the server, and interact with it from a controller?  We know by now that we should be using services to perform this kind of data-getting, but how do we deal with this asynchrony?  Doing so is not too painful, we simply return the `promise` Angular gives us when we make an AJAX call, and use the `then` method to define our callback in the controller.  A simple example:
+So what if you want to use Angular's `$http` service to retrieve or set some data on the server, and interact with it from a controller?  We know by now that we should be using services to perform this kind of data-getting, but how do we deal with this asynchrony?  Doing so is not too painful, we simply return the `promise` Angular gives us when we make an AJAX call, and use the `then` method to define our callback in the controller.  A simple example:
 
 ```js
 app.factory('githubService', function($http) {
@@ -205,7 +205,7 @@ But what if you want the service to take care of some more stuff (e.g. parsing t
 }
 ```
 
-There's quite a bit of information here, and with more complex API calls response will be full of nested objects and arrays.  What if we just wanted to get the `avatar_url` with `githubService.getUserAvatarUrl(username)` and didn't care about any of the other stuff?  We can set that method up in our service using Angular's `$q` ([promise implementation](http://docs.angularjs.org/api/ng.$q)) service to return *a promise of our own*:
+There's quite a bit of information here, and with more complex API calls response will be full of nested objects and arrays.  What if we just wanted to get the `avatar_url` with `githubService.getUserAvatarUrl(username)` and didn't care about any of the other stuff?  We can use promise chaining to take care of this logic in the service.  Whatever is returned from the `success` callback on our `$http.get()` call will be passed to the callback function on the promise's `then` method:
 
 ```js
 app.factory('githubService', function($http, $q) {
