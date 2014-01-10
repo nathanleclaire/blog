@@ -88,7 +88,7 @@ app.controller('MainCtrl', function(weatherService) {
 });
 ```
 
-You can use them in several controllers and they will save you the headache of trying to sync up data over multiple controllers.  They are also a great place to store `AWKWARD_CONSTANT_THAT_WOULD_OTHERWISE_BE_GLOBAL`.
+You can use them in several controllers and they will save you the headache of trying to sync up data over multiple controllers. If you think that this could be a good place to store your `AWKWARD_CONSTANT_THAT_WOULD_OTHERWISE_BE_GLOBAL` you shold take a look first to [$provider.constant()] (http://docs.angularjs.org/api/AUTO.$provide#constant).
 
 # Retaining state when switching from view to view
 
