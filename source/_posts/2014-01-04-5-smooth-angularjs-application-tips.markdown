@@ -205,18 +205,18 @@ But what if you want the service to take care of some more stuff (e.g. parsing t
 }
 ```
 
-There's quite a bit of information here, and with more complex API calls response will be full of nested objects and arrays.  What if we just wanted to get the `avatar_url` with `githubService.getUserAvatarUrl(username)` and didn't care about any of the other stuff?  We can use promise chaining to take care of this logic in the service.  Whatever is returned from the `success` callback on our `$http.get()` call will be passed to the callback function on the promise's `then` method:
+There's quite a bit of information here, and with more complex API calls response will be full of nested objects and arrays.  What if we just wanted to get the `avatar_url` with `githubService.getUserAvatarUrl(username)` and didn't care about any of the other stuff?  We can use promise chaining to take care of this logic in the service.  Whatever is returned from the callback on the `then` method which has been invoked on the result of our `$http.get()` call (a promise object) will be passed to the callback function on the controller promise's `then` method:
 
 ```js
 app.factory('githubService', function($http, $q) {
 	var GITHUB_API_ENDPOINT = 'https://api.github.com';
 	return {
 		getUserAvatarUrl: function(username) {
-			return $http.get(GITHUB_API_ENDPOINT + '/users/' + username).success(function(data) {
+			return $http.get(GITHUB_API_ENDPOINT + '/users/' + username).then(function(res) {
 				// Though our return value is simple here, it could easily involve searching/parsing
 				// through the response to extract some metadata, higher-order information, etc. that
 				// we really shouldn't be parsing in the controller 
-				return data.avatar_url;
+				return res.data.avatar_url;
 			});
 		}
 	}	
