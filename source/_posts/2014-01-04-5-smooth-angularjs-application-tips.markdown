@@ -162,7 +162,7 @@ app.factory('githubService', function($http) {
 app.controller('MainCtrl', function($scope, githubService) {
 	// assuming $scope.username is set with ng-model
 	githubService.getUserInfo($scope.username).then(function(data) {
-		$scope.userInfo = data;
+		$scope.userInfo = data.data;
 	});
 });
 ```
