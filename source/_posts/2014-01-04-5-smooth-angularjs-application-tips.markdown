@@ -84,7 +84,7 @@ app.factory('weatherService', function() {
     };
 });
 app.controller('MainCtrl', function(weatherService) {
-	$scope.temperature = weatherData.getTemperature();	
+	$scope.temperature = weatherService.getTemperature();	
 });
 ```
 
