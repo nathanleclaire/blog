@@ -14,3 +14,7 @@
 - List PHP Class Methods In Vim Quickly and Easily
 - Examining patio11's Cost Center vs. Profit Center ideas regarding consulting shops, and other musings on Not Calling Yourself a Programer 
 - Programmers: Go The Fuck Outside
+
+# Errors To Fix
+
+- The "template" parameter in the angular drag drop article is incorrect
