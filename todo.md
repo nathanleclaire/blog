@@ -13,3 +13,4 @@
 - Run PHPUnit Tests From Within Vim
 - List PHP Class Methods In Vim Quickly and Easily
 - Examining patio11's Cost Center vs. Profit Center ideas regarding consulting shops, and other musings on Not Calling Yourself a Programer 
+- Programmers: Go The Fuck Outside
