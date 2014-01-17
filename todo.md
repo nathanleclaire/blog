@@ -18,3 +18,4 @@
 # Errors To Fix
 
 - The "template" parameter in the angular drag drop article is incorrect
+- Use CSS/Jekyll instead of JavaScript to style images / captions
