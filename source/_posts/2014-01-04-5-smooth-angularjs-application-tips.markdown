@@ -10,7 +10,7 @@ Anyone who follows my blog even a little closely can probably see that I <3 Angu
 
 * [How to Unit Test Controllers In AngularJS Without Setting Your Hair On Fire](http://nathanleclaire.com/blog/2013/12/13/how-to-unit-test-controllers-in-angularjs-without-setting-your-hair-on-fire/)
 * [Don’t Fear Directives In AngularJS](http://nathanleclaire.com/blog/2013/12/07/dont-fear-directives-in-angular-dot-js/)
-* [Fear and Loathing With Golanhg and AngularJS](http://nathanleclaire.com/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-dot-js/)
+* [Fear and Loathing With Golang and AngularJS](http://nathanleclaire.com/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-dot-js/)
 
 As I've learned more about the framework, I've come to appreciate many of the design decisions in spite of their initial (beastly) learning curve.  For example, directives provide an absurd amount of flexibility and expressiveness in writing declarative HTML that is unmatched by jQuery-style imperative DOM twiddling.  But the learning curve on them, and other bits of Angular, is weird:
 
