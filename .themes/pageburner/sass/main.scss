@@ -1,0 +1,353 @@
+@import "bourbon/bourbon";
+@import "typography";
+@import "variables";
+@import "responsive";
+
+*::selection {
+	background: $main-color;
+	color: $white;
+	}
+
+*::-moz-selection {
+	background: $main-color;
+	color: $white;
+	}
+
+*::-webkit-selection {
+	background: $main-color;
+	color: $white;
+	}
+	
+body {
+	margin: 0;
+	padding: 0;
+	border-top: $top-line-weight solid $black;
+	font-family: $body-font;
+	font-size: $body-font-size;
+	color: $black;
+	
+	@media only screen and (max-width: 1000px) {
+		font-size: 0.9em;
+		}
+	}
+	
+em {
+	font-style: italic;
+	font-family: $body-font-italic;
+	}
+	
+h1 {
+	margin-top: $heading-top-spacing;
+	font-size: $heading-font-size;
+	font-weight: $heading-font-weight;
+	font-style: $heading-font-style;
+	text-align: $page-title-align;
+	}
+	
+h2 {
+	margin-top: $subheading-top-spacing;
+	font-size: $subheading-font-size;
+	font-weight: $subheading-font-weight;
+	font-style: $subheading-font-style;
+	}
+		
+.wrap {
+	margin: 0 auto;
+	width: $content-width;
+	
+	@media only screen and (min-width: 0px) and (max-width: 1200px) {
+		width: 90%;
+		}
+	
+	/* blog footer */
+	& > footer {
+		margin-top: 2em;
+		padding: 2em 0;
+		border-top: 1px solid $light-gray;
+		text-align: center;
+		font-size: 0.8em;
+		}
+	}
+
+/* The main blog header */
+header {
+	margin-bottom: 1em;
+	padding: $header-spacing 0;
+	border-bottom: 1px solid $light-gray;
+	text-align: center;
+	
+	.title {
+		font-family: $blog-title-font;
+		font-size: $blog-title-font-size;
+		text-transform: $blog-title-text-transform;
+		a {
+			color: $black;
+			&:hover {
+				color: red;
+			}
+		}
+		}
+	
+	.navi {
+		font-family: $navi-font;
+		font-size: $navi-font-size;
+		
+		ul {
+			margin: $navi-top-spacing 0 0 0;
+			padding: 0;
+			list-style: none;
+			
+			li {
+				margin: 0;
+				padding: 0 ($navi-link-spacing/2 * 1em);
+				
+				a {
+					color: $black;
+					text-decoration: none;
+					
+					&:hover,
+					&:active{
+						color: $main-color;
+						} 
+					} /* // a */
+				} /* // li */
+			} /* // ul */
+		} /* // .navi */
+	} /* // header */
+	
+a {
+	color: $main-color;
+	text-decoration: none;
+	
+	&:hover {
+		color: $black;
+		}
+	}
+		
+blockquote {
+	   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+   font-weight: 300;
+	font-size: $blockquote-font-size;
+	border-left: 5px solid #eee;
+	padding: 10px 20px;
+	}
+	
+article {
+	margin-left: 250px;
+	@media only screen and (min-width: 0px) and (max-width: 1200px) {
+		margin-left: 0px;
+	}
+	padding: 0;
+	font-size: $post-font-size;
+	line-height: $post-font-line-height;
+	text-align: $post-align;
+	
+	.content {
+		padding-bottom: $post-content-bottom-space;
+		}
+
+		
+	footer {
+		padding: $tags-spacing 0;
+		border-bottom: 1px solid $light-gray;
+		border-top: 1px solid $light-gray;
+		}
+		
+	h1, h2, h3 {
+		text-align: $subheadings-align;
+		
+		a {
+			color: $black;
+			
+			&:hover {
+				color: $main-color;
+				}
+			}
+		}
+		
+	header {
+		margin: 0 0 $post-content-top-space 0;
+		padding: 0;
+		border: 0px;
+		text-align: center;
+		
+		h1 {
+			font-size: $post-title-font-size;		
+			font-weight: $post-title-font-weight;
+			font-style: $post-title-font-style;
+			line-height: $post-title-line-height;
+			text-align: $post-title-align;
+			}
+				
+		time {
+			font-size: $date-font-size;
+			font-style: $date-font-style;
+			}
+		}
+		
+	hr {
+		margin: $hr-spacing !important;
+		height: 1px;
+		border: none;
+		color: $light-gray;
+		background-color: $light-gray;
+		}
+		
+	p {
+		.caption {
+			font-style: italic;
+			font-family: $caption-font-family;
+			font-size: $caption-font-size;
+			}
+			
+		img {
+			max-width: 100%;
+			padding: 4px;
+			@include box-shadow(0 0 0px 1px $gray);
+			}
+			
+		.word1,
+		.word2,
+		.word3 {
+			font-size: $post-first-words-font-size;
+			font-variant: $post-first-words-font-variant;
+			}
+		}
+	}
+	
+/* Code blocks */
+pre {
+	position: relative;
+	border: 1px solid $light-gray;
+	@include border-radius(4px);
+	line-height: $code-block-line-height;
+	background-color: $code-background-color;
+	overflow: hidden;
+	@media only screen and (min-width: 0px) and (max-width: 1200px) {
+		margin: 0px auto;
+		width: 90%;
+		}
+	
+	}
+	
+code {
+	margin: $code-margin 0;
+	padding: $code-padding;
+	font-family: $code-font-family;
+	font-size: $code-font-size;
+	
+	}
+	
+/* Code blocks first line is wonky with the padding set the way
+   it was before */
+pre > code {
+	padding: 0px;
+}
+	
+/* Inline code */
+p > code, li > code {
+	border: 1px solid $light-gray;
+	@include border-radius(4px);
+	background-color: $code-background-color;
+	white-space: nowrap;
+	}
+
+.pagination {
+	position: relative;
+	margin: 5em 0;
+	
+	a {
+		font-family: $paginator-font-family;
+		font-size: $paginator-font-size;
+		color: $black;
+		text-decoration: none;
+		
+		&:hover {
+			color: $main-color;
+			}
+		}
+		
+	.newer {
+		position: absolute;
+		top: 0;
+		right: 0;
+		}
+		
+	.older {
+		position: absolute;
+		top: 0;
+		left: 0;
+		}
+	
+	span {
+		display: block;
+		width: 100%;
+		text-align: center;
+		}
+	}
+	
+/* Archive and tags listings */
+.cat-year {
+	padding-top: $year-spacing-bottom;
+	font-family: $year-font-family;
+	font-size: $year-font-size;
+	}
+	
+.cat-month {
+	margin: $month-indent 0 $month-spacing-bottom $month-indent;
+	font-family: $month-font-family;
+	font-size: $month-font-size;
+	}
+	
+.title-listing {
+	margin-left: $month-indent;
+	}
+
+div.highlight {
+	overflow: auto;
+}
+
+.highlight > table {
+	width: 100%;
+}
+
+.line-numbers {
+	display: none;
+}
+
+pre {
+	margin: 0em auto;
+	padding: 0.7em;
+}
+
+figure {
+	@media only screen and (min-width: 0px) and (max-width: 1200px) {
+			margin: 0px;
+		}
+}
+
+iframe {
+	width: 100%;
+	height: 300px;
+	resize: vertical;
+}
+
+.nateface {
+	display: block;
+	border-radius: 20px;
+	margin: 5px auto;
+}
+
+div.content > h1 {
+	margin-top: 2em;
+}
+
+a {
+	transition: 0.3s all ease-in-out;
+}
+
+div#sidebar {
+	float: left;
+	position: fixed;
+	width: 200px;
+}

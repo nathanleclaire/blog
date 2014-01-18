@@ -1,0 +1,25 @@
+---
+layout: page
+title: All posts
+footer: false
+---
+
+<!-- BEGIN blog/archives/index.html -->
+{% for post in site.posts reverse %}
+{% capture this_year %}{{ post.date | date: "%Y" }}{% endcapture %}
+{% capture this_month %}{{ post.date | date: "%B" }}{% endcapture %}
+
+{% unless year == this_year %}
+  {% assign year = this_year %}
+	<div class="cat-year">{{ year }}</div>
+{% endunless %}
+
+{% unless month == this_month %}
+  {% assign month = this_month %}
+	<div class="cat-month">{{ month }}</div>
+{% endunless %}
+
+{% include archive_post.html %}
+{% endfor %}
+
+<!-- END blog/archives/index.html -->
