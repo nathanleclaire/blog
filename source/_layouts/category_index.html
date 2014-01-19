@@ -18,7 +18,10 @@ footer: false
 	<div class="cat-month">{{ month }}</div>
 {% endunless %}
 
-{% include archive_post.html %}
+<ul>
+	{% include archive_post.html %}
+</ul>
+
 {% endfor %}
 
 {{ category_list }}
