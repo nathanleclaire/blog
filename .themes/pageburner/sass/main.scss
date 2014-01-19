@@ -27,7 +27,7 @@ body {
 	color: $black;
 	
 	@media only screen and (max-width: 1000px) {
-		font-size: 0.9em;
+		font-size: 1em;
 		}
 	}
 	
@@ -72,7 +72,7 @@ h2 {
 /* The main blog header */
 header {
 	margin-bottom: 1em;
-	padding: $header-spacing 0;
+	padding: 0 0;
 	border-bottom: 1px solid $light-gray;
 	text-align: center;
 	
@@ -100,9 +100,6 @@ header {
 			list-style: none;
 			
 			li {
-				@media only screen and (min-width: 0px) and (max-width: 768px) {
-					display: inline;
-				}
 				margin: 0;
 				padding: 0 ($navi-link-spacing/2 * 1em);
 				
@@ -138,7 +135,7 @@ blockquote {
 	}
 	
 article {
-	margin-left: 250px;
+	margin-left: 350px;
 	@media only screen and (min-width: 0px) and (max-width: 768px) {
 		margin-left: 0px;
 	}
@@ -353,7 +350,7 @@ a {
 #sidebar {
 	float: left;
 	position: fixed;
-	width: 200px;
+	width: 300px;
 	@media only screen and (min-width: 0px) and (max-width: 768px) {
 		float: none;
 		position: relative;
@@ -366,10 +363,9 @@ a {
 	@media only screen and (min-width: 0px) and (max-width: 768px) {
 		display: none;
 	}
-}
-
-.caption {
-	text-align: center;
+	@media only screen and (min-width: 1000px) {
+		font-size: 0.9em;
+	}
 }
 
 img {
@@ -379,6 +375,11 @@ img {
 
 .caption {
 	font-style: italic;
+	text-align: center;
 	font-family: $caption-font-family;
 	font-size: $caption-font-size;
+}
+
+li.title {
+	text-align: left;
 }
