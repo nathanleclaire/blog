@@ -3,11 +3,11 @@
 # ----------------------- #
 
 url: http://nathanleclaire.com
-title: Nathan LeClaire
-subtitle: Business Consultant & Solutions Delivery Expert.
+title: nathan leclaire
+subtitle: i do good software and great business.
 author: Nathan LeClaire
 simple_search: http://google.com/search
-description: "Hi there!  I'm Nathan LeClaire, a friendly geek that helps people and organizations leverage the power of technology."
+description: "I'm a solution delivery and technology expert.  I write about on code (back-end and front-end), entrepreneurship, and life.  I'm obsessed with application performance, user experience, and shipping."
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
