@@ -2,6 +2,7 @@
 
 - Google Analytics Demographics?
 - Research / fix blockquote usages
+- Implement better related_posts functionality either through implementing myself (rank based on frequency of word usage / tags) or implementing someone else's plugin
 
 # Blog Article Ideas
 
@@ -18,4 +19,3 @@
 # Errors To Fix
 
 - The "template" parameter in the angular drag drop article is incorrect
-- Use CSS/Jekyll instead of JavaScript to style images / captions
