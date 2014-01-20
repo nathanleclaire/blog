@@ -3,6 +3,7 @@
 - Google Analytics Demographics?
 - Research / fix blockquote usages
 - Implement better related_posts functionality either through implementing myself (rank based on frequency of word usage / tags) or implementing someone else's plugin
+- Email signup form / clean up sidebar
 
 # Blog Article Ideas
 
