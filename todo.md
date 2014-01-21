@@ -4,6 +4,9 @@
 - Research / fix blockquote usages
 - Implement better related_posts functionality either through implementing myself (rank based on frequency of word usage / tags) or implementing someone else's plugin
 - Email signup form / clean up sidebar
+- Fix pagination issue (broken on archived articles right now)
+- Fix title on archives page (showing Nathan LeClaire instead of nathan leclaire)
+
 
 # Blog Article Ideas
 
