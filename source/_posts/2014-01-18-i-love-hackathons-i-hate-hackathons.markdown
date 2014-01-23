@@ -6,7 +6,7 @@ comments: true
 categories: [hackathons]
 ---
 
-{%img /images/mhacks/crowd.jpg A pic I snapped of some of the attendees. %}
+{%img /images/mhacks/crowd.jpeg A pic I snapped of some of the attendees. %}
 
 This weekend I've been attending [MHacks](http://mhacks.org/), which is an event in Detroit geared mostly towards college students.  It is sponsored by a variety of companies including [Quicken Loans](http://www.quickenloans.com), [Twilio](http://twilio.com), [Yahoo!](http://yahoo.com), [Mashery](http://mashery.com), [Apple](http://apple.com) and many more.  For those of you unfamiliar with the concept, a hackathon is an event where (mostly) young people interested in technology get together to [hack](http://stallman.org/) (not the naughty kind of hacking) on side projects of their choice and perhaps even compete with each other to win some sweet prizes, or just glory and the respect of their peers.  The attendees are typically mostly men, although I feel that MHacks' female attendance and culture is very positive compared to some other events I've experienced in the past).  Sleep deprivation, stimulants, and indoor activities are encouraged.  Starting to get the picture yet?
 
@@ -22,7 +22,7 @@ The money behind the conference was out in full effect, with sponsors manning bo
 
 I also can't resist posting this gem, scrawled on the whiteboarded walls in the main area like something from Randall Monroe's wildest lucid dreams:
 
-{%img /images/mhacks/twerking-algorithm.jpg %}
+{%img /images/mhacks/twerking-algorithm.jpeg %}
 
 The authors are working on an app that will evaluate your twerking ability (you keep your phone in your pocket while you twerk) and rank results against your friends'.
 

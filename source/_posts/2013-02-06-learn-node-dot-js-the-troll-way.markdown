@@ -15,7 +15,7 @@ Throw in a sweet package manager for every sort of JS voodoo you can imagine ([n
 
 ## Screen Scraping With Node.js ##
 
-{% img /images/skyrim-guard.jpg Go cast your fancy JavaScript somewhere else! %}
+{% img /images/skyrim-guard.jpeg Go cast your fancy JavaScript somewhere else! %}
 
 The purpose of this article is to give a quick flyby example, in which I will be demonstrating Node.js by constructing a screen-scraping bot to troll my brother on Reddit.  I had an idea to build an application which uses the Reddit API, to spam my brother's account with Skyrim quotes/dialogue in comments for entertainment purposes.  If he ever were to reply, bewildered, my bot would ping back: _"Problem, theonewhoquestions?"_  
 

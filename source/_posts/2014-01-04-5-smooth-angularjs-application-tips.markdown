@@ -14,7 +14,7 @@ Anyone who follows my blog even a little closely can probably see that I <3 Angu
 
 As I've learned more about the framework, I've come to appreciate many of the design decisions in spite of their initial (beastly) learning curve.  For example, directives provide an absurd amount of flexibility and expressiveness in writing declarative HTML that is unmatched by jQuery-style imperative DOM twiddling.  But the learning curve on them, and other bits of Angular, is weird:
 
-{%img /images/smooth-angular-tips/js-learning-curves.jpg Hearkens to the Emacs graph of yore. %}
+{%img /images/smooth-angular-tips/js-learning-curves.jpeg Hearkens to the Emacs graph of yore. %}
 
 Some things that should be pretty straightforward, like navigating from tab to tab in single-page web applications, can be a little confusing to cough up in code *100% GUARANTEED TO BE CORRECT &#0153;*.  So here's a blog article with some cool tips to help you out.
 

@@ -8,11 +8,11 @@ categories: [node.js,mvc,socket.io,rails,sails,javascript,server]
 
 Over the Christmas vacation time that I've been taking I've been finding myself drawn back to [Node.js](http://nodejs.org/), mostly for the promise of rapid web application development and not having to switch languages when changing from working on the server-side and the client-side.  As part of my interest in developing applications using [WebSockets](http://www.html5rocks.com/en/tutorials/websockets/basics/) for their real-time capabilities, I looked into [Derby](http://derbyjs.com/) and [Meteor](https://www.meteor.com/) and eventually I stumbled across [Sails.js](http://sailsjs.org/), the new kid on the block.  It seemed very promising and addressed some issues that I had with Derby and with Meteor.  Namely, both of those frameworks seem very tightly coupled from the client to the server and I wanted something that would provide more flexibility while still allowing me to develop rapidly.  So, I decided to begin prototyping out my new side project in Sails and naturally I developed a variety of opinions to rant about.  Enjoy.
 
-{% img /images/sails/clint-eastwood.jpg My face when developing. %}
+{% img /images/sails/clint-eastwood.jpeg My face when developing. %}
 
 # The Good
 
-{% img /images/sails/thegood.jpg %}
+{% img /images/sails/thegood.jpeg %}
 
 [Sails.js](http://sailsjs.org/#!) makes getting things started ridiculously quick.  You run `sails new myApp` to create the application skeleton.  Then, to create a Controller and Model for some data that you're going to be working with, you run `sails generate foo` (`foo` being the name of your model).  You configure the model really simply:
 
@@ -66,7 +66,7 @@ In summary:
 
 # The Bad
 
-{% img /images/sails/thebad.jpg %}
+{% img /images/sails/thebad.jpeg %}
 
 Sails is a young framework so sometimes issues come up that can be frustrating to address (since there are not that many users yet, therefore there are not that many resources on StackOverflow etc.).  For instace, when I wanted to start using Redis as a datastore for chat room comments, I tried running `npm install sails-redis`.  This seemed to go off without a hitch but when I ran `sails lift` I got an error indicating that the `sails-redis` module could not be found.  It was very bizarre but then I tracked down [this Github issue](https://github.com/balderdashy/sails-redis/issues/3) which pointed out there was no source code in the npm package!!  I was able to install the package from GitHub but it was very frustrating to blow time on something like that when ostensibly the framework allows you to develop rapidly.
 
@@ -85,7 +85,7 @@ In summary:
 
 # The Ugly
 
-{% img /images/sails/theugly.jpg %}
+{% img /images/sails/theugly.jpeg %}
 
 At the time of writing, [their build is listed as not passing on TravisCI](https://travis-ci.org/balderdashy/sails), and the sticker on their Github page says so.  That doesn't exactly send the right kind of message you want to send with your project.  Now, be aware that I cloned the repository and ran all of the tests locally, and they all passed with Node `v0.10.24` and `v0.11.9`, but not with a previous version of `v0.10.*` that I had (can't remember which unfortunately).  So, perhaps it's more of a TravisCI / versioning issue than a Sails issue, but I think that's a big public-facing thing to overlook.
 

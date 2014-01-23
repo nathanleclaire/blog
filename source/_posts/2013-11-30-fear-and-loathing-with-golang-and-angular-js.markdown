@@ -7,7 +7,7 @@ comments: true
 categories: [Angular,Golang,Form,Post,ParseForm,Bugs]
 ---
 
-{% img /images/fearandloathing/fearandloathingwithgolangular.jpg Complete and utter hyperbole. %}
+{% img /images/fearandloathing/fearandloathingwithgolangular.jpeg Complete and utter hyperbole. %}
 
 Recently I've been building an app to check a web page for broken links using [Golang](http://golang.org) and [AngularJS](http://angularjs.org) (it's for use with this blog, actually, as well as general public consumption).  It's pretty close to being done, except for a contact form which will allow people to send an e-mail directly to me (which has involved all manner of fun with Go's [smtp](http://golang.org/pkg/net/smtp/) library and will most likely be the subject of a future blog post) to make suggestions, send comments, flame me for creating a free tool for them to use, etc.  Though I am generally a huge fan of both of these technologies, I was tearing my hair out over a particular issue which turned out to be solvable by reading the Go source code.  This coincided with the timing of my weekly blog article.  So here I am sharing my frustration and catharsis with you, dear readers.
 

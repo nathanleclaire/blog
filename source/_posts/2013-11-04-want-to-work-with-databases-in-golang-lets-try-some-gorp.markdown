@@ -13,7 +13,7 @@ categories: [golang,gorp,MySQL,ORM,database,go]
 
 Its supporters emphasize its [performance](http://benchmarksgame.alioth.debian.org/u64q/benchmark.php?test=all&lang=go&lang2=yarv&data=u64q), nifty approach to concurrency (it's [built right in](http://golang.org/doc/effective_go.html#concurrency)), and fast compile times as advantages.  Some of its detractors dislike its lack of exceptions and generics, but the purpose of this article is not to address these concerns, which have already been discussed *ad nauseum*.  Instead, this article will talk about and examine the `gorp` library.  
 
-{% img /images/gorp/gorp.jpg Eh? %}
+{% img /images/gorp/gorp.jpeg Eh? %}
 
 I don't actually mean GOOD OLD RAISINS & PEANUTS, of course- I mean [gorp](https://github.com/coopernurse/gorp), an "ORM-ish library for Go".  What is it, and how does it work its funny magic?
 
@@ -172,7 +172,7 @@ count, err := dbmap.Delete(person)
 
 Obviously gorp is really cool, and useful.  So how does it work?
 
-{% img /images/gorp/use-the-source-luke.jpg Best way to learn. %}
+{% img /images/gorp/use-the-source-luke.jpeg Best way to learn. %}
 
 I had no idea, but I remembered the words of Jeff Atwood and other wise folks and cracked open the [source code on github](https://github.com/coopernurse/gorp/blob/master/gorp.go).  Reading the unit tests also proved useful in understanding how `gorp` should be used (one of the virtues of meticulously tested code - it documents).
 

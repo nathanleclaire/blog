@@ -28,7 +28,7 @@ However, doing it this way was exhausting and tedious, as it required a lot of f
 
 I won't be publishing my full source code because this has so much potential for abuse, but I will talk a little bit here about how I accomplished automating this.  I chose to reach for my old friend Python to write the script to automate this process.  I wanted to get things done quickly and easily and Python proved to be a great boon here, even providing the excellent `argparse` module to make the script much more usable from the command line.
 
-{% img /images/autorap/copy-as-curl.jpg Useful Developer Tools are useful. %}
+{% img /images/autorap/copy-as-curl.jpeg Useful Developer Tools are useful. %}
 
 First, I got an example cURL request using Chrome's handy developer tools.
 

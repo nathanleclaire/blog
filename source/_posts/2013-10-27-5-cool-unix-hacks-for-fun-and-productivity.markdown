@@ -47,7 +47,7 @@ $ echo "Whoops we just committed unrelated stuff.  Not very modular of us."
 
 The `-p` (standing for patch) flag for `git add` is ridiculously useful for these kinds of cases.  This tells `git add` that we want to do a _partial_ add of the file, and we're presented with a nice interative menu which allows us to specify with a lovely amount of detail exactly which parts of the file we want to stage.  `git` splits the changes into hunks automatically, which you can approve or reject with `y` or `n` respectively, or use `s` to split up into finer grained hunks.  If `git` can't split the hunks up the way you want automatically, you can specify as much detail as you want with the `e` (edit) option.
 
-{% img /images/five-tips/git-add-minus-p.jpg And now our commits are nice and tidy. %}
+{% img /images/five-tips/git-add-minus-p.jpeg And now our commits are nice and tidy. %}
 
 See here for more details on `git add -p`: [How can I commit only part of a file in git?](http://stackoverflow.com/questions/1085162/how-can-i-commit-only-part-of-a-file-in-git)
 
@@ -61,7 +61,7 @@ You can press CTRL-N to move down the list of suggested completions when typing 
 
 CTRL-P/CTRL-N have a lot of synergy with the next tip as well, as touched upon briefly in the above paragraph.
 
-{% img /images/five-tips/ctrl-n-vim.jpg And you barely need to leave the home row. %}
+{% img /images/five-tips/ctrl-n-vim.jpeg And you barely need to leave the home row. %}
 
 # exuberant ctags
 
@@ -76,7 +76,7 @@ You can even set up a [post-commit hook in git](http://tbaggery.com/2011/08/08/e
 
 Ever been typing in a command at the terminal, when you suddenly find yourself wishing that there was an easy way to just autofill the prompt with something that you'd entered previously so you can edit it or just run it again?  If so, then I've got good news for you:  You can!  Just press CTRL+R and start typing the thing that you are looking for.  The terminal will fill in what it thinks you are looking for, and if there is more than one option you can cycle through them by pressing CTRL+R repeatedly.  When you've found the thing you're after, you can break out of the prompt with any of the usual movement commands (CTRL+A, CTRL+E, arrow keys, etc. if you have standard `bash` keybindings).  Try it out!  Very handy if you can't remember the name of the box you want to `ssh` into.
 
-{% img /images/five-tips/ctrl-r.jpg What was that IP address again? %}
+{% img /images/five-tips/ctrl-r.jpeg What was that IP address again? %}
 
 `history | grep $COMMAND` will treat you well too, if you just want to review all of the times you've run that command in recent times.
 
