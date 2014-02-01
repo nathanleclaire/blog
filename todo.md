@@ -5,7 +5,7 @@
 - Implement better related_posts functionality either through implementing myself (rank based on frequency of word usage / tags) or implementing someone else's plugin
 - Email signup form / clean up sidebar
 - Fix pagination issue (broken on archived articles right now)
-- bold `<h1>` - `<h6>`
+- Write 25 headlines for every article!!  http://www.slideshare.net/Upworthy/upworthy-10-ways-to-win-the-internets?ref=http://blog.crazyegg.com/2014/01/23/how-to-get-more-blog-traffic/
 
 # Blog Article Ideas
 
