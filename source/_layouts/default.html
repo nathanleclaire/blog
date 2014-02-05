@@ -17,6 +17,23 @@
 	<style>
 	/* prettify hemisu */
 	.pln{color:#111}@media screen{.kwd,.str{color:#739200}.com{color:#999}.typ{color:#f05}.lit{color:#538192}.clo,.opn,.pun,.tag{color:#111}.atn{color:#739200}.atv{color:#f05}.dec,.var{color:#111}.fun{color:#538192}}@media print,projection{.str{color:#060}.kwd{color:#006;font-weight:700}.com{color:#600;font-style:italic}.typ{color:#404;font-weight:700}.lit{color:#044}.clo,.opn,.pun{color:#440}.tag{color:#006;font-weight:700}.atn{color:#404}.atv{color:#060}}.prettyprint ol{color:#ccc}ol.linenums{margin-top:0;margin-bottom:0}
+	/* mailchimp */
+	#mc_embed_signup form{display:block;position:relative;text-align:left;padding:10px 0 10px 3%}#mc_embed_signup h2{font-weight:700;padding:0;margin:15px 0;font-size:1.4em}#mc_embed_signup input{border:1px solid #999;-webkit-appearance:none}#mc_embed_signup input[type=checkbox]{-webkit-appearance:checkbox}#mc_embed_signup input[type=radio]{-webkit-appearance:radio}#mc_embed_signup input:focus{border-color:#333}#mc_embed_signup .button{clear:both;background-color:#aaa;border:0 none;border-radius:4px;color:#FFF;cursor:pointer;display:inline-block;font-size:15px;font-weight:700;height:32px;line-height:32px;margin:0 5px 10px 0;padding:0;text-align:center;text-decoration:none;vertical-align:top;white-space:nowrap;width:auto}#mc_embed_signup .button:hover{background-color:#777}#mc_embed_signup .small-meta{font-size:11px}#mc_embed_signup .nowrap{white-space:nowrap}#mc_embed_signup .clear{clear:none;display:inline}#mc_embed_signup label{display:block;font-size:16px;padding-bottom:10px;font-weight:700}#mc_embed_signup input.email{display:block;padding:8px 0;margin:0 4% 10px 0;text-indent:5px;width:58%;min-width:130px}#mc_embed_signup input.button{display:block;width:35%;margin:0 0 10px;min-width:90px}#mc_embed_signup div#mce-responses{float:left;top:-1.4em;padding:0 .5em;overflow:hidden;width:90%;margin:0 5%;clear:both}#mc_embed_signup div.response{margin:1em 0;padding:1em .5em .5em 0;font-weight:700;float:left;top:-1.5em;z-index:1;width:80%}#mc_embed_signup #mce-error-response{display:none}#mc_embed_signup #mce-success-response{color:#529214;display:none}#mc_embed_signup label.error{display:block;float:none;width:auto;margin-left:1.05em;text-align:left;padding:.5em 0}
+	</style>
+	<style type="text/css">
+		#mc_embed_signup{
+			background:#fff; 
+			clear:left; 
+			font:14px Helvetica,Arial,sans-serif; 
+		}
+
+		#mce-EMAIL {
+			display: inline !important;
+		}
+
+		#mc-embedded-subscribe {
+			display: inline !important;
+		}
 	</style>
 	</head>
 	<body>
@@ -35,10 +52,21 @@
 					</div> <!-- // .navi -->
 				</header>
 				<span id="shameless-self-promotion">
-					<p>I love getting e-mail from readers. You should <a href="mailto:nathanleclaire@gmail.com">send me one</a>.</p>
+				<!-- Begin MailChimp Signup Form -->
+
+				<div id="mc_embed_signup">
+				<form action="http://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<label for="mce-EMAIL">Get hot technology tips and news delivered straight to your inbox</label>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+				</form>
+				</div>
+
+				<!--End mc_embed_signup-->
 					{% if page.id %}
-						<a target="_blank" style="display: block;" href="https://twitter.com/share?url=http://nathanleclaire.com{{ page.url }}&text=from @upthecyberpunks : " class="social-media-spam">Tweet this article!</a>
-						<p>You might also like:<p>
+					<p><i>You might like:</i><p>
 						<ul>
 							{% for post in site.related_posts limit:site.recent_posts %}
         						<li class="title">
