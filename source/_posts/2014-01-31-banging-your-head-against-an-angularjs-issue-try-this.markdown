@@ -88,7 +88,7 @@ You could also invoke `scope.$apply` in the directive itself.  To be honest, I'm
 
 > [There's a problem with your code] ... that can be the cause of significant bugs down the road, because it calls `$apply` from a scope inside the controller.  This will fail when that function is called from inside an AngularJS `$digest` cycle, for example, when the functions are called in any expression in the HTML (unless the directive is created in an isolate scope).
 >
-> As you know, angular whines hard when $apply is called inside an $apply or $digest.
+> As you know, Angular whines hard when `$apply` is called inside an `$apply` or `$digest`.
 >
 > The better practice is to call `$apply` only when you know you are outside of a `$digest` loop, such as inside the directive link function.  That is, keep the `$apply` out of a $controller, which is accessible to the declarative code in HTML or in another controller — and do the `$apply` in the directive link function, when you know you are outside of the `$digest` loop (I think).
 
