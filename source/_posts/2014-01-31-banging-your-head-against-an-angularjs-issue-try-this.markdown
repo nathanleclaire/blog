@@ -84,7 +84,54 @@ If you try the above code, you'll notice that it doesn't work.  The variable on 
 
 You could also invoke `scope.$apply` in the directive itself.  To be honest, I'm not sure what the Angular gurus would consider best practice.  Perhaps the latter since it is more DRY.
 
-You can see this finished code in action in a Plunk here:
+*EDIT*: I have received an email from a reader, Andrew Greenberg, that indicates the latter is indeed the way to go.  In fact, he points out a deeper flaw in my reasoning/approach:
+
+> [There's a problem with your code] ... that can be the cause of significant bugs down the road, because it calls `$apply` from a scope inside the controller.  This will fail when that function is called from inside an AngularJS `$digest` cycle, for example, when the functions are called in any expression in the HTML (unless the directive is created in an isolate scope).
+>
+> As you know, angular whines hard when $apply is called inside an $apply or $digest.
+>
+> The better practice is to call `$apply` only when you know you are outside of a `$digest` loop, such as inside the directive link function.  That is, keep the `$apply` out of a $controller, which is accessible to the declarative code in HTML or in another controller — and do the `$apply` in the directive link function, when you know you are outside of the `$digest` loop (I think).
+
+So there you have it- reasoning why you should call `$scope.$apply` or `$scope.$digest` in the link function of your directives, not in your controllers.  My code revised to meet these requirements would look like this:
+
+```js
+.directive('arrowListener', function() {
+	return {
+		restrict: 'A', // attribute
+		scope: {
+			moveRight: '&', // bind to parent method
+			moveLeft: '&'
+		}
+		link: function(scope, elm, attrs) {
+			elm.bind('keydown', function(e) {
+				if (e.keyCode === 39) {
+					scope.moveRight();
+				}
+				if (e.keyCode === 37) {
+					scope.moveLeft();
+				}
+				scope.$apply();
+			})
+		}
+	};
+})
+.controller('NumCtrl', function($scope) {
+	var history = [];
+	$scope.numbersDisplayed = [0,1,2,3,4,5];
+
+	$scope.moveRight = function() {
+		history.unshift($scope.numbersDisplayed.shift());
+	};
+
+	$scope.moveLeft = function() {
+		$scope.numbersDisplayed.unshift(history.shift());
+	};
+})
+```
+
+Writing it out, this way looks a bit cleaner to me as well.
+
+A Plunker demo of these concepts in action:
 
 <iframe src="http://embed.plnkr.co/agbSSuA2Mwx5pAd8kZSw/preview"></iframe>
 
