@@ -48,7 +48,7 @@ We're ignoring bounds-checking for the sake of simplicity in this demonstation. 
 		scope: {
 			moveRight: '&', // bind to parent method
 			moveLeft: '&'
-		}
+		},
 		link: function(scope, elm, attrs) {
 			elm.bind('keydown', function(e) {
 				if (e.keyCode === 39) {
@@ -90,7 +90,7 @@ You could also invoke `scope.$apply` in the directive itself.  To be honest, I'm
 >
 > As you know, Angular whines hard when `$apply` is called inside an `$apply` or `$digest`.
 >
-> The better practice is to call `$apply` only when you know you are outside of a `$digest` loop, such as inside the directive link function.  That is, keep the `$apply` out of a $controller, which is accessible to the declarative code in HTML or in another controller — and do the `$apply` in the directive link function, when you know you are outside of the `$digest` loop (I think).
+> The better practice is to call `$apply` only when you know you are outside of a `$digest` loop, such as inside the directive link function.  That is, keep the `$apply` out of a `$controller`, which is accessible to the declarative code in HTML or in another controller — and do the `$apply` in the directive link function, when you know you are outside of the `$digest` loop (I think).
 
 So there you have it- reasoning why you should call `$scope.$apply` or `$scope.$digest` in the link function of your directives, not in your controllers.  My code revised to meet these requirements would look like this:
 
@@ -101,7 +101,7 @@ So there you have it- reasoning why you should call `$scope.$apply` or `$scope.$
 		scope: {
 			moveRight: '&', // bind to parent method
 			moveLeft: '&'
-		}
+		},
 		link: function(scope, elm, attrs) {
 			elm.bind('keydown', function(e) {
 				if (e.keyCode === 39) {
