@@ -3,7 +3,7 @@ layout: post
 title: "5 Cool Unix Hacks For Fun and Productivity"
 date: 2013-10-27 19:44
 comments: true
-categories: [unix,hacking,vi,git,bash,zsh]
+categories: [unix,hacking,vi,git,bash,zsh,five]
 ---
 
 In my workflow I am always looking for ways to be more productive, and to have more fun while developing.  There's nothing quite like the feeling of flying through a sequence of commands in `bash` that you know would take your peers twice as long to execute.  Have you ever :

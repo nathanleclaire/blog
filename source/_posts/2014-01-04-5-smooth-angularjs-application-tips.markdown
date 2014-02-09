@@ -3,7 +3,7 @@ layout: post
 title: "4 Smooth AngularJS Application Tips"
 date: 2014-01-04 14:24
 comments: true
-categories: [javscript,hacking,angularJS,animations,tricks,tips,design patterns,ng-view,ng-show,tabs,promises,$q,$http,services,directives]
+categories: [javscript,hacking,angularJS,animations,tricks,tips,design patterns,ng-view,ng-show,tabs,promises,$q,$http,services,directives,five]
 ---
 
 Anyone who follows my blog even a little closely can probably see that I <3 AngularJS:
