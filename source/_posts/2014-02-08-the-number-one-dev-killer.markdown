@@ -18,15 +18,15 @@ Do you recognize this guy?
 
 {%img /images/dev-killer/mailchimp.jpg %}
 
-Probably at least looks familiar, right?  It's the [Mailchimp](http://mailchimp.com) monkey.  How about this guy?
+Probably at least looks familiar, right?  It's the [MailChimp](http://mailchimp.com) monkey.  How about this guy?
 
 {%img /images/dev-killer/hermes.jpg %}
 
-It's [Hermes](http://en.wikipedia.org/Hermes), the Greek god of communication.  But unless you're a theology buff, Freddie the Mailchimp mascot was probably a lot more meaningful to you in a modern context than Hermes.  So what?  Let me tell you a story to explain what I'll be getting at.
+It's [Hermes](http://en.wikipedia.org/Hermes), the Greek god of communication.  But unless you're a theology buff, Freddie the MailChimp mascot was probably a lot more meaningful to you in a modern context than Hermes.  So what?  Let me tell you a story to explain what I'll be getting at.
 
 Now that I've started getting some traffic to my blog, and received a variety of emails from readers, I wanted to get a mailing list up.  You know, nothing fancy, just an email that I send out every once in a while to give people a chance to catch up with what I've been writing about this week.  So what do I do?
 
-I could use [Mailchimp](http://mailchimp.com), a rock-solid and proven standby that is good enough for people like [Andrew Chen](http://andrewchen.co) and [Patrick McKenzie]() and obviously should be good enough for me.  But what did I do?  Like a "good" hacker, I started writing my own (In addition to just wanting a cool project, for some reason I was embarassed about the possibility of people know that I use Mailchimp.  I don't know why, I guess I just have some kind of weird DIY fetish).  It was going to be called [Hermes](http://github.com/nathanleclaire/hermes), written in Express/Node.js, and I was totally stoked.  Mostly because now I was going to attempt to re-invent Mailchimp instead of doing more important, but less sexy, things with my time.
+I could use [MailChimp](http://mailchimp.com), a rock-solid and proven standby that is good enough for people like [Andrew Chen](http://andrewchen.co) and [Patrick McKenzie](http://www.kalzumeus.com) and obviously should be good enough for me.  But what did I do?  Like a "good" hacker, I started writing my own (In addition to just wanting a cool project, for some reason I was embarassed about the possibility of people know that I use MailChimp.  I don't know why, I guess I just have some kind of weird DIY fetish).  It was going to be called [Hermes](http://github.com/nathanleclaire/hermes), written in Express/Node.js, and I was totally stoked.  Mostly because now I was going to attempt to re-invent MailChimp instead of doing more important, but less sexy, things with my time.
 
 I got about this far (I'm skipping over some boilerplate):
 
@@ -88,9 +88,13 @@ function main(conn) {
 }
 ```
 
-Before I started to say to myself: "Nate, are you being reasonable or are you just being cheap?  And why are you doing this instead of working on other, more low-hanging fruit to make your blog and side-projects more successful?  [Check For Broken Links](http://github.com/nathanleclaire/checkforbrokenlinks) *still* hasn't ever been deployed!".  Though the Check For Broken Links comment was a low blow, I knew I was right.  So I bit the bullet and used Mailchimp instead.  You can see the results of my "labor" in the left sidebar of my blog, and I'm actually ecstatic I decided to go with them instead of writing my own mail management system.
+Before I started to say to myself: "Nate, are you being reasonable or are you just being cheap?  And why are you doing this instead of working on other, more low-hanging fruit to make your blog and side-projects more successful?  [Check For Broken Links](http://github.com/nathanleclaire/checkforbrokenlinks) *still* hasn't ever been deployed!"<sup id="foot1return"><a href="#foot1">1</a></sup>.  Though the Check For Broken Links comment was a low blow, I knew I was right.  
 
-Why?  Because all of the time I saved by going the Mailchimp route, instead of creating something original but inferior, allowed me to spend more time doing other, more valuable things.  For that matter, the influx of reader emails that I was anticipating and hoping for hasn't really materialized, and at the time of writing I have all of two people on my mailing list :D (myself and my girlfriend- though I'm working on improving this).  I'm glad to have one less (giant) thing on my todo list, and I don't feel like a failure since I didn't waste a bunch of time on something that isn't paying dividends right away (though I think it will in the future).  And I get all of the niceness, including analytics and a crazy awesome Web UI, for the small price of a MailChimp logo on my signup form.  Sign me up!
+# Enlightenment
+
+So I bit the bullet and used MailChimp instead.  You can see the results of my "labor" in the left sidebar of my blog, and I'm actually ecstatic I decided to go with them instead of writing my own mail management system.
+
+Why?  Because all of the time I saved by going the MailChimp route, instead of creating something original but inferior, allowed me to spend more time doing other, more valuable things.  For that matter, the influx of reader emails that I was anticipating and hoping for hasn't really materialized, and at the time of writing I have all of two people on my mailing list :D (myself and my girlfriend- though I'm working on improving this).  I'm glad to have one less (giant) thing on my todo list, and I don't feel like a failure since I didn't waste a bunch of time on something that isn't paying dividends right away (though I think it will in the future).  And I get all of the niceness, including analytics and a crazy awesome Web UI, for the small price of a MailChimp logo on my signup form.  Sign me up!
 
 Coming back to the Freddie the Chimp vs. Hermes comparison- Why use an untrusted brand / sketchy open source product when you can use a battle-hardened old friend? 
 
@@ -145,6 +149,8 @@ I have been this person on and off.  It's no more fun them than it is to be arou
 
 Go forth and hack, sisters and brothers.  Just put some thought into using the right tool for the right job, and getting things done FAST instead of learning the newest hotness (which may cause you more headaches than it prevents).  There's nothing wrong with a box running MySQL as its only database, or using just jQuery on your front end if that's all you need, or developing an iOS app instead of an HTML5 one written with PhoneGap and AngularJS.  Let the tool fit the situation, and get things done (especially if you're starting a company).
 
-Until next week, stay sassy Internet!
+Until next week, stay sassy Internet!  Oh, and subscribe to my mailing list already.  You're killing me over here.
 
 - Nathan
+
+<span id="foot1"><a href="#foot1return">(1)</a></span> : It's kind of like my "[Chinese Democracy](http://en.wikipedia.org/wiki/Chinese_Democracy)".
