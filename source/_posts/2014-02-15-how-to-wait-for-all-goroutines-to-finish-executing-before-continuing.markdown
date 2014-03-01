@@ -6,6 +6,8 @@ comments: true
 categories: [golang,concurrency,goroutines,waitGroup,sync]
 ---
 
+*EDIT:*  As pointed out by effenn in [this Reddit comment](http://www.reddit.com/r/golang/comments/1y3spq/how_to_wait_for_all_goroutines_to_finish/cfh9fg7), a lot of information in this article is "dangerously inaccurate".  OOPS!  I've written a followup/correction article [here]() for your viewing pleasure, but I'm leaving this article up for "historical purposes".
+
 {%img /images/syncwaitgroup/gophermegaphones.jpeg %}
 
 Goroutines and channels are one of [Go](http://golang.org)'s nicest language features.  They provide a rather headache-free way to use the power of concurrency in your Go programs, and they are baked into the language itself instead of relying on standard or external libraries.  I was very excited when I started playing around with them but eventually came across a problem : what if you want to wait for all goroutines (a kind of lightweight thread in case you're not familiar) to finish executing before you continue execution in the current goroutine?
