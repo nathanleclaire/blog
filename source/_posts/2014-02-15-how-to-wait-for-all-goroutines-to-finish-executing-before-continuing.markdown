@@ -116,7 +116,9 @@ This method is a little better but sacrifices some flexibility.  For instance, i
 
 As mentioned, the canonical way to do this is to use the `sync` package's `WaitGroup` structure ([link](http://golang.org/pkg/sync/#WaitGroup)).  From the docs:
 
-> A WaitGroup waits for a collection of goroutines to finish. The main goroutine calls Add to set the number of goroutines to wait for. Then each of the goroutines runs and calls Done when finished. At the same time, Wait can be used to block until all goroutines have finished.  To use `sync.WaitGroup` we:
+> A WaitGroup waits for a collection of goroutines to finish. The main goroutine calls Add to set the number of goroutines to wait for. Then each of the goroutines runs and calls Done when finished. At the same time, Wait can be used to block until all goroutines have finished.  
+
+To use `sync.WaitGroup` we:
 
 1. Create a new instance of a `sync.WaitGroup` (we'll call it `wg`)
 2. Call `wg.Add(n)` where `n` is the number of goroutines to wait for (we can also call `wg.Add(1)` `n` times)
