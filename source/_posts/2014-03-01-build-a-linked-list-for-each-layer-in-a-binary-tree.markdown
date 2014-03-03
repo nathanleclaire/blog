@@ -89,7 +89,7 @@ No methods, I do all of the tree manipulation by hand.  This works okay for prob
 
 The algorithm that I came up with is actually slightly different than what is listed as the solution in the book, and depends a bit of idiosyncracies of Python that aren't in Java (which all of the solutions from the book are written in).  Namely, it uses optional arguments to avoid wrapper methods and it uses a dictionary instead of a `ArrayList<LinkedList<BinaryTree>>`.
 
-I also differ from the solution in the book in that I grab the depth of the tree once and use that to determine the linked list's index, which is slightly less efficient than the solution that they provide.  If I'm not mistaken, however, the asymptotic complexity is still the same (`O(log n)`).
+I also differ from the solution in the book in that I grab the depth of the tree once and use that to determine the linked list's index, which is slightly less efficient than the solution that they provide.  If I'm not mistaken, however, the asymptotic complexity is still the same (`O(n)`).
 
 My depth function is exactly what you'd expect (recursive):
 
