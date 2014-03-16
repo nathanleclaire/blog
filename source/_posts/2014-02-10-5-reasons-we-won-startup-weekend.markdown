@@ -3,7 +3,7 @@ layout: post
 title: "5 Reasons We Won Startup Weekend"
 date: 2014-02-10 18:27
 comments: true
-categories: [startups,entrepreneurship,hacking,reasons]
+categories: [fixworthy,vagrant,startups,entrepreneurship,hacking,reasons]
 ---
 
 This previous weekend I participated in [Ann Arbor Startup Weekend](http://annarbor.startupweekend.org/) and had a blast.  Our company's name is [Fixworthy](http://fixworthy.co) and we built a photo-based bug tracking app for real life (think Github Issues meets Instagram).
