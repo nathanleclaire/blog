@@ -82,7 +82,7 @@ Angular is a new framework and it requires a new way of thinking.  Trying to app
 
 Everyone likes jQuery because jQuery is a useful tool.  It is simple and it allows you to build whatever you want.  It isn't very opinionated about the way you do so (in fact it provides you with a lot of options).
 
-Angular, on the other hand, is like a house.  It already has a framework and a foundation for how to do things, you just have to ffurnish it.  Trying to use Angular like a hammer will only result in tears.  It is like trying to use a house to build a house.
+Angular, on the other hand, is like a house.  It already has a framework and a foundation for how to do things, you just have to furnish it.  Trying to use Angular like a hammer will only result in tears.  It is like trying to use a house to build a house.
 
 I hope that this essay may help to clear some things up to people who are new to Angular.
 
