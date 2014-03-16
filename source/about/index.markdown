@@ -17,7 +17,7 @@ I programmed on and off for a few years after taking in more in high school, mos
 
 When I graduated from college, began interning at [21st Century Parks](http://21cparks.org) and I stumbled across a rekindled enjoyment of programing and technology.  When I started maintaining their website and the website of my band [Funny Bones](http://funnybonesbeats.org), I knew I was onto something.  Thus began my career in technology.
 
-I continue to experiment with exciting new technologies like [Go](golang.org) and [AngularJS](http://angularjs.org) in my free time, as well as writing about them, computer science, and some old favorites such as Python in my blog.
+I continue to experiment with exciting new technologies like [Go](http://golang.org) and [AngularJS](http://angularjs.org) in my free time, as well as writing about them, computer science, and some old favorites such as Python in my blog.
 
 Areas of interest for me in computing include:
 
