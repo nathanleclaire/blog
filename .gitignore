@@ -12,3 +12,4 @@ vendor
 node_modules
 *.swp
 public
+sass
