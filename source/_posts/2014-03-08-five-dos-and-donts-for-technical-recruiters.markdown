@@ -206,8 +206,10 @@ I already mentioned the recruiter that dropped off the Red Bull (he was actually
 
 I was starting to get into my morning groove, sipping some coffee when I got a Skype message from Jill, our administrative assistant.
 
-JILL: "[some recruiter I'd never heard of] from [recruiting agency] is asking for you"
+JILL: "*[some recruiter I'd never heard of]* from *[recruiting agency]* is asking for you"
+
 ME: "Wait, like he's literally here at the front desk?"
+
 JILL: "He's here, at the front desk"
 
 I was going to ignore it, hoping he'd go away, when I got another message from Jill:
