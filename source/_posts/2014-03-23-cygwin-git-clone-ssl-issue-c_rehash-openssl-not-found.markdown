@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Fixing Cygwin's SSL issues with git clone / c_rehash bug"
-date: 2013-10-27 19:44
+date: 2014-3-24 19:44
 comments: true
 categories: [unix,cygwin,windows,git,dear god why]
 ---
