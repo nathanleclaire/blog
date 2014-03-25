@@ -16,7 +16,6 @@ group :development do
   gem 'yui-compressor', '~> 0.12.0'
   gem 'html_compressor', '~> 0.0.3'
   gem 'parallel', '~> 0.9.1'
-  gem 'gsl'
 end
 
 gem 'sinatra', '~> 1.3.3'
