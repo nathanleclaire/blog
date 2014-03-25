@@ -14,3 +14,4 @@ fonts_dir = "source/fonts"
 
 line_comments = false
 output_style = :compressed
+cache_path = '/tmp/.sass-cache'
