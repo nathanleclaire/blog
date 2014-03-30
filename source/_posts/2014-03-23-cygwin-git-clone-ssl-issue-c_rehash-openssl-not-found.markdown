@@ -8,7 +8,7 @@ categories: [unix,cygwin,windows,git,dear god why]
 
 # Cygwin's git clone drama
 
-{%img /images/cygwin-ssl/cygwin.jpg %}
+{%img /images/cygwin-ssl/cygwin.png %}
 
 ## Oh, you.
 
