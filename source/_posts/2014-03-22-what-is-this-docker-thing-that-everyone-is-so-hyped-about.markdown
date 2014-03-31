@@ -10,7 +10,7 @@ categories: [docker,containers,virtualization,vagrant]
 
 # Docker
 
-Approximately one year I was browsing [Hacker News](http://news.ycombinator.com) and I came across this video:
+Approximately one year ago I was browsing [Hacker News](http://news.ycombinator.com) and I came across this video:
 
 <div style="text-align: center;">
 <iframe style="width: 420px !important;" width="420" height="315" src="//www.youtube.com/embed/wW9CAH9nSLs" frameborder="0" allowfullscreen></iframe>
