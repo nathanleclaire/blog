@@ -142,7 +142,7 @@ Want to select by primary key?
 
 ```go
 primaryKey := 1
-p1, err := dmap.Get(Person{}, primaryKey)
+p1, err := dbmap.Get(Person{}, primaryKey)
 ```
 
 How about selecting by arbitrary (non-primary-key) fields?  You can use `dbm.Select` to get a slice, or `dbm.SelectOne` to populate the slice or structure with the revelant data.
