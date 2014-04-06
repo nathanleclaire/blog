@@ -8,7 +8,7 @@ categories: [golang,algorithms,floodfill,concurrency]
 
 # The setup
 
-Lately as part of a coding exercise I found myself implementing a [Flood Fill]() for "painting" an ASCII canvas.  For those of you unfamiliar with what that is, think back to MSPaint - remember that little paint bucket that would fill a region with your color of choice?  That paint bucket implements a flood fill algorithm, although I didn't know that's what it was called until I started working on implementing one myself.
+Lately as part of a coding exercise I found myself implementing a [Flood Fill](http://en.wikipedia.org/wiki/Flood_fill) for "painting" an ASCII canvas.  For those of you unfamiliar with what that is, think back to MSPaint - remember that little paint bucket that would fill a region with your color of choice?  That paint bucket implements a flood fill algorithm, although I didn't know that's what it was called until I started working on implementing one myself.
 
 {%img /images/flood-fill/flood-fill-basic.gif %}
 
@@ -221,11 +221,11 @@ GGGGGGGGGGGGGGGGG---
 GGGGGGGGGGGGGGGGG---
 </pre>
 
-It runs pretty satisfyingly quickly.  Wiki mentions a few alternative approaches that might work a little better, but I like this one for its simplicity.
+It runs pretty satisfyingly quickly.  Wiki mentions a few alternative approaches that might work a little better (EDIT: it says that going line-by-line instead of pixel by pixel is an order of magnitude faster), but I like this one for its simplicity.
 
 # Conclude
 
-The code is [up on Github]() if you're curious.  I'd love to hear about other possible approaches, especially ones that are better at taking advtange of Go's concurrency features.  I considered using `sync.WaitGroup` but this didn't really seem like a good case to do so.
+The code is [up on Github](https://github.com/nathanleclaire/golangfloodfill) if you're curious.  I'd love to hear about other possible approaches, especially ones that are better at taking advtange of Go's concurrency features.  I considered using `sync.WaitGroup` but this didn't really seem like a good case to do so.
 
 Until next time, stay sassy Internet.
 
