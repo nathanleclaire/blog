@@ -21,7 +21,7 @@ deploy_branch  = "gh-pages"
 
 public_dir      = "/tmp/public"    # compiled site directory
 source_dir      = "/tmp/source"    # source file directory
-blog_index_dir  = 'source/blog'    # directory for your blog's index page (if you put your index in source/blog/index.html, set this to 'source/blog')
+blog_index_dir  = "/tmp/source/blog"    # directory for your blog's index page (if you put your index in source/blog/index.html, set this to 'source/blog')
 deploy_dir      = "_deploy"   # deploy directory (for Github pages deployment)
 stash_dir       = "_stash"    # directory to stash posts for speedy generation
 posts_dir       = "_posts"    # directory for blog files
@@ -35,12 +35,15 @@ desc "Initial setup for Octopress: copies the default theme into the path of Jek
 task :install, :theme do |t, args|
   # copy theme into working Jekyll directories
   theme = args.theme || 'classic'
-  puts "## Copying "+theme+" theme into #{source_dir} and ./sass"
+  puts "## Copying "+theme+" theme into ./#{source_dir} and ./sass"
   mkdir_p source_dir
   cp_r "#{themes_dir}/#{theme}/source/.", source_dir
   mkdir_p "sass"
   cp_r "#{themes_dir}/#{theme}/sass/.", "sass"
   mkdir_p "#{source_dir}/#{posts_dir}"
+  cp_r "source/_posts", "#{source_dir}"
+  cp_r "source/_includes", "#{source_dir}"
+  cp_r "source/images", "#{source_dir}"
   mkdir_p public_dir
 end
 
@@ -54,10 +57,6 @@ task :generate do
   puts "## Generating Site with Jekyll"
   system "compass compile --css-dir #{source_dir}/stylesheets"
   system "jekyll"
-  system "rm -rf #{public_dir}"
-  system "cp -r public /tmp"
-  mkdir_p "#{public_dir}/stylesheets/"
-  system "cp #{source_dir}/stylesheets/main.css #{public_dir}/stylesheets"
 end
 
 desc "Watch the site and regenerate when it changes"
