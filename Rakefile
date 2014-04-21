@@ -37,13 +37,10 @@ task :install, :theme do |t, args|
   theme = args.theme || 'classic'
   puts "## Copying "+theme+" theme into ./#{source_dir} and ./sass"
   mkdir_p source_dir
+  cp_r "source/.", source_dir
   cp_r "#{themes_dir}/#{theme}/source/.", source_dir
   mkdir_p "sass"
   cp_r "#{themes_dir}/#{theme}/sass/.", "sass"
-  mkdir_p "#{source_dir}/#{posts_dir}"
-  cp_r "source/_posts", "#{source_dir}"
-  cp_r "source/_includes", "#{source_dir}"
-  cp_r "source/images", "#{source_dir}"
   mkdir_p public_dir
 end
 
