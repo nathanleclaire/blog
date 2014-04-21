@@ -17,7 +17,7 @@ They are:
 1. Not having a dot in your `ng-model` (or other places you need it!)
 2. Extreme overuse of event broadcasting and listening (`$emit`, `$broadcast`, `$on`)
 3. Too much stuff in controllers 
-4. Misunderstading or misusing isolate scope
+4. Misunderstanding or misusing isolate scope
 5. Using the outside world instead of doing things the Angular way
 
 # 1. Not having a dot in your `ng-model` (or other places you need it!)
@@ -45,7 +45,7 @@ In particular, when you have an `ng-model` bound to a property on `$scope` which
 
 > “Whenever you have ng-model there’s gotta be a dot in there somewhere. If you don’t have a dot, you’re doing it wrong.”
 
-Words from the mouth of Miško's himself.
+Words from the mouth of Miško himself.
 
 This is because *primitives* (String, Number, etc.) passed in to a child scope create their own "shadow" property in the child scope, which hides the original property on the parent scope due to the way that JavaScript prototypes work (the prototype chain will not need to be consulted to determine the value of `foo` if `foo` is not an `Object` or `Array`).  If they are bound using `=` and they are objects, however, `foo.bar` *will* be bound correctly to the original property in the parent scope.
 
@@ -53,17 +53,18 @@ Understanding this will save you soooo much pain.  Seriously, if you're serious 
 
 I suspect that a misunderstanding of this (communicating effectively from scope to scope up and down the prototype chain) is at least partially what contributes to people digging themselves further and further into a hole by misusing event broadcasting/emitting/listening and isoalte scope, as detailed later on in this article.  When things spiral out of control in this manner, it can really be pure torture.  You're fighting against the framework, and nobody wins in that battle, least of all the people who have to maintain your code.
 
-The point is, most people new to Angular (and even people who have been doing it for a while) expect this to work (sorry for the weird looking curlies, Octopress is handling them weirdly):
+The point is, most people new to Angular (and even people who have been doing it for a while) expect this to work :
 
 {% raw %}
 ```
 <p> You have {{dollars}} dollars </p>
-<crazy-awesome-widget info="dollars">
+<crazy-awesome-widget ng-repeat="account in accounts" info="dollars">
 </crazy-awesome-widget>
 
 <script>
 angular.module('dotDemo').controller('OuterCtrl', function($scope) {
   $scope.dollars = 5;
+  $scope.accounts = ["Tom", "Bobby", "Sally"];
 });
 angular.module('dotDemo').directive('crazyAwesomeWidget', function() {
   return {
@@ -80,14 +81,16 @@ angular.module('dotDemo').directive('crazyAwesomeWidget', function() {
 
 Can you spot the bug?  If you've been paying attention, you should be able to pick it out easily.
 
+<iframe src="http://embed.plnkr.co/ii8xZoOIRcWw4LlNMayf/preview"></iframe>
+
 Come on, intone it with me.  *I need a dot. I need a dot. I need a dot.*
 
-In the above code the input box won't update the property in the parent scope.  The prototype chain creates a new property `info` which is unique to the child scope instead of bound to the parent scope.  It won't work this way.  You need an object instead.  The code should look like this instead:
+In the above code the input boxes won't update the property in the parent scope.  The prototype chain creates a new property `info` which is unique to the child scope instead of bound to the parent scope.  It won't work this way.  You need an object.  The code should look like this instead:
 
 {% raw %}
 ```
 <p> You have {{customerData.dollars}} dollars </p>
-<crazy-awesome-widget info="customerData">
+<crazy-awesome-widget ng-repeat="account in accounts" info="customerData">
 </crazy-awesome-widget>
 
 <script>
@@ -95,6 +98,7 @@ angular.module('dotDemo').controller('OuterCtrl', function($scope) {
   $scope.customerData = {
     dollars: 5
   };
+  $scope.accounts = ["Tom", "Bobby", "Sally"];
 });
 angular.module('dotDemo').directive('crazyAwesomeWidget', function() {
   return {
@@ -108,6 +112,12 @@ angular.module('dotDemo').directive('crazyAwesomeWidget', function() {
 </script>
 ```
 {% endraw %}
+
+<iframe src="http://embed.plnkr.co/IVkqcNVhwQXd1zQ9nZQ2/preview"></iframe>
+
+Boom, synchronization from parent scope => isolated child scopes and back again.
+
+Big shout out to Reddit user [Commentares](http://www.reddit.com/user/Commentares) who caught a flaw in the original implementation of my first example in the first draft of this article.
 
 See for reference:
 
