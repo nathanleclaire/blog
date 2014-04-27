@@ -113,7 +113,7 @@ app.directive('scroller', function($timeout, rememberService) {
 	return {
 		restrict: 'A', // this gets tacked on to an existing <div>
 		scope: {},
-		link: function(scope, element, attrs) {
+		link: function(scope, elm, attrs) {
 			var raw = elm[0];  // get raw element object to access its scrollTop property
 			
 			elm.bind('scroll', function() {
