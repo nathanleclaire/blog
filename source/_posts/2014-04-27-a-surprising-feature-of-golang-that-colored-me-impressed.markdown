@@ -6,6 +6,14 @@ comments: true
 categories: [golang]
 ---
 
+*EDIT:* Some commenters were confused about some things in this article, and I don't want people to get an unclear picture, so to clarify:
+
+1. Yes, I know that insertion into a hash table creates an arbitrary ordering of elements by definition.  For a variety of reasons, e.g. that not every map is a hash map as some posters have pointed out (and some languages have ordered hash maps), I can see how someone might hypothesize (especially with a naïve understanding of Go maps) that iteration order could be the same as insertion order.
+2. My original example was contrived and does not demonstrate the point for most versions of Go (though I hear it might work for 1.3), so I have updated the code to be something you can chuck into an editor or the [Go Playground](http://play.golang.org/p/ppIvkgAGL1) and see the effect for yourself.
+3.  It *is* true that Go runs from a [random offset for map iteration](https://codereview.appspot.com/5285042/patch/9001/10003).  It's not *just* arbitrary.
+
+Now back to your regularly scheduled article.  :)
+
 {%img /images/gopher/hardhat.png %}
 
 # go blog.Article()
@@ -50,7 +58,7 @@ for key, value := range m {
 
 ## Iteration Order
 
-At first glance you would think that the output of this code:
+At first glance a Go programmer might think that the output of this code:
 
 ```go
 package main
@@ -58,38 +66,57 @@ package main
 import "fmt"
 
 func main() {
-	blogArticleViews := make(map[string]int)
-	blogArticleViews["unix"] = 500
-	blogArticleViews["python"] = 300
-	blogArticleViews["go"] = 100
-	blogArticleViews["javascript"] = 4000
-	blogArticleViews["testing"] = 800
+	blogArticleViews := map[string]int{
+		"unix": 0,
+		"python": 1,
+		"go": 2,
+		"javascript": 3,
+		"testing": 4,
+		"philosophy": 5,
+		"startups": 6,
+		"productivity": 7,
+		"hn": 8,
+		"reddit": 9,
+		"C++": 10,
+	}
 	for key, views := range blogArticleViews {
 		fmt.Println("There are", views, "views for", key)
 	}
 }
 ```
 
-Would be something like this:
+Would be this:
 
 ```
 $ go run map_iteration_order.go
-There are 500 views for unix
-There are 300 views for python
-There are 100 views for go
-There are 4000 views for javascript
-There are 800 views for testing
+There are 0 views for unix
+There are 1 views for python
+There are 2 views for go
+There are 3 views for javascript
+There are 4 views for testing
+There are 5 views for philosophy
+There are 6 views for startups
+There are 7 views for productivity
+There are 8 views for hn
+There are 9 views for reddit
+There are 10 views for C++
 ```
 
-But, since Go 1, the iteration order is actually random.  So in fact it will be more like this:
+But, since Go 1, the Go runtime actually randomizes the iteration order.  So in fact it will be more like this:
 
 ```
 $ go run map_iteration_order.go
-There are 800 views for testing
-There are 4000 views for javascript
-There are 300 views for python
-There are 100 views for go
-There are 500 views for unix
+There are 3 views for javascript
+There are 5 views for philosophy
+There are 10 views for C++
+There are 0 views for unix
+There are 1 views for python
+There are 2 views for go
+There are 4 views for testing
+There are 6 views for startups
+There are 7 views for productivity
+There are 8 views for hn
+There are 9 views for reddit
 ```
 
 The Go language designers noticed that people were relying on the fact that keys were normally stored in the order they were added in, so they randomized the order in which the keys are iterated over.  Thus, if you want to output keys in the order they were added in, you need to keep track of which value is in which position in the order *yourself* like so :
@@ -130,7 +157,7 @@ One of the biggest weak points of PHP, for instance, is the needle-versus-haysta
 
 Go is a pleasant language and just so well thought-out in many ways.  Don't be too quick to judge or criticize because it lacks features you are accustomed to such as generics or dynamic typing- perhaps if you give it a try you will find that you do not miss them all that much and you are writing simple, clean, elegant code with easy-to-integrate concurrency.
 
-Go is definitely still growing and evolving, and that's part of the fun of it as well.  It is definitely proving to be no less than rock-solid and production-ready, yet still performance and reliability keeps improving.  Just check out the awesome numbers on these benchmarks [Rob Pike recently posted]() comparing the Go 1 release to tip (nearing 1.3):
+Go is definitely still growing and evolving, and that's part of the fun of it as well.  It is definitely proving to be no less than rock-solid and production-ready, yet still performance and reliability keeps improving.  Just check out the awesome numbers on these benchmarks [Rob Pike recently posted](https://groups.google.com/forum/#!msg/golang-dev/2YRmu_AWz68/tKAZgpV7zQwJ) comparing the Go 1 release to tip (nearing 1.3):
 
 <pre style="transition: 1s ease-in-out all;" id="bench">
 Delta from go1 to tip: 
