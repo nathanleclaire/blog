@@ -63,3 +63,5 @@ I'm super optimistic for the future of this technology.
 Until next time, stay sassy Internet.
 
 - Nathan
+
+# Long-term concerns on using Docker
