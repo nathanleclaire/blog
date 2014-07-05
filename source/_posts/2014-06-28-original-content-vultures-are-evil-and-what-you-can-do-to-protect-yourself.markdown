@@ -48,15 +48,24 @@ If you care about your content follow the tip below and participate in a communi
 
 # I don't want this to happen to me.  What can I do about it?
 
-I've put the following piece of JavaScript on many of my pages, and you might want to follow suit with a similar snippet:
+EDIT: I've swapped out the "shaming" text for a trick which simply redirects to the original page (listed below), which I had previously just assumed wasn't possible due to cross-domain policies in browsers.
 
-```js
-if (window.top !== window.self) {
-	$('body').html('<h1>If you are reading this then you may be viewing this content on a domain outside of <a href="http://nathanleclaire.com">nathanleclaire.com</a>, the original site and source of this content, possibly (mis)led here by an original content hijacking and exploitation tool such as Tweetganic.  That\'s not cool, so please visit my original website instead.  Cheers.</h1><h1>- Nate</h1>');
-}
+I've put the following piece of JavaScript/CSS on many of my pages, and you might want to follow suit with a similar snippet:
+
+```
+<style> html{display:none;} </style>
+<script>
+   if(self == top) {
+       document.documentElement.style.display = 'block'; 
+   } else {
+       top.location = self.location; 
+   }
+</script>
 ```
 
-It displays a little message calling these kinds of tools on their shenanigans if the page is embedded in an `<iframe>` (how tweetganic and many similar tools work).  I want a more robust solution, but this covers a decent set of use cases.
+Source: [Wikipedia](http://en.wikipedia.org/wiki/Framekiller)
+
+Basically what it does is makes content unrendered by default and redirects the page to the original domain if the site is loaded in an iframe.
 
 You could also set the `X-Frame-Options` HTTP header to `DENY` in your server config (if you don't need your page to load in iframes, and for 90% of sites why would you?).
 
