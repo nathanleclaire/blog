@@ -15,7 +15,7 @@ I'm Nathan LeClaire and I &lt;3 technology.  When I was 14 or so I started to le
 
 I programmed on and off for a few years after taking in more in high school, mostly about Java, and eventually majored in Philosophy for college.  I love analyzing arguments and discussions of great philosophical thinkers all the way from Plato to Leibniz to Dennett.  Studying philosophy made me a better thinker and communciator as I realized that no line of argument was perfect.
 
-When I graduated from college, began interning at [21st Century Parks](http://21cparks.org) and I stumbled across a rekindled enjoyment of programing and technology.  When I started maintaining their website and the website of my band [Funny Bones](http://funnybonesbeats.org), I knew I was onto something.  Thus began my career in technology.
+When I graduated from college, I began interning at [21st Century Parks](http://21cparks.org) and I stumbled across a rekindled enjoyment of programming and technology.  When I started maintaining their website and the website of my band [Funny Bones](http://funnybonesbeats.org), I knew I was onto something.  Thus began my career in technology.
 
 I continue to experiment with exciting new technologies like [Go](http://golang.org) and [AngularJS](http://angularjs.org) in my free time, as well as writing about them, computer science, and some old favorites such as Python in my blog.
 
@@ -24,14 +24,5 @@ Areas of interest for me in computing include:
 * Scalability & Distributed Systems
 * Machine Learning, Artificial Neural Nets, Genetic Algorithms/Programming etc.
 * Security (reverse engineering exploits and network vulnerabilities)
-
-Though I am currently employed I am always interested in talking about other opportunities, particularly involving the interests listed above and in the following cities:
-
-* New York, NY
-* San Francisco, CA
-* Portland, OR
-* Denver, CO
-* Austin, TX
-* Berlin, Germany
 
 I enjoy getting e-mail, you should <a href="mailto:nathanleclaire@gmail.com">send me one</a>.  Thanks for visiting!

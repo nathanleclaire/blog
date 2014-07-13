@@ -6,7 +6,7 @@ comments: true
 categories: [golang,concurrency,goroutines,waitGroup,sync]
 ---
 
-*EDIT:*  As pointed out by effenn in [this Reddit comment](http://www.reddit.com/r/golang/comments/1y3spq/how_to_wait_for_all_goroutines_to_finish/cfh9fg7), a lot of information in this article is "dangerously inaccurate".  OOPS!  I've written a followup/correction article [here]() for your viewing pleasure, but I'm leaving this article up for "historical purposes".
+*EDIT:*  As pointed out by effenn in [this Reddit comment](http://www.reddit.com/r/golang/comments/1y3spq/how_to_wait_for_all_goroutines_to_finish/cfh9fg7), a lot of information in this article is "dangerously inaccurate".  OOPS!  I've written a followup/correction article [here](http://nathanleclaire.com/blog/2014/02/21/how-to-wait-for-all-goroutines-to-finish-executing-before-continuing-part-two-fixing-my-ooops/) for your viewing pleasure, but I'm leaving this article up for "historical purposes".
 
 {%img /images/syncwaitgroup/gophermegaphones.jpeg %}
 
