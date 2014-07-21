@@ -94,18 +94,15 @@ If I want to test the `isActive` function, how do I do so?  I need to ensure tha
 
 ```
 describe('NavCtrl', function() {
-    var $scope, $location, $rootScope, createController;
+    var scope, _$location, createController;
 
-    beforeEach(inject(function($injector) {
-        $location = $injector.get('$location');
-        $rootScope = $injector.get('$rootScope');
-        $scope = $rootScope.$new();
-
-        var $controller = $injector.get('$controller');
+    beforeEach(inject(function ($rootScope, $controller _$location_) {
+        $location = _$location_;
+        scope = $rootScope.$new();
 
         createController = function() {
             return $controller('NavCtrl', {
-                '$scope': $scope
+                '$scope': scope
             });
         };
     }));
@@ -114,8 +111,8 @@ describe('NavCtrl', function() {
         var controller = createController();
         $location.path('/about');
         expect($location.path()).toBe('/about');
-        expect($scope.isActive('/about')).toBe(true);
-        expect($scope.isActive('/contact')).toBe(false);
+        expect(scope.isActive('/about')).toBe(true);
+        expect(scope.isActive('/contact')).toBe(false);
     });
 });
 ```
@@ -130,33 +127,29 @@ This looks like this:
 
 ```
 describe('MainCtrl', function() {
-    var $scope, $rootScope, $httpBackend, $timeout, createController;
-    beforeEach(inject(function($injector) {
-        $timeout = $injector.get('$timeout');
-        $httpBackend = $injector.get('$httpBackend');
-        $rootScope = $injector.get('$rootScope');
-        $scope = $rootScope.$new();
+    var scope, httpBackend, createController;
 
-
-        var $controller = $injector.get('$controller');
+    beforeEach(inject(function($rootScope, $httpBackend, $controller) {
+        httpBackend = $httpBackend;
+        scope = $rootScope.$new();
 
         createController = function() {
             return $controller('MainCtrl', {
-                '$scope': $scope
+                '$scope': scope
             });
         };
     }));
 
     afterEach(function() {
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
+        httpBackend.verifyNoOutstandingExpectation();
+        httpBackend.verifyNoOutstandingRequest();
     });
 
     it('should run the Test to get the link data from the go backend', function() {
         var controller = createController();
-        $scope.urlToScrape = 'success.com';
+        scope.urlToScrape = 'success.com';
 
-        $httpBackend.expect('GET', '/slurp?urlToScrape=http:%2F%2Fsuccess.com')
+        httpBackend.expect('GET', '/slurp?urlToScrape=http:%2F%2Fsuccess.com')
             .respond({
                 "success": true,
                 "links": ["http://www.google.com", "http://angularjs.org", "http://amazon.com"]
@@ -164,17 +157,17 @@ describe('MainCtrl', function() {
 
         // have to use $apply to trigger the $digest which will
         // take care of the HTTP request
-        $scope.$apply(function() {
-            $scope.runTest();
+        scope.$apply(function() {
+            scope.runTest();
         });
 
-        expect($scope.parseOriginalUrlStatus).toEqual('calling');
+        expect(scope.parseOriginalUrlStatus).toEqual('calling');
 
-        $httpBackend.flush();
+        httpBackend.flush();
 
-        expect($scope.retrievedUrls).toEqual(["http://www.google.com", "http://angularjs.org", "http://amazon.com"]);
-        expect($scope.parseOriginalUrlStatus).toEqual('waiting');
-        expect($scope.doneScrapingOriginalUrl).toEqual(true);
+        expect(scope.retrievedUrls).toEqual(["http://www.google.com", "http://angularjs.org", "http://amazon.com"]);
+        expect(scope.parseOriginalUrlStatus).toEqual('waiting');
+        expect(scope.doneScrapingOriginalUrl).toEqual(true);
     });
 });
 ```
