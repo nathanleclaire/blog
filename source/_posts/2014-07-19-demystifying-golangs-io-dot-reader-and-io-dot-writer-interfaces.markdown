@@ -8,7 +8,7 @@ categories: [golang,go,io.reader,io.writer]
 
 {%img /images/iowriter/aviator.png %}
 
-If you're coming to [Go]() from a more flexible, dynamically typed language like Ruby or Python, there may be some confusion as you adjust to the Go way of doing things.  In my case, I had some trouble wrapping my head around `io.Reader`, `io.Writer`, `io.ReadCloser` etc.  What are they used for, and how can they be included in our Go programs for interesting and helpful results?
+If you're coming to [Go](http://golang.org) from a more flexible, dynamically typed language like Ruby or Python, there may be some confusion as you adjust to the Go way of doing things.  In my case, I had some trouble wrapping my head around `io.Reader`, `io.Writer`, `io.ReadCloser` etc.  What are they used for, and how can they be included in our Go programs for interesting and helpful results?
 
 # Quick interface review
 
