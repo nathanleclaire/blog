@@ -41,35 +41,27 @@ import (
 	"time"
 )
 
-func debounce(interval time.Duration, f func(arg int)) func(int) {
-	timer := &time.Timer{}
-	return func(arg int) {
-		timer.Stop()
-		timer = time.AfterFunc(interval, func() {
-			f(arg)
-		})
+func debounce(interval time.Duration, input chan int, f func(arg int)) {
+	var item = <-input
+	for {
+		select {
+		case item = <-input:
+			fmt.Println("received a send on a spammy channel - might be doing a costly operation if not for debounce")
+		case <-time.After(interval):
+			f(item)
+		}
 	}
 }
 
 func main() {
 	spammyChan := make(chan int, 10)
-	debouncedCostlyOperation := debounce(300*time.Millisecond, func(arg int) {
+	go debounce(300*time.Millisecond, spammyChan, func(arg int) {
 		fmt.Println("*****************************")
 		fmt.Println("* DOING A COSTLY OPERATION! *")
 		fmt.Println("*****************************")
 		fmt.Println("In case you were wondering, the value passed to this function is", arg)
 		fmt.Println("We could have more args to our \"compiled\" debounced function too, if we wanted.")
 	})
-	go func() {
-		for {
-			select {
-			case spam := <-spammyChan:
-				fmt.Println("received a send on a spammy channel - might be doing a costly operation if not for debounce")
-				debouncedCostlyOperation(spam)
-			default:
-			}
-		}
-	}()
 	for i := 0; i < 10; i++ {
 		spammyChan <- i
 	}
