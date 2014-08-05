@@ -18,7 +18,7 @@ As some of you may recall I wrote [this post about an interview I bombed with a 
 
 > Creates and returns a new debounced version of the passed function which will postpone its execution until after wait milliseconds have elapsed since the last time it was invoked. Useful for implementing behavior that should only happen after the input has stopped arriving. For example: rendering a preview of a Markdown comment, recalculating a layout after the window has stopped being resized, and so on. 
 
-`debounce` is very useful is the cost of triggering the callback function (or equivalent) for your event is quite high.  It's a good way to get laziness for cheap if you have a busy event stream.  The example listed in the documentation is lucid:
+`debounce` is very useful if the cost of triggering the callback function (or equivalent) for your event is quite high.  It's a good way to get laziness for cheap if you have a busy event stream.  The example listed in the documentation is lucid:
 
 ```js
 var lazyLayout = _.debounce(calculateLayout, 300);
