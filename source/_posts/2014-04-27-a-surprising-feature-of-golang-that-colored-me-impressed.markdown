@@ -32,7 +32,7 @@ Stolen directly from [*the* article on maps](http://blog.golang.org/go-maps-in-a
 
 > One of the most useful data structures in computer science is the hash table. Many hash table implementations exist with varying properties, but in general they offer fast lookups, adds, and deletes. Go provides a built-in map type that implements a hash table.
 
-So in Go if you need a hash table you use a map.  Since Go is strongly typed you have to define what type the keys are, and what type the associated values are (e.g. strings, integers, pointers to structs, etc.).  A common use case, for instance, it to have a map where the keys are string and the values they reference are strings.
+So in Go if you need a hash table you use a map.  Since Go is strongly typed you have to define what type the keys are, and what type the associated values are (e.g. strings, integers, pointers to structs, etc.).  A common use case, for instance, it to have a map where the keys are strings and the values they reference are strings.
 
 ```go
 m := make(map[string]string)
