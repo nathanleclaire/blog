@@ -48,7 +48,7 @@ type SmtpTemplateData struct {
 }
 
 const emailTemplate = `From: &#123;&#123;.From&#125;&#125;
-To: &#123;&#123;.To}&#125;&#125;
+To: &#123;&#123;.To&#125;&#125;
 Subject: &#123;&#123;.Subject&#125;&#125;
 
 &#123;&#123;.Body&#125;&#125;
