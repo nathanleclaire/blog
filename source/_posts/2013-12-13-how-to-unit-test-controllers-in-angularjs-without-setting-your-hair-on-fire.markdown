@@ -94,7 +94,7 @@ If I want to test the `isActive` function, how do I do so?  I need to ensure tha
 
 ```
 describe('NavCtrl', function() {
-    var scope, _$location, createController;
+    var scope, $location, createController;
 
     beforeEach(inject(function ($rootScope, $controller _$location_) {
         $location = _$location_;
