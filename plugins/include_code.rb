@@ -27,14 +27,12 @@ require 'pathname'
 module Jekyll
 
   class IncludeCodeTag < Liquid::Tag
-    include HighlightCode
-    include TemplateWrapper
     def initialize(tag_name, markup, tokens)
       @title = nil
       @file = nil
-      if markup.strip =~ /\s*lang:(\w+)/i
+      if markup.strip =~ /\s*lang:(\S+)/i
         @filetype = $1
-        markup = markup.strip.sub(/lang:\w+/i,'')
+        markup = markup.strip.sub(/lang:\S+/i,'')
       end
       if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
         @title = $1 || nil
@@ -62,8 +60,8 @@ module Jekyll
         title = @title ? "#{@title} (#{file.basename})" : file.basename
         url = "/#{code_dir}/#{@file}"
         source = "<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n"
-        source += " #{highlight(code, @filetype)}</figure>"
-        safe_wrap(source)
+        source += "#{HighlightCode::highlight(code, @filetype)}</figure>"
+        TemplateWrapper::safe_wrap(source)
       end
     end
   end
