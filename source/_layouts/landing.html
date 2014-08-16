@@ -9,13 +9,21 @@
 		<meta content="{{ site.description }}" name="description">
 		<meta content="{{ site.title }}" name="author">
 		
-		<title>nathan leclaire | I care, I share, I'm Nathan LeClaire.</title>
+		<title>{% if page.title %}{{ page.title }} &mdash; {% endif %}{{ site.title }} | I care, I share, I'm Nathan LeClaire.</title>
 		
 		<link href="{{ root_url }}/stylesheets/main.css" rel="stylesheet">
 		<style>
 			div#wrapper {
 				width: 70%;
 				margin: 0px auto;
+			}
+
+			#mce-EMAIL {
+				font-size: 24px;
+			}
+
+			#mc-embedded-subscribe {
+				width: 20px;
 			}
 		</style>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>

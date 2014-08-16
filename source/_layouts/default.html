@@ -1,7 +1,7 @@
 {% capture root_url %}{{ site.root | strip_slash }}{% endcapture %}
 <!doctype html>
 <!-- START OF _layouts/default.html -->
-<html lang="en">
+<html style="display:none;" lang="en">
 	<head>
 		<meta charset="utf-8">
 		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
@@ -12,16 +12,76 @@
 		<title>{% if page.title %}{{ page.title }} &mdash; {% endif %}{{ site.title }} | I care, I share, I'm Nathan LeClaire.</title>
 		
 		<link href="{{ root_url }}/stylesheets/main.css" rel="stylesheet">
+		<style>
+		/* Modal Styles */
+		.modal {
+		  display: none;
+		  width: 400px;
+		  background: #fff;
+		  padding: 15px 30px;
+		  -webkit-border-radius: 8px;
+		  -moz-border-radius: 8px;
+		  -o-border-radius: 8px;
+		  -ms-border-radius: 8px;
+		  border-radius: 8px;
+		  -webkit-box-shadow: 0 0 10px #000;
+		  -moz-box-shadow: 0 0 10px #000;
+		  -o-box-shadow: 0 0 10px #000;
+		  -ms-box-shadow: 0 0 10px #000;
+		  box-shadow: 0 0 10px #000;
+		}
+
+		.modal a.close-modal {
+		  position: absolute;
+		  top: -12.5px;
+		  right: -12.5px;
+		  display: block;
+		  width: 30px;
+		  height: 30px;
+		  text-indent: -9999px;
+		  background: url(/images/close.png) no-repeat 0 0;
+		}
+
+		.modal-spinner {
+		  display: none;
+		  width: 64px;
+		  height: 64px;
+		  position: fixed;
+		  top: 50%;
+		  left: 50%;
+		  margin-right: -32px;
+		  margin-top: -32px;
+		  background: url(spinner.gif) #111 no-repeat center center;
+		  -webkit-border-radius: 8px;
+		  -moz-border-radius: 8px;
+		  -o-border-radius: 8px;
+		  -ms-border-radius: 8px;
+		  border-radius: 8px;
+		}
+		</style>
+		
+		<script>
+		   if(self == top) {
+			   document.documentElement.style.display = 'block'; 
+		   } else {
+			   top.location = self.location; 
+		   }
+		</script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+		<script src="{{ root_url }}/js/jquery.modal.min.js"></script>
 		<script src="{{ root_url }}/js/fuse.min.js"></script>
 	</head>
 	<body>
 		<div class="wrap">
 			<div id="sidebar">
 				<header>
-					<div class="title"><a href="http://nathanleclaire.com">
-							<img src="{{ root_url }}/images/nateface.jpeg" class="nateface" /> {{ site.title }} </a>
+					<div class="title">
+						<a href="http://nathanleclaire.com">
+							<img src="{{ root_url }}/images/nateface.jpeg" class="nateface" /> 
+							{{ site.title }} 
+						</a>
 					</div>
+					<p class="slogan">I care, I share, I'm Nathan LeClaire.</p>
 					<div class="navi">
 						<ul>
 							<li><a href="{{ root_url }}/about/">About</a></li>
@@ -37,7 +97,7 @@
 				<!-- Begin MailChimp Signup Form -->
 
 				<div id="mc_embed_signup">
-				<form action="http://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+				<form action="https://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
 					<label for="mce-EMAIL">Get my awesome essays about tech delivered to your inbox</label>
 					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email@domain.com" required>
 					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
@@ -58,9 +118,26 @@
 			<div id="content">
 				{{ content | expand_urls: root_url }}
 			</div>
+			<form class="modal" id="mailing-list-modal" action="http://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<h1>Like what you're reading?</h1>
+					<img src="/images/happy-reader.jpeg"></img>
+					<p style="display: block;" for="mce-EMAIL">Did you enjoy this article?  You might want to sign up for my mailing list.  I send out weekly-ish essays about hot new tech stuff.</p>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL-modal" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+			</form>
 		</div> <!-- // .wrap -->
 	<script type="text/javascript" src="{{ root_url }}/js/prettify.js"></script>
 	<script>
+	function supports_html5_storage() {
+	  try {
+		return 'localStorage' in window && window['localStorage'] !== null;
+	  } catch (e) {
+		return false;
+	  }
+	}
+
 	$(document).ready(function () {
 	    var fuse;
 
@@ -102,9 +179,37 @@
 	    var n = "https://github.com/nathanleclaire/blog/edit/master/source/_posts/" + e.split("/").slice(4, 8).join("-") + ".markdown";
 	    t.attr("href", n);
 
-	    if (document.domain !== "nathanleclaire.com" && document.domain !== "localhost") {
-	    	$('body').html('<h1>If you are reading this then you may be viewing this content on a domain outside of <a href="http://nathanleclaire.com">nathanleclaire.com</a>, the original site and source of this content, possibly (mis)lead here by an original content hijacking and exploitation tool such as Tweetganic.  You should relentlessly shame the perpetrators of such an injustice.  I put this content out there online for the good of the community (education) and to exploit that fact for an attempt at personal gain is slimy, immoral, and just plain wrong.</h1>');
-	    }
+	    // Only offer mailing list once
+		var tryModal = localStorage["modal"] ? false : true;
+
+		// Don't offer mailing list to people on mobile
+		if ($(window).width() < 720) {
+			tryModal = false;
+		}
+
+		$('#mc-embedded-subscribe').click(function() {
+			// Don't offer mailing list if people have
+			// already clicked to try and sign up
+			tryModal = false;
+			localStorage["modal"] = "true";
+		});
+
+		$(window).scroll(function () {
+			if (tryModal && document.URL.indexOf('archives') === -1 && document.URL.indexOf('about') === -1) {
+				if (($(window).scrollTop() + $(window).height()) === $(document).height()) {
+					if (supports_html5_storage()) {
+						window.setTimeout(function() {
+							$('#mailing-list-modal').modal({
+								fadeDuration: 250
+							});
+							$('#mce-EMAIL-modal').focus();
+							tryModal = false;
+							localStorage["modal"] = "true";
+						}, 1000);
+					}
+				}
+			}
+		});
 
 	});
 	</script>
