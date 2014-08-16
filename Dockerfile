@@ -8,13 +8,13 @@ run /etc/profile.d/rvm.sh
 
 env PATH $PATH:/usr/local/rvm/bin
 
-run /bin/bash -l -c "rvm install 1.9.3"
-run /bin/bash -l -c "rvm use 1.9.3"
-run /bin/bash -l -c "gem install bundler"
+run -l "rvm install 1.9.3"
+run -l "rvm use 1.9.3"
+run -l "gem install bundler"
 
 add Gemfile /blog/Gemfile
 workdir /blog
-run /bin/bash -l -c "bundle install -j4"
+run -l "bundle install -j4"
 run npm install -g http-server
 
 add . /blog
