@@ -1,25 +1,18 @@
-from node
+from debian:wheezy
 
 run apt-get update && \
-    apt-get install -y curl
-run curl -L https://get.rvm.io | bash
-run gpasswd -a root rvm
-run /etc/profile.d/rvm.sh
+    apt-get install -y curl build-essential
 
-env PATH $PATH:/usr/local/rvm/bin
-
-run -l "rvm install 1.9.3"
-run -l "rvm use 1.9.3"
-run -l "gem install bundler"
+run apt-get install -y ruby1.9.3
+run apt-get install -y lsb-release && \
+    curl -sL https://deb.nodesource.com/setup | bash
+run apt-get install -y nodejs npm
+run gem install bundler
 
 add Gemfile /blog/Gemfile
 workdir /blog
-run -l "bundle install -j4"
-run npm install -g http-server
+run bundle install
 
 add . /blog
 
-run /bin/bash -l -c "rake install['pageburner'] && rake generate"
-
-cmd []
-entrypoint ["http-server"]
+run rake install['pageburner'] && rake generate
