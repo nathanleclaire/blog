@@ -147,5 +147,3 @@ Thanks for reading and I'll catch you next week,
 Nathan
 
 *EDIT*: Some commenters have pointed out my misuse of `clearInterval` as opposed to `clearTimeout`.  It turns out that this (mostly) works to clear timeouts, but is clearly not correct (it's meant to be used with `window.setInterval`).  I have fixed this now.
-
-`This is a test, to see if the new Docker build thing works`.
