@@ -88,7 +88,7 @@ server {
 }
 </pre>
 
-The `/hubhook` is some proxy-matic goodness, which farms out the task to re-deploy the site to a simple but effective "Docker Hub Listener" worker that my colleague Brian Goff originally wrote (and I twisted to my own nefarious purposes, muahaha).  Enter the next couples of steps.
+The `/hubhook` is some proxy-matic goodness, which farms out the task to re-deploy the site to a simple but effective "Docker Hub Listener" worker that my colleague Brian Goff originally wrote (and I twisted to my own nefarious purposes, muahaha).  Enter the next couple of steps.
 
 ## Step 2: Set up Automated Build for this repo on Docker Hub
 
