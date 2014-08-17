@@ -18,8 +18,10 @@ add . /blog
 
 
 run rake install['pageburner'] && rake generate
-run rm -r /usr/share/nginx/www
-run cp -r public /usr/share/nginx/www
+run rm /etc/nginx/sites-available/default
+add nginx/nathanleclaire.com /etc/nginx/sites-available/nathanleclaire.com
+run ln -s /etc/nginx/sites-available/nathanleclaire.com /etc/nginx/sites-enabled/nathanleclaire.com
+
 run echo "daemon off;" >>/etc/nginx/nginx.conf
 
 expose 80
