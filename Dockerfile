@@ -20,7 +20,9 @@ add . /blog
 run rake install['pageburner'] && rake generate
 run rm /etc/nginx/sites-available/default
 add nginx/nathanleclaire.com /etc/nginx/sites-available/nathanleclaire.com
+add nginx/boot2docker /etc/nginx/sites-available/boot2docker
 run ln -s /etc/nginx/sites-available/nathanleclaire.com /etc/nginx/sites-enabled/nathanleclaire.com
+run ln -s /etc/nginx/sites-available/boot2docker /etc/nginx/sites-enabled/boot2docker
 
 run echo "daemon off;" >>/etc/nginx/nginx.conf
 
