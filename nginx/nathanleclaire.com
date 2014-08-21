@@ -2,7 +2,7 @@ server {
   listen 80;
   index index.html;
   autoindex off;
-  server_name boot2docker:8000 localhost:8000;
+  server_name localhost:8000;
   server_name_in_redirect on;
   port_in_redirect on;
 
