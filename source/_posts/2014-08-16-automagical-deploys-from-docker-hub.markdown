@@ -6,8 +6,7 @@ comments: true
 categories: [docker, hub]
 ---
 
-I want the speed and other advantages of a static site generator, but with the flexibility of a database-backed CMS.
-</blockquote>
+> I want the speed and other advantages of a static site generator, but with the flexibility of a database-backed CMS.
 
 ![](https://nathanleclaire.com/images/automagic-dockerhub/hub.png)
 
