@@ -94,7 +94,7 @@ If you want to send e-mails concurrently, or just not block in a HTTP handler, y
 
 # Conclusion
 
-`"net/smtp"` gets the job done, but specifically for the task of sending e-mails from Gmail it takes a little bit of setup.  I may take a whack at making a simple, clean implementation of a library for this purpose (also providing support for boiletplate templating).
+`"net/smtp"` gets the job done, but specifically for the task of sending e-mails from Gmail it takes a little bit of setup.  I may take a whack at making a simple, clean implementation of a library for this purpose (also providing support for boilerplate templating).
 
 Hope this article has been useful and you have a Merry Christmas.  And as always, stay sassy Internet.
 
