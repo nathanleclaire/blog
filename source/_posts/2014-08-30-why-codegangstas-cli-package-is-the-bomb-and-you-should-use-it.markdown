@@ -82,7 +82,7 @@ From the manual:
 
 ## Lets you get stuff done
 
-I sorted of hinted at this, but this is what I see as the main advantage of `cli` over using nothing, or just using raw `flag` parsing, it allows you to handle the inevitable complexity of developing a command line application before it even becomes an issue.
+I sort of hinted at this, but this is what I see as the main advantage of `cli` over using nothing, or just using raw `flag` parsing, it allows you to handle the inevitable complexity of developing a command line application before it even becomes an issue.
 
 I've long noticed that developers love libraries the most when you barely even notice they're there.  The framework or tool becomes like an extension of your own mind in solving the problem.  In my opinion, jQuery is like this.  It inspires such a raw explosion of creativity in the people using it that its explosion and proliferation was inevitable.  Instead of making you cobble together vanilla JavaScript to get what you want, you can work way further up in many different ways which are _all right_.  Go is like that too, with `gofmt` and Go's error handling patterns etc. at play everyone's code starts to look the same.
 
