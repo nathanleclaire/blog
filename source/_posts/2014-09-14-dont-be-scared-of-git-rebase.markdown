@@ -16,7 +16,7 @@ Rebasing, like most of `git`, should be learned and applied to be useful - not f
 
 `git rebase` in its simplest form is a command which will merge another branch into the branch where you are currently working, and move all of the local commits that are ahead of the rebased branch to the top of the history on that branch.
 
-From the man page: "git rebase: Forward-port local commits to the updated upstream head".
+From the main page: "git rebase: Forward-port local commits to the updated upstream head".
 
 If you're still confused, let's look at an example.
 
