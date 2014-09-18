@@ -1,4 +1,5 @@
 require './plugins/pygments_code'
+require 'cgi'
 
 module BacktickCodeBlock
   AllOptions = /([^\s]+)\s+(.+?)\s+(https?:\/\/\S+|\/\S+)\s*(.+)?/i
@@ -25,7 +26,7 @@ module BacktickCodeBlock
         str = str.gsub(/^( {4}|\t)/, '')
       end
       if @lang.nil? || @lang == 'plain'
-        code = HighlightCode::tableize_code(str.gsub('<','&lt;').gsub('>','&gt;'))
+        code = "<pre><code>#{CGI.escapeHTML(str)}</code></pre>"
         "<figure class='code'>#{@caption}#{code}</figure>"
       else
         if @lang.include? "-raw"
@@ -33,7 +34,7 @@ module BacktickCodeBlock
           raw += str
           raw += "\n```\n"
         else
-          code = HighlightCode::highlight(str, @lang)
+          code = "<pre class=#{@lang}><code>#{CGI.escapeHTML(str)}</code></pre>"
           "<figure class='code'>#{@caption}#{code}</figure>"
         end
       end
