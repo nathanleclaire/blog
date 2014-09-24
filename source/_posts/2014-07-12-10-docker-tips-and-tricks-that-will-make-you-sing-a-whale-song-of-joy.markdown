@@ -177,7 +177,7 @@ docker run -it supertest2014/nyan
 
 {%img /images/dockertips/hacking.png This is what hacking looks like. %}
 
-The newest (read: BEST) versions of [boot2docker](https://github.com/boot2docker/boot2docker) include a host-only network where you can access ports exposed by containers using the boot2docker virtual machine's IP address. The `boot2docker ip` command makes access to this value easy.  However, usually it is simply `192.168.59.103`.  I find this spcific address a little hard to remember and cumbersome to type, so I add an entry to my `/etc/hosts` file for easy access of `boot2docker:port` when I'm running applications that expose ports with Docker.  It's handy, give it a shot!
+The newest (read: BEST) versions of [boot2docker](https://github.com/boot2docker/boot2docker) include a host-only network where you can access ports exposed by containers using the boot2docker virtual machine's IP address. The `boot2docker ip` command makes access to this value easy.  However, usually it is simply `192.168.59.103`.  I find this specific address a little hard to remember and cumbersome to type, so I add an entry to my `/etc/hosts` file for easy access of `boot2docker:port` when I'm running applications that expose ports with Docker.  It's handy, give it a shot!
 
 **Note**: Do remember that it is possible for the boot2docker VM's IP address to change, so make sure to check that if you are encountering network issues using this shortcut.  If you are not doing something that would mess with your network configuration (setting up and tearing down multiple virtual machines including boot2docker's, etc.), though, you will likely not encounter this issues.
 
