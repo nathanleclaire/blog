@@ -14,12 +14,12 @@ chip_away_at_plugins () {
     echo "stashing working directory changes..."
     STASH_MSG=$(git stash)
     for plugin in plugins/*; do
-        echo -e "|=> ${PURPLE}Trying out removing plugin ${plugin}...${RESTORE}"
+        echo -e "${CYAN}Trying out removing plugin ${plugin}...${RESTORE}"
 
         # invalidate public diff so that failed generate will get caught
         echo "invalidate" >>public/index.html
 
-        printf "====> " && git rm ${plugin}
+        git rm ${plugin} >/dev/null
         ./build.sh &>/dev/null
 
         # remove XML timestamp stuff (not what we're interested in)
@@ -47,6 +47,7 @@ case "$1" in
     rollback)
         git reset HEAD plugins/
         git checkout -- plugins
+        git checkout -- public
         ;;
     *)
         echo "Usage: $0 {apply|rollback}"
