@@ -14,7 +14,7 @@ chip_away_at_plugins () {
     echo "stashing working directory changes..."
     STASH_MSG=$(git stash)
     for plugin in plugins/*; do
-        echo -e "${CYAN}Trying out removing plugin ${plugin}...${RESTORE}"
+        echo "Trying out removing plugin ${plugin}..."
 
         # invalidate public diff so that failed generate will get caught
         echo "invalidate" >>public/index.html
