@@ -2,6 +2,7 @@
 
 docker build -t nathanleclaire/octoblog .
 if [[ -d public ]]; then
+    echo "removing public/ directory..."
     rm -rf public
 fi
 
