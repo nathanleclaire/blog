@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "stashing working directory changes..."
-$STASH_MSG = $(git stash)
+STASH_MSG=$(git stash)
 for plugin in plugins/*; do
     echo "=> Trying out removing plugin ${plugin}..."
     git rm ${plugin}
