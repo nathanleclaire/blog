@@ -10,10 +10,9 @@ PURPLE='\033[00;35m'
 CYAN='\033[00;36m'
 LIGHTGRAY='\033[00;37m'
 
-echo "stashing working directory changes..."
-STASH_MSG=$(git stash)
-
 chip_away_at_plugins () {
+    echo "stashing working directory changes..."
+    STASH_MSG=$(git stash)
     for plugin in plugins/*; do
         echo -e "|=> ${PURPLE}Trying out removing plugin ${plugin}...${RESTORE}"
 
