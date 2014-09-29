@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: floodfill | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/floodfill/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Implementing a Concurrent Floodfill with Golang]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/04/05/implementing-a-concurrent-floodfill-with-golang/"/>
+    <updated>2014-04-05T13:34:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/04/05/implementing-a-concurrent-floodfill-with-golang</id>
+    <content type="html"><![CDATA[<h1>The setup</h1>
+
+<p>Lately as part of a coding exercise I found myself implementing a <a href="http://en.wikipedia.org/wiki/Flood_fill">Flood Fill</a> for &#8220;painting&#8221; an ASCII canvas.  For those of you unfamiliar with what that is, think back to MSPaint - remember that little paint bucket that would fill a region with your color of choice?  That paint bucket implements a flood fill algorithm, although I didn&#8217;t know that&#8217;s what it was called until I started working on implementing one myself.</p>
+
+<p><img src="/images/flood-fill/flood-fill-basic.gif"></p>
+
+<p>My original implementation was in PHP and I had to go through a few iterations before I got to an implementation I was satisfied with.  It was surprisingly tricky to get correct as my depth-first implementation kept blowing the stack through excessive use of recursion.  A naive flood fill algorithm (depth first) looks like this:</p>
+
+<ol>
+<li>Store the color of the pixel where you are starting, then color it the new color.</li>
+<li>For every adjacent pixel, if it is the same as the original color and you have never visited that pixel before, perform a flood fill on it.</li>
+</ol>
+
+
+<p>There are a lot of issues with this algorithm.  It takes a long time and it will quickly blow the stack if the canvas size contains more than a trivial number of pixels.</p>
+
+<p>So I started thinking about ways to improve it, and it occurred to me to use a <em>breadth</em>-first solution instead (this is actually the kind of solution that&#8217;s visualized in the GIF above).  That way, we could store the pixels that we want to visit / fill in a queue, and visit them one at a time without blowing the stack.  It worked pretty well.</p>
+
+<p>Just one problem, though:  It was written in PHP, and PHP is dog slow.  It&#8217;s also painfully single-threaded to boot.</p>
+
+<h1>Go!</h1>
+
+<p><code>&lt;s&gt;</code> Since we all know that all the cool kids use <a href="http://golang.org">Go</a> nowadays <code>&lt;/s&gt;</code>, I decided to take a crack at implementing a solution for this in Go, taking advantage of Go&#8217;s high performance and concurrency patterns.  Also, I just really like coding stuff in Go.</p>
+
+<h2>&#8220;Canvas&#8221; abstraction</h2>
+
+<p>The &#8220;canvas&#8221; I modeled as an two-dimensional array of byte arrays (which are chars for our purposes).  There&#8217;s another matrix that we use to keep track of which pixels we have visited before.  For convenient passing, we also have a struct <code>Node</code> that contains data about a given pixel.  We will use this later on to make our helper functions a little bit more clean looking.</p>
+
+<pre><code class="go">type Canvas struct {
+    contents [][]byte
+    visited  [][]bool
+}
+
+type Node struct {
+    X     int
+    Y     int
+    Color byte
+}
+</code></pre>
+
+<p>The function to initialize the &#8220;canvas&#8221; is pretty straightforward.  We also have an analagous method, <code>setVisitedMatrixToFalse</code>, that we call before performing a flood fill operation to indicate we haven&#8217;t visited anywhere yet.</p>
+
+<pre><code>func (c *Canvas) Init(width int, height int, blankChar byte) {
+    c.contents = make([][]byte, width)
+    for i := 0; i &lt; width; i++ {
+        c.contents[i] = make([]byte, height)
+        for j := 0; j &lt; height; j++ {
+            c.contents[i][j] = blankChar
+        }
+    }
+}
+</code></pre>
+
+<p>Called like:</p>
+
+<pre><code>canvas := Canvas{}
+canvas.Init(120, 120, '_')
+</code></pre>
+
+<p>We take advantage of easy casting from <code>[]byte</code> type to <code>string</code> for our function to print the contents of the canvas:</p>
+
+<pre><code>func (c *Canvas) Print() {
+    for _, row := range c.contents {
+        fmt.Println(string(row))
+    }
+}
+</code></pre>
+
+<p>With this code set up, we can get into the &#8220;meat&#8221; of the flood fill algorithm.</p>
+
+<h2>Flood Fill</h2>
+
+<p>Instead of using pure recursion, we will instead have a &#8220;master&#8221; goroutine that forks off visits to other pixels/nodes in their own goroutines.  The child goroutines will report back their &#8220;findings&#8221; to the main goroutine, including what pixels to visit next if any.  Through the use of buffered and unbuffered goroutines, we will prevent too many visits from firing off at once, and the Go runtime scheduler will take care of juggling these activities which are running concurrently.</p>
+
+<p>The main goroutine looks like this:</p>
+
+<pre><code>func (c *Canvas) FloodFill(x int, y int, color byte) {
+    // If unbuffered, this channel will block when we go to send the
+    // initial nodes to visit (at most 4).  Not cool man.
+    toVisit := make(chan Node, 4)
+    visitDone := make(chan bool)
+
+    originalColor := c.contents[x][y]
+
+    c.setVisitedMatrixToFalse()
+
+    go c.floodFill(x, y, color, originalColor, toVisit, visitDone)
+    remainingVisits := 1
+
+    for {
+        select {
+        case nextVisit := &lt;-toVisit:
+            if !c.visited[nextVisit.X][nextVisit.Y] {
+                c.visited[nextVisit.X][nextVisit.Y] = true
+                remainingVisits++
+                go c.floodFill(nextVisit.X, nextVisit.Y, color, originalColor, toVisit, visitDone)
+            }
+        case &lt;-visitDone:
+            remainingVisits--
+        default:
+            if remainingVisits == 0 {
+                return
+            }
+        }
+    }
+}
+</code></pre>
+
+<p>To start, we create two channels.  One is called <code>toVisit</code> and is the channel through which we send Nodes that we still want to visit (color, then check if they have neighbors we should color).  You may notice that this channel is buffered.  This is because if it is not buffered, then when we attempt to send <code>Node</code>s to visit over it, it will block and the whole program will deadlock.  Since we know that we will &#8220;queue up&#8221; at most four <code>Node</code>s into the channel (for this exercise we don&#8217;t fill pixels which are diagonally adjacent), that&#8217;s why we set our buffer size to that.  Theoretically however it will work with any buffer value greater than or equal to one.</p>
+
+<p>The other channel is called <code>visitDone</code> and is used to indicate when a visit for a given node is finished.  We don&#8217;t care which one, since we just maintain a &#8220;one true counter&#8221; in our main routine (<code>remainingVisits</code>) that tracks how many outstanding visits we have, and ensures that the function doesn&#8217;t return as long as there are visits outstanding.  Before I implemented this solution I was getting all kinds of frustrating race conditions where the <code>default</code> block would sometimes get hit before any additional visits would get added, and so the program would exit prematurely.  If you have a better idea/solution to manage this, I&#8217;d love to hear!</p>
+
+<p>We also keep track of the color of the original pixel, since that&#8217;s a condition of coloring (the pixels should be adjacent and the same color as the original pixel).</p>
+
+<p>The <code>floodFill</code> method that we spin off into auxilliary goroutines looks like this:</p>
+
+<pre><code>func (c *Canvas) floodFill(x int, y int, color byte, originalColor byte, toVisit chan Node, visitDone chan bool) {
+    c.contents[x][y] = color
+    neighbors := c.getNeighbors(x, y)
+    for _, neighbor := range neighbors {
+        if neighbor.Color == originalColor {
+            toVisit &lt;- neighbor
+        }
+    }
+    visitDone &lt;- true
+}
+</code></pre>
+
+<p>I don&#8217;t know that I&#8217;m crazy about having the actual pixel coloring in this method, since it involves mutable data that&#8217;s shared between threads, so I might move it into the main method eventually, but for example purposes it works okay.  This method is fairly terse and simply colors the pixel, then calls this method to get the neighbors of the current pixel (ensuring that we don&#8217;t run over the bounds of the slice):</p>
+
+<pre><code>func (c *Canvas) getNeighbors(x int, y int) []Node {
+    var (
+        neighbors []Node
+        color     byte
+    )
+    if x+1 &lt; len(c.contents) {
+        color = c.contents[x+1][y]
+        neighbors = append(neighbors, Node{x + 1, y, color})
+    }
+    if x-1 &gt;= 0 {
+        color = c.contents[x-1][y]
+        neighbors = append(neighbors, Node{x - 1, y, color})
+    }
+    if y+1 &lt; len(c.contents[0]) {
+        color = c.contents[x][y+1]
+        neighbors = append(neighbors, Node{x, y + 1, color})
+    }
+    if y-1 &gt;= 0 {
+        color = c.contents[x][y-1]
+        neighbors = append(neighbors, Node{x, y - 1, color})
+    }
+    return neighbors
+}
+</code></pre>
+
+<p>Then, we send the returned nodes over the <code>toVisit</code> channel if their color matches the original pixel&#8217;s color, and we send <code>true</code> across <code>visitDone</code> channel to indicate we are done when that is all through (this decrements our counter in the main goroutine).</p>
+
+<p>And that&#8217;s all!</p>
+
+<p>Check the sample output.</p>
+
+<p>Before:</p>
+
+<pre>
+____________________
+________//__________
+________//_______---
+__\\\\\\\\\\\\\\_---
+________//_______---
+________//_______---
+________//_______---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+</pre>
+
+
+<p>After: (filled with <code>'G'</code> char)</p>
+
+<pre>
+GGGGGGGGGGGGGGGGGGGG
+GGGGGGGG//GGGGGGGGGG
+GGGGGGGG//GGGGGGG---
+GG\\\\\\\\\\\\\\G---
+GGGGGGGG//GGGGGGG---
+GGGGGGGG//GGGGGGG---
+GGGGGGGG//GGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+</pre>
+
+
+<p>It runs pretty satisfyingly quickly.  Wiki mentions a few alternative approaches that might work a little better (EDIT: it says that going line-by-line instead of pixel by pixel is an order of magnitude faster), but I like this one for its simplicity.</p>
+
+<h1>Conclude</h1>
+
+<p>The code is <a href="https://github.com/nathanleclaire/golangfloodfill">up on Github</a> if you&#8217;re curious.  I&#8217;d love to hear about other possible approaches, especially ones that are better at taking advtange of Go&#8217;s concurrency features.  I considered using <code>sync.WaitGroup</code> but this didn&#8217;t really seem like a good case to do so.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

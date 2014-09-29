@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: golang | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/golang/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Handling CTRL-C (interrupt signal) in Golang Programs]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/08/24/handling-ctrl-c-interrupt-signal-in-golang-programs/"/>
+    <updated>2014-08-24T19:33:53+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/08/24/handling-ctrl-c-interrupt-signal-in-golang-programs</id>
+    <content type="html"><![CDATA[<h1>Interruptions</h1>
+
+<p><img src="/images/signal.png"></p>
+
+<p>Recently I&#8217;ve been working on a Go program where I will need to do some cleanup work before exiting if the users press <code>CTRL+C</code> (thereby sending an interrupt signal, <code>SIGINT</code>, to the process).  I was unsure how to do this.</p>
+
+<p>As it turns out, <code>signal.Notify</code> is the method by which this is accomplished.</p>
+
+<p>Here is some sample source code:</p>
+
+<pre><code class="go">// Code to set up some services up here...
+
+// After setting everything up!
+// Wait for a SIGINT (perhaps triggered by user with CTRL-C)
+// Run cleanup when signal is received
+signalChan := make(chan os.Signal, 1)
+cleanupDone := make(chan bool)
+signal.Notify(signalChan, os.Interrupt)
+go func() {
+    for _ = range signalChan {
+        fmt.Println("\nReceived an interrupt, stopping services...\n")
+        cleanup(services, c)
+        cleanupDone &lt;- true
+    }
+}()
+&lt;-cleanupDone
+</code></pre>
+
+<p>I like this example because it really illuminates the power of Go&#8217;s concurrency primitives.  Instead of having to worry about complicated process or threading logic I simply abstract away the concurrency details using a goroutine and a couple of channels. In this instance, the main goroutine is blocked by a unbuffered <code>cleanupDone</code> channel because that is what behavior is expected (we&#8217;ve already spin up additional goroutines earlier to do some logging and handling of outside of the context of the main goroutine).</p>
+
+<p>Now I can clean up after my containers when a user interrupts the terminal with CTRL+C.  Awesome!</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Don't Get Bitten by Pointer vs Non-Pointer Method Receivers in Golang]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang/"/>
+    <updated>2014-08-09T11:14:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang</id>
+    <content type="html"><![CDATA[<p><img src="/images/gopointer/gopherswrench.jpg"></p>
+
+<h1>What?</h1>
+
+<p>People from all sorts of backgrounds are flocking to the <a href="http://golang.org">Go Programming Language</a> and even for those who have written C and C++ before (myself included) it may be confusing to grok Go&#8217;s approach to pointers, and how they interact with the methods you can attach to Go&#8217;s structs.</p>
+
+<p>In Go, you define a <em>method receiver</em> to specify which struct to attach a certain function to in order to make it invoke-able as a method.  For instance, <code>func (d Dog)</code> is part which defines the method receiver in the following program:</p>
+
+<pre><code class="go">package main
+
+import "fmt"
+
+type Dog struct {
+}
+
+func (d Dog) Say() {
+    fmt.Println("Woof!")
+}
+
+func main() {
+    d := &amp;Dog{}
+    d.Say()
+}
+</code></pre>
+
+<h2>Is there confusion?</h2>
+
+<p>There was for me at first over something having to do with method receivers, and I just noticed that another person who I consider to be quite competent had been surprised by this as well, so I decided to write about it.</p>
+
+<p>In Go, you can define methods using both <em>pointer</em> and <em>non-pointer</em> method receivers.  The former looks like <code>func (t *Type)</code> and the latter looks like <code>func (t Type)</code>.  Though <a href="http://golang.org/ref/spec#Method_sets">the spec</a> has very specific details about how the various types of method calls should behave, when I first started programming in Go I felt that pointers and the things that they point to were often conflated in property accesses and method invocations using the <code>.</code> operator.  I was thrown because I am accustomed to having to use the <code>-&gt;</code> operator, a habit carried over from C, as a shorthand for &#8220;dereference this struct pointer and use the <code>.</code> operator&#8221;.  For those unfamiliar, a quick picture of what that looks like:</p>
+
+<pre><code class="c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Tree {
+    int a;
+    int b;
+};
+
+int main() {
+    struct Tree tree, *pointerToTree;
+    tree.a = 5;
+    tree.b = 7;
+    pointerToTree = malloc(sizeof(struct Tree));
+    pointerToTree-&gt;a = 5;
+    pointerToTree-&gt;b = 7;
+    printf("tree vals: %d %d\n", tree.a, tree.b);
+    printf("pointerToTree: %p %d %d\n", pointerToTree, pointerToTree-&gt;a, pointerToTree-&gt;b);
+    free(pointerToTree);
+    return 0;
+}
+</code></pre>
+
+<p>In Go you have more freedom of expression, and the type system dictates that:</p>
+
+<blockquote><p>A method call <code>x.m()</code> is valid if the method set of (the type of) <code>x</code> contains <code>m</code> and the argument list can be assigned to the parameter list of <code>m</code>. If <code>x</code> is addressable and <code>&amp;x</code>&#8217;s method set contains <code>m</code>, <code>x.m()</code> is shorthand for <code>(&amp;x).m()</code></p></blockquote>
+
+<p>This leads to emergent behavior depending on how you define the method, and in particular, the method receiver.</p>
+
+<h2>So what&#8217;s the difference between pointer and non-pointer method receivers?</h2>
+
+<p>Simply stated:  you can treat the receiver as if it was an argument being passed to the method.  All the same reasons why you might want to pass by value or pass by reference apply.</p>
+
+<p>Reasons why you would want to pass by reference as opposed to by value:</p>
+
+<ul>
+<li>You want to actually modify the receiver (&#8220;read/write&#8221; as opposed to just &#8220;read&#8221;)</li>
+<li>The <code>struct</code> is very large and a deep copy is expensive</li>
+<li>Consistency: if some of the methods on the <code>struct</code> have pointer receivers, the rest should too.  This allows predictability of behavior</li>
+</ul>
+
+
+<p>If you need these characteristics on your method call, use a pointer receiver.</p>
+
+<h2>Show me.</h2>
+
+<p>Some code to demonstrate, and an <a href="http://play.golang.org/p/O0O7Nk1SGF">example on the Go playground</a>:</p>
+
+<pre><code class="go">package main
+
+import "fmt"
+
+type Mutatable struct {
+    a int
+    b int
+}
+
+func (m Mutatable) StayTheSame() {
+    m.a = 5
+    m.b = 7
+}
+
+func (m *Mutatable) Mutate() {
+    m.a = 5
+    m.b = 7
+}
+
+func main() {
+    m := &amp;Mutatable{0, 0}
+    fmt.Println(m)
+    m.StayTheSame()
+    fmt.Println(m)
+    m.Mutate()
+    fmt.Println(m)
+}
+</code></pre>
+
+<p>You&#8217;ll notice that the conspicuously named <code>StayTheSame</code> and <code>Mutate</code>  methods have behavior which corresponds to precisely that:  <code>StayTheSame</code> is defined with a non-pointer receiver and doesn&#8217;t change the values of the <code>struct</code> it is invoked on, and <code>Mutate</code> is defined with a pointer receiver, so it <em>does</em> change the values of the <code>struct</code> upon which it is invoked.</p>
+
+<h1>Fin</h1>
+
+<p>In the process of writing this article I also noticed a <a href="http://golang.org/doc/faq#methods_on_values_or_pointers">great explanation of this</a> in the Go FAQ.  It&#8217;s definitely worth a read.  It covers many of the same points, and helped me round out my understanding of the issue.</p>
+
+<p>Until next time, stay sassy Internet, and may your code forever be free of race conditions.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Write a Function Similar To Underscore.js's debounce, in Golang]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/08/03/write-a-function-similar-to-underscore-dot-jss-debounce-in-golang/"/>
+    <updated>2014-08-03T17:22:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/08/03/write-a-function-similar-to-underscore-dot-jss-debounce-in-golang</id>
+    <content type="html"><![CDATA[<h1>Debounce, eh?</h1>
+
+<p><img src="/images/debouncego/debounceit.gif"></p>
+
+<p>As some of you may recall I wrote <a href="http://nathanleclaire.com/blog/2013/11/16/the-javascript-question-i-bombed-in-an-interview-with-a-y-combinator-startup/">this post about an interview I bombed with a YCombinator Startup</a> and in it I describe how to implement a <code>debounce</code> (term taken from <a href="http://underscorejs.org/">Underscore.js</a>) type of function from scratch.  Recently I found myself having to implement a similar thing in Golang, so I&#8217;m sharing the results of my implementation here.</p>
+
+<h2>What is it?</h2>
+
+<p><code>debounce</code> in the Underscore.js documentation:</p>
+
+<blockquote><p>Creates and returns a new debounced version of the passed function which will postpone its execution until after wait milliseconds have elapsed since the last time it was invoked. Useful for implementing behavior that should only happen after the input has stopped arriving. For example: rendering a preview of a Markdown comment, recalculating a layout after the window has stopped being resized, and so on.</p></blockquote>
+
+<p><code>debounce</code> is very useful if the cost of triggering the callback function (or equivalent) for your event is quite high.  It&#8217;s a good way to get laziness for cheap if you have a busy event stream.  The example listed in the documentation is lucid:</p>
+
+<pre><code class="js">var lazyLayout = _.debounce(calculateLayout, 300);
+$(window).resize(lazyLayout);
+</code></pre>
+
+<h2>What about in Go?</h2>
+
+<p>Go usually eschews the JavaScript callback continuation-passing style in favor of using goroutines and channels for concurrency.  It&#8217;s a very nice language feature, and elegant, but sometimes you want use a &#8220;debounce&#8221; to respond to, say, a bunch of values coming over a channel in rapid bursts.  So how do you do this in Go?</p>
+
+<p>The answer is to use <code>time.Timer</code>&#8217;s <code>Stop</code> and <code>AfterFunc</code> methods in tandem like you would otherwise use <code>window.setTimeout</code> and <code>window.clearTimeout</code>.</p>
+
+<p>Example code:</p>
+
+<pre><code class="go">package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func debounce(interval time.Duration, f func(arg int)) func(int) {
+    timer := &amp;time.Timer{}
+    return func(arg int) {
+        timer.Stop()
+        timer = time.AfterFunc(interval, func() {
+            f(arg)
+        })
+    }
+}
+
+func main() {
+    spammyChan := make(chan int, 10)
+    debouncedCostlyOperation := debounce(300*time.Millisecond, func(arg int) {
+        fmt.Println("*****************************")
+        fmt.Println("* DOING A COSTLY OPERATION! *")
+        fmt.Println("*****************************")
+        fmt.Println("In case you were wondering, the value passed to this function is", arg)
+        fmt.Println("We could have more args to our \"compiled\" debounced function too, if we wanted.")
+    })
+    go func() {
+        for {
+            select {
+            case spam := &lt;-spammyChan:
+                fmt.Println("received a send on a spammy channel - might be doing a costly operation if not for debounce")
+                debouncedCostlyOperation(spam)
+            default:
+            }
+        }
+    }()
+    for i := 0; i &lt; 10; i++ {
+        spammyChan &lt;- i
+    }
+    time.Sleep(500 * time.Millisecond)
+}
+</code></pre>
+
+<p>We create a function, <code>debounce</code>, that consumes a <code>func (int)</code> and returns a <code>func(int)</code>.  Whenever we trigger this function, it will wait a specified number of milliseconds, and, if it is not interrupted by another attempt to trigger the action in that duration, it triggers the action.  If it is interrupted, it resets the timeout.</p>
+
+<h1>fin</h1>
+
+<p>Go is a little less flexible than JavaScript due to the strong typing (if anyone has ideas how to make this more flexible I&#8217;m very interested to hear) but this approach will get you 90% of the way there in the instances where you need debouncing.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Demystifying Golang's io.Reader and io.Writer Interfaces]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/07/19/demystifying-golangs-io-dot-reader-and-io-dot-writer-interfaces/"/>
+    <updated>2014-07-19T19:35:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/07/19/demystifying-golangs-io-dot-reader-and-io-dot-writer-interfaces</id>
+    <content type="html"><![CDATA[<p><img src="/images/iowriter/aviator.png"></p>
+
+<p>If you&#8217;re coming to <a href="http://golang.org">Go</a> from a more flexible, dynamically typed language like Ruby or Python, there may be some confusion as you adjust to the Go way of doing things.  In my case, I had some trouble wrapping my head around <code>io.Reader</code>, <code>io.Writer</code>, <code>io.ReadCloser</code> etc.  What are they used for, and how can they be included in our Go programs for interesting and helpful results?</p>
+
+<h1>Quick interface review</h1>
+
+<p>To make up for some of the flexibility lost by not having generics, and for other reasons as well, Go provides an abstraction in the form of interfaces.</p>
+
+<p>You can specify an interface and then any consumer of that interface will accept it.</p>
+
+<pre><code class="go">type error interface {
+    Error() string
+}
+</code></pre>
+
+<p>Many standard library components of Go define interfaces.  In fact, the <code>error</code> type you know and love (hate?) is simply an interface which insists that a method named <code>Error</code> which consumes nothing and returns a string must be defined on a struct for the interface to count as satisfied.  Interfaces in Go are set <em>implicitly</em>, so all you have to do is define the required methods on your struct and it will qualify as implementing that interface.</p>
+
+<p>For instance:</p>
+
+<pre><code class="go">package main
+
+import (
+    "fmt"
+    "os"
+)
+
+type Animal interface {
+    Say() string
+    Greet(Animal)
+}
+
+type Person struct {
+}
+
+func (p Person) Say() string {
+    return "Hey there bubba!"
+}
+
+func (p Person) Greet(animalToGreet Animal) {
+    fmt.Println("Hi!")
+}
+
+type Dog struct {
+    age int
+    breed string
+    owner *Person
+}
+
+func (d Dog) Say() string {
+    return "Woof woof!"
+}
+
+func (d Dog) Growl() {
+    fmt.Println("Grrr!")
+}
+
+func (d *Dog) Snuggle() {
+    // snuggle code...
+}
+
+func (d Dog) Sniff(animalToSniff Animal) (bool, error) {
+    // sniff code...
+    return true, nil
+}
+
+func (d Dog) Greet(animalToGreet Animal) {
+    if _, ok := animalToGreet.(Person); ok {
+        d.Snuggle()
+    } else {
+        friendly, err := d.Sniff(animalToGreet)
+        if err != nil {
+            fmt.Fprintln(os.Stderr, "Error sniffing a non-person")
+        }
+        if !friendly {
+            d.Growl()
+        }
+    }
+}
+
+func main() {
+    d1 := Dog{2, "shibe", &amp;Person{}}
+    d2 := Dog{3, "poodle", &amp;Person{}}
+    d2.Greet(d1)
+    fmt.Println("Successfully greeted a dog.")
+}
+</code></pre>
+
+<p>Run here: <a href="http://play.golang.org/p/m_RQeo9N1H">http://play.golang.org/p/m_RQeo9N1H</a></p>
+
+<p>Yup, I &#8220;went there&#8221; with the Animal OO-ish (Go doesn&#8217;t have pure objects) cliché.</p>
+
+<p>When you compile a program containing the above, the Go compiler knows that the <code>Dog</code> struct satisfies the <code>Animal</code> interface provided (it infers this because <code>Dog</code> implements the neccesary methods to qualify), so it won&#8217;t complain if you pass instances of of <code>Dog</code> to functions which demand an <code>Animal</code> type.  This allows for a lot of power and flexibility in your architecture and abstractions, without breaking the type system.</p>
+
+<h1>So what&#8217;s with <code>io</code>?</h1>
+
+<p><code>io</code> is a Golang standard library package that defines flexible interfaces for many operations and usecases around input and output.</p>
+
+<p>See: <a href="http://golang.org/pkg/io/">http://golang.org/pkg/io/</a></p>
+
+<p>You can use the same mechanisms to talk to files on disk, the network, STDIN/STDOUT, and so on.  This allows Go programmers to create re-usable &#8220;Lego brick&#8221; components that work together well without too much shimming or shuffling of components.  They smooth over cross-platform implemenation details, and it&#8217;s all just <code>[]byte</code> getting passed around, so everyone&#8217;s expectations (senders/writers and receivers/readers) are congruent.  You have <code>io.Reader</code>, <code>io.ReadCloser</code>, <code>io.Writer</code>, and so on to use.  Go also provides packages called <code>bufio</code> and <code>ioutil</code> that are packed with useful features related to using these interfaces.</p>
+
+<h1>OK, but what can you do with it.</h1>
+
+<p>Let&#8217;s look at an example to see how combining some of these primitives can be useful in practice.  I&#8217;ve been working on a project where I want to attach to multiple running Docker containers concurrently and stream (multiplex) their output to STDOUT with some metadata (container name) prepended to each log line.  Sounds easy, right? ;)</p>
+
+<p>The Docker REST API bindings written by <a href="http://github.com/fsouza">fsouza</a> provide an abstraction whereby we can pass an <code>io.Writer</code> instance for STDOUT and STDERR of the container we are attaching to.  So we have control of a <code>io.Writer</code> that we inject in, but how do read what gets written by this container one line at a time, and multiplex/label the output together in the fashion I described in the previous paragraph?</p>
+
+<p>We will use a combination of Go&#8217;s concurrency primitives, <code>io.Pipe</code>, and a <code>bufio.Scanner</code> to accomplish this.</p>
+
+<p>Since the call to the API binding&#8217;s <code>AttachContainer</code> method hijacks the HTTP connection and consequently forces the calling goroutine to be blocked, we run each <code>Attach</code> call in its own goroutine.</p>
+
+<p>We need an <code>io.Reader</code> to be able to read and parse the output from the container, but we only have the option to pass in an instance of <code>io.Writer</code> for STDOUT and STDERR.  What to do?  We can use a call to <code>io.Pipe</code> (see <a href="http://golang.org/pkg/io/#Pipe">here</a> for reference).  <code>io.Pipe</code> returns an instance of a <code>PipeReader</code>, and an instance of a <code>PipeWriter</code>, which are connected (calling the <code>Write</code> method on the <code>Writer</code> will lead directly to what comes out of <code>Read</code> in the <code>Reader</code>).  So, we can use the returned <code>Reader</code> to stream the output from the container.</p>
+
+<p>The final step is to use a <code>bufio.Scanner</code> to read the output from the <code>PipeReader</code> line by line.  If you use the <code>Scan</code> method with a <code>range</code> statement, it will iterate line by line as we desire.  We have already generated the prefix earlier and saved it in the <code>Service</code> struct we are working with (<code>Service</code> in my implementation is a very light wrapper around a container).</p>
+
+<p>Therefore, the final method looks like this:</p>
+
+<pre><code class="go">func (s *Service) Attach() error {
+    r, w := io.Pipe()
+    options := apiClient.AttachToContainerOptions{
+        Container:    s.Name,
+        OutputStream: w,
+        ErrorStream:  w,
+        Stream:       true,
+        Stdout:       true,
+        Stderr:       true,
+        Logs:         true,
+    }
+    fmt.Println("Attaching to container", s.Name)
+    go s.api.AttachToContainer(options)
+    go func(reader io.Reader, s Service) {
+        scanner := bufio.NewScanner(reader)
+        for scanner.Scan() {
+            fmt.Printf("%s%s \n", s.LogPrefix, scanner.Text())
+        }
+        if err := scanner.Err(); err != nil {
+            fmt.Fprintln(os.Stderr, "There was an error with the scanner in attached container", err)
+        }
+    }(r, *s)
+    return nil
+}
+</code></pre>
+
+<p>We kick off attaching to, and reading from, the container at the same time- when the attach is complete and starts streaming, the <code>scanner.Scan</code> loop will start logging.</p>
+
+<h1>Conclude</h1>
+
+<p>I had some trouble understanding <code>io.Writer</code>, <code>io.Reader</code>, etc. when getting started with Go (and recently as well), but I think I was over-thinking their simplicity and explicit power.  Additionally, learning about some higher-level abstractions related to them helped a lot.  Hopefully this article is useful for you and clears stuff up in the future.  I know that my Go has accelerated a lot since grokking these concepts, especially since so much (file IO etc.) relies on it.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Surprising Feature of Golang that Colored Me Impressed]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/04/27/a-surprising-feature-of-golang-that-colored-me-impressed/"/>
+    <updated>2014-04-27T00:16:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/04/27/a-surprising-feature-of-golang-that-colored-me-impressed</id>
+    <content type="html"><![CDATA[<p><em>EDIT:</em> Some commenters were confused about some things in this article, and I don&#8217;t want people to get an unclear picture, so to clarify:</p>
+
+<ol>
+<li>Yes, I know that insertion into a hash table creates an arbitrary ordering of elements by definition.  For a variety of reasons, e.g. that not every map is a hash map as some posters have pointed out (and some languages have ordered hash maps), I can see how someone might hypothesize (especially with a naïve understanding of Go maps) that iteration order could be the same as insertion order.</li>
+<li>My original example was contrived and does not demonstrate the point for most versions of Go (though I hear it might work for 1.3), so I have updated the code to be something you can chuck into an editor or the <a href="http://play.golang.org/p/ppIvkgAGL1">Go Playground</a> and see the effect for yourself.</li>
+<li>It <em>is</em> true that Go runs from a <a href="https://codereview.appspot.com/5285042/patch/9001/10003">random offset for map iteration</a>.  It&#8217;s not <em>just</em> arbitrary.</li>
+</ol>
+
+
+<p>Now back to your regularly scheduled article.  :)</p>
+
+<p><img src="/images/gopher/hardhat.png"></p>
+
+<h1>go blog.Article()</h1>
+
+<p>The amount of enthusiasm and momentum I&#8217;ve been seeing regarding the <a href="http://golang.org">Go programming language</a> in the past few weeks has been really amazing.  Partially this is due to <a href="http://gophercon.com">Gophercon 2014</a>, which at the time of writing has just occured.  I am insanely jealous of the attendees - the format and talks sound like they were awesome, and it&#8217;d be great to bump elbows with titans such as <a href="https://twitter.com/rob_pike">Rob Pike</a> as well as hear all the cool stuff that everyone is building with Go.  I feel like additionally I&#8217;ve seen a big spike in blog articles related to Go lately, and many are making awesome pivots to include Go in their stack (for instance, <a href="https://www.digitalocean.com/company/blog/new-super-fast-droplet-console-thanks-golang/">Digital Ocean</a>, new cloud startup darling of the masses, just announced they reworked a bunch of Perl code to Go and improved some things such as response time dramatically).</p>
+
+<p>I&#8217;ve never written the obligatory &#8220;ZOMG I played with Golang for two weeks and it&#8217;s awesome&#8221; post, since I didn&#8217;t really find it had much of a value add in its myriad forms.  But recently I came across a Go feature that I considered a very cool reflection of its very excellent (in my opinion) attitude as a language.</p>
+
+<p>Go&#8217;s <code>map</code> iteration order (using the <code>range</code> keyword) is random instead of in the order that the entries were added.  What does this mean (context), and why is it significant?</p>
+
+<h1>Maps</h1>
+
+<h2>Brief intro to maps</h2>
+
+<p>Stolen directly from <a href="http://blog.golang.org/go-maps-in-action"><em>the</em> article on maps</a> by the prolific <a href="https://twitter.com/enneff">Andrew Gerrand</a>:</p>
+
+<blockquote><p>One of the most useful data structures in computer science is the hash table. Many hash table implementations exist with varying properties, but in general they offer fast lookups, adds, and deletes. Go provides a built-in map type that implements a hash table.</p></blockquote>
+
+<p>So in Go if you need a hash table you use a map.  Since Go is strongly typed you have to define what type the keys are, and what type the associated values are (e.g. strings, integers, pointers to structs, etc.).  A common use case, for instance, it to have a map where the keys are strings and the values they reference are strings.</p>
+
+<pre><code class="go">m := make(map[string]string)
+</code></pre>
+
+<p>Usage is pretty straightforward.  Keys don&#8217;t need to exist before they are assigned, or even before they are referenced (if they do not exist, we get the value type&#8217;s &#8220;zero value&#8221;).</p>
+
+<pre><code class="go">m["bandName"] = "Funny Bones"             // "create"
+websiteTitle := m["bandName"] + " Music"  // "read"
+m["bandName"] = "Moon Taxi"               // "update"
+delete(m, "bandName")                     // "delete"
+fmt.Printf(m["bandName"])                 // prints nothing since m["bandName"] == ""
+</code></pre>
+
+<p>To iterate over all the entries in a map you use the <code>range</code> keyword:</p>
+
+<pre><code class="go">for key, value := range m {
+    fmt.Println("Key:", key, "Value:", value)
+}
+</code></pre>
+
+<h2>Iteration Order</h2>
+
+<p>At first glance a Go programmer might think that the output of this code:</p>
+
+<pre><code class="go">package main
+
+import "fmt"
+
+func main() {
+    blogArticleViews := map[string]int{
+        "unix": 0,
+        "python": 1,
+        "go": 2,
+        "javascript": 3,
+        "testing": 4,
+        "philosophy": 5,
+        "startups": 6,
+        "productivity": 7,
+        "hn": 8,
+        "reddit": 9,
+        "C++": 10,
+    }
+    for key, views := range blogArticleViews {
+        fmt.Println("There are", views, "views for", key)
+    }
+}
+</code></pre>
+
+<p>Would be this:</p>
+
+<pre><code>$ go run map_iteration_order.go
+There are 0 views for unix
+There are 1 views for python
+There are 2 views for go
+There are 3 views for javascript
+There are 4 views for testing
+There are 5 views for philosophy
+There are 6 views for startups
+There are 7 views for productivity
+There are 8 views for hn
+There are 9 views for reddit
+There are 10 views for C++
+</code></pre>
+
+<p>But, since Go 1, the Go runtime actually randomizes the iteration order.  So in fact it will be more like this:</p>
+
+<pre><code>$ go run map_iteration_order.go
+There are 3 views for javascript
+There are 5 views for philosophy
+There are 10 views for C++
+There are 0 views for unix
+There are 1 views for python
+There are 2 views for go
+There are 4 views for testing
+There are 6 views for startups
+There are 7 views for productivity
+There are 8 views for hn
+There are 9 views for reddit
+</code></pre>
+
+<p>The Go language designers noticed that people were relying on the fact that keys were normally stored in the order they were added in, so they randomized the order in which the keys are iterated over.  Thus, if you want to output keys in the order they were added in, you need to keep track of which value is in which position in the order <em>yourself</em> like so :</p>
+
+<pre><code class="go">import "sort"
+
+var m map[int]string
+var keys []int
+for k := range m {
+    keys = append(keys, k)
+}
+sort.Ints(keys)
+for _, k := range keys {
+    fmt.Println("Key:", k, "Value:", m[k])
+}
+</code></pre>
+
+<p>Note that the above codeblock is once again shamelessly stolen from <a href="http://blog.golang.org/go-maps-in-action">Andrew&#8217;s excellent article</a>.</p>
+
+<p>I think that peoples&#8217; reactions to these sort of things mostly can be categorized into two separate groups.</p>
+
+<p>One group responds with anything from not understanding why this might be something that is done to being slightly peeved to vehemently disapproving.  These are most likely the ones who are comfortable making potentially dangerous or magical assumptions about what code is doing behind the scenes and they would prefer that the Go language designers allow them to continue to write dangerous code.</p>
+
+<p>The other group accepts that this was an issue which was addressed, are thankful that the Go language designers are looking out for them, implements the provided solution and moves on.</p>
+
+<h2>Why is it significant?</h2>
+
+<p>In one word: attitude.</p>
+
+<p>This seemingly innocuous language feature is something that I consider to be a very good sign in terms of general language philosophy.  Instead of trying to be overly flexible and allow sloppy programming, Go forces you to get things straight from the get-go.  I think that this is one of the things that contributes to the reported &#8220;fuzzy good feeling&#8221; that Go programmers reference suggesting that if their program compiles (and especially if it conforms to Go idioms as outlined above), there is a good chance it will work as intended as well.  No sneaky typing bugs, missed semi-colons and so on.</p>
+
+<p>In particular Andrew&#8217;s referenced article mentions that this was something the Go language designers <em>changed</em> rather than continuing to allow people to rely on broken assumptions.  One of my hugest pet peeves is when broken or buggy functionality (this could happen in a deliverable, or in a programming language, or elsewhere) becomes a feature through acceptance and workarounds and then a huge stink is raised when the &#8220;feature&#8221; is attempted to be fixed!  It&#8217;s pretty clear that, say, PHP and JavaScript have let their culture wander in these directions for various reasons (they&#8217;re working on it, but there&#8217;s a huge crushing amount of debt to be paid, and some things that will never get fixed).</p>
+
+<p>One of the biggest weak points of PHP, for instance, is the needle-versus-haystack problem.  My ideal language (Blub?) would have the sort of attitude that gets driven absolutely crazy by this sort of inconsistency.  This is also why I find the Go language designer&#8217;s refusal to cave to the cow-towing for exceptions and generics reassuring - they want very badly to <em>do the right thing</em> and they know it takes time.  They&#8217;re in no rush and it&#8217;s a lot easier to add features than to un-add them.</p>
+
+<h1>Conclude</h1>
+
+<p>Go is a pleasant language and just so well thought-out in many ways.  Don&#8217;t be too quick to judge or criticize because it lacks features you are accustomed to such as generics or dynamic typing- perhaps if you give it a try you will find that you do not miss them all that much and you are writing simple, clean, elegant code with easy-to-integrate concurrency.</p>
+
+<p>Go is definitely still growing and evolving, and that&#8217;s part of the fun of it as well.  It is definitely proving to be no less than rock-solid and production-ready, yet still performance and reliability keeps improving.  Just check out the awesome numbers on these benchmarks <a href="https://groups.google.com/forum/#!msg/golang-dev/2YRmu_AWz68/tKAZgpV7zQwJ">Rob Pike recently posted</a> comparing the Go 1 release to tip (nearing 1.3):</p>
+
+<pre style="transition: 1s ease-in-out all;" id="bench">
+Delta from go1 to tip: 
+
+benchmark                          old ns/op      new ns/op      delta 
+BenchmarkBinaryTree17              7102124000     5790215308     <span style="color: #32cd32">-18.47%</span> 
+BenchmarkFannkuch11                7139655000     4361664854     <span style="color: #32cd32">-38.91%</span> 
+BenchmarkFmtFprintfEmpty           177            104            <span style="color: #32cd32">-41.24%</span> 
+BenchmarkFmtFprintfString          575            312            <span style="color: #32cd32">-45.74%</span> 
+BenchmarkFmtFprintfInt             424            230            <span style="color: #32cd32">-45.75%</span> 
+BenchmarkFmtFprintfIntInt          682            403            <span style="color: #32cd32">-40.91%</span> 
+BenchmarkFmtFprintfPrefixedInt     661            394            <span style="color: #32cd32">-40.39%</span> 
+BenchmarkFmtFprintfFloat           907            598            <span style="color: #32cd32">-34.07%</span> 
+BenchmarkFmtManyArgs               2787           1663           <span style="color: #32cd32">-40.33%</span> 
+BenchmarkGobDecode                 31284200       10693446       <span style="color: #32cd32">-65.82%</span> 
+BenchmarkGobEncode                 13900550       6919498        <span style="color: #32cd32">-50.22%</span> 
+BenchmarkGzip                      636714400      704154254      <span style="color: red">+10.59%</span> 
+BenchmarkGunzip                    275620600      139906588      <span style="color: #32cd32">-49.24%</span> 
+BenchmarkHTTPClientServer          144041         71739          <span style="color: #32cd32">-50.20%</span> 
+BenchmarkJSONEncode                83472200       32969241       <span style="color: #32cd32">-60.50%</span> 
+BenchmarkJSONDecode                391968600      120858167      <span style="color: #32cd32">-69.17%</span> 
+BenchmarkMandelbrot200             9540360        6062905        <span style="color: #32cd32">-36.45%</span> 
+BenchmarkGoParse                   10007700       6760226        <span style="color: #32cd32">-32.45%</span> 
+BenchmarkRegexpMatchEasy0_32       198            168            <span style="color: #32cd32">-15.15%</span> 
+BenchmarkRegexpMatchEasy0_1K       540            479            <span style="color: #32cd32">-11.30%</span> 
+BenchmarkRegexpMatchEasy1_32       175            149            <span style="color: #32cd32">-14.86%</span> 
+BenchmarkRegexpMatchEasy1_1K       1353           1414           <span style="color: red">+4.51%</span>
+BenchmarkRegexpMatchMedium_32      311            307            <span style="color: #32cd32">-1.29%</span> 
+BenchmarkRegexpMatchMedium_1K      108924         126452         <span style="color: red">+16.09%</span>
+BenchmarkRegexpMatchHard_32        4972           5681           <span style="color: red">+14.26%</span>
+BenchmarkRegexpMatchHard_1K        157354         181042         <span style="color: red">+15.05%</span>
+BenchmarkRevcomp                   1362067000     1162752845     <span style="color: #32cd32">-14.63%</span> 
+BenchmarkTemplate                  714330000      144396424      <span style="color: #32cd32">-79.79%</span> 
+BenchmarkTimeParse                 1651           669            <span style="color: #32cd32">-59.48%</span> 
+BenchmarkTimeFormat                3215           714            <span style="color: #32cd32">-77.79%</span> 
+</pre>
+
+
+<p><button id="relBench" type="button">Click me to show relative benchmarks above!!</button></p>
+
+<p>I love this!  And I love Go.</p>
+
+<p>Until next time, stay sassy Internet.  And <a href="http://nathanleclaire.com">consider subscribing to my mailing list</a>.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+
+<script>
+$(document).ready(function () {
+    $('#relBench').click(function () {
+        $("#bench").css('line-height', '50px');
+        $('pre > span').each(function(i, e) { 
+            var $e = $(e); 
+            $e.css('transition', '1s ease-in-out all');
+            $e.css('font-size', $e.html().slice(1, $e.html().length-1) + 'px'); 
+        }); 
+    });
+});
+</script>
+
+]]></content>
+  </entry>
+  
+</feed>

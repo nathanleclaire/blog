@@ -1,0 +1,392 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html style="display:none;" lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="I'm a solution delivery and technology expert.  I write about code (back-end and front-end), entrepreneurship, and life.  I'm obsessed with application performance, user experience, and shipping." name="description">
+		<meta content="nathan leclaire" name="author">
+		
+		<title>Demystifying Golang's io.Reader and io.Writer Interfaces &mdash; nathan leclaire | I care, I share, I'm Nathan LeClaire.</title>
+		
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href="/stylesheets/main.css" rel="stylesheet">
+		
+		<script>
+		   if(self == top) {
+			   document.documentElement.style.display = 'block'; 
+		   } else {
+			   top.location = self.location; 
+		   }
+		</script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+		<script src="/js/jquery.modal.min.js"></script>
+		<script src="/js/fuse.min.js"></script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div id="sidebar">
+				<header>
+					<div class="title">
+						<a href="http://nathanleclaire.com">
+							<img src="/images/nateface.jpeg" class="nateface" /> 
+							nathan leclaire 
+						</a>
+					</div>
+					<p class="slogan">I care, I share, I'm Nathan LeClaire.</p>
+					<div class="navi">
+						<ul>
+							<li><a href="/about/">About</a></li>
+							<li><a href="/blog/archives">Archives</a></li>
+							<li><a href="/atom.xml">RSS</a></li>
+						</ul>
+					</div> <!-- // .navi -->
+					<div id="sidebar-email">
+						<a href="mailto:nathan.leclaire@gmail.com">nathan.leclaire@gmail.com</a>
+					</div>
+				</header>
+				<span id="shameless-self-promotion">
+				<!-- Begin MailChimp Signup Form -->
+
+				<div id="mc_embed_signup">
+				<form action="https://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<label for="mce-EMAIL">Get my essays about tech delivered to your inbox</label>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+				</form>
+				</div>
+				<!--End mc_embed_signup-->
+				
+				<p>Quickly search the archive:</p>
+				<input type="text" placeholder="Fuzzy search by keyword (e.g. Angular)" id="archive-search">
+				<img src="/images/magnifying-glass.png" id="search-icon" />
+				<ul id="archive-search-populate">
+				</ul>
+				
+				</span>
+			</div>
+			<div id="content">
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+    <header>
+        <h1>
+            <a href="/blog/2014/07/19/demystifying-golangs-io-dot-reader-and-io-dot-writer-interfaces/">Demystifying Golang's io.Reader and io.Writer Interfaces</a>
+        </h1>
+        <h3 style="text-align: center;">by Nathan LeClaire</h3>
+        <time>19 July 2014</time>
+    </header>
+    <div>
+        <p><img src="/images/iowriter/aviator.png"></p>
+
+<p>If you're coming to <a href="http://golang.org">Go</a> from a more flexible, dynamically typed language like Ruby or Python, there may be some confusion as you adjust to the Go way of doing things.  In my case, I had some trouble wrapping my head around <code>io.Reader</code>, <code>io.Writer</code>, <code>io.ReadCloser</code> etc.  What are they used for, and how can they be included in our Go programs for interesting and helpful results?</p>
+
+<h1>Quick interface review</h1>
+
+<p>To make up for some of the flexibility lost by not having generics, and for other reasons as well, Go provides an abstraction in the form of interfaces.</p>
+
+<p>You can specify an interface and then any consumer of that interface will accept it.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=go><code>type error interface {
+    Error() string
+}</code></pre></figure></notextile></div>
+
+
+<p>Many standard library components of Go define interfaces.  In fact, the <code>error</code> type you know and love (hate?) is simply an interface which insists that a method named <code>Error</code> which consumes nothing and returns a string must be defined on a struct for the interface to count as satisfied.  Interfaces in Go are set <em>implicitly</em>, so all you have to do is define the required methods on your struct and it will qualify as implementing that interface.</p>
+
+<p>For instance:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=go><code>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;os&quot;
+)
+
+type Animal interface {
+    Say() string
+    Greet(Animal)
+}
+
+type Person struct {
+}
+
+func (p Person) Say() string {
+    return &quot;Hey there bubba!&quot;
+}
+
+func (p Person) Greet(animalToGreet Animal) {
+    fmt.Println(&quot;Hi!&quot;)
+}
+
+type Dog struct {
+    age int
+    breed string
+    owner *Person
+}
+
+func (d Dog) Say() string {
+    return &quot;Woof woof!&quot;
+}
+
+func (d Dog) Growl() {
+    fmt.Println(&quot;Grrr!&quot;)
+}
+
+func (d *Dog) Snuggle() {
+    // snuggle code...
+}
+
+func (d Dog) Sniff(animalToSniff Animal) (bool, error) {
+    // sniff code...
+    return true, nil
+}
+
+func (d Dog) Greet(animalToGreet Animal) {
+    if _, ok := animalToGreet.(Person); ok {
+        d.Snuggle()
+    } else {
+        friendly, err := d.Sniff(animalToGreet)
+        if err != nil {
+            fmt.Fprintln(os.Stderr, &quot;Error sniffing a non-person&quot;)
+        }
+        if !friendly {
+            d.Growl()
+        }
+    }
+}
+
+func main() {
+    d1 := Dog{2, &quot;shibe&quot;, &amp;Person{}}
+    d2 := Dog{3, &quot;poodle&quot;, &amp;Person{}}
+    d2.Greet(d1)
+    fmt.Println(&quot;Successfully greeted a dog.&quot;)
+}</code></pre></figure></notextile></div>
+
+
+<p>Run here: <a href="http://play.golang.org/p/m_RQeo9N1H">http://play.golang.org/p/m_RQeo9N1H</a></p>
+
+<p>Yup, I "went there" with the Animal OO-ish (Go doesn't have pure objects) cliché.</p>
+
+<p>When you compile a program containing the above, the Go compiler knows that the <code>Dog</code> struct satisfies the <code>Animal</code> interface provided (it infers this because <code>Dog</code> implements the neccesary methods to qualify), so it won't complain if you pass instances of of <code>Dog</code> to functions which demand an <code>Animal</code> type.  This allows for a lot of power and flexibility in your architecture and abstractions, without breaking the type system.</p>
+
+<h1>So what's with <code>io</code>?</h1>
+
+<p><code>io</code> is a Golang standard library package that defines flexible interfaces for many operations and usecases around input and output.</p>
+
+<p>See: <a href="http://golang.org/pkg/io/">http://golang.org/pkg/io/</a></p>
+
+<p>You can use the same mechanisms to talk to files on disk, the network, STDIN/STDOUT, and so on.  This allows Go programmers to create re-usable "Lego brick" components that work together well without too much shimming or shuffling of components.  They smooth over cross-platform implemenation details, and it's all just <code>[]byte</code> getting passed around, so everyone's expectations (senders/writers and receivers/readers) are congruent.  You have <code>io.Reader</code>, <code>io.ReadCloser</code>, <code>io.Writer</code>, and so on to use.  Go also provides packages called <code>bufio</code> and <code>ioutil</code> that are packed with useful features related to using these interfaces.</p>
+
+<h1>OK, but what can you do with it.</h1>
+
+<p>Let's look at an example to see how combining some of these primitives can be useful in practice.  I've been working on a project where I want to attach to multiple running Docker containers concurrently and stream (multiplex) their output to STDOUT with some metadata (container name) prepended to each log line.  Sounds easy, right? ;)</p>
+
+<p>The Docker REST API bindings written by <a href="http://github.com/fsouza">fsouza</a> provide an abstraction whereby we can pass an <code>io.Writer</code> instance for STDOUT and STDERR of the container we are attaching to.  So we have control of a <code>io.Writer</code> that we inject in, but how do read what gets written by this container one line at a time, and multiplex/label the output together in the fashion I described in the previous paragraph?</p>
+
+<p>We will use a combination of Go's concurrency primitives, <code>io.Pipe</code>, and a <code>bufio.Scanner</code> to accomplish this.</p>
+
+<p>Since the call to the API binding's <code>AttachContainer</code> method hijacks the HTTP connection and consequently forces the calling goroutine to be blocked, we run each <code>Attach</code> call in its own goroutine.</p>
+
+<p>We need an <code>io.Reader</code> to be able to read and parse the output from the container, but we only have the option to pass in an instance of <code>io.Writer</code> for STDOUT and STDERR.  What to do?  We can use a call to <code>io.Pipe</code> (see <a href="http://golang.org/pkg/io/#Pipe">here</a> for reference).  <code>io.Pipe</code> returns an instance of a <code>PipeReader</code>, and an instance of a <code>PipeWriter</code>, which are connected (calling the <code>Write</code> method on the <code>Writer</code> will lead directly to what comes out of <code>Read</code> in the <code>Reader</code>).  So, we can use the returned <code>Reader</code> to stream the output from the container.</p>
+
+<p>The final step is to use a <code>bufio.Scanner</code> to read the output from the <code>PipeReader</code> line by line.  If you use the <code>Scan</code> method with a <code>range</code> statement, it will iterate line by line as we desire.  We have already generated the prefix earlier and saved it in the <code>Service</code> struct we are working with (<code>Service</code> in my implementation is a very light wrapper around a container).</p>
+
+<p>Therefore, the final method looks like this:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=go><code>func (s *Service) Attach() error {
+    r, w := io.Pipe()
+    options := apiClient.AttachToContainerOptions{
+        Container:    s.Name,
+        OutputStream: w,
+        ErrorStream:  w,
+        Stream:       true,
+        Stdout:       true,
+        Stderr:       true,
+        Logs:         true,
+    }
+    fmt.Println(&quot;Attaching to container&quot;, s.Name)
+    go s.api.AttachToContainer(options)
+    go func(reader io.Reader, s Service) {
+        scanner := bufio.NewScanner(reader)
+        for scanner.Scan() {
+            fmt.Printf(&quot;%s%s \n&quot;, s.LogPrefix, scanner.Text())
+        }
+        if err := scanner.Err(); err != nil {
+            fmt.Fprintln(os.Stderr, &quot;There was an error with the scanner in attached container&quot;, err)
+        }
+    }(r, *s)
+    return nil
+}</code></pre></figure></notextile></div>
+
+
+<p>We kick off attaching to, and reading from, the container at the same time- when the attach is complete and starts streaming, the <code>scanner.Scan</code> loop will start logging.</p>
+
+<h1>Conclude</h1>
+
+<p>I had some trouble understanding <code>io.Writer</code>, <code>io.Reader</code>, etc. when getting started with Go (and recently as well), but I think I was over-thinking their simplicity and explicit power.  Additionally, learning about some higher-level abstractions related to them helped a lot.  Hopefully this article is useful for you and clears stuff up in the future.  I know that my Go has accelerated a lot since grokking these concepts, especially since so much (file IO etc.) relies on it.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+
+    </div>
+    <footer>
+        <p>If you find a mistake or issue in this article, please <a id="pull-request-link" taget="_blank" href="">fix it and submit a pull request on Github</a> (must be signed in to your GitHub account).</p>
+        <a target="_blank" style="display: block;" href="https://twitter.com/share?url=http://nathanleclaire.com/blog/2014/07/19/demystifying-golangs-io-dot-reader-and-io-dot-writer-interfaces/&text=Great article from @upthecyberpunks : " class="social-media-spam">Tweet It</a>
+        <a target="_blank" href="https://news.ycombinator.com/submitlink?u=http://nathanleclaire.com/blog/2014/07/19/demystifying-golangs-io-dot-reader-and-io-dot-writer-interfaces/&t=" class="social-media-spam">Submit to Hacker News</a>
+        <a target="_blank" style="display: block !important;" href="http://www.reddit.com/submit?url=http://nathanleclaire.com/blog/2014/07/19/demystifying-golangs-io-dot-reader-and-io-dot-writer-interfaces/&title=" class="social-media-spam">Submit to Reddit</a>
+        <br>
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/blog/categories/go/'>go</a>, <a class='category' href='/blog/categories/golang/'>golang</a>, <a class='category' href='/blog/categories/io-dot-reader/'>io.reader</a>, <a class='category' href='/blog/categories/io-dot-writer/'>io.writer</a>
+	
+
+ 
+
+        <a target="_blank" style="display: block !important;" href="http://discourse.nathanleclaire.com">Chat in the forum!!</a>
+    
+        <div id="discourse-comments"></div>
+    </footer>
+    
+</article>
+<!-- END OF _includes/article.html -->
+
+
+<!-- END OF _/layouts/post.html -->
+
+			</div>
+			<form class="modal" id="mailing-list-modal" action="http://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<h1>Like what you're reading?</h1>
+					<img src="/images/happy-reader.jpeg"></img>
+					<p style="display: block;" for="mce-EMAIL">Did you enjoy this article?  You might want to sign up for my mailing list.  I send out weekly-ish essays about hot new tech stuff.</p>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL-modal" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+			</form>
+		</div> <!-- // .wrap -->
+	<script type="text/javascript" src="/js/prettify.js"></script>
+	<script>
+	function supports_html5_storage() {
+	  try {
+		return 'localStorage' in window && window['localStorage'] !== null;
+	  } catch (e) {
+		return false;
+	  }
+	}
+
+	$(document).ready(function () {
+	    var fuse;
+
+	    $("code").addClass("prettyprint");
+	    prettyPrint();
+
+	    $.getJSON("/articles.json", function(data) {
+	    	// input:
+	    	// [{title: "Learn Node.js The Troll Way", href: "blahblah"}, { ... }]
+	    	fuse = new Fuse(data, {
+	    	    keys: ['title', 'tags']
+	    	});
+	    });
+	    
+	    $("#archive-search").keyup(function() {
+	    	var $this = $(this);
+	    	var val = $this.val();
+	    	var result = fuse.search(val).slice(0, 1);
+	    	$list = $("#archive-search-populate");
+	    	$list.empty();
+	    	if (result.length > 0 && val !== '') {
+	    	    $.each(result, function(i, e) {
+	    	        $list.append('<li><a href="'+ e.href +'">'+ e.title +'</a></li>');
+	    	    });
+	    	}
+	    });
+	    
+	    $(".social-media-spam").each(function () {
+	        var e = $(this);
+	        var t = e.attr("href");
+	        var n = $("article header h1 a").html();
+	        t += encodeURIComponent(n);
+	        e.attr("href", t)
+	    });
+
+	    var e = window.location.href;
+	    var t = $("#pull-request-link");
+	    var n = "https://github.com/nathanleclaire/blog/edit/master/source/_posts/" + e.split("/").slice(4, 8).join("-") + ".markdown";
+	    t.attr("href", n);
+
+	    // Only offer mailing list once
+		var tryModal = localStorage["modal"] ? false : true;
+
+		// Don't offer mailing list to people on mobile
+		if ($(window).width() < 720) {
+			tryModal = false;
+		}
+
+		$('#mc-embedded-subscribe').click(function() {
+			// Don't offer mailing list if people have
+			// already clicked to try and sign up
+			tryModal = false;
+			localStorage["modal"] = "true";
+		});
+
+		$(window).scroll(function () {
+			if (tryModal && document.URL.indexOf('archives') === -1 && document.URL.indexOf('about') === -1) {
+				if (($(window).scrollTop() + $(window).height()) === $(document).height()) {
+					if (supports_html5_storage()) {
+						window.setTimeout(function() {
+							$('#mailing-list-modal').modal({
+								fadeDuration: 250
+							});
+							$('#mce-EMAIL-modal').focus();
+							tryModal = false;
+							localStorage["modal"] = "true";
+						}, 1000);
+					}
+				}
+			}
+		});
+
+
+	});
+	</script>
+	<script type="text/javascript">
+	if ('/blog/2014/07/19/demystifying-golangs-io-dot-reader-and-io-dot-writer-interfaces/' !== '/blog/index.html') {
+	  var discourseUrl = "http://discourse.nathanleclaire.com/",
+	      discourseEmbedUrl = 'http://nathanleclaire.com/blog/2014/07/19/demystifying-golangs-io-dot-reader-and-io-dot-writer-interfaces/';
+
+	  (function() {
+	    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+	      d.src = discourseUrl + 'javascripts/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+	  })();
+	}
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-26758702-2', 'nathanleclaire.com');
+	  ga('send', 'pageview');
+	</script>
+	</body>
+</html>
+<!-- END OF _layouts/default.html -->

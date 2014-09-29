@@ -1,0 +1,2914 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+	<title><![CDATA[nathan leclaire]]></title>
+	<link href="http://nathanleclaire.com/atom.xml" rel="self"/>
+	<link href="http://nathanleclaire.com/"/>
+	<updated>2014-09-29T03:13:10+00:00</updated>
+	<id>http://nathanleclaire.com/</id>
+	<author>
+		<name><![CDATA[Nathan LeClaire]]></name>
+		
+	</author>
+	<generator uri="http://octopress.org/">Octopress</generator>
+
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Don't Be Scared of git rebase]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/09/14/dont-be-scared-of-git-rebase/"/>
+		<updated>2014-09-14T14:38:31+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/09/14/dont-be-scared-of-git-rebase</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p><img src="http://nathanleclaire.com/images/rebase/golden_retriever.jpeg" title="" ></p>
+
+<p>Developers like to pretend that we&#8217;re analytical and make decisions based purely on logic but the truth is that, like most people, we&#8217;re creatures of emotion and habit first and foremost. We get superstitious sometimes, and in the face of the brain-crushing complexity of modern computing, who wouldn&#8217;t?  One fear I&#8217;ve noticed is of <code>git</code> (in general) and in particular of <code>git rebase</code>.  Indeed, previously I worked on a team where the mere mention of a rebase to the wrong team member could evoke howls of anxiety and protest.  Feel free to share your own rebase experiences in the comments.</p>
+
+<p>Rebasing, like most of <code>git</code>, should be learned and applied to be useful - not feared or misunderstood - so if you&#8217;ve been bitten by rebase in the past, or are simply curious about how it can be used, hopefully I can persuade you here of its utility.</p>
+
+<h1>What is it?</h1>
+
+<p><code>git rebase</code> in its simplest form is a command which will merge another branch into the branch where you are currently working, and move all of the local commits that are ahead of the rebased branch to the top of the history on that branch.</p>
+
+<p>From the man page: &#8220;git rebase: Forward-port local commits to the updated upstream head&#8221;.</p>
+
+<p>If you&#8217;re still confused, let&#8217;s look at an example.</p>
+
+<p>Say I have been doing work on a feature branch and I want to merge in the changes my teammates have made on the <code>master</code> branch.  I&#8217;ve made 2 commits locally that aren&#8217;t shared on the <code>origin</code> remote, and while I&#8217;ve been working on my feature branch my co-workers have made 20 commits on <code>origin/master</code> that I don&#8217;t have on my branch (but I would like to).</p>
+
+<p>My log looks something like this on the local branch.  My two recent (unshared) commits are at the top of the history, and the rest is the history of <code>master</code> when I originally checked out this branch.</p>
+
+<pre>
+f48d47c Add Controller changes
+fd4e046 Add DB migration
+907e384 Most recent commit on master when I originally checked out feature branch
+71fd630 ...
+...
+</pre>
+
+
+<p>So how should I approach getting the changes my co-workers have made on <code>master</code>?  I could <code>git fetch origin</code> and <code>git merge origin/master</code>, but that would cause two undesirable side effects:</p>
+
+<ol>
+<li>It forces the creation of a merge commit.  This is useful information if there was a conflict, but otherwise it&#8217;s just noise which pollutes the history.  Not good if you update your branch frequently (which you probably should).</li>
+<li>It buries my commits under an avalanche of commits from other places, when really they should be at the top of the log due to the fact that they&#8217;re &#8220;more recent to try and move upstream&#8221;.  That is, it makes more sense for my buddy who is also working on this feature branch to see my commits first when he pulls in changes than it does for him to see the <code>master</code> changes.  The things that I&#8217;ve been working on in this branch are probably more relevant to him.</li>
+</ol>
+
+
+<p>So what to do?  Well, as you may have predicted, <code>git rebase</code> comes to our rescue here.</p>
+
+<p><code>git rebase origin/master</code> will merge in the requested branch (<code>origin/master</code> in this case) and apply the commits that you have made locally to the top of the history without creating a merge commit (assuming there were no conflicts).  Now our history is nice and clean, and we have avoided the two issues listed above.</p>
+
+<p><img src="http://nathanleclaire.com/images/rebase/obama.jpeg"></p>
+
+<p>So why are people afraid?</p>
+
+<h1>The fear</h1>
+
+<p>I am speculating based on anecdata here, but I suspect the general anxiety around rebasing stems from two primary places:</p>
+
+<ol>
+<li>Due to the mechanics of <code>git rebase</code>, merge conflicts are more frequent and seemingly harder to deal with</li>
+<li>Previous experiences with loss of work due to a botched interactive rebase and/or force push (more on this is a second).</li>
+</ol>
+
+
+<p>The merge conflicts one makes sense, since few things enrage programmers quite like a well-timed merge conflict, but you shouldn&#8217;t let that keep you from rebasing.  Two reasons for this are:</p>
+
+<ol>
+<li>If you frequently commit your ongoing work (which you should) and rebase, the probability of having unmanageable merge conflicts goes way down.</li>
+<li>If you run into conflicts while rebasing, fix them, and <code>git rebase --continue</code>, the rebase will continue to go off without a hitch (there will be a merge commit, but once again it will contain useful information about where the conflict was and how it was resolved).</li>
+<li>If the conflicts are too bad and you need to bail out and attempt a normal fast-forward merge, you can easily do so with <code>git rebase --abort</code> (leaving you where you were before attempting the rebase).</li>
+</ol>
+
+
+<p>So, always try rebase first, and your git history will thank you (and take note, there is <code>git pull --rebase</code> as well- I won&#8217;t go into the whole fetch/merge vs. pull flamewar here).</p>
+
+<h1>Not to mention that interactive rebase is <em>fantastically</em> useful.</h1>
+
+<p>Another reason that the rebase fear is unwarranted is that <code>git rebase</code> has an interactive mode which is absurdly powerful and useful.  Let&#8217;s take a look at some examples where this might come in handy:</p>
+
+<ul>
+<li>Quickly removing a commit which snuck into a different branch</li>
+<li>Squashing several commits into one</li>
+<li>Rapidly changing the message on a series of commits</li>
+</ul>
+
+
+<h2>Quickly removing a commit which snuck into a different branch</h2>
+
+<p>If you&#8217;ve ever been working rapidly and concurrently on a few different branches, you may well be familiar with this problem.  It looks like this:</p>
+
+<ol>
+<li>I commit some stuff on one branch, the correct place for it, then have to move over to another branch to do some different work there.  You quickly commit some changes e.g. a panic-mode bug fix.</li>
+<li>Oh, crap.  I forgot to switch to <code>master</code> or the appropriate parent branch before checking out the new branch for the hotfix, and now I have the commits from the branch I was working on before, when really I wanted a &#8220;clean slate&#8221; from <code>master</code>.</li>
+<li>These other commits don&#8217;t belong on this branch.  What to do?</li>
+</ol>
+
+
+<p>Now, obviously it&#8217;d be easiest to just not make mistakes in the first place, but I&#8217;m willing to bet that this sort of thing happens to people more likely than most of us would like to admit.  So, we need a way to quickly deal with situations like this when they happen.</p>
+
+<p>What to do?  You can&#8217;t just <code>git reset --hard</code> without losing your desired commit, and the <code>git reset --soft</code> song and dance is annoying.  Fortunately, you can just do something like <code>git rebase -i HEAD~2</code> to quickly drop the commits from your new branch.  Just delete the lines for the commit(s) in the interactive rebase prompt.</p>
+
+<p><img src="http://nathanleclaire.com/images/rebase/rebaserm.gif"></p>
+
+<p>Obviously care should be taken that you don&#8217;t remove anything that&#8217;s not on other branches (thereby destroying work), but this is a nice swift way to correct the classic &#8220;these-commits-shouldn&#8217;t-be-on-this-branch&#8221; mistake.</p>
+
+<h2>Squashing several commits into one</h2>
+
+<p>Sometimes, in order to save your progress as you go, you may find yourself committing disparate pieces which may be better served or represented as only one commit.  For instance, your team might have a policy that all commits to a class must also have accompanying changes to unit tests in the same commit, but you like to check in your work as you go.</p>
+
+<p><code>git rebase -i</code> makes combining these several commits into one a piece of cake.  Just run <code>git rebase -i HEAD~n</code>, where <code>n</code> is the number of commits you need access to, and change &#8220;pick&#8221; on those commits&#8217; lines to &#8220;squash&#8221;.  Commits with &#8220;squash&#8221; on consecutive lines will be combined into one!</p>
+
+<p><img src="http://nathanleclaire.com/images/rebase/rebasesquash.gif"></p>
+
+<p>Once again, rebasing helps us keep our history tight and readable.</p>
+
+<h3>Rapidly changing the message on a series of commits</h3>
+
+<p>Some open source projects, such as <a href="https://github.com/docker/docker">docker</a>, require contributors to sign their work using <code>git commit -s</code> (or a custom message) as proof of ownership.  Changes won&#8217;t be merged upstream unless they are signed off correctly in this manner.</p>
+
+<p>So if you submit a pull request with four or five commits without know to do this, are you hosed?  Will you have to do the <code>git reset --soft</code> song and dance and try again on a new branch?</p>
+
+<p>Hell no!  You can use <code>git rebase -i</code> to rapidly sign all of your commits the correct way.  Just change <code>pick</code> to <code>edit</code> for the commits in question, and do a <code>git commit --amend -s</code> (no need to change the original message!) and <code>git rebase --continue</code> for each commit.  If I recall correctly, you can also do <code>reword</code> if you set up signing the commits automatically as a hook in your repo (this has the additional bonus of keeping you from forgetting in the future too).</p>
+
+<p>Now you can force push (<code>git push -f</code>) to the branch on the remote you&#8217;re making the PR from and the commits will be signed correctly.</p>
+
+<p>If you&#8217;re sitting there cringing because you feel force pushing is dirty, I agree.  It <em>is</em> dirty.  That&#8217;s why it&#8217;s so awesome.</p>
+
+<p>A word on that, actually&#8230;</p>
+
+<h1>A word on re-writing history</h1>
+
+<p>Re-writing history with <code>git rebase</code>, as you have seen, is fun <em>and</em> useful, but once history hits remotes that other people are using it should be considered canon and it should almost never be changed.  So, if you rebase, make sure not to muck with <em>other people&#8217;s</em> history and commits on accident.  Likewise, if you force push, NEVER EVER force push to a remote where other people are working unless:</p>
+
+<ul>
+<li>You are 100% sure you know what you are doing.</li>
+<li>You get explicit consent to do so from everyone working on that remote.</li>
+</ul>
+
+
+<p>Being loose and careless about this will get you a <em>very</em> bad reputation, and if you do it the consequences could range from getting kicked off the team to getting fired to getting hellbanned from touching a computer for the rest of your life.</p>
+
+<h1>But don&#8217;t fear the rebase</h1>
+
+<p>As long as you&#8217;re cautious, <code>git rebase</code> will be a blast.  Learn it, love it, and grow old with it (until something better comes along!).  As you&#8217;ve seen, uses for rebase run the gamut from &#8220;keep the history clean&#8221; to &#8220;holy crap that solves problems in a different way than I would have thought of before&#8221;.</p>
+
+<p>For reference or more reading, check out this section of the Git book: <a href="http://git-scm.com/book/ch3-6.html">http://git-scm.com/book/ch3-6.html</a></p>
+
+<p>Until next time, stay sassy Internet.</p>
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Bash Scripting and the Legend of the Hidden Bracket]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/09/07/bash-scripting-and-the-legend-of-the-hidden-bracket/"/>
+		<updated>2014-09-07T22:55:23+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/09/07/bash-scripting-and-the-legend-of-the-hidden-bracket</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p><img src="http://nathanleclaire.com/images/hiddenbracket/temple.jpeg"></p>
+
+<h2>#!/bin/article</h2>
+
+<p>It&#8217;s really amazing sometimes how frequently the shallowness of my UNIX knowledge gets exposed, even though I&#8217;ve been tinkering around with UNIX for ten-odd years and even own a yellow-paged, dusty old copy of Rob Pike and Brian Kernighan&#8217;s excellent book &#8220;THE UNIX PROGRAMMING ENVIRONMENT&#8221;.</p>
+
+<p><img src="http://nathanleclaire.com/images/hiddenbracket/unixprogrammingenv.gif"></p>
+
+<p>It&#8217;s a great book, and it outlines a lot of the philosophy of UNIX perfectly, as well as regexp, sed, and other fundamental tools that are essential to being a command line power user.  Anyway, lately in my growing pains as a Bash scripter I&#8217;ve stumbled across an incredibly noteworthy fact that I feel compelled to share, if only to save anyone else the pain of learning it the hard way, like me, after years of hiding from writing more intricate Bourne-again shell scripts because I couldn&#8217;t ever remember the difference between <code>-f</code>, <code>-ne</code>, <code>==</code> and so on in comparisons.</p>
+
+<p>It&#8217;s as simple as this: <code>[</code> is just a wrapper for the UNIX <code>test</code> command.</p>
+
+<h1>test</h1>
+
+<p><code>test</code> is one of those classic commands like <code>tr</code>, <code>cut</code>, etc. whose influence touches everyone but largely is cloaked from mere mortals and moderates such as myself.  I hadn&#8217;t realized it until someone recently pointed out that <code>[</code> is not syntax, it&#8217;s a <em>command</em>.</p>
+
+<figure class='code'><pre><code>$ which [
+/bin/[</code></pre></figure>
+
+
+<p>I don&#8217;t know about you, I assume my audience for this blog is probably at least a little bit UNIX literate, but this one really threw me for a loop when I found out.  Suddenly my whole outlook on shell scripting shifted as I realized that this was yet another instance of the UNIX &#8220;do one thing and do it right&#8221; way clicking into place for me.  As anyone accustomed to the flexibility afforded you by langauges such as Python and Ruby may be familiar with, I had had many bad experiences trying to cobble together even simple conditionals in impromptu shell scripts due to the seemingly esoteric syntax that <code>if</code>s required, as well as the usage of <code>==</code> and so on.  Perhaps I was spoiled in my UNIX education by being introduced to Python too early, and I should have learned to do things the hard way first.</p>
+
+<p>At any rate, <code>[</code> is just a wrapper for the UNIX <code>test</code> command with the addition of a closing <code>]</code> at the end of the arguments.  That means the available comparisons can be easily looked up with man!</p>
+
+<p><img src="http://nathanleclaire.com/images/hiddenbracket/man.png" title="I've probably been set back a lot by not knowing about this." ></p>
+
+<p>Having the available comparisons right at my fingertips like this has made me feel so much more empowered with shell scripting.  Previously when I wanted run a test I had to Google around for &#8220;shell script comparisons&#8221; etc., find a website that looked promising, and squint my way through a table or equivalent to find the relevant flags.  Now I can just pop a new terminal window open and use <code>/</code> search inside of <code>man</code>!</p>
+
+<p>Walkthough of some uses of <code>test</code>, for kicks:</p>
+
+<p>Test if two strings are equal:</p>
+
+<figure class='code'><pre><code>if [ &quot;$FOO&quot; == &quot;BAR&quot; ]; then
+    echo &quot;FOO environment variable value is equal to \&quot;BAR\&quot;&quot;
+fi</code></pre></figure>
+
+
+<p>Check if a given path is a directory:</p>
+
+<figure class='code'><pre><code>if [ -d src/ ]; then
+    echo &quot;src exists&quot;
+fi</code></pre></figure>
+
+
+<p>Check if output of command was a certain value:</p>
+
+<figure class='code'><pre><code>(exit 2)
+if [ $? -eq 2 ]; then
+    echo &quot;Received error exit code&quot;
+fi</code></pre></figure>
+
+
+<h1>fin</h1>
+
+<p>Anyway, that&#8217;s my bit of bash-nerdery for the day.  I hope I can help some people out, who may have been struggling with the same issue as me: a combination of over-thinking things and a lack of someone showing me the correct way early on.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Why codegangsta's cli package is the bomb, and you should use it]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/08/31/why-codegangstas-cli-package-is-the-bomb-and-you-should-use-it/"/>
+		<updated>2014-08-31T06:18:50+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/08/31/why-codegangstas-cli-package-is-the-bomb-and-you-should-use-it</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<h1>go go go</h1>
+
+<p><img src="http://nathanleclaire.com/images/cli/codegangsta.png" title="Blowing other gangsters (and coders) to smithereens." ></p>
+
+<p>This week I&#8217;m writing an opinion piece on why I think that <a href="https://github.com/codegangsta/cli">codegangsta</a>&#8217;s command line interface package for Golang is great, and you should use it.  Nice job, contributors!</p>
+
+<p>The reasons are:</p>
+
+<ol>
+<li>Well designed, and a pleasure to use</li>
+<li>Lets you get stuff done</li>
+<li>Flags are how they&#8217;re meant to be</li>
+<li>Well documented</li>
+<li>Friendly community</li>
+</ol>
+
+
+<h2>Well designed, and a pleasure to use</h2>
+
+<p>This is the library that you dreamed about when you first learned how to use <code>argv</code> and <code>argc</code> in C.  If you&#8217;ve ever tried parsing <code>argv</code> by hand (without relying on an external library), you know that it can be a pain and require a lot of strenuous fixing up with duct tape in order to get working effectively.  Well no more now.  Just:</p>
+
+<ul>
+<li><code>import "github.com/codegangsta/cli"</code></li>
+<li>get an instance of <code>cli.App</code></li>
+<li>set actions and usage, and quickly get to making the thing you set out to!!</li>
+</ul>
+
+
+<p>As evidenced by the popularity of <a href="https://github.com/codegangsta/martini">Martini</a> and <a href="https://github.com/codegangsta/negroni">Negroni</a>, codegangsta has good taste when it comes to designing APIs for developers to consume.  I&#8217;ve used <code>cli</code> for a variety of things now, and it&#8217;s very flexible while still be incredibly effective.</p>
+
+<p>I mean come on, this just <em>looks</em> incredibly fun:</p>
+
+<figure class='code'><pre><code>/* greet.go */
+package main
+
+import (
+  &quot;os&quot;
+  &quot;github.com/codegangsta/cli&quot;
+)
+
+func main() {
+  app := cli.NewApp()
+  app.Name = &quot;greet&quot;
+  app.Usage = &quot;fight the loneliness!&quot;
+  app.Action = func(c *cli.Context) {
+    println(&quot;Hello friend!&quot;)
+  }
+
+  app.Run(os.Args)
+}</code></pre></figure>
+
+
+<p>And gives you stuff like <em>this</em>:</p>
+
+<figure class='code'><pre><code>$ greet help
+NAME:
+    greet - fight the loneliness!
+
+USAGE:
+    greet [global options] command [command options] [arguments...]
+
+VERSION:
+    0.0.0
+
+COMMANDS:
+    help, h  Shows a list of commands or help for one command
+
+GLOBAL OPTIONS
+    --version   Shows version information</code></pre></figure>
+
+
+<p>From the manual:</p>
+
+<blockquote><p>cli.go also generates some bitchass help text:</p></blockquote>
+
+<p>+1</p>
+
+<h2>Lets you get stuff done</h2>
+
+<p>I sort of hinted at this, but this is what I see as the main advantage of <code>cli</code> over using nothing, or just using raw <code>flag</code> parsing, it allows you to handle the inevitable complexity of developing a command line application before it even becomes an issue.</p>
+
+<p>I&#8217;ve long noticed that developers love libraries the most when you barely even notice they&#8217;re there.  The framework or tool becomes like an extension of your own mind in solving the problem.  In my opinion, jQuery is like this.  It inspires such a raw explosion of creativity in the people using it that its explosion and proliferation was inevitable.  Instead of making you cobble together vanilla JavaScript to get what you want, you can work way further up in many different ways which are <em>all right</em>.  Go is like that too, with <code>gofmt</code> and Go&#8217;s error handling patterns etc. at play everyone&#8217;s code starts to look the same.</p>
+
+<p>That&#8217;s what <code>cli</code> is like.  It just gets out of the way, and lets you write the application that you actually came here to write.</p>
+
+<h2>Flags are how they&#8217;re meant to be</h2>
+
+<p>I have to admit, I <em>LOVE</em> flags.  I grew up on a steady diet of UNIX weirdness and writing apps that have crazy flag fun is fantastic.  <code>cli</code>&#8217;s API is easy to follow.  Even a complicated structure retains order.  For instance, a sample from a rewrite of <a href="fig">fig</a> in Go that I&#8217;ve been doing:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>// global level flags
+app.Flags = []gangstaCli.Flag{
+    gangstaCli.BoolFlag{
+        Name:  &quot;verbose&quot;,
+        Usage: &quot;Show more output&quot;,
+    },
+    gangstaCli.StringFlag{
+        Name:  &quot;f, file&quot;,
+        Usage: &quot;Specify an alternate fig file (default: fig.yml)&quot;,
+    },
+    gangstaCli.StringFlag{
+        Name:  &quot;p, project-name&quot;,
+        Usage: &quot;Specify an alternate project name (default: directory name)&quot;,
+    },
+}
+
+// Commands
+app.Commands = []gangstaCli.Command{
+    {
+        Name: &quot;build&quot;,
+        Flags: []gangstaCli.Flag{
+            gangstaCli.BoolFlag{
+                Name:  &quot;no-cache&quot;,
+                Usage: &quot;Do not use cache when building the image.&quot;,
+            },
+        },
+        Usage:  &quot;Build or rebuild services&quot;,
+        Action: CmdBuild,
+    },
+    // etc...
+    {
+        Name: &quot;run&quot;,
+        Flags: []gangstaCli.Flag{
+            gangstaCli.BoolFlag{
+                Name:  &quot;d&quot;,
+                Usage: &quot;Detached mode: Run container in the background, print new container name.&quot;,
+            },
+            gangstaCli.BoolFlag{
+                Name:  &quot;T&quot;,
+                Usage: &quot;Disables psuedo-tty allocation. By default `fig run` allocates a TTY.&quot;,
+            },
+            gangstaCli.BoolFlag{
+                Name:  &quot;rm&quot;,
+                Usage: &quot;Remove container after run.  Ignored in detached mode.&quot;,
+            },
+            gangstaCli.BoolFlag{
+                Name:  &quot;no-deps&quot;,
+                Usage: &quot;Don't start linked services.&quot;,
+            },
+        },
+        Usage:  &quot;Run a one-off command&quot;,
+        Action: CmdRm,
+    },
+    
+    {
+        Name: &quot;up&quot;,
+        Flags: []gangstaCli.Flag{
+            gangstaCli.BoolFlag{
+                Name:  &quot;watch&quot;,
+                Usage: &quot;Watch build directory for changes and auto-rebuild/restart&quot;,
+            },
+            gangstaCli.BoolFlag{
+                Name:  &quot;d&quot;,
+                Usage: &quot;Detached mode: Run containers in the background, print new container names.&quot;,
+            },
+            gangstaCli.BoolFlag{
+                Name:  &quot;k,kill&quot;,
+                Usage: &quot;Kill instead of stop on terminal stignal&quot;,
+            },
+            gangstaCli.BoolFlag{
+                Name:  &quot;no-clean&quot;,
+                Usage: &quot;Don't remove containers after termination signal interrupt (CTRL+C)&quot;,
+            },
+            gangstaCli.BoolFlag{
+                Name:  &quot;no-deps&quot;,
+                Usage: &quot;Don't start linked services.&quot;,
+            },
+            gangstaCli.BoolFlag{
+                Name:  &quot;no-recreate&quot;,
+                Usage: &quot;If containers already exist, don't recreate them.&quot;,
+            },
+        },
+        Usage:  &quot;Create and start containers&quot;,
+        Action: CmdUp,
+    },
+}</code></pre></figure>
+
+
+<p>It always drove me crazy that Golang&#8217;s default <code>flag</code> package preferred <code>-name</code> style (one hyphen) flags  by default, although there may be a good reason for it that I&#8217;m not aware of.  <code>cli</code> does <code>--long-flags</code> this way by default.  Yay!</p>
+
+<p>It supports multiple forms of flags (e.g. <code>-v</code> and <code>--verbose</code>).  You get subcommands too (e.g. <code>git remote add</code>, <code>git remote rm</code>).  It&#8217;s an incredible amount of power and flexibility.</p>
+
+<h2>Well documented</h2>
+
+<p>I was able to divine pretty much everything I needed to write an effective app with this library quite easily from the documentation.  &#8216;Nuff said.  That&#8217;s a rare honor in this world of half-baked Github repos, Gists, and JSFiddles.</p>
+
+<h2>Friendly community</h2>
+
+<p>codegangsta and crew are pretty active on Github (and I would guess IRC, but I don&#8217;t know this for a fact).  Proposals for new features and the like are not met with hostility on Github, instead they are discussed with civility.  I hate seeing Github issues devolve into flame wars and I definitely think community matters a lot in weeding out the bad actors to keep the experience of discussing software a pleasurable one.</p>
+
+<h1>What are the downsides?</h1>
+
+<p>Like anything new, <code>cli</code> has a few downsides too.</p>
+
+<ul>
+<li><a href="https://github.com/codegangsta/cli/issues/56">this bug about the flag parsing terminator (<code>--</code>)</a></li>
+<li>Performance (probably not a concern for most apps)</li>
+<li>Still early in development</li>
+</ul>
+
+
+<p>In spite of these issues, obviously I think <code>cli</code> is really great for getting applications out the door quickly with Go.  I am hopeful that its great design and philosophy will influence future libraries, frameworks, and software.  :thumbsup:</p>
+
+<h1>Fin.</h1>
+
+<p>I like this library.  Use it.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Handling CTRL-C (interrupt signal) in Golang Programs]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/08/24/handling-ctrl-c-interrupt-signal-in-golang-programs/"/>
+		<updated>2014-08-24T19:33:53+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/08/24/handling-ctrl-c-interrupt-signal-in-golang-programs</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<h1>Interruptions</h1>
+
+<p><img src="http://nathanleclaire.com/images/signal.png"></p>
+
+<p>Recently I&#8217;ve been working on a Go program where I will need to do some cleanup work before exiting if the users press <code>CTRL+C</code> (thereby sending an interrupt signal, <code>SIGINT</code>, to the process).  I was unsure how to do this.</p>
+
+<p>As it turns out, <code>signal.Notify</code> is the method by which this is accomplished.</p>
+
+<p>Here is some sample source code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>// Code to set up some services up here...
+
+// After setting everything up!
+// Wait for a SIGINT (perhaps triggered by user with CTRL-C)
+// Run cleanup when signal is received
+signalChan := make(chan os.Signal, 1)
+cleanupDone := make(chan bool)
+signal.Notify(signalChan, os.Interrupt)
+go func() {
+    for _ = range signalChan {
+        fmt.Println(&quot;\nReceived an interrupt, stopping services...\n&quot;)
+        cleanup(services, c)
+        cleanupDone &lt;- true
+    }
+}()
+&lt;-cleanupDone</code></pre></figure>
+
+
+<p>I like this example because it really illuminates the power of Go&#8217;s concurrency primitives.  Instead of having to worry about complicated process or threading logic I simply abstract away the concurrency details using a goroutine and a couple of channels. In this instance, the main goroutine is blocked by a unbuffered <code>cleanupDone</code> channel because that is what behavior is expected (we&#8217;ve already spin up additional goroutines earlier to do some logging and handling of outside of the context of the main goroutine).</p>
+
+<p>Now I can clean up after my containers when a user interrupts the terminal with CTRL+C.  Awesome!</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Automagical Deploys from Docker Hub]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/08/17/automagical-deploys-from-docker-hub/"/>
+		<updated>2014-08-17T05:52:12+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/08/17/automagical-deploys-from-docker-hub</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<blockquote><p>I want the speed and other advantages of a static site generator, but with the flexibility of a database-backed CMS.</p></blockquote>
+
+<p><img src="https://nathanleclaire.com/images/automagic-dockerhub/hub.png" alt="" /></p>
+
+<h1>I want performance, flexibility, <em>and</em> ease of maintenance.</h1>
+
+<p>From cars to computers, getting both flexibility and performance all too often requires a carefully weighed set of trade-offs. Generating content for your readers and fans on the web is no exception. On the one hand, techies have recently embraced static site generators such as Jekyll, and for good reason, as these systems provide a lot of advantages (e.g., deploying straight to Github pages, high performance, and ease of keeping your content in version control). However, they are not without their own challenges such as steep learning curves and slow, cumbersome workflows.</p>
+
+<p>On the other hand, flexible, database-backed content management system such as WordPress can be a better choice in some situations. It’s very nice to have the flexibility to allow non-technical people to edit and update content, and for authors to edit online from anywhere without needing a special suite of software and skills. However, CMSs such as WordPress can also be slow, temperamental, and hard to optimize.</p>
+
+<p>Lately, I’ve been trying to find a good balance for my website. Currently, it takes the techie-approved approach: serving static pages via Jekyll. There are lots of things to recommend this approach. I LOVE that people from the community can make pull requests to the site from Github, which has helped me clean it up tremendously. I also value the performance and general ease of maintenance of just serving up static files using Nginx. However, using Jekyll (especially on new computers) can be slow and cumbersome — my stack is based on Octopress and it gives me a lot of heartache due to my noob status in the Ruby ecosystem and because of some not-so-great design decisions I made early on. Additionally, if I merge in a minor change on Github, then I have to fetch the changes to a local computer where Octopress has been set up to perform correctly, re-generate the site using some <code>rake</code> commands and then deploy it again. Not immensely difficult, but not trivial either, and if I am catching small mistakes every day and I want to keep the blog in sync instead of letting it slip, the time to regenerate and re-deploy the site starts to add up quickly. Usually I just let things slip, including keeping the changes up to date on Github.</p>
+
+<p>Additionally, Github’s online markdown editor is <strong>nice</strong> (and fast), and I wouldn’t mind writing whole articles on there from time to time. If I could write using only Github and deploy on commit, a world of possibilities would open up. Yes there is <a href="https://help.github.com/articles/using-jekyll-with-pages">Github Pages</a>, but if I decide to switch static site generators later on I am hosed (plus, I want to eventually finish migrating to <a href="https://github.com/spf13/hugo">hugo</a>).</p>
+
+<h1>Game on.</h1>
+
+<p>So what to do? Well, lately I’ve been thinking that I could reduce a lot of pain by chaining together some automation systems and deploying directly from an automated build on <a href="http://hub.docker.com">Docker Hub</a> by using the great <a href="https://docs.docker.com/docker-hub/builds/#webhooks">Web Hooks</a> feature. This would allow me to trigger a re-build and re-deploy of the blog whenever there is a change in source control on master, and it would all run asynchronously without needing my attention. Better still, this technique could be applied generally to other stacks and other static site generators, letting anyone roll out a solution that fits their needs no matter what they’re building.</p>
+
+<p>To accomplish this, I did the following:</p>
+
+<ol>
+<li>Built a <code>Dockerfile</code> to compile the latest static site from source using our chosen stack (Octopress in my case)</li>
+<li>Set up an automated build on Docker Hub which will re-build the image from scratch whenever a change is made on Github (including merges and the online editor)</li>
+<li>Used Docker Hub’s Web Hooks to make a <code>POST</code> request to a small <a href="https://github.com/cpuguy83/dockerhub-webhook-listener">“hook listener” server</a> running on my Linode which re-deploys the new image (props to <a href="https://github.com/cpuguy83">cpuguy83</a> for helping me with this)</li>
+</ol>
+
+
+<h2>Step 1: Build a <code>Dockerfile</code> for our static site generator</h2>
+
+<p>This is my Dockerfile for this Octopress build, it installs dependencies and then creates the site itself:</p>
+
+<pre>
+from debian:wheezy
+
+run apt-get update && \
+    apt-get install -y curl build-essential
+
+run apt-get install -y ruby1.9.3
+run apt-get install -y lsb-release && \
+    curl -sL https://deb.nodesource.com/setup | bash
+run apt-get install -y nodejs npm
+run apt-get install -y nginx
+run gem install bundler
+
+add Gemfile /blog/Gemfile
+workdir /blog
+run bundle install -j8
+
+add . /blog
+
+run rake install['pageburner'] && rake generate
+run rm /etc/nginx/sites-available/default
+add nginx/nathanleclaire.com /etc/nginx/sites-available/nathanleclaire.com
+run ln -s /etc/nginx/sites-available/nathanleclaire.com /etc/nginx/sites-enabled/nathanleclaire.com
+
+run echo "daemon off;" >>/etc/nginx/nginx.conf
+
+expose 80
+
+cmd ["service", "nginx", "start"]
+</pre>
+
+
+<p>Apparently, Jekyll has a Node.js dependency these days. Who knew? (Side note: Writing my Dockerfiles in all lowercase like this makes me feel like e e cummings. A really geeky e e cummings.)</p>
+
+<p>This Dockerfile is really cool because the <code>bundle install</code> gets cached as long as the Gemfile doesn’t get changed. So, the only part that takes a non-trivial amount of time during the <code>docker build</code> of the image is the <code>rake generate</code> command that spits out the final static site, so the whole process runs quite quickly (unfortunately, though, Highland, Docker’s automated build robot, doesn’t cache builds).</p>
+
+<p>I would love to see some more of these for various static site generating stacks, and I intend to contribute just a vanilla Octopress / Jekyll one at some point soon.</p>
+
+<p>Octopress is pretty finicky about only working with Ruby 1.9.3, so I was fortunate to be able to find a Debian package that fulfills those requirements. The static files get served up with nginx on port 80 of the container (which I just proxy to the host for now), which works well enough for my purposes. In fact, I just have all the gzip and other per-site (caching headers etc.) settings in the nginx config in the container, so I can deploy that stuff this way too (just change the source in the repo and push to Github!). I like this kind of high-level-ops knowledge PaaS fusion mutated weirdness. Yum.</p>
+
+<p>This approach cuts my “native” sites-available file for the websites down to something like:</p>
+
+<pre>server {
+  server_name nathanleclaire.com;
+
+  location / {
+       proxy_pass http://localhost:8000;
+  }
+
+  location /hubhook {
+      proxy_pass https://localhost:3000;
+  }
+}
+</pre>
+
+
+<p>The <code>hubhook</code> is some proxy-matic goodness, which farms out the task to re-deploy the site to a simple but effective “Docker Hub Listener” worker that my colleague Brian Goff originally wrote (and which I twisted to my own nefarious purposes, muahaha). Okay, on to the next steps.</p>
+
+<h2>Step 2: Set up Automated Build for this repo on Docker Hub</h2>
+
+<p>This step is crucial, and really illustrates the power and flexibility of Hub’s automated builds (which if you haven’t tried them already, you <em>totally should</em>). When a change (commit, merge or otherwise) hits the <code>dockerize</code> branch on Github (though it could be any branch, and eventually it will be master for me), it triggers a re-build of the images with the most up-to-date Dockerfile. This means that new articles I have written or content that I have added will be re-built asynchronously by Highland without needing any attention from me. So, even if I merge in a small revision from another user on Github or make a quick edit with the online editor, the site will be rebuilt from source (which is mostly Markdown files and a “theme” template). Note that automated builds work with Bitbucket too if you prefer Bitbucket!!</p>
+
+<p>And, critically, this method takes advantage of a powerful Docker Hub feature called Web Hooks which allows you to make a <code>POST</code> request to the endpoint of your choice whenever a new build is complete. This is what I use to re-deploy the website.</p>
+
+<h2>Step 3: Post to the hook listener server and re-deploy!</h2>
+
+<p>I had been kicking around the idea of implementing something like this for a while, but I was missing a piece. I had no server to listen for the request from Docker Hub when the build was completed. Then, serendipitously, my colleague Brian Goff (also known as super-helpful community member <a href="https://github.com/cpuguy83">cpuguy83</a>) demoed a “webhook listener” that was the very thing I was thinking of writing myself (only his was better thought out, to be be honest). It’s a tiny little Golang program which allows you to register handlers that run when the hook hits, and which has support for both self-signed SSL (so you can send the request with encryption / <code>https</code> from Docker Hub) and for API keys (so that even if black-hats know the endpoint to hit, they won’t know the API key to pass to actually get it to do anything).</p>
+
+<p>Link to the repo here:</p>
+
+<ul>
+<li><a href="https://github.com/cpuguy83/dockerhub-webhook-listener">https://github.com/cpuguy83/dockerhub-webhook-listener</a></li>
+</ul>
+
+
+<p>To get it to work, I generated an OpenSSL key and cert (which I linked to in a <code>config.ini</code> file passed to Brian’s server program).</p>
+
+<p>I wrote this script to automate that key/cert generation:</p>
+
+<pre>#!/bin/bash
+
+openssl genrsa -des3 -out server.key 1024 && \
+  openssl req -new -key server.key -out server.csr && \
+  cp server.key server.key.org && \
+  openssl rsa -in server.key.org -out server.key && \
+  openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+</pre>
+
+
+<p>Then I generated a random API key and also added it to the config file. So, in the end, the <code>config.ini</code> file that I use lives in the same directory as the dockerhub-webhook-listener binary and it looks like this:</p>
+
+<pre>[apiKeys]
+key = bigLongRandomApiKeyString
+
+[tls]
+key = ../server.key
+cert = ../server.crt
+</pre>
+
+
+<p>Lastly, I wrote a simple shell script to run whenever the hub hook listener received a valid request, and wrote a Go handler to invoke it from Brian’s server program.</p>
+
+<p>The shell script looks like this:</p>
+
+<pre>#!/bin/bash
+
+sudo docker pull nathanleclaire/octoblog:latest
+docker stop blog
+docker rm blog
+docker run --name blog -d -p 8000:80 nathanleclaire/octoblog
+</pre>
+
+
+<p>Just keeping it simple for now.</p>
+
+<p>The Go code looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>func reloadHandler(msg HubMessage) {
+  log.Println(&quot;received message to reload ...&quot;)
+  out, err := exec.Command(&quot;../reload.sh&quot;).Output()
+  if err != nil {
+    log.Println(&quot;ERROR EXECUTING COMMAND IN RELOAD HANDLER!!&quot;)
+    log.Println(err)
+    return
+  }
+  log.Println(&quot;output of reload.sh is&quot;, string(out))
+}</code></pre></figure>
+
+
+<p>As you can see, there’s nothing too fancy here. It’s just Plain Old Golang and Shell Script. In fact, it could be a lot more sophisticated, but this works just fine- which is part of what pleases me a lot about this setup.</p>
+
+<p>Finally, we use the Docker Hub webhooks configuration to make the <code>POST</code> request to the endpoint exposed on the public Internet by this middleware server. In my case, I added an endpoint called <code>/hubhook</code> to my nginx configuration that proxies the outside request to the dockerhub-webhook-listener running on <code>localhost:3000</code>. The API key is passed as a query string parameter, i.e., the request is to <code>https://nathanleclaire.com/hubhook?apikey=bigLongRandomApiKeyString</code>.</p>
+
+<p>So, pieced together, this is how this all works:</p>
+
+<ol>
+<li>Commit hits Github</li>
+<li>Docker Hub builds image</li>
+<li>Docker Hub hits middleware server with hook</li>
+<li>Server pulls image, and restarts the server</li>
+</ol>
+
+
+<h1>Automagical.</h1>
+
+<p>Now my deploys are launched seamlessly from source control push. I really enjoy this. Now that everything is set up, it will work smoothly without needing any manual intervention from me (though I need additional logging and monitoring around the systems involved to ensure their uptime and successful operation, in particular,&amp; the hub hook listener – <em>oh god, am I slowly turning into a sysadmin? NAH</em>)</p>
+
+<p>There is still a lot of room for improvement in this setup (specifically around how Docker images get moved around and the ability to extract build artifacts from them, both of which should improve in the future), but I hope I have stimulated your imagination with this setup. I really envision the future of application portability as being able to work and edit apps anywhere, without needing your hand-crafted pet environment, and being able to rapidly deploy them without having to painstakingly sit through every step of the process yourself.</p>
+
+<p>So go forth and create cool (Dockerized) stuff!</p>
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Don't Get Bitten by Pointer vs Non-Pointer Method Receivers in Golang]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang/"/>
+		<updated>2014-08-09T11:14:00+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p><img src="http://nathanleclaire.com/images/gopointer/gopherswrench.jpg"></p>
+
+<h1>What?</h1>
+
+<p>People from all sorts of backgrounds are flocking to the <a href="http://golang.org">Go Programming Language</a> and even for those who have written C and C++ before (myself included) it may be confusing to grok Go&#8217;s approach to pointers, and how they interact with the methods you can attach to Go&#8217;s structs.</p>
+
+<p>In Go, you define a <em>method receiver</em> to specify which struct to attach a certain function to in order to make it invoke-able as a method.  For instance, <code>func (d Dog)</code> is part which defines the method receiver in the following program:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>package main
+
+import &quot;fmt&quot;
+
+type Dog struct {
+}
+
+func (d Dog) Say() {
+    fmt.Println(&quot;Woof!&quot;)
+}
+
+func main() {
+    d := &amp;Dog{}
+    d.Say()
+}</code></pre></figure>
+
+
+<h2>Is there confusion?</h2>
+
+<p>There was for me at first over something having to do with method receivers, and I just noticed that another person who I consider to be quite competent had been surprised by this as well, so I decided to write about it.</p>
+
+<p>In Go, you can define methods using both <em>pointer</em> and <em>non-pointer</em> method receivers.  The former looks like <code>func (t *Type)</code> and the latter looks like <code>func (t Type)</code>.  Though <a href="http://golang.org/ref/spec#Method_sets">the spec</a> has very specific details about how the various types of method calls should behave, when I first started programming in Go I felt that pointers and the things that they point to were often conflated in property accesses and method invocations using the <code>.</code> operator.  I was thrown because I am accustomed to having to use the <code>-&gt;</code> operator, a habit carried over from C, as a shorthand for &#8220;dereference this struct pointer and use the <code>.</code> operator&#8221;.  For those unfamiliar, a quick picture of what that looks like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=c><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Tree {
+    int a;
+    int b;
+};
+
+int main() {
+    struct Tree tree, *pointerToTree;
+    tree.a = 5;
+    tree.b = 7;
+    pointerToTree = malloc(sizeof(struct Tree));
+    pointerToTree-&gt;a = 5;
+    pointerToTree-&gt;b = 7;
+    printf(&quot;tree vals: %d %d\n&quot;, tree.a, tree.b);
+    printf(&quot;pointerToTree: %p %d %d\n&quot;, pointerToTree, pointerToTree-&gt;a, pointerToTree-&gt;b);
+    free(pointerToTree);
+    return 0;
+}</code></pre></figure>
+
+
+<p></p>
+
+<p>In Go you have more freedom of expression, and the type system dictates that:</p>
+
+<blockquote><p>A method call <code>x.m()</code> is valid if the method set of (the type of) <code>x</code> contains <code>m</code> and the argument list can be assigned to the parameter list of <code>m</code>. If <code>x</code> is addressable and <code>&amp;x</code>&#8217;s method set contains <code>m</code>, <code>x.m()</code> is shorthand for <code>(&amp;x).m()</code></p></blockquote>
+
+<p>This leads to emergent behavior depending on how you define the method, and in particular, the method receiver.</p>
+
+<h2>So what&#8217;s the difference between pointer and non-pointer method receivers?</h2>
+
+<p>Simply stated:  you can treat the receiver as if it was an argument being passed to the method.  All the same reasons why you might want to pass by value or pass by reference apply.</p>
+
+<p>Reasons why you would want to pass by reference as opposed to by value:</p>
+
+<ul>
+<li>You want to actually modify the receiver (&#8220;read/write&#8221; as opposed to just &#8220;read&#8221;)</li>
+<li>The <code>struct</code> is very large and a deep copy is expensive</li>
+<li>Consistency: if some of the methods on the <code>struct</code> have pointer receivers, the rest should too.  This allows predictability of behavior</li>
+</ul>
+
+
+<p>If you need these characteristics on your method call, use a pointer receiver.</p>
+
+<h2>Show me.</h2>
+
+<p>Some code to demonstrate, and an <a href="http://play.golang.org/p/O0O7Nk1SGF">example on the Go playground</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>package main
+
+import &quot;fmt&quot;
+
+type Mutatable struct {
+    a int
+    b int
+}
+
+func (m Mutatable) StayTheSame() {
+    m.a = 5
+    m.b = 7
+}
+
+func (m *Mutatable) Mutate() {
+    m.a = 5
+    m.b = 7
+}
+
+func main() {
+    m := &amp;Mutatable{0, 0}
+    fmt.Println(m)
+    m.StayTheSame()
+    fmt.Println(m)
+    m.Mutate()
+    fmt.Println(m)
+}</code></pre></figure>
+
+
+<p>You&#8217;ll notice that the conspicuously named <code>StayTheSame</code> and <code>Mutate</code>  methods have behavior which corresponds to precisely that:  <code>StayTheSame</code> is defined with a non-pointer receiver and doesn&#8217;t change the values of the <code>struct</code> it is invoked on, and <code>Mutate</code> is defined with a pointer receiver, so it <em>does</em> change the values of the <code>struct</code> upon which it is invoked.</p>
+
+<h1>Fin</h1>
+
+<p>In the process of writing this article I also noticed a <a href="http://golang.org/doc/faq#methods_on_values_or_pointers">great explanation of this</a> in the Go FAQ.  It&#8217;s definitely worth a read.  It covers many of the same points, and helped me round out my understanding of the issue.</p>
+
+<p>Until next time, stay sassy Internet, and may your code forever be free of race conditions.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Write a Function Similar To Underscore.js's debounce, in Golang]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/08/03/write-a-function-similar-to-underscore-dot-jss-debounce-in-golang/"/>
+		<updated>2014-08-03T17:22:00+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/08/03/write-a-function-similar-to-underscore-dot-jss-debounce-in-golang</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<h1>Debounce, eh?</h1>
+
+<p><img src="http://nathanleclaire.com/images/debouncego/debounceit.gif"></p>
+
+<p>As some of you may recall I wrote <a href="http://nathanleclaire.com/blog/2013/11/16/the-javascript-question-i-bombed-in-an-interview-with-a-y-combinator-startup/">this post about an interview I bombed with a YCombinator Startup</a> and in it I describe how to implement a <code>debounce</code> (term taken from <a href="http://underscorejs.org/">Underscore.js</a>) type of function from scratch.  Recently I found myself having to implement a similar thing in Golang, so I&#8217;m sharing the results of my implementation here.</p>
+
+<h2>What is it?</h2>
+
+<p><code>debounce</code> in the Underscore.js documentation:</p>
+
+<blockquote><p>Creates and returns a new debounced version of the passed function which will postpone its execution until after wait milliseconds have elapsed since the last time it was invoked. Useful for implementing behavior that should only happen after the input has stopped arriving. For example: rendering a preview of a Markdown comment, recalculating a layout after the window has stopped being resized, and so on.</p></blockquote>
+
+<p><code>debounce</code> is very useful if the cost of triggering the callback function (or equivalent) for your event is quite high.  It&#8217;s a good way to get laziness for cheap if you have a busy event stream.  The example listed in the documentation is lucid:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=js><code>var lazyLayout = _.debounce(calculateLayout, 300);
+$(window).resize(lazyLayout);</code></pre></figure>
+
+
+<h2>What about in Go?</h2>
+
+<p>Go usually eschews the JavaScript callback continuation-passing style in favor of using goroutines and channels for concurrency.  It&#8217;s a very nice language feature, and elegant, but sometimes you want use a &#8220;debounce&#8221; to respond to, say, a bunch of values coming over a channel in rapid bursts.  So how do you do this in Go?</p>
+
+<p>The answer is to use <code>time.Timer</code>&#8217;s <code>Stop</code> and <code>AfterFunc</code> methods in tandem like you would otherwise use <code>window.setTimeout</code> and <code>window.clearTimeout</code>.</p>
+
+<p>Example code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;time&quot;
+)
+
+func debounce(interval time.Duration, f func(arg int)) func(int) {
+    timer := &amp;time.Timer{}
+    return func(arg int) {
+        timer.Stop()
+        timer = time.AfterFunc(interval, func() {
+            f(arg)
+        })
+    }
+}
+
+func main() {
+    spammyChan := make(chan int, 10)
+    debouncedCostlyOperation := debounce(300*time.Millisecond, func(arg int) {
+        fmt.Println(&quot;*****************************&quot;)
+        fmt.Println(&quot;* DOING A COSTLY OPERATION! *&quot;)
+        fmt.Println(&quot;*****************************&quot;)
+        fmt.Println(&quot;In case you were wondering, the value passed to this function is&quot;, arg)
+        fmt.Println(&quot;We could have more args to our \&quot;compiled\&quot; debounced function too, if we wanted.&quot;)
+    })
+    go func() {
+        for {
+            select {
+            case spam := &lt;-spammyChan:
+                fmt.Println(&quot;received a send on a spammy channel - might be doing a costly operation if not for debounce&quot;)
+                debouncedCostlyOperation(spam)
+            default:
+            }
+        }
+    }()
+    for i := 0; i &lt; 10; i++ {
+        spammyChan &lt;- i
+    }
+    time.Sleep(500 * time.Millisecond)
+}</code></pre></figure>
+
+
+<p>We create a function, <code>debounce</code>, that consumes a <code>func (int)</code> and returns a <code>func(int)</code>.  Whenever we trigger this function, it will wait a specified number of milliseconds, and, if it is not interrupted by another attempt to trigger the action in that duration, it triggers the action.  If it is interrupted, it resets the timeout.</p>
+
+<h1>fin</h1>
+
+<p>Go is a little less flexible than JavaScript due to the strong typing (if anyone has ideas how to make this more flexible I&#8217;m very interested to hear) but this approach will get you 90% of the way there in the instances where you need debouncing.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Demystifying Golang's io.Reader and io.Writer Interfaces]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/07/19/demystifying-golangs-io-dot-reader-and-io-dot-writer-interfaces/"/>
+		<updated>2014-07-19T19:35:00+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/07/19/demystifying-golangs-io-dot-reader-and-io-dot-writer-interfaces</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p><img src="http://nathanleclaire.com/images/iowriter/aviator.png"></p>
+
+<p>If you&#8217;re coming to <a href="http://golang.org">Go</a> from a more flexible, dynamically typed language like Ruby or Python, there may be some confusion as you adjust to the Go way of doing things.  In my case, I had some trouble wrapping my head around <code>io.Reader</code>, <code>io.Writer</code>, <code>io.ReadCloser</code> etc.  What are they used for, and how can they be included in our Go programs for interesting and helpful results?</p>
+
+<h1>Quick interface review</h1>
+
+<p>To make up for some of the flexibility lost by not having generics, and for other reasons as well, Go provides an abstraction in the form of interfaces.</p>
+
+<p>You can specify an interface and then any consumer of that interface will accept it.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>type error interface {
+    Error() string
+}</code></pre></figure>
+
+
+<p>Many standard library components of Go define interfaces.  In fact, the <code>error</code> type you know and love (hate?) is simply an interface which insists that a method named <code>Error</code> which consumes nothing and returns a string must be defined on a struct for the interface to count as satisfied.  Interfaces in Go are set <em>implicitly</em>, so all you have to do is define the required methods on your struct and it will qualify as implementing that interface.</p>
+
+<p>For instance:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;os&quot;
+)
+
+type Animal interface {
+    Say() string
+    Greet(Animal)
+}
+
+type Person struct {
+}
+
+func (p Person) Say() string {
+    return &quot;Hey there bubba!&quot;
+}
+
+func (p Person) Greet(animalToGreet Animal) {
+    fmt.Println(&quot;Hi!&quot;)
+}
+
+type Dog struct {
+    age int
+    breed string
+    owner *Person
+}
+
+func (d Dog) Say() string {
+    return &quot;Woof woof!&quot;
+}
+
+func (d Dog) Growl() {
+    fmt.Println(&quot;Grrr!&quot;)
+}
+
+func (d *Dog) Snuggle() {
+    // snuggle code...
+}
+
+func (d Dog) Sniff(animalToSniff Animal) (bool, error) {
+    // sniff code...
+    return true, nil
+}
+
+func (d Dog) Greet(animalToGreet Animal) {
+    if _, ok := animalToGreet.(Person); ok {
+        d.Snuggle()
+    } else {
+        friendly, err := d.Sniff(animalToGreet)
+        if err != nil {
+            fmt.Fprintln(os.Stderr, &quot;Error sniffing a non-person&quot;)
+        }
+        if !friendly {
+            d.Growl()
+        }
+    }
+}
+
+func main() {
+    d1 := Dog{2, &quot;shibe&quot;, &amp;Person{}}
+    d2 := Dog{3, &quot;poodle&quot;, &amp;Person{}}
+    d2.Greet(d1)
+    fmt.Println(&quot;Successfully greeted a dog.&quot;)
+}</code></pre></figure>
+
+
+<p>Run here: <a href="http://play.golang.org/p/m_RQeo9N1H">http://play.golang.org/p/m_RQeo9N1H</a></p>
+
+<p>Yup, I &#8220;went there&#8221; with the Animal OO-ish (Go doesn&#8217;t have pure objects) cliché.</p>
+
+<p>When you compile a program containing the above, the Go compiler knows that the <code>Dog</code> struct satisfies the <code>Animal</code> interface provided (it infers this because <code>Dog</code> implements the neccesary methods to qualify), so it won&#8217;t complain if you pass instances of of <code>Dog</code> to functions which demand an <code>Animal</code> type.  This allows for a lot of power and flexibility in your architecture and abstractions, without breaking the type system.</p>
+
+<h1>So what&#8217;s with <code>io</code>?</h1>
+
+<p><code>io</code> is a Golang standard library package that defines flexible interfaces for many operations and usecases around input and output.</p>
+
+<p>See: <a href="http://golang.org/pkg/io/">http://golang.org/pkg/io/</a></p>
+
+<p>You can use the same mechanisms to talk to files on disk, the network, STDIN/STDOUT, and so on.  This allows Go programmers to create re-usable &#8220;Lego brick&#8221; components that work together well without too much shimming or shuffling of components.  They smooth over cross-platform implemenation details, and it&#8217;s all just <code>[]byte</code> getting passed around, so everyone&#8217;s expectations (senders/writers and receivers/readers) are congruent.  You have <code>io.Reader</code>, <code>io.ReadCloser</code>, <code>io.Writer</code>, and so on to use.  Go also provides packages called <code>bufio</code> and <code>ioutil</code> that are packed with useful features related to using these interfaces.</p>
+
+<h1>OK, but what can you do with it.</h1>
+
+<p>Let&#8217;s look at an example to see how combining some of these primitives can be useful in practice.  I&#8217;ve been working on a project where I want to attach to multiple running Docker containers concurrently and stream (multiplex) their output to STDOUT with some metadata (container name) prepended to each log line.  Sounds easy, right? ;)</p>
+
+<p>The Docker REST API bindings written by <a href="http://github.com/fsouza">fsouza</a> provide an abstraction whereby we can pass an <code>io.Writer</code> instance for STDOUT and STDERR of the container we are attaching to.  So we have control of a <code>io.Writer</code> that we inject in, but how do read what gets written by this container one line at a time, and multiplex/label the output together in the fashion I described in the previous paragraph?</p>
+
+<p>We will use a combination of Go&#8217;s concurrency primitives, <code>io.Pipe</code>, and a <code>bufio.Scanner</code> to accomplish this.</p>
+
+<p>Since the call to the API binding&#8217;s <code>AttachContainer</code> method hijacks the HTTP connection and consequently forces the calling goroutine to be blocked, we run each <code>Attach</code> call in its own goroutine.</p>
+
+<p>We need an <code>io.Reader</code> to be able to read and parse the output from the container, but we only have the option to pass in an instance of <code>io.Writer</code> for STDOUT and STDERR.  What to do?  We can use a call to <code>io.Pipe</code> (see <a href="http://golang.org/pkg/io/#Pipe">here</a> for reference).  <code>io.Pipe</code> returns an instance of a <code>PipeReader</code>, and an instance of a <code>PipeWriter</code>, which are connected (calling the <code>Write</code> method on the <code>Writer</code> will lead directly to what comes out of <code>Read</code> in the <code>Reader</code>).  So, we can use the returned <code>Reader</code> to stream the output from the container.</p>
+
+<p>The final step is to use a <code>bufio.Scanner</code> to read the output from the <code>PipeReader</code> line by line.  If you use the <code>Scan</code> method with a <code>range</code> statement, it will iterate line by line as we desire.  We have already generated the prefix earlier and saved it in the <code>Service</code> struct we are working with (<code>Service</code> in my implementation is a very light wrapper around a container).</p>
+
+<p>Therefore, the final method looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>func (s *Service) Attach() error {
+    r, w := io.Pipe()
+    options := apiClient.AttachToContainerOptions{
+        Container:    s.Name,
+        OutputStream: w,
+        ErrorStream:  w,
+        Stream:       true,
+        Stdout:       true,
+        Stderr:       true,
+        Logs:         true,
+    }
+    fmt.Println(&quot;Attaching to container&quot;, s.Name)
+    go s.api.AttachToContainer(options)
+    go func(reader io.Reader, s Service) {
+        scanner := bufio.NewScanner(reader)
+        for scanner.Scan() {
+            fmt.Printf(&quot;%s%s \n&quot;, s.LogPrefix, scanner.Text())
+        }
+        if err := scanner.Err(); err != nil {
+            fmt.Fprintln(os.Stderr, &quot;There was an error with the scanner in attached container&quot;, err)
+        }
+    }(r, *s)
+    return nil
+}</code></pre></figure>
+
+
+<p>We kick off attaching to, and reading from, the container at the same time- when the attach is complete and starts streaming, the <code>scanner.Scan</code> loop will start logging.</p>
+
+<h1>Conclude</h1>
+
+<p>I had some trouble understanding <code>io.Writer</code>, <code>io.Reader</code>, etc. when getting started with Go (and recently as well), but I think I was over-thinking their simplicity and explicit power.  Additionally, learning about some higher-level abstractions related to them helped a lot.  Hopefully this article is useful for you and clears stuff up in the future.  I know that my Go has accelerated a lot since grokking these concepts, especially since so much (file IO etc.) relies on it.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[10 Docker Tips and Tricks That Will Make You Sing A Whale Song of Joy]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/07/12/10-docker-tips-and-tricks-that-will-make-you-sing-a-whale-song-of-joy/"/>
+		<updated>2014-07-12T17:35:00+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/07/12/10-docker-tips-and-tricks-that-will-make-you-sing-a-whale-song-of-joy</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p><img src="http://nathanleclaire.com/images/dockertips/humpback.jpg"></p>
+
+<h1>docker run -it nathanleclaire/article</h1>
+
+<p>As mentioned in a previous post I just started a shiny new job at Docker Inc. and I&#8217;ve been accumulating all sorts of good Docker tips and tricks.  I think there is probably demand for them in the community, where just the sheer amount of information about Docker to take in is very overwhelming.  Once you&#8217;ve mastered the basics, the creative possibilites are endless, and already my mind has been blown by what some of the folks I work with have come up with.  Just like I mentioned in <a href="http://nathanleclaire.com/blog/2014/03/22/what-is-this-docker-thing-that-everyone-is-so-hyped-about/">this post</a>, the Cambrian explosion of creativity it&#8217;s provoking is extremely exciting.</p>
+
+<p>So I&#8217;m going to share some of my favorite tips and tricks with you guys.  Ready?</p>
+
+<p>The 10 tips and tricks are:</p>
+
+<ol>
+<li>Run it on a VPS for extra speed</li>
+<li>Bind mount the docker socket on docker run</li>
+<li>Use containers as highly disposable dev environments</li>
+<li>bash is your friend</li>
+<li>Insta-nyan</li>
+<li>Edit <code>/etc/hosts/</code> with the <code>boot2docker</code> IP address on OSX</li>
+<li><code>docker inspect -f</code> voodoo</li>
+<li>Super easy terminals in-browser with wetty</li>
+<li>nsenter</li>
+<li>&#35;docker</li>
+</ol>
+
+
+<p>Alright, let&#8217;s do this!</p>
+
+<h2>Run it on a VPS for extra speed</h2>
+
+<p><img src="http://nathanleclaire.com/images/dockertips/vps.jpeg"></p>
+
+<p>This one&#8217;s pretty straightforward.  If you run Docker on <a href="http://digitalocean.com">Digital Ocean</a> or <a href="http://linode.com">Linode</a> you can get way better bandwidth on pulls and pushes if, like me, your home internet&#8217;s bandwidth is pretty lacking.  I get around 50mbps download with Comcast, on my Linode my speed tests run an order of magnitude faster than that.</p>
+
+<p>So if you have the need for speed, consider investing in a VPS for your own personal Docker playground.</p>
+
+<h2>Bind mount the docker socket on docker run</h2>
+
+<p>What if you want to do Docker-ey things inside of a container but you don&#8217;t want to go full Docker in Docker (dind) and run in <code>--privileged</code> mode?  Well, you can use a base image that has the Docker client installed and bind-mount your Docker socket with <code>-v</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=sh><code>docker run -it -v /var/run/docker.sock:/var/run/docker.sock nathanleclaire/devbox</code></pre></figure>
+
+
+<p>Now you can send docker commands to the same instance of the docker daemon you are using on the host - inside your container!</p>
+
+<p>This is really fun because it gives you all the advantages of being able to mess around with Docker containers on the host, with the flexibility and ephemerality of containers.  Which leads into my next tip&#8230;.</p>
+
+<h2>Use containers as highly disposable dev environments</h2>
+
+<p><img src="http://nathanleclaire.com/images/dockertips/devenv.gif"></p>
+
+<p>How many times have you needed to quickly isolate an issue to see if it was related to certain factors in particular, and nothing else?  Or just wanted to pop onto a new branch, make some changes and experiment a little bit with what you have running/installed in your environment, without accidentally screwing something up big time?</p>
+
+<p>Docker allows you to do this in a a portable way.</p>
+
+<p>Simply create a Dockerfile that defines your ideal development environment on the CLI (including ack, autojump, Go, etc. if you like those - whatever you need) and kick up a new instance of that image whenever you want to pop into a totally new box and try some stuff out.  For instance, here&#8217;s <a href="https://github.com/shykes">Solomon&#8217;s</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=sh><code>FROM ubuntu:14.04
+
+RUN apt-get update -y
+RUN apt-get install -y mercurial
+RUN apt-get install -y git
+RUN apt-get install -y python
+RUN apt-get install -y curl
+RUN apt-get install -y vim
+RUN apt-get install -y strace
+RUN apt-get install -y diffstat
+RUN apt-get install -y pkg-config
+RUN apt-get install -y cmake
+RUN apt-get install -y build-essential
+RUN apt-get install -y tcpdump
+RUN apt-get install -y screen
+
+# Install go
+RUN curl https://go.googlecode.com/files/go1.2.1.linux-amd64.tar.gz | tar -C /usr/local -zx
+ENV GOROOT /usr/local/go
+ENV PATH /usr/local/go/bin:$PATH
+
+# Setup home environment
+RUN useradd dev
+RUN mkdir /home/dev &amp;&amp; chown -R dev: /home/dev
+RUN mkdir -p /home/dev/go /home/dev/bin /home/dev/lib /home/dev/include
+ENV PATH /home/dev/bin:$PATH
+ENV PKG_CONFIG_PATH /home/dev/lib/pkgconfig
+ENV LD_LIBRARY_PATH /home/dev/lib
+ENV GOPATH /home/dev/go:$GOPATH
+
+RUN go get github.com/dotcloud/gordon/pulls
+
+# Create a shared data volume
+# We need to create an empty file, otherwise the volume will
+# belong to root.
+# This is probably a Docker bug.
+RUN mkdir /var/shared/
+RUN touch /var/shared/placeholder
+RUN chown -R dev:dev /var/shared
+VOLUME /var/shared
+
+WORKDIR /home/dev
+ENV HOME /home/dev
+ADD vimrc /home/dev/.vimrc
+ADD vim /home/dev/.vim
+ADD bash_profile /home/dev/.bash_profile
+ADD gitconfig /home/dev/.gitconfig
+
+# Link in shared parts of the home directory
+RUN ln -s /var/shared/.ssh
+RUN ln -s /var/shared/.bash_history
+RUN ln -s /var/shared/.maintainercfg
+
+RUN chown -R dev: /home/dev
+USER dev</code></pre></figure>
+
+
+<p>Especially deadly if you use vim/emacs as your editor <code>;)</code>.  You can use <code>/bin/bash</code> as your <code>CMD</code> and <code>docker run -it my/devbox</code> right into a shell.</p>
+
+<p>You can also bind-mount the Docker client binary and socket (as mentioned above) inside the container when you run it to have access to the host&#8217;s Docker daemon for container antics!</p>
+
+<p>Likewise you can bootstrap a development environment on a new computer easily this way.  Just install docker and download your dev box image!</p>
+
+<h2>bash is your friend</h2>
+
+<p>Or &#8220;the shell is your friend&#8221;.  Sorry <code>zsh</code> and <code>fish</code> users.</p>
+
+<p>Just like many of you have aliases for <code>git</code> to save keystrokes, you&#8217;ll likely want to create little shortcuts for youself if you start to use Docker heavily.  Just add these to your <code>~/.bashrc</code> or equivalent and off you go.</p>
+
+<p>There are some obvious ones:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=sh><code>alias drm=&quot;docker rm&quot;
+alias dps=&quot;docker ps&quot;</code></pre></figure>
+
+
+<p>Basically I will add one of these whenever I find myself typing the same command over and over.  Like you do :D</p>
+
+<p>You can also mix and match in all kinds of fun ways.  You can do</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=sh><code>$ drm -f $(docker ps -aq)</code></pre></figure>
+
+
+<p>To remove all containers, for instance (including those which are running).  Or:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=sh><code>function da () {
+    docker start $1 &amp;&amp; docker attach $1
+}</code></pre></figure>
+
+
+<p>to start a stopped conatiner and attach to it.</p>
+
+<p>I created a fun one to enable my rapid-bash-container-prompt habit mentioned in the previous tip:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=sh><code>function newbox () {
+    docker run --name $1 --volumes-from=volume_container -it -v /var/run/docker.sock:/var/run/docker.sock -e BOX_NAME=$1 nathanleclaire/devbox
+}</code></pre></figure>
+
+
+<h2>Insta-nyan</h2>
+
+<p><img src="http://nathanleclaire.com/images/dockertips/nyan.png" title="Let's face it, who doesn't love this?" ></p>
+
+<p>Pretty simple.  You want a nyan-cat in your terminal, you have docker, and you need only one command to activate the goodness.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=sh><code>docker run -it supertest2014/nyan</code></pre></figure>
+
+
+<h2>Edit <code>/etc/hosts/</code> with the <code>boot2docker</code> IP address on OSX</h2>
+
+<p><img src="http://nathanleclaire.com/images/dockertips/hacking.png" title="This is what hacking looks like." ></p>
+
+<p>The newest (read: BEST) versions of <a href="https://github.com/boot2docker/boot2docker">boot2docker</a> include a host-only network where you can access ports exposed by containers using the boot2docker virtual machine&#8217;s IP address. The <code>boot2docker ip</code> command makes access to this value easy.  However, usually it is simply <code>192.168.59.103</code>.  I find this specific address a little hard to remember and cumbersome to type, so I add an entry to my <code>/etc/hosts</code> file for easy access of <code>boot2docker:port</code> when I&#8217;m running applications that expose ports with Docker.  It&#8217;s handy, give it a shot!</p>
+
+<p><strong>Note</strong>: Do remember that it is possible for the boot2docker VM&#8217;s IP address to change, so make sure to check that if you are encountering network issues using this shortcut.  If you are not doing something that would mess with your network configuration (setting up and tearing down multiple virtual machines including boot2docker&#8217;s, etc.), though, you will likely not encounter this issues.</p>
+
+<p>While you&#8217;re at it you should probably tweet <a href="http://twitter.com/SvenDowideit">@SvenDowideit</a> and thank him for his work on boot2docker, since he is an absolute champ for delivering, maintaining, and documenting it.  ;)</p>
+
+<h2><code>docker inspect -f</code> voodoo</h2>
+
+<p>You can do all sorts of awesome flexible things with the <code>docker inspect</code> command&#8217;s <code>-f</code> (or <code>--format</code>) flag if you&#8217;re willing to learn a little bit about <a href="http://golang.org/pkg/text/template/">Go templates</a>.</p>
+
+<p>Normally <code>docker inspect $ID</code> outputs a big JSON dump, and you access individual properties with templating like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=sh><code>docker inspect -f '{{ .NetworkSettings.IPAddress }}' $ID</code></pre></figure>
+
+
+<p>The argument to <code>-f</code> is a Go template.  If you try something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=sh><code>$ docker inspect -f '{{ .NetworkSettings }}' $ID
+map[Bridge:docker0 Gateway:172.17.42.1 IPAddress:172.17.0.4 IPPrefixLen:16 PortMapping:&lt;nil&gt; Ports:map[5000/tcp:[map[HostIp:0.0.0.0 HostPort:5000]]]]</code></pre></figure>
+
+
+<p>You will not get JSON since Go will actually just dump the data type that Docker is marshalling into JSON for the output you see without <code>-f</code>.  But you can do:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=sh><code>$ docker inspect -f '{{ json .NetworkSettings }}' $ID
+{&quot;Bridge&quot;:&quot;docker0&quot;,&quot;Gateway&quot;:&quot;172.17.42.1&quot;,&quot;IPAddress&quot;:&quot;172.17.0.4&quot;,&quot;IPPrefixLen&quot;:16,&quot;PortMapping&quot;:null,&quot;Ports&quot;:{&quot;5000/tcp&quot;:[{&quot;HostIp&quot;:&quot;0.0.0.0&quot;,&quot;HostPort&quot;:&quot;5000&quot;}]}}</code></pre></figure>
+
+
+<p>To get JSON!  And to prettify it, you can pipe it into a Python builtin:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=sh><code>$ docker inspect -f '{{ json .NetworkSettings }}' $ID | python -mjson.tool
+{
+    &quot;Bridge&quot;: &quot;docker0&quot;,
+    &quot;Gateway&quot;: &quot;172.17.42.1&quot;,
+    &quot;IPAddress&quot;: &quot;172.17.0.4&quot;,
+    &quot;IPPrefixLen&quot;: 16,
+    &quot;PortMapping&quot;: null,
+    &quot;Ports&quot;: {
+        &quot;5000/tcp&quot;: [
+            {
+                &quot;HostIp&quot;: &quot;0.0.0.0&quot;,
+                &quot;HostPort&quot;: &quot;5000&quot;
+            }
+        ]
+    }
+}</code></pre></figure>
+
+
+<p>You can also do other fun tricks like access object properties which have non-alphanumeric keys.  Helps to know some Go :P</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=sh><code>docker inspect -f '{{ index .Volumes &quot;/host/path&quot; }}' $ID</code></pre></figure>
+
+
+<p>This is a very powerful tool for quickly extracting information about your running containers, and is extremely helpful for troubleshooting because it provides a ton of detail.</p>
+
+<h2>Super easy terminals in-browser with wetty</h2>
+
+<p>I really foresee people making extremely FUN web applications with this kind of functionality.  You can spin up a container which is running an instance of <a href="https://github.com/krishnasrinivas/wetty">wetty</a> (a JavaScript-powered in-browser terminal emulator).</p>
+
+<p>Try it for yourself with:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=sh><code>docker run -p 3000:3000 -d nathanleclaire/wetty</code></pre></figure>
+
+
+<p><img src="http://nathanleclaire.com/images/dockertips/wetty.png"></p>
+
+<p>Wetty only works in Chrome unfortunately, but there are other JavaScript terminal emulators begging to be Dockerized and if you are using it for a presentation or something (imagine embedding interactive CLI snapshots in your Reveal.js slideshow - nice) you control the browser anyway.  Now you can embed isolated terminal applications in web applications wherever you want, and you control the environment in which they execute with an excruciating amount of detail.  No pollution from host to container, and vice versa.</p>
+
+<p>The creative possibilites of this are just mind-boggling to me.  I REALLY want to see someone make a version of <a href="http://typeracer.com">TypeRacer</a> where you compete with other contestants in real time to type code into vim or emacs as quickly as possible.  That would be pure awesome.  Or a real-time coding challenge where your code competes with other code in an arena for dominance ala <a href="http://www.corewars.org/">Core Wars</a>.</p>
+
+<h2>nsenter</h2>
+
+<p><a href="http://twitter.com/jpetazzo">Jerome</a> wrote an opinionated article a few weeks ago that shook things up a bit.  In it, he argues that you should not need to run <code>sshd</code> (daemon for getting a remote terminal prompt) in your containers and, in fact, if you are doing so you are violating the Docker philosophy (one concern per container).  It&#8217;s a good read, and he mentions <code>nsenter</code> as a fun trick to get a prompt inside of containers which have already been initialized with a process.</p>
+
+<p>See <a href="http://jpetazzo.github.io/2014/06/23/docker-ssh-considered-evil/">here</a> or <a href="http://www.sebastien-han.fr/blog/2014/01/27/access-a-container-without-ssh/">here</a> to learn how to do it.</p>
+
+<h2>#docker</h2>
+
+<p>I&#8217;m not talking about the hashtag!!  I&#8217;m talking about the channel on Freenode on IRC.  It&#8217;s hands-down the best place to meet with fellow Dockers online, ask questions (all levels welcome!), and seek truly excellent expertise.  At any given time there are about 1000 people or more sitting in, and it&#8217;s a great community as well as resource.  Seriously, if you&#8217;ve never tried it before, go check it out.  I know IRC can be scary if you&#8217;re not accustomed to using it, but the effort of setting it up and learning to use it a bit will pay huge dividends for you in terms of knowledge gleaned.  I guarantee it.  So if you haven&#8217;t come to hang out with us on IRC yet, do it!</p>
+
+<p>To join:</p>
+
+<ol>
+<li>Download an IRC Client such as <a href="http://limechat.net/mac/">LimeChat</a></li>
+<li>Connect to the <code>irc.freenode.net</code> network</li>
+<li>Join the <code>#docker</code> channel</li>
+</ol>
+
+
+<p>Welcome!</p>
+
+<h1>Conclude</h1>
+
+<p>That&#8217;s all for now folks, I hope you&#8217;ve learned a bit and you have all sorts of great ideas burning in your head about Docker!!  Enjoy it, join the conversation around it, and above all <strong>BE CREATIVE</strong>.</p>
+
+<p>Until next time, stay sassy Internet.  And consider <a href="http://nathanleclaire.com">signing up for my mailing list</a>.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[RethinkDB is Quietly Changing the Way We Think About Data]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/07/01/rethinkdb-is-quietly-changing-the-way-we-think-about-data/"/>
+		<updated>2014-07-01T23:10:00+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/07/01/rethinkdb-is-quietly-changing-the-way-we-think-about-data</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<h1>meet up</h1>
+
+<p>This past week I attended a meetup at <a href="http://firebase.io">Firebase</a> headquarters in downtown San Francisco.  No joke, there is photographic evidence.</p>
+
+<p><img src="http://nathanleclaire.com/images/rethinkfire/meetup.jpeg" title="Me!" ></p>
+
+<p>It was a very intruiging event since the focus of the conversation was on building real-time apps, and what the future of that is going to look like.  Essentially real-time apps are websites or native device applications where the interaction with other users is nearly instantaneous.  For instance, if you&#8217;ve ever edited a Google Doc at the same time as someone else, you will recall that you could see changes that they made in real-time, and vice versa, and so on.</p>
+
+<p>There were a lot of great speakers, including Sara Robinson from <a href="http://firebase.io">Firebase</a> and Vincent Woo from <a href="http://coderpad.io">CoderPad</a>, but here I&#8217;m going to discuss a little about what RethinkDB demoed.</p>
+
+<p>In case you&#8217;re not familiar, <a href="http://rethinkdb.com">RethinkDB</a> is a JSON data store similar in some ways to <a href="http://mongodb.com">MongoDB</a>.  The comparison has been done to death so I won&#8217;t rehash as it&#8217;s easy to <a href="http://lmgtfy.com/?q=difference+between+rethinkdb+and+mongodb">Google</a>, I want to talk here about some new features that RethinkDB has been introducing which I find very innovative.</p>
+
+<h1>http as a query (HaaQ)</h1>
+
+<p><img src="http://nathanleclaire.com/images/rethinkfire/rethinkquer.gif"></p>
+
+<p>RethinkDB just introduced a new feature that allows users to query APIs directly from their &#8220;Data Explorer&#8221; view (which is amazingly cool by the way, you should check it out - I really wish there was a demo of it online for people to play with).</p>
+
+<p>It&#8217;s called <code>http</code> and it&#8217;s a part of ReQL, their query language.  What it does is connect to a remote server to retrieve JSON, which you can then dump into RethinkDB directly and/or query with a very expressive query language (the ReQL API is based on JavaScript so it contains many familiar patterns, however there are many bindings for other languages as well).  This task traditionally is done using a scripting language like Ruby, Perl, or Python to keep the feedback loop tight, but being able to do it directly from Rethink makes the feedback loop even tighter.</p>
+
+<p>I suspect this sort of mutation will be a winning one in the end.  Just thinking about the possibilities, it reminded me of many times where I had to do some sort of straightforward data manipulation task based on external data and I was forced to reach for Python et al. for their networking capabilities.  It&#8217;s really interesting to, say, be able to very quickly access information from APIs such as who are the top committers for your project on GitHub, what are your most popular submissions to <a href="http://reddit.com/r/javascript">/r/javascript</a>, and so on, and then query that information in a very richly interactive and intuitive manner.</p>
+
+<p>Expect to see more http-as-a-query (HaaQ) and similar features popping up in technologies the future.</p>
+
+<h1>changefeeds</h1>
+
+<p>Now this is really fascinating.  You can set a query so that, when changes occur to it, your program gets notified.</p>
+
+<p>Why is this useful?  For starters, a given client can subscribe to be notified when a value changes with another user (their score increased, they got further along the map, they typed something in to the document, etc.).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=python><code>feed = r.table('users').changes().run(conn)
+for change in feed:
+    print change</code></pre></figure>
+
+
+<p>I imagine doing this in a Goroutine or a similar type of lightweight thread.</p>
+
+<p>And perhaps more interestingly, you can also subscribe to just a certain kind of event (e.g. the user&#8217;s gotten a new high score):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=python><code>r.table('scores').changes().filter(
+    lambda change: change['new_val']['score'] &gt; change['old_val']['score']
+)['new_val'].run(conn)</code></pre></figure>
+
+
+<p>Nice!  In the kind of industry sweep that we&#8217;re seeing towards applications which are reactive (I think of them as &#8220;springy&#8221; or &#8220;spongey&#8221;) vs. applications which are sluggish and imperative, this kind of feature will prove invaluable.  I&#8217;m especially keen to see when they have it working with aggregate functions (if I recall correctly eventually it will work with any function parallelizable with Map/Reduce).  Imagine getting notifications every time some kind of complex-to-calculate performance metric changed, or a real-time visualization of data that is constantly being re-crunched on the fly.</p>
+
+<h1>fin</h1>
+
+<p>I was really impressed with Rethink&#8217;s new features and I think they represent a bold new direction for things.  It would have been easy to play it safe and stick to existing features but instead Rethink is really trying to shake things up around how we think about data : storing it, querying it, and delivering it to the end user in real-time.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Original Content Vultures are Evil, and What You Can Do To Protect Yourself]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/06/28/original-content-vultures-are-evil-and-what-you-can-do-to-protect-yourself/"/>
+		<updated>2014-06-28T17:58:00+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/06/28/original-content-vultures-are-evil-and-what-you-can-do-to-protect-yourself</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<h1>Here we go</h1>
+
+<p><img src="http://nathanleclaire.com/images/tg/ouch.png"></p>
+
+<p>So lately I&#8217;ve had this problem where people will e-mail me, or complain on Twitter, that my website looks pretty mangled on their <code>[OS|browser]</code>.  This of course upsets me since I want the experience of using my site to be smooth and simple.  I&#8217;m no designer but I tried to make something that was both usable (loads quite quickly) and not too hard to look at.</p>
+
+<p>So of course I investigate, and I&#8217;m led to find out that in several of these cases the unsuspecting viewers are stumbling across my site through a &#8220;gray hat&#8221; lead farming site.  It&#8217;s called Tweetganic, and I&#8217;m sure it&#8217;s not the only one of its kind but in case you&#8217;re not familiar, here&#8217;s what it does:</p>
+
+<ol>
+<li>Users sign up to use Tweetganic</li>
+<li>Users harvest links to other people&#8217;s content and Tweetganic proxies them at a Tweetganic URL</li>
+<li>Users then share the links on social media.  When viewers access the URL they are bombarded with lead generating tactics such as a &#8220;Hire Great Angular Developers&#8221; banner or a modal which prompts them to sign up for the Tweetganic user&#8217;s mailing list (NOT the generator of the original content!!).</li>
+</ol>
+
+
+<p>It is a lead (your precious eyeballs) farming mechanism used by content vultures and it must be destroyed.</p>
+
+<h1>Why is it so bad ?</h1>
+
+<p>Good question.</p>
+
+<p>Initially I was intruiged by the premise of Tweetganic and even considered using it myself to promote my mailing list.  However, I decided against it due to my values which emphasize the importance of &#8220;consent-based marketing&#8221;, where I make sure people <em>want</em> to receive my content (such as a mailing list) before sending it to them.  Tweetganic links try to trap users in a marketing funnel they don&#8217;t neccessarily want to be in.</p>
+
+<p>I get that people want to generate leads, and there&#8217;s nothing wrong with generating leads.  But, and this brings me to my first specific beef with Tweetganic, these leads are non-consensual (to the content owners/producers) and they do nothing to give back to the content producers who are the true value creators here.  No outreach, no offers to pay for the privelege, no classy referral link.</p>
+
+<p>Finding people using your stuff, greedily, for their own personal gain with no thought towards the blood, sweat, and tears that went into generating it feels like a dagger to the heart.</p>
+
+<h2>Tweetganic promotes non-consensual re-use of original content with no respect or payment to the authors.</h2>
+
+<p>Many of us (writers) do what we do because we want the community to learn and grown and develop.  Yes we&#8217;re also promoting ourselves, but we&#8217;re also putting in the elbow grease to make it happen.  Without being derivative.  By building legitimate value.</p>
+
+<p>My second specific beef with this practice ties into the first:</p>
+
+<h2>Tweetganic will completely maul your website and make it look like utter crap.</h2>
+
+<p>This is how I found out it was being done to me.  People were complaining in various ways that my website looked bad.  I knew most of them probably weren&#8217;t using older versions of IE (my website looks like crap in IE&lt;8 ☺ ) so I investigated.</p>
+
+<p>Yeah, it turns out that Tweetganic is just really, really, bad at front end.  I guess that&#8217;s what happens when you use other people&#8217;s content cross-domain without their consent or knowledge, and can&#8217;t modify their page directly.  You have to shove your hideous spam layer on top.</p>
+
+<p>Taking my content is one thing.  But to take away the last tiny little scrap of aesthetic value that my hilariously-made-by-a-programmer-not-a-designer blog has?  That&#8217;s war.</p>
+
+<p>If you care about your content follow the tip below and participate in a community discussion about how to stop them, and all of their ilk.  If you want to be a good person then don&#8217;t use tools such as this.</p>
+
+<h1>I don&#8217;t want this to happen to me.  What can I do about it?</h1>
+
+<p>EDIT: I&#8217;ve swapped out the &#8220;shaming&#8221; text for a trick which simply redirects to the original page (listed below), which I had previously just assumed wasn&#8217;t possible due to cross-domain policies in browsers.</p>
+
+<p>I&#8217;ve put the following piece of JavaScript/CSS on many of my pages, and you might want to follow suit with a similar snippet:</p>
+
+<figure class='code'><pre><code>&lt;style&gt; html{display:none;} &lt;/style&gt;
+&lt;script&gt;
+   if(self == top) {
+       document.documentElement.style.display = 'block'; 
+   } else {
+       top.location = self.location; 
+   }
+&lt;/script&gt;</code></pre></figure>
+
+
+<p>Source: <a href="http://en.wikipedia.org/wiki/Framekiller">Wikipedia</a></p>
+
+<p>Basically what it does is makes content unrendered by default and redirects the page to the original domain if the site is loaded in an iframe.</p>
+
+<p>You could also set the <code>X-Frame-Options</code> HTTP header to <code>DENY</code> in your server config (if you don&#8217;t need your page to load in iframes, and for 90% of sites why would you?).</p>
+
+<h1>I was featured on Tweetganic and all I got was this lousy rant.</h1>
+
+<p>Let&#8217;s cheerily call out offenders as we see them too, eh?</p>
+
+<p>For instance, I have one offender for you to ruthlessly unfollow: the Twitter account @AngularJS_News.  In my opinion they should not be promoting the use of such a tool, it literally exists only to screw over content creators for personal gain.</p>
+
+<p>That&#8217;s about all from me on this topic for the time being.  Moral of the story: If you&#8217;re going to make my website look like crap at least offer to pay me.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Back from the Dead]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/06/26/back-from-the-dead/"/>
+		<updated>2014-06-26T20:58:00+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/06/26/back-from-the-dead</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p><img src="http://nathanleclaire.com/images/dead/phoenix.jpeg" title="Me." ></p>
+
+<p>Hey all, really sorry that I haven&#8217;t been writing my usual weekly articles.  The good news is that the reason I haven&#8217;t been doing so is that I&#8217;ve been getting settled in in San Francisco, California!  I have started a new job as a Solutions Engineer at <a href="http://www.docker.com">Docker Inc.</a>.</p>
+
+<p><img src="http://nathanleclaire.com/images/dead/docker.jpeg"></p>
+
+<p>I&#8217;m going back to writing weekly articles, don&#8217;t be surprised to see me writing a fair bit about Docker too :)</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Do We Need a Community for Vagrantfiles?]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/05/02/do-we-need-a-community-for-vagrantfiles/"/>
+		<updated>2014-05-02T03:50:00+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/05/02/do-we-need-a-community-for-vagrantfiles</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<h1>vagrant up</h1>
+
+<p><img src="http://nathanleclaire.com/images/swaa/vagrant.png"></p>
+
+<p>For those of you who are unfamiliar, <a href="http://www.vagrantup.com/">Vagrant</a> is &#8220;development environments made easy&#8221;.</p>
+
+<blockquote><p>Create and configure lightweight, reproducible, and portable development environments.</p></blockquote>
+
+<p>Vagrant is a command line tool that aids in the creation and provisioning of development environments.  Why is it important?  Let&#8217;s say that you want to work on a Django application.  In order to get started with even basic work on the application you need Python installed, probably pip and virtualenv, the dependencies on Python libraries including Django itself, and a database program (sqlite, MySQL, and PostgreSQL are all popular choices).  Orchestrating the setup of all of this creates a lot of friction, especially if you are new to the Python ecosystem, and ranges from medium difficulty to &#8220;Dear God why did I ever attempt this&#8221; difficulty on Windows.  Worst of all, when you eventually want to deploy your application so the outside world can use it, you have to juggle all of this stuff <em>again</em> plus more overhead (e.g. installing and configuring nginx) on your server.</p>
+
+<p>Vagrant&#8217;s value proposition is simple:  Get the repo of the project you want to work on, run <code>vagrant up</code> once in the top level directory, wait for the virtual machine to boot and get provisioned, and then you are ready to go.  Point your browser to <code>localhost:8000</code> (or wherever) and there is your app.   Vagrant works with virtualization technologies (<a href="https://www.virtualbox.org/">VirtualBox</a>, <a href="https://www.virtualbox.org/">VmWare</a>, and they recently announced <a href="http://docker.io">Docker</a> support) and provisioners (anything from shell scripts to <a href="https://puppetlabs.com/">Puppet</a> to <a href="http://www.getchef.com/chef/">Chef</a>) behind the scenes and provides a nice clean interface for customization of things such as port forwarding from the guest to the host.  It really is a very flexible and powerful technology.</p>
+
+<p>But it, and related technologies (like Docker), are so new, they still have a big problem.  There&#8217;s no centralized way to find a quality image for what you may be searching for (e.g. Rails).  Someone out there has probably already done the legwork of creating that Vagrantfile and provisioning, right?  But at best we have Google and Github to try and hunt one down, and no assurance that it actually works.  For instance, I once tried to run a Vagrantfile that pretty much required Ansible to be installed on the host machine, and I was on Windows (so it was no good).  There are workarounds, but at that point you&#8217;ve already missed out on the awesome <code>vagrant up</code> workflow.</p>
+
+<h2>The Idea</h2>
+
+<p>About a month ago I got frustrated with the fact that I had to set up all of the weird Ruby stuff on a new computer any time I wanted to blog (because my blog right now is based on <a href="http://octopress.org/">Octopress</a>) so I set about creating a Vagrantfile and a provisioning script to take care of that.  That way, any time I wanted to blog on a new computer, I could just run <code>vagrant up</code> and have Octopress rarin&#8217; to go.</p>
+
+<p>5 hours later, I was still struggling.  For a variety of reasons that I won&#8217;t go into here, including that Windows interfered with several critical <code>rake</code> commands due to shared folder access.  I did eventually get it online, but it might have done me well to know that there was an existing version with these issues resolved floating around.  Indeed, some Googling just now reveals that <a href="http://blog.andrewallen.co.uk/2013/05/13/setting-up-vagrant-for-octopress/">this is the case</a>.  Or is it?  There&#8217;s no way to know if things you find just by Googling work well, on what OSes, whether or not they&#8217;re outdated, and so on.</p>
+
+<p>Which brings me to my point.</p>
+
+<p>I think there should be a community for Vagrantfiles (and their corresponding provisioning scripts), which I envision as being a sort of an awesome mashup of <a href="http://google.com">Google</a>, <a href="http://github.com">Github</a>, and <a href="http://reddit.com">Reddit</a>.  Basically, it would just be a CRUD app where people could submit and vote on Vagrant environments for particular stacks (want a <a href="http://mean.io/#!/">MEAN</a> stack?  Here&#8217;s the definitive one, etc.).  That way, if you wanted to start a new project with a particular stack, you could just <code>git clone</code> the project, optionally delete the <code>.git</code> directory to start fresh, run <code>vagrant up</code> and be done with it.  This is the sort of workflow we used to get going on a Laravel app when we <a href="http://nathanleclaire.com/blog/2014/02/10/5-reasons-we-won-startup-weekend/">won Startup Weekend</a> and it worked incredibly well.</p>
+
+<p>Additionally it would be pretty amazing if there were continuously integrated builds of the box/provisioning under OSX, Windows, and Linux hosts to reasonably assure you that no funny business was going to happen if you built the box with <code>vagrant up</code> locally.  For instance, making things work with a Windows host for me entailed making some pretty drastic changes to the Rakefile to appease SASS.  This would account for stuff like that.</p>
+
+<p>The upvote/downvote and discussion mechanisms would enable people to isolate the builds which are the &#8220;best&#8221; for various reasons, including being actively maintained.</p>
+
+<p>I feel like the <a href="https://index.docker.io">Docker index</a> is sort of headed in the right direction here, but at the time of writing lacks a way to sort search results by relevant paramters e.g. stars.  The code for that is online and written in Python, which I am familiar with, so I may take a stab at implementing it.</p>
+
+<h2>Fin</h2>
+
+<p>Maybe I&#8217;m just barking up the wrong tree here, but if there&#8217;s interest in this as a tool I definitely want to start looking into building and maintaining such a site.  I think we would see so many cool apps come to fruition that otherwise might have languished in dependency hell.  Everyone should know the awesomeness of <code>vagrant up</code>.</p>
+
+<p>Until next time, stay sassy Internet.  And <a href="http://nathanleclaire.com">consider subscribing to my blog</a>.</p>
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[A Surprising Feature of Golang that Colored Me Impressed]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/04/27/a-surprising-feature-of-golang-that-colored-me-impressed/"/>
+		<updated>2014-04-27T00:16:00+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/04/27/a-surprising-feature-of-golang-that-colored-me-impressed</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p><em>EDIT:</em> Some commenters were confused about some things in this article, and I don&#8217;t want people to get an unclear picture, so to clarify:</p>
+
+<ol>
+<li>Yes, I know that insertion into a hash table creates an arbitrary ordering of elements by definition.  For a variety of reasons, e.g. that not every map is a hash map as some posters have pointed out (and some languages have ordered hash maps), I can see how someone might hypothesize (especially with a naïve understanding of Go maps) that iteration order could be the same as insertion order.</li>
+<li>My original example was contrived and does not demonstrate the point for most versions of Go (though I hear it might work for 1.3), so I have updated the code to be something you can chuck into an editor or the <a href="http://play.golang.org/p/ppIvkgAGL1">Go Playground</a> and see the effect for yourself.</li>
+<li>It <em>is</em> true that Go runs from a <a href="https://codereview.appspot.com/5285042/patch/9001/10003">random offset for map iteration</a>.  It&#8217;s not <em>just</em> arbitrary.</li>
+</ol>
+
+
+<p>Now back to your regularly scheduled article.  :)</p>
+
+<p><img src="http://nathanleclaire.com/images/gopher/hardhat.png"></p>
+
+<h1>go blog.Article()</h1>
+
+<p>The amount of enthusiasm and momentum I&#8217;ve been seeing regarding the <a href="http://golang.org">Go programming language</a> in the past few weeks has been really amazing.  Partially this is due to <a href="http://gophercon.com">Gophercon 2014</a>, which at the time of writing has just occured.  I am insanely jealous of the attendees - the format and talks sound like they were awesome, and it&#8217;d be great to bump elbows with titans such as <a href="https://twitter.com/rob_pike">Rob Pike</a> as well as hear all the cool stuff that everyone is building with Go.  I feel like additionally I&#8217;ve seen a big spike in blog articles related to Go lately, and many are making awesome pivots to include Go in their stack (for instance, <a href="https://www.digitalocean.com/company/blog/new-super-fast-droplet-console-thanks-golang/">Digital Ocean</a>, new cloud startup darling of the masses, just announced they reworked a bunch of Perl code to Go and improved some things such as response time dramatically).</p>
+
+<p>I&#8217;ve never written the obligatory &#8220;ZOMG I played with Golang for two weeks and it&#8217;s awesome&#8221; post, since I didn&#8217;t really find it had much of a value add in its myriad forms.  But recently I came across a Go feature that I considered a very cool reflection of its very excellent (in my opinion) attitude as a language.</p>
+
+<p>Go&#8217;s <code>map</code> iteration order (using the <code>range</code> keyword) is random instead of in the order that the entries were added.  What does this mean (context), and why is it significant?</p>
+
+<h1>Maps</h1>
+
+<h2>Brief intro to maps</h2>
+
+<p>Stolen directly from <a href="http://blog.golang.org/go-maps-in-action"><em>the</em> article on maps</a> by the prolific <a href="https://twitter.com/enneff">Andrew Gerrand</a>:</p>
+
+<blockquote><p>One of the most useful data structures in computer science is the hash table. Many hash table implementations exist with varying properties, but in general they offer fast lookups, adds, and deletes. Go provides a built-in map type that implements a hash table.</p></blockquote>
+
+<p>So in Go if you need a hash table you use a map.  Since Go is strongly typed you have to define what type the keys are, and what type the associated values are (e.g. strings, integers, pointers to structs, etc.).  A common use case, for instance, it to have a map where the keys are strings and the values they reference are strings.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>m := make(map[string]string)</code></pre></figure>
+
+
+<p>Usage is pretty straightforward.  Keys don&#8217;t need to exist before they are assigned, or even before they are referenced (if they do not exist, we get the value type&#8217;s &#8220;zero value&#8221;).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>m[&quot;bandName&quot;] = &quot;Funny Bones&quot;             // &quot;create&quot;
+websiteTitle := m[&quot;bandName&quot;] + &quot; Music&quot;  // &quot;read&quot;
+m[&quot;bandName&quot;] = &quot;Moon Taxi&quot;               // &quot;update&quot;
+delete(m, &quot;bandName&quot;)                     // &quot;delete&quot;
+fmt.Printf(m[&quot;bandName&quot;])                 // prints nothing since m[&quot;bandName&quot;] == &quot;&quot;</code></pre></figure>
+
+
+<p>To iterate over all the entries in a map you use the <code>range</code> keyword:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>for key, value := range m {
+    fmt.Println(&quot;Key:&quot;, key, &quot;Value:&quot;, value)
+}</code></pre></figure>
+
+
+<h2>Iteration Order</h2>
+
+<p>At first glance a Go programmer might think that the output of this code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>package main
+
+import &quot;fmt&quot;
+
+func main() {
+    blogArticleViews := map[string]int{
+        &quot;unix&quot;: 0,
+        &quot;python&quot;: 1,
+        &quot;go&quot;: 2,
+        &quot;javascript&quot;: 3,
+        &quot;testing&quot;: 4,
+        &quot;philosophy&quot;: 5,
+        &quot;startups&quot;: 6,
+        &quot;productivity&quot;: 7,
+        &quot;hn&quot;: 8,
+        &quot;reddit&quot;: 9,
+        &quot;C++&quot;: 10,
+    }
+    for key, views := range blogArticleViews {
+        fmt.Println(&quot;There are&quot;, views, &quot;views for&quot;, key)
+    }
+}</code></pre></figure>
+
+
+<p>Would be this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>$ go run map_iteration_order.go
+There are 0 views for unix
+There are 1 views for python
+There are 2 views for go
+There are 3 views for javascript
+There are 4 views for testing
+There are 5 views for philosophy
+There are 6 views for startups
+There are 7 views for productivity
+There are 8 views for hn
+There are 9 views for reddit
+There are 10 views for C++</code></pre></figure>
+
+
+<p>But, since Go 1, the Go runtime actually randomizes the iteration order.  So in fact it will be more like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>$ go run map_iteration_order.go
+There are 3 views for javascript
+There are 5 views for philosophy
+There are 10 views for C++
+There are 0 views for unix
+There are 1 views for python
+There are 2 views for go
+There are 4 views for testing
+There are 6 views for startups
+There are 7 views for productivity
+There are 8 views for hn
+There are 9 views for reddit</code></pre></figure>
+
+
+<p>The Go language designers noticed that people were relying on the fact that keys were normally stored in the order they were added in, so they randomized the order in which the keys are iterated over.  Thus, if you want to output keys in the order they were added in, you need to keep track of which value is in which position in the order <em>yourself</em> like so :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>import &quot;sort&quot;
+
+var m map[int]string
+var keys []int
+for k := range m {
+    keys = append(keys, k)
+}
+sort.Ints(keys)
+for _, k := range keys {
+    fmt.Println(&quot;Key:&quot;, k, &quot;Value:&quot;, m[k])
+}</code></pre></figure>
+
+
+<p>Note that the above codeblock is once again shamelessly stolen from <a href="http://blog.golang.org/go-maps-in-action">Andrew&#8217;s excellent article</a>.</p>
+
+<p>I think that peoples&#8217; reactions to these sort of things mostly can be categorized into two separate groups.</p>
+
+<p>One group responds with anything from not understanding why this might be something that is done to being slightly peeved to vehemently disapproving.  These are most likely the ones who are comfortable making potentially dangerous or magical assumptions about what code is doing behind the scenes and they would prefer that the Go language designers allow them to continue to write dangerous code.</p>
+
+<p>The other group accepts that this was an issue which was addressed, are thankful that the Go language designers are looking out for them, implements the provided solution and moves on.</p>
+
+<h2>Why is it significant?</h2>
+
+<p>In one word: attitude.</p>
+
+<p>This seemingly innocuous language feature is something that I consider to be a very good sign in terms of general language philosophy.  Instead of trying to be overly flexible and allow sloppy programming, Go forces you to get things straight from the get-go.  I think that this is one of the things that contributes to the reported &#8220;fuzzy good feeling&#8221; that Go programmers reference suggesting that if their program compiles (and especially if it conforms to Go idioms as outlined above), there is a good chance it will work as intended as well.  No sneaky typing bugs, missed semi-colons and so on.</p>
+
+<p>In particular Andrew&#8217;s referenced article mentions that this was something the Go language designers <em>changed</em> rather than continuing to allow people to rely on broken assumptions.  One of my hugest pet peeves is when broken or buggy functionality (this could happen in a deliverable, or in a programming language, or elsewhere) becomes a feature through acceptance and workarounds and then a huge stink is raised when the &#8220;feature&#8221; is attempted to be fixed!  It&#8217;s pretty clear that, say, PHP and JavaScript have let their culture wander in these directions for various reasons (they&#8217;re working on it, but there&#8217;s a huge crushing amount of debt to be paid, and some things that will never get fixed).</p>
+
+<p>One of the biggest weak points of PHP, for instance, is the needle-versus-haystack problem.  My ideal language (Blub?) would have the sort of attitude that gets driven absolutely crazy by this sort of inconsistency.  This is also why I find the Go language designer&#8217;s refusal to cave to the cow-towing for exceptions and generics reassuring - they want very badly to <em>do the right thing</em> and they know it takes time.  They&#8217;re in no rush and it&#8217;s a lot easier to add features than to un-add them.</p>
+
+<h1>Conclude</h1>
+
+<p>Go is a pleasant language and just so well thought-out in many ways.  Don&#8217;t be too quick to judge or criticize because it lacks features you are accustomed to such as generics or dynamic typing- perhaps if you give it a try you will find that you do not miss them all that much and you are writing simple, clean, elegant code with easy-to-integrate concurrency.</p>
+
+<p>Go is definitely still growing and evolving, and that&#8217;s part of the fun of it as well.  It is definitely proving to be no less than rock-solid and production-ready, yet still performance and reliability keeps improving.  Just check out the awesome numbers on these benchmarks <a href="https://groups.google.com/forum/#!msg/golang-dev/2YRmu_AWz68/tKAZgpV7zQwJ">Rob Pike recently posted</a> comparing the Go 1 release to tip (nearing 1.3):</p>
+
+<pre style="transition: 1s ease-in-out all;" id="bench">
+Delta from go1 to tip: 
+
+benchmark                          old ns/op      new ns/op      delta 
+BenchmarkBinaryTree17              7102124000     5790215308     <span style="color: #32cd32">-18.47%</span> 
+BenchmarkFannkuch11                7139655000     4361664854     <span style="color: #32cd32">-38.91%</span> 
+BenchmarkFmtFprintfEmpty           177            104            <span style="color: #32cd32">-41.24%</span> 
+BenchmarkFmtFprintfString          575            312            <span style="color: #32cd32">-45.74%</span> 
+BenchmarkFmtFprintfInt             424            230            <span style="color: #32cd32">-45.75%</span> 
+BenchmarkFmtFprintfIntInt          682            403            <span style="color: #32cd32">-40.91%</span> 
+BenchmarkFmtFprintfPrefixedInt     661            394            <span style="color: #32cd32">-40.39%</span> 
+BenchmarkFmtFprintfFloat           907            598            <span style="color: #32cd32">-34.07%</span> 
+BenchmarkFmtManyArgs               2787           1663           <span style="color: #32cd32">-40.33%</span> 
+BenchmarkGobDecode                 31284200       10693446       <span style="color: #32cd32">-65.82%</span> 
+BenchmarkGobEncode                 13900550       6919498        <span style="color: #32cd32">-50.22%</span> 
+BenchmarkGzip                      636714400      704154254      <span style="color: red">+10.59%</span> 
+BenchmarkGunzip                    275620600      139906588      <span style="color: #32cd32">-49.24%</span> 
+BenchmarkHTTPClientServer          144041         71739          <span style="color: #32cd32">-50.20%</span> 
+BenchmarkJSONEncode                83472200       32969241       <span style="color: #32cd32">-60.50%</span> 
+BenchmarkJSONDecode                391968600      120858167      <span style="color: #32cd32">-69.17%</span> 
+BenchmarkMandelbrot200             9540360        6062905        <span style="color: #32cd32">-36.45%</span> 
+BenchmarkGoParse                   10007700       6760226        <span style="color: #32cd32">-32.45%</span> 
+BenchmarkRegexpMatchEasy0_32       198            168            <span style="color: #32cd32">-15.15%</span> 
+BenchmarkRegexpMatchEasy0_1K       540            479            <span style="color: #32cd32">-11.30%</span> 
+BenchmarkRegexpMatchEasy1_32       175            149            <span style="color: #32cd32">-14.86%</span> 
+BenchmarkRegexpMatchEasy1_1K       1353           1414           <span style="color: red">+4.51%</span>
+BenchmarkRegexpMatchMedium_32      311            307            <span style="color: #32cd32">-1.29%</span> 
+BenchmarkRegexpMatchMedium_1K      108924         126452         <span style="color: red">+16.09%</span>
+BenchmarkRegexpMatchHard_32        4972           5681           <span style="color: red">+14.26%</span>
+BenchmarkRegexpMatchHard_1K        157354         181042         <span style="color: red">+15.05%</span>
+BenchmarkRevcomp                   1362067000     1162752845     <span style="color: #32cd32">-14.63%</span> 
+BenchmarkTemplate                  714330000      144396424      <span style="color: #32cd32">-79.79%</span> 
+BenchmarkTimeParse                 1651           669            <span style="color: #32cd32">-59.48%</span> 
+BenchmarkTimeFormat                3215           714            <span style="color: #32cd32">-77.79%</span> 
+</pre>
+
+
+<p><button id="relBench" type="button">Click me to show relative benchmarks above!!</button></p>
+
+<p>I love this!  And I love Go.</p>
+
+<p>Until next time, stay sassy Internet.  And <a href="http://nathanleclaire.com">consider subscribing to my mailing list</a>.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+
+<script>
+$(document).ready(function () {
+    $('#relBench').click(function () {
+        $("#bench").css('line-height', '50px');
+        $('pre > span').each(function(i, e) { 
+            var $e = $(e); 
+            $e.css('transition', '1s ease-in-out all');
+            $e.css('font-size', $e.html().slice(1, $e.html().length-1) + 'px'); 
+        }); 
+    });
+});
+</script>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[5 AngularJS Antipatterns & Pitfalls]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/04/19/5-angularjs-antipatterns-and-pitfalls/"/>
+		<updated>2014-04-19T13:58:00+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/04/19/5-angularjs-antipatterns-and-pitfalls</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<h1>The Angular Jungle</h1>
+
+<p><img src="http://nathanleclaire.com/images/angular-antipatterns/jungle.jpg"></p>
+
+<p><a href="http://angularjs.org">AngularJS</a> is a big JavaScript framework and it gives you just enough rope to hang yourself with.  I&#8217;ve written a lot about it in this blog and really hope that I have made a noteworthy impact on improving the general availability of resources.  I&#8217;ve been working on a project using AngularJS at my dayjob lately and noticed some antipatterns and pitfalls that people fall into when they are new to Angular (myself included, so they&#8217;re based on my own sweat and blood learning the framework) and I&#8217;ve consolidated some of them here for you to peruse.  Hopefully I&#8217;ll save you some pain.</p>
+
+<p>They are:</p>
+
+<ol>
+<li>Not having a dot in your <code>ng-model</code> (or other places you need it!)</li>
+<li>Extreme overuse of event broadcasting and listening (<code>$emit</code>, <code>$broadcast</code>, <code>$on</code>)</li>
+<li>Too much stuff in controllers</li>
+<li>Misunderstanding or misusing isolate scope</li>
+<li>Using the outside world instead of doing things the Angular way</li>
+</ol>
+
+
+<h1>1. Not having a dot in your <code>ng-model</code> (or other places you need it!)</h1>
+
+<p><img src="http://nathanleclaire.com/images/angular-antipatterns/george.jpg"></p>
+
+<p>Angular&#8217;s <a href="https://docs.angularjs.org/guide/directive">directives</a> provide fantastic flexibility and an amazing way to write HTML that describes its interactive behavior in a clean and clear fashion.  They provide a way to create <a href="https://egghead.io/lessons/angularjs-understanding-isolate-scope">isolate scope</a> to promote reusability and creating a directive that uses this looks something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=js><code>angular.module('myApp').directive('myDir', function () {
+  return  {
+    restrict: 'E',
+    scope: {
+      aProperty: '=',
+      bProperty: '&amp;'
+    },
+    // and so on...
+  };
+});</code></pre></figure>
+
+
+<p>In the above definition <code>aProperty</code> gets passed in through an attribute (normalized to <code>a-property</code>) and creates a two-way data binding between the parent scope and the child scope.  That means if you change one, the other will be updated to match it and vice versa.  However, because of the way that JavaScript&#8217;s prototypal inheritance works, sometimes this may not work &#8220;magically&#8221; as you would expect.  I will dicuss a particular situation with <code>ng-model</code> here but know that understanding how this all ties together will save you lots of tears due to <code>ng-switch</code>, <code>ng-repeat</code>, etc. creating their own scopes (and &#8220;shadow&#8221; properties in the prototype chain) that throw off the way you might be expecting things to work.</p>
+
+<p>In particular, when you have an <code>ng-model</code> bound to a property on <code>$scope</code> which was originally passed in using <code>=</code> in your child directive:</p>
+
+<blockquote><p>“Whenever you have ng-model there’s gotta be a dot in there somewhere. If you don’t have a dot, you’re doing it wrong.”</p></blockquote>
+
+<p>Words from the mouth of Miško himself.</p>
+
+<p>This is because <em>primitives</em> (String, Number, etc.) passed in to a child scope create their own &#8220;shadow&#8221; property in the child scope, which hides the original property on the parent scope due to the way that JavaScript prototypes work (the prototype chain will not need to be consulted to determine the value of <code>foo</code> if <code>foo</code> is not an <code>Object</code> or <code>Array</code>).  If they are bound using <code>=</code> and they are objects, however, <code>foo.bar</code> <em>will</em> be bound correctly to the original property in the parent scope.</p>
+
+<p>Understanding this will save you soooo much pain.  Seriously, if you&#8217;re serious about Angular at all, take the time to read the offical article I link at the end of this section.  Then read it again.</p>
+
+<p>I suspect that a misunderstanding of this (communicating effectively from scope to scope up and down the prototype chain) is at least partially what contributes to people digging themselves further and further into a hole by misusing event broadcasting/emitting/listening and isoalte scope, as detailed later on in this article.  When things spiral out of control in this manner, it can really be pure torture.  You&#8217;re fighting against the framework, and nobody wins in that battle, least of all the people who have to maintain your code.</p>
+
+<p>The point is, most people new to Angular (and even people who have been doing it for a while) expect this to work :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=js><code>&lt;p&gt; You have {{dollars}} dollars &lt;/p&gt;
+&lt;crazy-awesome-widget ng-repeat=&quot;account in accounts&quot; info=&quot;dollars&quot;&gt;
+&lt;/crazy-awesome-widget&gt;
+
+&lt;script&gt;
+angular.module('dotDemo').controller('OuterCtrl', function($scope) {
+  $scope.dollars = 5;
+  $scope.accounts = [&quot;Tom&quot;, &quot;Bobby&quot;, &quot;Sally&quot;];
+});
+angular.module('dotDemo').directive('crazyAwesomeWidget', function() {
+  return {
+    restrict: 'E',
+    template: '&lt;input type=&quot;text&quot; ng-model=&quot;info&quot; /&gt;',
+    scope: {
+      info: '='
+    }
+  };
+});
+&lt;/script&gt;</code></pre></figure>
+
+
+<p>Can you spot the bug?  If you&#8217;ve been paying attention, you should be able to pick it out easily.</p>
+
+<iframe src="http://embed.plnkr.co/ii8xZoOIRcWw4LlNMayf/preview"></iframe>
+
+
+<p>Come on, intone it with me.  <em>I need a dot. I need a dot. I need a dot.</em></p>
+
+<p>In the above code the input boxes won&#8217;t update the property in the parent scope.  The prototype chain creates a new property <code>info</code> which is unique to the child scope instead of bound to the parent scope.  It won&#8217;t work this way.  You need an object.  The code should look like this instead:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=js><code>&lt;p&gt; You have {{customerData.dollars}} dollars &lt;/p&gt;
+&lt;crazy-awesome-widget ng-repeat=&quot;account in accounts&quot; info=&quot;customerData&quot;&gt;
+&lt;/crazy-awesome-widget&gt;
+
+&lt;script&gt;
+angular.module('dotDemo').controller('OuterCtrl', function($scope) {
+  $scope.customerData = {
+    dollars: 5
+  };
+  $scope.accounts = [&quot;Tom&quot;, &quot;Bobby&quot;, &quot;Sally&quot;];
+});
+angular.module('dotDemo').directive('crazyAwesomeWidget', function() {
+  return {
+    restrict: 'E',
+    template: '&lt;input type=&quot;text&quot; ng-model=&quot;info.dollars&quot; /&gt;',
+    scope: {
+      info: '='
+    }
+  };
+});
+&lt;/script&gt;</code></pre></figure>
+
+
+
+
+<iframe src="http://embed.plnkr.co/IVkqcNVhwQXd1zQ9nZQ2/preview"></iframe>
+
+
+<p>Boom, synchronization from parent scope => isolated child scopes and back again.</p>
+
+<p>Big shout out to Reddit user <a href="http://www.reddit.com/user/Commentares">Commentares</a> who caught a flaw in the original implementation of my first example in the first draft of this article.</p>
+
+<p>See for reference:</p>
+
+<ul>
+<li><a href="http://jimhoskins.com/2012/12/14/nested-scopes-in-angularjs.html">This excellent article by Jim Hoskins</a></li>
+<li><a href="https://github.com/angular/angular.js/wiki/Understanding-Scopes">This aforementioned Angular documentation gettin&#8217; mad deep about scopes</a></li>
+</ul>
+
+
+<h1>2. Extreme overuse of event broadcasting and listening (<code>$emit</code>, <code>$broadcast</code>, <code>$on</code>)</h1>
+
+<p>Everybody loves to hate on GOTOs.  Poor little GOTOs.  All they ever wanted to do was help control program execution flow and branching, and they get the Rodney Dangerfield treatment.  They&#8217;re reviled with that sort of knee-jerk reaction that only programmers can revile something with.  You know the type.  They&#8217;re the ones who got burned by <code>git rebase</code> one time (it was their own fault) and spend way too much effort and energy spreading FUD about rebases.  But I digress.  My point is, there&#8217;s this Angular antipattern I&#8217;ve seen and fallen into, where <code>$scope.$emit</code> and <code>$scope.$broadcast</code> have become the new GOTO.  Except that it&#8217;s shiny and new and Angular-ey, so everybody gives it a pass.  <code>$scope.$watch</code> can kind of be abused in the same way, but the others are slightly easier to pick on.</p>
+
+<p>I really feel that you should keep manual event broadcasting and catching out of your code if possible.  It doesn&#8217;t usually do a whole lot of good and confuses the hell out of the people who have to maintain your code (including you!).  The problem is thus:  Let&#8217;s say you have something going wacky in a <code>$scope.$on</code>.  You set a breakpoint in the defined callback function that runs when that <code>$scope.$on</code> catches its defined event.  OK, now what?  Perhaps you look to see where the event was thrown from.  With constrained eventing, debugging shouldn&#8217;t be a problem, but if you or your team lets their discipline slip into event spaghetti you&#8217;re in for a world of pain.  Usually this can be avoided by careful use of services and proper scope inheritance.</p>
+
+<h1>3. Too much stuff in controllers</h1>
+
+<p>It&#8217;s unfortunate that I have to point this one out, but as I&#8217;ve personally fallen into this pitfall especially when first getting started with Angular, I suppose I can give people a free pass on making this mistake once or twice.  After that, however, they should definitely learn.</p>
+
+<p>Your controllers should be lean.  Say it with me.</p>
+
+<p>My controllers should be lean.</p>
+
+<p>My controllers should be lean.</p>
+
+<p>My controllers <em>are</em> lean.</p>
+
+<p>This means that absolutely everything which can be stripped out of them, should be.  They exist to coordinate the delicate dance between your other resources (services and directives).</p>
+
+<p>For instance, I came across a line introduced in one of our controllers that looked like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=js><code>$('body').attr('data-state', 'someNewState');</code></pre></figure>
+
+
+<p>This was my reaction upon finding this code in this controller:</p>
+
+<p><img src="http://nathanleclaire.com/images/angular-antipatterns/hulk.gif"></p>
+
+<p>Note:  My actual reaction was way more passive aggressive (wrote about it in my <em>blog</em>!  Showed that guy).</p>
+
+<p>In Angular, DOM manipulation is done inside directives.  NOT controllers.  DOM manipulation is done inside directives.  Every aspiring Angular programmer should have this branded into his or her brain.</p>
+
+<p>Other common things that slip into controllers:</p>
+
+<ul>
+<li>Ajax (sometimes disguised in a half-baked abstraction) - this should be done in services</li>
+<li>Tangled mess of event handling as discussed in last section</li>
+<li>Things that are basically service or factory logic, but eh I&#8217;m too lazy to move this code</li>
+</ul>
+
+
+<p>Don&#8217;t do it.  If you keep your controllers lean and small they will reward you with readability and ease of debugging.  If you let them spiral out of control you will be punished unceremoniously.</p>
+
+<h1>4. Misunderstanding or misusing isolate scope</h1>
+
+<p>Isolate scope is really nice.  It prevents directives from just accessing / modifying the parent scope willy-nilly, opening the door to all kinds of bugs associated with global-ish scope, and promotes reusability.  But it&#8217;s important to realize that this is the point of isolate scope.  Consequently, if you&#8217;re passing a bunch of properties into your directive&#8217;s <code>$scope</code>, and then cascading them downwards through a variety of child scopes, you are probably doing something wrong.</p>
+
+<p>I&#8217;ve seen this a bit.  If you are passing a bunch of information down to your directive&#8217;s scope, either it should be inheriting by default (in which case you don&#8217;t want isolate scope), or you should bundle the properties that you can together in an object or two to keep the <code>scope</code> definition nice and clean and promote readability of the HTML.</p>
+
+<h1>5. Using the outside world instead of doing things the Angular way</h1>
+
+<p><img src="http://nathanleclaire.com/images/angular-antipatterns/but-computers.png" title="Aren't we all nowadays?" ></p>
+
+<p>It&#8217;s really tempting, especially when first learning Angular, and directives in particular, to just write jQuery code like we always have that happens to be wrapped in an Angular directive.  While this is still probably better than rolling with no framework at all and creating a tangled mess, it indicates a basic ungrok of the Angular way.</p>
+
+<p>Things should be done in Angular, when they can.  Angular provides so much niceness in the form of built-in directives, services (<code>$window</code>, <code>$timeout</code>, <code>$http</code> et al. wrap these things for you so you don&#8217;t have to worry about accidentally interfering with Angular&#8217;s internals!) that we should only reach for custom solutions when we have to (and believe me, you will - just think carefully before doing so).  Just wrapping jQuery code in a directive doesn&#8217;t do us any good, and creates complications when we need to start doing stuff like chucking <code>$scope.$apply</code> into things.  So think things through, and do them the Angular way.</p>
+
+<p>Likewise dependencies that you had before (modules you are relying on etc.) should be refactored into e.g. factories for increased ease of use and testability.  If you have the time to use Angular into your project, you have the time to do this too.  Angular will reward you with layers of increased richness.</p>
+
+<h1>Fin</h1>
+
+<p>I really hope that this article helps people avoid these bad behaviors, or at least see them when they come across them and refactor them into something better.</p>
+
+<p>Until next time, stay sassy Internet.  And <a href="http://nathanleclaire.com">consider subscribing to my mailing list</a>.</p>
+
+<ul>
+<li>Nate</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Unit Testing Services in AngularJS for Fun and for Profit]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/04/12/unit-testing-services-in-angularjs-for-fun-and-for-profit/"/>
+		<updated>2014-04-12T23:14:00+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/04/12/unit-testing-services-in-angularjs-for-fun-and-for-profit</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p><img src="http://nathanleclaire.com/images/unit-test-angularjs-service/jasmine.png" title="Your new best friend." ></p>
+
+<p>If there was a way to reduce the number of defects in the code you write (or manage), improve the quality and time to market of deliverables, and make things easier to maintain for those who come after you- would you do it?</p>
+
+<p>Right about now, especially given the content of the article, you might be sensing that I&#8217;m about to jump into the usual testing zealot rant.  And you&#8217;re right.</p>
+
+<p>How many times have you heard some variant on, &#8220;Writing tests isn&#8217;t as important as delivering finished code?&#8221;  If you&#8217;re like me, it&#8217;s way too many, and god help you if you&#8217;re working with no tests at all.  Programmers are human and we all make mistakes.  So test your code.  The number of times testing my code has helped me catch unforeseen issues before they became flat-out bugs, prevent future regressions, or simply architect better is pretty amazing.  And this is coming from a guy who used to hate writing tests for code.  <em>Hated</em> it.</p>
+
+<p>I think that stemmed more from a lack of understanding how to do it than anything else.  When systems get complex and have a lot of moving parts is when it is most critical to test them, and that is also when it becomes the most difficult to test them.  Without an understanding of your tools (e.g. mocks) or why each piece is important, and especially with a lack of easily accessible examples, testing code can be really intimidating and frustrating.</p>
+
+<p>So what do you do?  You commit code without tests.  You are cowboy.  Cowboy no test.</p>
+
+<p><img src="http://nathanleclaire.com/images/unit-test-angularjs-service/cowboy.png"></p>
+
+<p>But as some of you probably know all too well, this is dangerous.  It&#8217;s like going on vacation in the Caribbean using your credit card.  Fun for a while, and everything seems great, until suddenly reality hits and <a href="http://en.wikipedia.org/wiki/Red_Queen's_race">it takes all the running you can do just to stay in the same place</a>.</p>
+
+<p>Fortunately Angular treats us really well as far as testing goes.  It just requires some additional explanation, since the quality of resources available for both Angular <em>and</em> Jasmine is really not fantastic.  It&#8217;s better than a year ago, definitely, but not fantastic.</p>
+
+<p>So here I am doing a brain dump of sorts of what I know about testing services, which are part of the <a href="http://nathanleclaire.com/blog/2014/03/15/angularjs-isnt-mvc-its-sdc/">lifeblood</a> of any Angular application.</p>
+
+<h1>Section 1: In Which I Proclaim &#8220;I love Dependency Injection!&#8221;</h1>
+
+<p>When I first saw someone present on Angular, they got kind of hand-wavey about <a href="http://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a>.  &#8220;The way I see it, it&#8217;s basically magic and I don&#8217;t have to think about it.&#8221;  Ahhh.  Not what I like to hear.</p>
+
+<p>I get that it can be kind of scary, hearing people throw around jargon like injectors and providers and dependency injection like they&#8217;re nothing, but you can get it.  I know you can.</p>
+
+<p>It&#8217;s simple.  Not easy, but simple.  When Angular runs the code that you define for a controller or a service, it looks at the parameters you have attached to the function and sets them correctly for that run based on their names.  Let&#8217;s say that you have something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=js><code>angular.module(&quot;foo&quot;).controller(&quot;NavCtrl&quot;, function ($scope, tabService) {
+  // ...
+});</code></pre></figure>
+
+
+<p></p>
+
+<p>The order of the parameters on your function doesn&#8217;t matter.  You could just as easily have said <code>function (tabService, $scope)</code> and both of those values would still be set correctly.  That&#8217;s a nice advantage in itself, and it&#8217;s why you see funny business like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=js><code>angular.module(&quot;foo&quot;).controller(&quot;NavCtrl&quot;, [
+  &quot;$scope&quot;,
+  &quot;tabService&quot;,
+  function($scope, tabService) {
+    // ...
+  }
+]);</code></pre></figure>
+
+
+<p>That&#8217;s so that <a href="http://en.wikipedia.org/wiki/Minification_%28programming%29">minification</a>, which renames all of your passed variables in functions, doesn&#8217;t blow up Angular&#8217;s dependency injection.  Angular knows how to handle this if you use the second form of notation.</p>
+
+<p>But why are we even messing with this at all?  It&#8217;s because if we inject the dependencies, we can control them from the outside world.  And this is eminently important for testing.</p>
+
+<p>This kind of thing (admittedly contrived for effect):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=js><code>function mungeSomeData(data) {
+  var dataGetter, dataParser, dataTransformer;
+  dataGetter = new DataGetter();
+  dataParser = new DataParser();
+  dataTransformer = data.isXML() ? new XMLDataTransformer() : new JSONDataTransformer();
+  // ...
+}</code></pre></figure>
+
+
+<p>Doesn&#8217;t use Depdency Injection, and is a nightmare to test.  Minimizing surface area to test is so so important, and by writing code that way you make your surface area HUGE and slippery.</p>
+
+<p>Side note:  It is Angular convention to have a dollar sign (<code>$</code>) in the front of the names of things that are both injected (<code>$scope</code>, <code>$timeout</code>, <code>$http</code>) and built-in to Angular.  If you see <code>$scope</code> being used in the link function of a directive, that is both wrong and confusing since parameters are <em>passed</em> to the link function of directives, not injected.  Please Hulk out when you see this and correct the code.  If you are using <code>vim</code> a simple <code>:%s/$scope/scope/</code> (or perhaps just <code>:s</code> in visual mode if you have instances of <code>$scope</code> that <em>shouldn&#8217;t</em> be replaced) will do the trick.</p>
+
+<p><strong>Q: So what does that have to do with unit testing AngularJS services, Nate?</strong></p>
+
+<p>It has everything to do with testing services since they are injected.  So, in unit testing a service, you can control precisely what goes on in one in addition to all of its dependencies.</p>
+
+<p><strong>Q: Will you show us some actual Jasmine code already?</strong></p>
+
+<p>Getting there.</p>
+
+<h1>Section 2: In Which I Write an Actual Service, and a Unit Test for It</h1>
+
+<p>Let&#8217;s say that I&#8217;m writing an Angular app which interacts with the Reddit API.  Since we know that services are the part which Angular uses to interact with the outside world, we will write a service to handle our needs.</p>
+
+<p>We are going to write one with a method <code>getSubredditsSubmittedToBy(user)</code> which returns a list of which subreddits a user has submitted to recently.  We can use <a href="https://egghead.io/lessons/angularjs-chained-promises">promise chaining</a> to achieve this (aggregating the big glob of JSON returned by the API call) so that our controller stays super lean.</p>
+
+<h2>Writing the Service</h2>
+
+<p>Usage (inside controller):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=js><code>userService.getSubredditsSubmittedToBy(&quot;yoitsnate&quot;).then(function(subreddits) {
+  $scope.subreddits = subreddits;
+});</code></pre></figure>
+
+
+<p>So nice and readable!</p>
+
+<p>Our service looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=js><code>angular.module(&quot;reddit&quot;).service(&quot;userService&quot;,
+function($http) {
+  return {
+    getSubredditsSubmittedToBy: function(user) {
+      return $http.get(&quot;http://api.reddit.com/user/&quot; + user + &quot;/submitted.json&quot;).then(function(response) {
+        var posts, subreddits;
+
+        posts = response.data.data.children;
+
+        // transform data to be only subreddit strings
+        subreddits = posts.map(function(post) {
+          return post.data.subreddit;
+        });
+        
+        // de-dupe
+        subreddits = subreddits.filter(function(element, position) {
+          return subreddits.indexOf(element) === position;
+        });
+
+        return subreddits;
+      });
+    }
+  };
+});</code></pre></figure>
+
+
+<h2>Writing the test</h2>
+
+<p>We will write a test using <a href="http://pivotal.github.io/jasmine/">Jasmine</a>.  Jasmine is a Behavior-Driven-Development framework, which is sort of a roundabout way of saying that our tests include descriptions of the sections that they are testing and what they are supposed to do.  This is done using nested <code>describe</code> and <code>it</code> blocks, which look really weird at first (something about a function as short as <code>it</code> is just unsettling to me ;) ) but can be helpful in understanding what the test is intended to, well, test.</p>
+
+<p>This is quite helpful as sometimes large elaborate codebases have large elaborate tests and it can be hard to figure out what&#8217;s what.  For instance, in PHPUnit, this kind of &#8220;built-in documentation&#8221; is spread out and mostly optional, and makes complex unit tests a bit trickier to read.</p>
+
+<p>Using Karma we first tell it what module we&#8217;re working in (<code>"reddit"</code>), run an inject function to set up our dependencies and get the service under test (this allows us access to Angular&#8217;s injector so we can set local test variables), then run an actual test in the <code>it</code> block.</p>
+
+<p>Notice that in the <code>inject</code> method we inject in <code>_foo_</code>, with an underscore on either side of the name of the actual service, so that we can set it in the outer <code>describe</code> closure.  This is by design, as the Angular maintainers foresaw (or discovered) that:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=js><code>var redditService;
+beforeEach(inject(redditService) {
+  redditService = redditService;
+});</code></pre></figure>
+
+
+<p>would result in an error.</p>
+
+<p>So use <code>_underscoreNotation_</code> to get the service that you want to test :)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=js><code>&quot;use strict&quot;;
+
+describe(&quot;reddit api service&quot;, function () {
+  var redditService, httpBackend;
+
+  beforeEach(module(&quot;reddit&quot;));
+
+  beforeEach(inject(function (_redditService_, $httpBackend) {
+    redditService = _redditService_;
+    httpBackend = $httpBackend;
+  }));
+
+  it(&quot;should do something&quot;, function () {
+    httpBackend.whenGET(&quot;http://api.reddit.com/user/yoitsnate/submitted.json&quot;).respond({
+        data: {
+          children: [
+            {
+              data: {
+                subreddit: &quot;golang&quot;
+              }
+            },
+            {
+              data: {
+                subreddit: &quot;javascript&quot;
+              }
+            },
+            {
+              data: {
+                subreddit: &quot;golang&quot;
+              }
+            },
+            {
+              data: {
+                subreddit: &quot;javascript&quot;
+              }
+            }
+          ]
+        }
+    });
+    redditService.getSubredditsSubmittedToBy(&quot;yoitsnate&quot;).then(function(subreddits) {
+      expect(subreddits).toEqual([&quot;golang&quot;, &quot;javascript&quot;]);
+    });
+    httpBackend.flush();
+  });
+
+});</code></pre></figure>
+
+
+<p>Our mock data here mimics the actual data returned by the Reddit API, but only enough that we get the necessary bits of structure in place and can account for, say, the duplicate case.  If we wanted to add different functionality for different pieces of the API, or of this call, we could just define new <code>httpBackend</code> responses in new <code>it</code> blocks and test things the same way without having to worry about the bits of the API response we don&#8217;t need.</p>
+
+<h2>The provider idiom</h2>
+
+<p>Unfortunately my simple example above breaks down a little bit if we have additional dependencies on other services in our service under test.  What do we do in this case?  We need to control these injected parameters, and to do so we use <code>$provide</code>.  <code>$provide</code> can take the name of e.g. a service and dictate what to provide for it.  In doing so we can, say, use a spy object instead of the &#8220;real deal&#8221;.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=js><code>beforeEach(module(function($provide) {
+  $provide.value(&quot;myDependentService&quot;, serviceThatsActuallyASpyObject);
+}));</code></pre></figure>
+
+
+<p>Note that <code>$provide</code> should always be called before your call to <code>$inject</code>, since the former dicates what the latter should use.</p>
+
+<h1>Section 3: Helpful Tips</h1>
+
+<h2>Stutter.</h2>
+
+<p>If you change a <code>describe</code> or <code>it</code> block to <code>ddescribe</code> or <code>iit</code> respectively <a href="http://karma-runner.github.io/0.12/index.html">Karma</a> (<a href="http://nathanleclaire.com/blog/2013/12/13/how-to-unit-test-controllers-in-angularjs-without-setting-your-hair-on-fire/">Angular&#8217;s test runner</a>) will run only that block.  This is called <a href="https://github.com/davemo/jasmine-only">stuttering</a> and it is very useful if you don&#8217;t want to run your entire test suite every time, as the larger the codebase gets the longer this will take to do.</p>
+
+<h2>Don&#8217;t be afraid to rearrange code that is hard to test</h2>
+
+<p>If you can move code around to make it easier to test without changing other things, DO IT (in a general sense I find that this eases readability and maintainability too).  For instance I found that in one instance in a service a colleague was relying on a function call that was both unneccesary and confusing, and ultimately broke the chain of promises.  So I deleted the function definition and inlined the code it contained.  The resulting code was a bit easier to read and test.</p>
+
+<h2>Cheat.</h2>
+
+<p>You can create stubbed objects quite easily in JavaScript, so if there&#8217;s no need to introduce the extra complexity of a spy (see next section), then do so.  For example, if you can just return <code>4</code> from a method every time you call it instead of counting the elements or whatever it usually does, then do so.</p>
+
+<h2>Do you need a Spy?</h2>
+
+<p>If you need more power / assertions out of the last point, Jasmine provides Spies for you to use.</p>
+
+<p>They&#8217;re a little out of scope for this article, but they should provide you all of the flexibility you need for faking data / objects / calls and testing what was faked.</p>
+
+<p>For a good reference, see this <a href="http://tobyho.com/2011/12/15/jasmine-spy-cheatsheet/">Jasmine spy cheatsheet</a>.</p>
+
+<h2>Or just use <code>$q</code> / manually manage promises</h2>
+
+<p>I found myself in kind of a funny situation at work recently.  We use Angular for structure but the codebase we are working on has a lot of pre-existing bits/modules that were not really moved over to Angular fully due to intense deadline pressure.  So, we find ourselves making XMLHttpRequests outside of <code>$http</code> land, but the original programmers still return promises from their outside world modules for us to use (it&#8217;s kind of an odd setup that we don&#8217;t really have time to refactor).  So, I just caused the functions that take care of those API calls return promises that I control using <code>$q</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=js><code>var mockPromise;
+mockDeferred = $q.defer();
+someSpyObj.methodThatReturnsAPromise.andCallFake(function () {
+  return mockDeferred.promise;
+});
+mockDeferred.resolve({
+  things: &quot;foo&quot;,
+  otherThings: &quot;bar&quot;
+});</code></pre></figure>
+
+
+<h1>Conclusion.</h1>
+
+<p>Jasmine tests are pretty quick to write once you get the hang of them.  Seriously guys, there&#8217;s no excuse.</p>
+
+<p>The <a href="http://blog.codinghorror.com/coding-for-violent-psychopaths/">violent psychopath who ends up maintaining your code</a> will thank you.  Or at least not murder you.</p>
+
+<p>Until next time, stay sassy Internet, and <a href="http://nathanleclaire.com">consider subscribing to my blog</a>.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Implementing a Concurrent Floodfill with Golang]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/04/05/implementing-a-concurrent-floodfill-with-golang/"/>
+		<updated>2014-04-05T13:34:00+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/04/05/implementing-a-concurrent-floodfill-with-golang</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<h1>The setup</h1>
+
+<p>Lately as part of a coding exercise I found myself implementing a <a href="http://en.wikipedia.org/wiki/Flood_fill">Flood Fill</a> for &#8220;painting&#8221; an ASCII canvas.  For those of you unfamiliar with what that is, think back to MSPaint - remember that little paint bucket that would fill a region with your color of choice?  That paint bucket implements a flood fill algorithm, although I didn&#8217;t know that&#8217;s what it was called until I started working on implementing one myself.</p>
+
+<p><img src="http://nathanleclaire.com/images/flood-fill/flood-fill-basic.gif"></p>
+
+<p>My original implementation was in PHP and I had to go through a few iterations before I got to an implementation I was satisfied with.  It was surprisingly tricky to get correct as my depth-first implementation kept blowing the stack through excessive use of recursion.  A naive flood fill algorithm (depth first) looks like this:</p>
+
+<ol>
+<li>Store the color of the pixel where you are starting, then color it the new color.</li>
+<li>For every adjacent pixel, if it is the same as the original color and you have never visited that pixel before, perform a flood fill on it.</li>
+</ol>
+
+
+<p>There are a lot of issues with this algorithm.  It takes a long time and it will quickly blow the stack if the canvas size contains more than a trivial number of pixels.</p>
+
+<p>So I started thinking about ways to improve it, and it occurred to me to use a <em>breadth</em>-first solution instead (this is actually the kind of solution that&#8217;s visualized in the GIF above).  That way, we could store the pixels that we want to visit / fill in a queue, and visit them one at a time without blowing the stack.  It worked pretty well.</p>
+
+<p>Just one problem, though:  It was written in PHP, and PHP is dog slow.  It&#8217;s also painfully single-threaded to boot.</p>
+
+<h1>Go!</h1>
+
+<p><code>&lt;s&gt;</code> Since we all know that all the cool kids use <a href="http://golang.org">Go</a> nowadays <code>&lt;/s&gt;</code>, I decided to take a crack at implementing a solution for this in Go, taking advantage of Go&#8217;s high performance and concurrency patterns.  Also, I just really like coding stuff in Go.</p>
+
+<h2>&#8220;Canvas&#8221; abstraction</h2>
+
+<p>The &#8220;canvas&#8221; I modeled as an two-dimensional array of byte arrays (which are chars for our purposes).  There&#8217;s another matrix that we use to keep track of which pixels we have visited before.  For convenient passing, we also have a struct <code>Node</code> that contains data about a given pixel.  We will use this later on to make our helper functions a little bit more clean looking.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>type Canvas struct {
+    contents [][]byte
+    visited  [][]bool
+}
+
+type Node struct {
+    X     int
+    Y     int
+    Color byte
+}</code></pre></figure>
+
+
+<p>The function to initialize the &#8220;canvas&#8221; is pretty straightforward.  We also have an analagous method, <code>setVisitedMatrixToFalse</code>, that we call before performing a flood fill operation to indicate we haven&#8217;t visited anywhere yet.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>func (c *Canvas) Init(width int, height int, blankChar byte) {
+    c.contents = make([][]byte, width)
+    for i := 0; i &lt; width; i++ {
+        c.contents[i] = make([]byte, height)
+        for j := 0; j &lt; height; j++ {
+            c.contents[i][j] = blankChar
+        }
+    }
+}</code></pre></figure>
+
+
+<p>Called like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>canvas := Canvas{}
+canvas.Init(120, 120, '_')</code></pre></figure>
+
+
+<p>We take advantage of easy casting from <code>[]byte</code> type to <code>string</code> for our function to print the contents of the canvas:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>func (c *Canvas) Print() {
+    for _, row := range c.contents {
+        fmt.Println(string(row))
+    }
+}</code></pre></figure>
+
+
+<p>With this code set up, we can get into the &#8220;meat&#8221; of the flood fill algorithm.</p>
+
+<h2>Flood Fill</h2>
+
+<p>Instead of using pure recursion, we will instead have a &#8220;master&#8221; goroutine that forks off visits to other pixels/nodes in their own goroutines.  The child goroutines will report back their &#8220;findings&#8221; to the main goroutine, including what pixels to visit next if any.  Through the use of buffered and unbuffered goroutines, we will prevent too many visits from firing off at once, and the Go runtime scheduler will take care of juggling these activities which are running concurrently.</p>
+
+<p>The main goroutine looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>func (c *Canvas) FloodFill(x int, y int, color byte) {
+    // If unbuffered, this channel will block when we go to send the
+    // initial nodes to visit (at most 4).  Not cool man.
+    toVisit := make(chan Node, 4)
+    visitDone := make(chan bool)
+
+    originalColor := c.contents[x][y]
+
+    c.setVisitedMatrixToFalse()
+
+    go c.floodFill(x, y, color, originalColor, toVisit, visitDone)
+    remainingVisits := 1
+
+    for {
+        select {
+        case nextVisit := &lt;-toVisit:
+            if !c.visited[nextVisit.X][nextVisit.Y] {
+                c.visited[nextVisit.X][nextVisit.Y] = true
+                remainingVisits++
+                go c.floodFill(nextVisit.X, nextVisit.Y, color, originalColor, toVisit, visitDone)
+            }
+        case &lt;-visitDone:
+            remainingVisits--
+        default:
+            if remainingVisits == 0 {
+                return
+            }
+        }
+    }
+}</code></pre></figure>
+
+
+<p>To start, we create two channels.  One is called <code>toVisit</code> and is the channel through which we send Nodes that we still want to visit (color, then check if they have neighbors we should color).  You may notice that this channel is buffered.  This is because if it is not buffered, then when we attempt to send <code>Node</code>s to visit over it, it will block and the whole program will deadlock.  Since we know that we will &#8220;queue up&#8221; at most four <code>Node</code>s into the channel (for this exercise we don&#8217;t fill pixels which are diagonally adjacent), that&#8217;s why we set our buffer size to that.  Theoretically however it will work with any buffer value greater than or equal to one.</p>
+
+<p>The other channel is called <code>visitDone</code> and is used to indicate when a visit for a given node is finished.  We don&#8217;t care which one, since we just maintain a &#8220;one true counter&#8221; in our main routine (<code>remainingVisits</code>) that tracks how many outstanding visits we have, and ensures that the function doesn&#8217;t return as long as there are visits outstanding.  Before I implemented this solution I was getting all kinds of frustrating race conditions where the <code>default</code> block would sometimes get hit before any additional visits would get added, and so the program would exit prematurely.  If you have a better idea/solution to manage this, I&#8217;d love to hear!</p>
+
+<p>We also keep track of the color of the original pixel, since that&#8217;s a condition of coloring (the pixels should be adjacent and the same color as the original pixel).</p>
+
+<p>The <code>floodFill</code> method that we spin off into auxilliary goroutines looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>func (c *Canvas) floodFill(x int, y int, color byte, originalColor byte, toVisit chan Node, visitDone chan bool) {
+    c.contents[x][y] = color
+    neighbors := c.getNeighbors(x, y)
+    for _, neighbor := range neighbors {
+        if neighbor.Color == originalColor {
+            toVisit &lt;- neighbor
+        }
+    }
+    visitDone &lt;- true
+}</code></pre></figure>
+
+
+<p>I don&#8217;t know that I&#8217;m crazy about having the actual pixel coloring in this method, since it involves mutable data that&#8217;s shared between threads, so I might move it into the main method eventually, but for example purposes it works okay.  This method is fairly terse and simply colors the pixel, then calls this method to get the neighbors of the current pixel (ensuring that we don&#8217;t run over the bounds of the slice):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><pre class=go><code>func (c *Canvas) getNeighbors(x int, y int) []Node {
+    var (
+        neighbors []Node
+        color     byte
+    )
+    if x+1 &lt; len(c.contents) {
+        color = c.contents[x+1][y]
+        neighbors = append(neighbors, Node{x + 1, y, color})
+    }
+    if x-1 &gt;= 0 {
+        color = c.contents[x-1][y]
+        neighbors = append(neighbors, Node{x - 1, y, color})
+    }
+    if y+1 &lt; len(c.contents[0]) {
+        color = c.contents[x][y+1]
+        neighbors = append(neighbors, Node{x, y + 1, color})
+    }
+    if y-1 &gt;= 0 {
+        color = c.contents[x][y-1]
+        neighbors = append(neighbors, Node{x, y - 1, color})
+    }
+    return neighbors
+}</code></pre></figure>
+
+
+<p>Then, we send the returned nodes over the <code>toVisit</code> channel if their color matches the original pixel&#8217;s color, and we send <code>true</code> across <code>visitDone</code> channel to indicate we are done when that is all through (this decrements our counter in the main goroutine).</p>
+
+<p>And that&#8217;s all!</p>
+
+<p>Check the sample output.</p>
+
+<p>Before:</p>
+
+<pre>
+____________________
+________//__________
+________//_______---
+__\\\\\\\\\\\\\\_---
+________//_______---
+________//_______---
+________//_______---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+_________________---
+</pre>
+
+
+<p>After: (filled with <code>'G'</code> char)</p>
+
+<pre>
+GGGGGGGGGGGGGGGGGGGG
+GGGGGGGG//GGGGGGGGGG
+GGGGGGGG//GGGGGGG---
+GG\\\\\\\\\\\\\\G---
+GGGGGGGG//GGGGGGG---
+GGGGGGGG//GGGGGGG---
+GGGGGGGG//GGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+GGGGGGGGGGGGGGGGG---
+</pre>
+
+
+<p>It runs pretty satisfyingly quickly.  Wiki mentions a few alternative approaches that might work a little better (EDIT: it says that going line-by-line instead of pixel by pixel is an order of magnitude faster), but I like this one for its simplicity.</p>
+
+<h1>Conclude</h1>
+
+<p>The code is <a href="https://github.com/nathanleclaire/golangfloodfill">up on Github</a> if you&#8217;re curious.  I&#8217;d love to hear about other possible approaches, especially ones that are better at taking advtange of Go&#8217;s concurrency features.  I considered using <code>sync.WaitGroup</code> but this didn&#8217;t really seem like a good case to do so.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Fixing Cygwin's SSL issues with git clone / c_rehash bug]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/03/24/cygwin-git-clone-ssl-issue-c_rehash-openssl-not-found/"/>
+		<updated>2014-03-24T19:44:00+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/03/24/cygwin-git-clone-ssl-issue-c_rehash-openssl-not-found</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<h1>Cygwin&#8217;s git clone drama</h1>
+
+<p><img src="http://nathanleclaire.com/images/cygwin-ssl/cygwin.png"></p>
+
+<h2>Oh, you.</h2>
+
+<p>When I am working on Windows for the various reasons which compel one to work on Windows I often use <a href="http://www.cygwin.com">Cygwin</a> to provide UNIX-like functionality on the command line (cmd.exe leaves a lot to be desired).  Since a vital part of my workflow on any OS is <a href="http://git-scm.com">git</a> I happily installed git using the Install.exe workflow that Cygwin provides.</p>
+
+<p>To my surprise (and, I&#8217;m not going to deny it, slight nerd-rage) when I attempted to <code>git clone</code> a repository from Github I was greeted by an error message like this one:</p>
+
+<figure class='code'><pre><code>$ git clone https://github.com/foo/bar
+error: SSL certificate problem, verify that the CA cert is OK. Details:
+error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed</code></pre></figure>
+
+
+<p>OK, so I have an SSL issue.  Running through the Setup.exe with Cygwin again and installing <code>ca-certificates</code> and <code>openssl</code> didn&#8217;t fix it, and eventually I came across <a href="http://stackoverflow.com/questions/3777075/ssl-certificate-rejected-trying-to-access-github-over-https-behind-firewall">this Stack Overflow post</a> which described my exact issue.</p>
+
+<h1>On the hunt for solutions</h1>
+
+<h2>One proposed solution</h2>
+
+<figure class='code'><pre><code>$ git config --global http.sslVerify false</code></pre></figure>
+
+
+<p>SERIOUSLY!?!?</p>
+
+<p>No way I&#8217;m going to turn off SSL just to try and workaround this issue.  I don&#8217;t like getting MITMed.</p>
+
+<h2>A much better proposed solution</h2>
+
+<p>Also from Stack Overflow:</p>
+
+<figure class='code'><pre><code>$ cd /usr/ssl/certs
+$  curl http://curl.haxx.se/ca/cacert.pem | awk 'split_after==1{n++;split_after=0} /-----END CERTIFICATE-----/ {split_after=1} {print &gt; &quot;cert&quot; n &quot;.pem&quot;}'
+$ c_rehash</code></pre></figure>
+
+
+<p>OK, this is headed in the right direction, I can tell.  I had to manually create the <code>/usr/ssl/certs</code> directory (probably because I hadn&#8217;t installed OpenSSL yet when I tried this), but even after getting OpenSSL <code>c_rehash</code> was giving me an error:</p>
+
+<figure class='code'><pre><code>$ c_rehash
+c_rehash: rehashing skipped ('openssl' program not available)</code></pre></figure>
+
+
+<p>Pretty odd, since just typing <code>openssl</code> on the CLI clearly indicated that it was present.</p>
+
+<h2>Debuggin&#8217; some Perl code</h2>
+
+<p>Nothing too fruitful was turning up on Google for this (the <a href="http://koti.kapsi.fi/ptk/postfix/c_rehash.txt">original program source</a> was, though :P) so I dug into the program source (Perl) and found this bit at the top:</p>
+
+<figure class='code'><pre><code>my $openssl;
+
+my $dir = &quot;/usr/lib/ssl&quot;;
+
+if(defined $ENV{OPENSSL}) {
+    $openssl = $ENV{OPENSSL};
+} else {
+    $openssl = &quot;openssl&quot;;
+    $ENV{OPENSSL} = $openssl;
+}
+
+$ENV{PATH} .= &quot;:$dir/bin&quot;;
+
+if(! -x $openssl) {
+    my $found = 0;
+    foreach (split /:/, $ENV{PATH}) {
+        if(-x &quot;$_/$openssl&quot;) {
+            $found = 1;
+            last;
+        }   
+    }
+    if($found == 0) {
+        print STDERR &quot;c_rehash: rehashing skipped ('openssl' program not available)\n&quot;;
+        exit 0;
+    }
+}</code></pre></figure>
+
+
+<p>Sprinkling some liberal debugging statements into that yielded me the information that <code>c_rehash</code> was finding the relevant directories (and consequently the <code>openssl</code> binary) but the file wasn&#8217;t showing up as executable.  Some Googling turned up stuff like <a href="http://cygwin.com/ml/cygwin/2007-05/msg00681.html">this</a>, which made me wonder&#8230;</p>
+
+<h2>If <em>this</em> solution would work</h2>
+
+<figure class='code'><pre><code>$ which openssl
+/cygdrive/c/Program Files (x86)/Git/bin/openssl
+$ chmod +x /cygdrive/c/Program\ Files\ \(x86\)/Git/bin/openssl</code></pre></figure>
+
+
+<p>It did!  You have to run Cygwin as administrator to have the proper permissions though to change those file permissions though.</p>
+
+<p><code>c_rehash</code> then went through without a hitch, Which finally allowed <code>git clone</code> to work.</p>
+
+<h1>Conclusion</h1>
+
+<p>Whew!  That was exhausting.  Time to do some programming to unwind :)</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[What is this Docker thing that everyone is so hyped about?]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/03/22/what-is-this-docker-thing-that-everyone-is-so-hyped-about/"/>
+		<updated>2014-03-22T20:38:00+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/03/22/what-is-this-docker-thing-that-everyone-is-so-hyped-about</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p><img src="http://nathanleclaire.com/images/what-is-docker/moby-dick.jpg" title="Just another day in Devops." ></p>
+
+<h1>Docker</h1>
+
+<p>Approximately one year ago I was browsing <a href="http://news.ycombinator.com">Hacker News</a> and I came across this video:</p>
+
+<div style="text-align: center;">
+<iframe style="width: 420px !important;" width="420" height="315" src="//www.youtube.com/embed/wW9CAH9nSLs" frameborder="0" allowfullscreen></iframe>
+</div>
+
+
+<p>I found it profoundly exciting for reasons I could not explain, mostly Solomon&#8217;s infectious enthusiasm and the enthusiasm that the Hacker News commmunity reacted to it with.  When I learned that Docker was being written in <a href="http://golang.org">Go</a> I was even more intruiged.  Especially having played with Go quite a bit, I have a hunch that Go will be a language which dictates the future of the &#8220;cloud&#8221; in a lot of ways.  <a href="http://cloudflare.com">Cloudflare</a>, for instance, has a ton of infrastructure written in Go that powers their CDN and other cool tools they provide such as <a href="https://www.cloudflare.com/railgun">Railgun</a>.  This was definitely a project to keep an eye on.  I mentally dog-eared it.</p>
+
+<p>There was only one problem:  I didn&#8217;t understand what Docker <em>was</em> yet.  There was talk of containers and shipping but I didn&#8217;t understand what it all meant, or what it could be used for.</p>
+
+<p>Then about six months ago, things began to gel and sink in for me.</p>
+
+<h1>The Problem</h1>
+
+<p><img src="http://nathanleclaire.com/images/what-is-docker/matrix-from-hell.png"></p>
+
+<p>In order to better understand Docker you have to understand the problem it is trying to solve.</p>
+
+<p>Modern day development (I&#8217;ll be focusing on the web here) lives in a world of lots of complexity.  In even the most basic application you are likely to have a back-end language that lives on the server, a front-end language (almost ubiquitously JavaScript) that lives on the client, third-party and in-house libraries for both of these languages to manage, a database, an operating system (often deploying to Linux but developing on God-knows-what OS), and more.  And this is for a <em>basic</em> app!  What if you have utility programs that are written in another language?  What if you have other weird dependencies and requirements?</p>
+
+<p>My point is that this all adds up to a lot of complexity, and worst of all- it is complexity that you have to manage across multiple platforms.  If I got an app up and running on my Macbook, and wanted to deploy to Linux, my options were not great.  If you&#8217;ve ever administrated your own VPS, much less a bare metal server, you know what I mean.  Having to install all of the packages and dependencies that you have in a totally different way is a recipe for headaches and tears.  Getting stuff to production is a completely different ball game from writing it in the first place.  Different technologies on different platforms create a &#8220;Matrix from Hell&#8221; (pictured above) that makes even the most courageous ops person want to set her hair on fire.</p>
+
+<p>Traditionally there have been a variety of solutions that have popped up in response to this, ranging from &#8220;just develop in PHP and FTP is your deploy&#8221; (ew) to <a href="http://heroku.com">Heroku</a> (<code>git push heroku master</code> is your deploy) to virtualization with provisioning (see <a href="http://vagrantup.com">Vagrant</a>).  Vagrant in particular has been gaining a lot of steam lately, for very good reason, and is a great technology (see my post on <a href="http://nathanleclaire.com/blog/2014/02/10/5-reasons-we-won-startup-weekend/">how we won Startup Weekend</a> if you&#8217;re curious why Vagrant was useful to us in that case).  However, virtual machines have several disadvantages as well.  Because the VM software has to simulate actual physical hardware, you take a big performance hit.  They are slow to start up and, especially before Vagrant started to become popular, difficult to get inexperienced developers started on (Download Vagrant and its dependencies and run <code>vagrant up</code> is a lot nicer than going through all of the VirtualBox menus, then provisioning your box manually).</p>
+
+<h1>Containers</h1>
+
+<p><img src="http://nathanleclaire.com/images/what-is-docker/containers.jpg"></p>
+
+<p><a href="https://linuxcontainers.org/">Containers</a> popped up as a solution to this issue.  They are sort of like virtual machines, but they focus on process isolation and containment instead of emulating a full-fledged physical machine.  The &#8220;guest&#8221; container uses the same kernel as the &#8220;host&#8221; machine (and possibly some other resources as well, but my understanding of this at this time is a little fuzzy).  This allows many of the advantages of virtual machines without some of the aforementioned disadvantages.</p>
+
+<p>Enter <a href="http://docker.io">Docker</a> (from the homepage):</p>
+
+<blockquote><p>Docker is an open-source project to easily create lightweight, portable, self-sufficient containers from any application. The same container that a developer builds and tests on a laptop can run at scale, in production, on VMs, bare metal, OpenStack clusters, public clouds and more.</p></blockquote>
+
+<p><img src="http://nathanleclaire.com/images/what-is-docker/docker.png"></p>
+
+<p>Docker&#8217;s goal is to provide a software solution that will allow users to &#8220;pack up&#8221; their applications into a standardized container and &#8220;ship it off&#8221; to wherever their heart desires.  A container, once developed, can be deployed anywhere that Docker runs.  They compare these containers to actual <a href="http://en.wikipedia.org/wiki/Containerization">physical shipping containers</a>, pictured above, which revolutionized international trade when it was standardized after World War 2.  From Wikipedia:</p>
+
+<blockquote><p>Containerization dramatically reduced transport costs &#8230; reduced congestion in ports, significantly shortened shipping time, and reduced losses from damage and theft.</p></blockquote>
+
+<p>Sound like benefits that would be nice to have for your business?</p>
+
+<h1>A Cambrian Explosion</h1>
+
+<p><img src="http://nathanleclaire.com/images/what-is-docker/cambrian.png"></p>
+
+<p>What is really interesting about Docker though, to me personally at least, is the Cambrian Explosion-esque fugue of creativity that it has inspired so far and continues to inspire in people everywhere.  It is being used for things online that aren&#8217;t exactly aligned to its original use case but really hearken to a bold new future of tech.  I know of at least one example where it is being used to make possible a interpreter-by-runnable-code editor for conducting Python interviews.  <a href="http://www.runnable.com">Runnable.com</a> uses Docker to host self-contained executable / editable little code projects where you can look at existing code which you know works, edit it on the fly, and re-run it.  That&#8217;s awesome!</p>
+
+<p>I&#8217;m super optimistic for the future of this technology.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[AngularJS isn't MVC, it's SDC]]></title>
+		
+		<link href="http://nathanleclaire.com/blog/2014/03/15/angularjs-isnt-mvc-its-sdc/"/>
+		<updated>2014-03-15T12:38:00+00:00</updated>
+		<id>http://nathanleclaire.com/blog/2014/03/15/angularjs-isnt-mvc-its-sdc</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<h1>Intro</h1>
+
+<p><img src="http://nathanleclaire.com/images/notmvc/angular-homepage-old.gif"></p>
+
+<p>I first started learning AngularJS because I was interested in exploring the world of MV&#42; JavaScript frameworks for the client side.  There was something intruiging and exciting happening about a year or two ago in that space, as several JS frameworks started to get some steam and critical mass and the mainstream of client-side development (even those boring <a href="http://www.hanselman.com/blog/501DevelopersFamilyAndExcitementAboutTheCraft.aspx">5:01 developers</a> couldn&#8217;t ignore the zeitgeist anymore) seemed to wake up and realize that maybe there was a need for something more than just vanilla jQuery in applications where everything was spiraling way out of control.</p>
+
+<p>So I started looking into Angular for the myriad reasons you usually hear people cite as a reason for using it.  It was backed by Google.  It was easy to get going quickly.  The quality of documentation and tutorials, though not fantastic, was starting to improve relative to Ember or more obscure frameworks.  It was fun.</p>
+
+<p>My first foray went down in flames.</p>
+
+<p><img src="http://nathanleclaire.com/images/notmvc/javascript.png"></p>
+
+<p>I fell into a common Angular antipattern (I may discuss Angular antipatterns more in a future article) where I stuffed everything into the controller.  Services and directives looked a little scary, and required learning esoteric things like what the meaning of <code>@</code>, <code>&amp;</code>, and <code>=</code> was in a directive, and instead I saw fit to simply stuff everything into <code>$scope</code> and coordinate activities using event broadcasting and listening.</p>
+
+<p>That project became so un-fun to work on that I just stopped.  I had dug myself into a hole deeper than I would ever get out of without a complete rewrite.</p>
+
+<p>Fortunately, partially through writing about Angular a lot, I eventually wised up.</p>
+
+<p>I learned that Angular is structured in some ways that are similar to what we have experienced before, but it also hearkens a little bit to the future of the client side (see <a href="http://www.w3.org/TR/components-intro/">Web Components</a>).  And because of that, it had a little bit of new stuff too that threw me.</p>
+
+<p>You may be used to the Model View Controller pattern- but that&#8217;s not what Angular is.   A subsection of it kind of looks like that, but if you take a step back you will see a bigger picture emerge.</p>
+
+<p>Angular is Service, Directive, Controller.</p>
+
+<h1>The Angular Way</h1>
+
+<p>Angular is all about testability, and testability mandates that we be able to break our application into components.  In most cases, monoliths are considered harmful.  You probably understand why if you&#8217;ve ever worked on one.  Things become too brittle and easy to break.  They become tightly coupled.  It&#8217;s impossible to change codes without introducing bugs in unrelated places.  And so on.</p>
+
+<p>Angular draws lines between separate parts of the architecture so that you can avoid many of these headaches.  In particular, dependency injection treats us well, as we rely on Angular&#8217;s injector to provide us with the things that we need instead of getting them ourselves.  This also allows us more control over how they are provided, which eases testing significantly (the developer has a smaller surface area that he needs to control).</p>
+
+<p>Most applications use these underlying principles to do three things: Retrieve, process, or send out data (usually communicating with the &#8220;outside world&#8221; such as a database or API), present (display) that data to the user in a useful way, and coordinate the general state of the application (this includes features such as routing).</p>
+
+<p>The first things that we mentioned, handling data, is the job of services.</p>
+
+<h2>Services</h2>
+
+<p>The main point of services is to dictate how data flows into or out of your application, not within it.  If you are talking to the outside world, this is a perfect use case for a service.  Controllers use methods and data provided by these services to update properties on <code>$scope</code>, which in turn dictates how the DOM changes when a new digest cycle hits.</p>
+
+<p>When I was new to Angular, I flubbed this.  In particular the difference between <a href="http://stackoverflow.com/questions/15666048/angular-js-service-vs-provider-vs-factory">services and factories</a> wasn&#8217;t clear to me, so I avoided them.  Instead I made <code>$http</code> calls inside of my controllers, which ended up turning my controllers into a confused mess of business and application logic.</p>
+
+<p>This is <em>NOT</em> the way to go.  Instead, anything that involves setting, retrieving, or processing data should happen in services.  The leaner that your controllers are, the better.</p>
+
+<p>Services should NEVER manipulate <code>$scope</code>.  That is the job of the controller.  If you need to change values in <code>$scope</code> based on the result of, say, an AJAX call, use <a href="http://docs.angularjs.org/api/ng/service/$q">promises</a>.  Check out <a href="http://nathanleclaire.com/blog/2014/01/04/5-smooth-angularjs-application-tips/">this blog article I wrote</a> for more details.</p>
+
+<h2>Directives</h2>
+
+<p>Directives are definitely one of the most confusing parts of AngularJS to a newcomer.  The prospect of writing your own is intimidating.  Especialy when I first started learning, the quality of available documentation and tutorials for them was not very high (this has improved a lot in the last year or so though).</p>
+
+<p>But directives, for all that they intimidate the newbie, promise a land of amazing power.  Most people who are coming to Angular from a jQuery way of thinking run the risk of getting themselves in trouble by performing DOM manipulation outside of directives.  They are so used to the old way of doing things, where an element can be accessed willy-nilly by any piece of client side code that needs it.</p>
+
+<p>Directives have several different forms but usually they are either completely new HTML elements, or attributes that you can throw on existing elements, to perform some kind of DOM manipulation.  They can have their own scope and they can be reused, which is one of their most useful properties.</p>
+
+<p>In some ways we are all still fighting our way towards manifesting in reality the Platonic ideal of what directives represent, e.g. I should never have to rewrite a calendar widget if it is already existing, I should just be able to use a <code>&lt;calendar&gt;&lt;/calendar&gt;</code> element and set properties to customize it the way that I like.  But in other ways this <em>is</em> approaching reality, especially as Angular grows in popularity and as systems such as Bower become more useful and flexible.</p>
+
+<p>Directives promise no more spaghetti jQuery code (do they deliver?).  Instead, everything gets broken out into modular components that are far easier to test.</p>
+
+<h2>What about Views?</h2>
+
+<p>In a lot of ways the &#8220;view&#8221; is the same as it&#8217;s ever been, modulo directives which we have already discussed.  <code>ngView</code> promises new, snappy navigation, which is exciting.  Views in AngularJS do the same job they always have and they do it well.  Technically I probably should have called this article &#8220;Angular isn&#8217;t MVC, it&#8217;s SDVC&#8221; but I didn&#8217;t think it had the same ring to it.</p>
+
+<h2>Controllers</h2>
+
+<p>Finally we discuss the piece that ties it all together.  The controller.</p>
+
+<p>Without controllers, directives are useless.  Controllers set properties on <code>$scope</code> for directives to use.</p>
+
+<p>Likewise, without controllers, services are useless.  They are just objects for playing with data.  Therefore controllers are like the &#8220;glue&#8221; of your application.</p>
+
+<p>Controllers should be as lean and lightweight as possible.  It makes it easier to see what&#8217;s going on, and it makes it easier to test them.</p>
+
+<h1>Conclusion</h1>
+
+<p>Angular is a new framework and it requires a new way of thinking.  Trying to apply the old patterns, or being inflexible and unwilling to learn about the different components of Angular and how they fit together will get you in trouble.</p>
+
+<p>Everyone likes jQuery because jQuery is a useful tool.  It is simple and it allows you to build whatever you want.  It isn&#8217;t very opinionated about the way you do so (in fact it provides you with a lot of options).</p>
+
+<p>Angular, on the other hand, is like a house.  It already has a framework and a foundation for how to do things, you just have to furnish it.  Trying to use Angular like a hammer will only result in tears.  It is like trying to use a house to build a house.</p>
+
+<p>I hope that this essay may help to clear some things up to people who are new to Angular.</p>
+
+<p>Until next week, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]>
+		</content>
+	</entry>
+	
+</feed>

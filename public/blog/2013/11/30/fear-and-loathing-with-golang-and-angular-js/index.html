@@ -1,0 +1,437 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html style="display:none;" lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="I'm a solution delivery and technology expert.  I write about code (back-end and front-end), entrepreneurship, and life.  I'm obsessed with application performance, user experience, and shipping." name="description">
+		<meta content="nathan leclaire" name="author">
+		
+		<title>Fear and Loathing With Golang and AngularJS &mdash; nathan leclaire | I care, I share, I'm Nathan LeClaire.</title>
+		
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href="/stylesheets/main.css" rel="stylesheet">
+		
+		<script>
+		   if(self == top) {
+			   document.documentElement.style.display = 'block'; 
+		   } else {
+			   top.location = self.location; 
+		   }
+		</script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+		<script src="/js/jquery.modal.min.js"></script>
+		<script src="/js/fuse.min.js"></script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div id="sidebar">
+				<header>
+					<div class="title">
+						<a href="http://nathanleclaire.com">
+							<img src="/images/nateface.jpeg" class="nateface" /> 
+							nathan leclaire 
+						</a>
+					</div>
+					<p class="slogan">I care, I share, I'm Nathan LeClaire.</p>
+					<div class="navi">
+						<ul>
+							<li><a href="/about/">About</a></li>
+							<li><a href="/blog/archives">Archives</a></li>
+							<li><a href="/atom.xml">RSS</a></li>
+						</ul>
+					</div> <!-- // .navi -->
+					<div id="sidebar-email">
+						<a href="mailto:nathan.leclaire@gmail.com">nathan.leclaire@gmail.com</a>
+					</div>
+				</header>
+				<span id="shameless-self-promotion">
+				<!-- Begin MailChimp Signup Form -->
+
+				<div id="mc_embed_signup">
+				<form action="https://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<label for="mce-EMAIL">Get my essays about tech delivered to your inbox</label>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+				</form>
+				</div>
+				<!--End mc_embed_signup-->
+				
+				<p>Quickly search the archive:</p>
+				<input type="text" placeholder="Fuzzy search by keyword (e.g. Angular)" id="archive-search">
+				<img src="/images/magnifying-glass.png" id="search-icon" />
+				<ul id="archive-search-populate">
+				</ul>
+				
+				</span>
+			</div>
+			<div id="content">
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+    <header>
+        <h1>
+            <a href="/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-js/">Fear and Loathing With Golang and AngularJS</a>
+        </h1>
+        <h3 style="text-align: center;">by Nathan LeClaire</h3>
+        <time>30 November 2013</time>
+    </header>
+    <div>
+        <p><img src="/images/fearandloathing/fearandloathingwithgolangular.jpeg" title="Complete and utter hyperbole." ></p>
+
+<p>Recently I've been building an app to check a web page for broken links using <a href="http://golang.org">Golang</a> and <a href="http://angularjs.org">AngularJS</a> (it's for use with this blog, actually, as well as general public consumption).  It's pretty close to being done, except for a contact form which will allow people to send an e-mail directly to me (which has involved all manner of fun with Go's <a href="http://golang.org/pkg/net/smtp/">smtp</a> library and will most likely be the subject of a future blog post) to make suggestions, send comments, flame me for creating a free tool for them to use, etc.  Though I am generally a huge fan of both of these technologies, I was tearing my hair out over a particular issue which turned out to be solvable by reading the Go source code.  This coincided with the timing of my weekly blog article.  So here I am sharing my frustration and catharsis with you, dear readers.</p>
+
+<h1>What's the rub?</h1>
+
+<p>The rub has to do with the way that Angular sends HTTP POST requests, the way that Golang handles them, and how these two interact.</p>
+
+<p>In AngularJS when we want to perform business logic (for example, calling out to a server to get some data to display ) we put that logic inside of a controller.  The controller sets properties on Angular's <code>$scope</code> variable that are accessible from the front end, and vice versa, providing us with two-way data binding.  If you want to make an AJAX call, you inject Angular's <code>$http</code> service (by passing it into the function where the controller is defined) and use it.  This is a little bit of a change from what most people are used to, which is usually something like <code>jQuery.ajax</code>, but it's not too unfamiliar.  Since Angular likes you to play exclusively in Anglar-land (in controllers at least), they provide you with this service to make sure that no funny business happens to interfere with Angular's apply-digest cycle.  The syntax is fairly straightforward and looks like this:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=js><code>function MainCtrl($scope, $http) {
+    $http.get('/login', {
+        username: $scope.user,
+        password: $scope.password,
+    })
+    .success(function(data, status, headers, config) {
+        $scope.userLoggedIn = data.isLoginValid;
+    })
+    .error(function(err, status, headers, config) {
+        console.log(&quot;Well, this is embarassing.&quot;);
+    });
+}</code></pre></figure></notextile></div>
+
+
+<p>This works extremely well with GET requests, so one would expect it to work equally well with POST requests, right?  Maybe.  I had a use case where I was trying to submit form data through <code>$http.post</code> and things were acting extremely funny.  No matter what I tried, it seemed that I could not retrieve anything on the back end, which in this case is written in Go.</p>
+
+<p>Normally in Go you can just call <code>request.ParseForm()</code> in the function that handles HTTP requests for the URI a form gets submitted to, and then the values you are interested in are accessible through <code>request.FormValue("fieldName")</code> calls (<code>request.FormValue</code> will automatically call <code>request.ParseForm</code> for you if needed).  Normally it works smooth as silk- so you can imagine my surprise when I couldn't for the life of me pull data out of the HTTP requests I was POSTing with Angular from my makeshift form.  I even upgraded my Go installation to 1.1.2, and still got nothing.  My code was something along the lines of this:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=js><code>func emailHandler(w http.ResponseWriter, r *http.Request) {
+    var err error
+    response := map[string]interface{} {
+        &quot;success&quot;: true,
+    }
+    err = r.ParseForm()
+    if err != nil {
+        log.Print(&quot;error parsing form &quot;, err)
+        response[&quot;success&quot;] = false
+    }
+    name := r.FormValue(&quot;yourName&quot;)
+    email := r.FormValue(&quot;yourEmail&quot;)
+    feedback := r.FormValue(&quot;feedback&quot;)
+    go sendMail(name, email, feedback)
+    jsonResponse, err = json.Marshal(response)
+    if err != nil {
+        log.Print(err)
+    }
+    w.Write(jsonResponse)
+}</code></pre></figure></notextile></div>
+
+
+<h1>So what gives?</h1>
+
+<p>Some Googling made me painfully aware that I was not the only one with an issue like this:</p>
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/17547227/angular-js-post-request-not-sending-json-data">Angular JS POST request not sending JSON data</a></li>
+<li><a href="http://stackoverflow.com/questions/11442632/how-can-i-make-angular-js-post-data-as-form-data-instead-of-a-request-payload">How can I make angular.js post data as form data instead of a request payload?</a></li>
+<li><a href="https://groups.google.com/forum/#!msg/angular/5nAedJ1LyO0/4Vj_72EZcDsJ">How to post application/x-www-form-encoded?</a></li>
+<li><a href="http://victorblog.com/2012/12/20/make-angularjs-http-service-behave-like-jquery-ajax/">Make AngularJS $http service behave like jQuery.ajax()</a> (a good blog article detailing this problem)</li>
+</ul>
+
+
+<p>Most StackOverflow answers suggested modifying stuff in Angular to get this to work (since there's not much you can do about stuff not showing up in <code>$_POST</code> in PHP, for example), but this left me dissatisfied.  As Ezekiel Victor points out in the aforementioned blog article:</p>
+
+<blockquote>
+    The difference is in how jQuery and AngularJS serialize and transmit the data. Fundamentally, the problem lies with your server language of choice being unable to understand AngularJS’s transmission natively—that’s a darn shame because AngularJS is certainly not doing anything wrong. By default, jQuery transmits data using <code>Content-Type: x-www-form-urlencoded</code> and the familiar <code>foo=bar&baz=moe</code> serialization. AngularJS, however, transmits data using <code>Content-Type: application/json</code> and <code>{ "foo": "bar", "baz": "moe" }</code> JSON serialization, which unfortunately some Web server languages—notably PHP—do not unserialize natively.
+</blockquote>
+
+
+<p>After poring over the documentation for Go's <code>http.Request</code> I was still stumped on how to make a basic <code>$http.post</code> call work in Go without modifying something on the client side.  <code>request.Body</code> didn't seem to have anything useful, and calls to <code>request.FormValue</code> were definitely not working.  The server, however, was definitely receiving a JSON payload, as dumping the request made clear (I've removed the <code>*/*</code> value from the <code>Accept</code> header so the request will play nice with the auto-pretty-printing of my blog):</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=js><code>POST /email HTTP/1.1
+Host: localhost:8000
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.57 Safari/537.36
+Content-Length: 68
+Accept: application/json, text/plain
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: en-US,en;q=0.8
+Connection: keep-alive
+Content-Type: application/json;charset=UTF-8
+Origin: http://localhost:8000
+Referer: http://localhost:8000/
+
+{&quot;yourName&quot;:&quot;John&quot;,&quot;yourEmail&quot;:&quot;John.Smith@gmail.com&quot;,&quot;feedback&quot;:&quot;I really like your new webapp!&quot;}</code></pre></figure></notextile></div>
+
+
+<h1>Let's Go Digging In The request.go Source!</h1>
+
+<p>Not being able to receive the values with <code>request.FormValue</code> was one thing, but I also could not successfully deserialize the JSON payload into a Go struct- the payload was seemingly nowhere to be found in the <code>Request</code> struct provided to my handler.  I could not believe that the Go language designers, who are otherwise very meticulous and reliable, had overlooked something like <code>Content-Type: application/json</code> handling.  But checking out the source for <code>Request.ParseForm</code> and <code>Request.parsePostForm</code> led me to my "aha" moment.  The source for <code>Request.ParseForm</code> (from <a href="http://golang.org/src/pkg/net/http/request.go?m=text&amp;ModPagespeed=noscript">golang.org</a>):</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=js><code>// ParseForm parses the raw query from the URL and updates r.Form.
+//
+// For POST or PUT requests, it also parses the request body as a form and
+// put the results into both r.PostForm and r.Form.
+// POST and PUT body parameters take precedence over URL query string values
+// in r.Form.
+//
+// If the request Body's size has not already been limited by MaxBytesReader,
+// the size is capped at 10MB.
+//
+// ParseMultipartForm calls ParseForm automatically.
+// It is idempotent.
+func (r *Request) ParseForm() error {
+    var err error
+    if r.PostForm == nil {
+        if r.Method == &quot;POST&quot; || r.Method == &quot;PUT&quot; {
+            r.PostForm, err = parsePostForm(r)
+        }
+        if r.PostForm == nil {
+            r.PostForm = make(url.Values)
+        }
+    }
+    if r.Form == nil {
+        if len(r.PostForm) &gt; 0 {
+            r.Form = make(url.Values)
+            copyValues(r.Form, r.PostForm)
+        }
+        var newValues url.Values
+        if r.URL != nil {
+            var e error
+            newValues, e = url.ParseQuery(r.URL.RawQuery)
+            if err == nil {
+                err = e
+            }
+        }
+        if newValues == nil {
+            newValues = make(url.Values)
+        }
+        if r.Form == nil {
+            r.Form = newValues
+        } else {
+            copyValues(r.Form, newValues)
+        }
+    }
+    return err
+}</code></pre></figure></notextile></div>
+
+
+<p>The relevant bit for us is that call to <code>parsePostForm</code> if <code>r.Method</code> is <code>"POST"</code> (since it is in our case).  The code for <code>parsePostForm</code>:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=js><code>func parsePostForm(r *Request) (vs url.Values, err error) {
+    if r.Body == nil {
+        err = errors.New(&quot;missing form body&quot;)
+        return
+    }
+    ct := r.Header.Get(&quot;Content-Type&quot;)
+    ct, _, err = mime.ParseMediaType(ct)
+    switch {
+    case ct == &quot;application/x-www-form-urlencoded&quot;:
+        var reader io.Reader = r.Body
+        maxFormSize := int64(1&lt;&lt;63 - 1)
+        if _, ok := r.Body.(*maxBytesReader); !ok {
+            maxFormSize = int64(10 &lt;&lt; 20) // 10 MB is a lot of text.
+            reader = io.LimitReader(r.Body, maxFormSize+1)
+        }
+        b, e := ioutil.ReadAll(reader)
+        if e != nil {
+            if err == nil {
+                err = e
+            }
+            break
+        }
+        if int64(len(b)) &gt; maxFormSize {
+            err = errors.New(&quot;http: POST too large&quot;)
+            return
+        }
+        vs, e = url.ParseQuery(string(b))
+        if err == nil {
+            err = e
+        }
+    case ct == &quot;multipart/form-data&quot;:
+        // handled by ParseMultipartForm (which is calling us, or should be)
+        // TODO(bradfitz): there are too many possible
+        // orders to call too many functions here.
+        // Clean this up and write more tests.
+        // request_test.go contains the start of this,
+        // in TestRequestMultipartCallOrder.
+    }
+    return
+}</code></pre></figure></notextile></div>
+
+
+<p>Initially I thought that the source code for this function might need to be modified to add another case to the switch block to handle the case where the content type is <code>application/json</code>, but then I had a moment of insight.</p>
+
+<p>I shouldn't be trying to parse a form at all!  Cue facepalm, and guilt of hours spent solving this issue (at least I'll know better next time).  My request payload wasn't encoded as a form, it was encoded as JSON.  If I just took out the call to <code>request.ParseForm</code>, I probably would have usable data in <code>request.Body</code> that I could <code>Demarshal</code>.  Indeed, this proved to be the case.</p>
+
+<h1>Conclusion</h1>
+
+<p>It seems that the issue in this case was mostly <a href="http://en.wikipedia.org/wiki/User_error">PEBKAC</a> (naturally).  I think that <code>ParseForm</code> is doing the right thing not handling requests with <code>Content-Type: application/json</code> in <code>ParseForm</code> (since they're not really form submissions), but it would be nice if there were some kind of API to handle this directly from the <code>Request</code> (though the JSON deserialization functions provided by <code>encoding/json</code> work really well), or this was better documented in some place (partially why I wanted to write this article).  I'd be curious to talk to some of the Go language maintainers about this, and may shoot an e-mail around.</p>
+
+<p>At any rate, it definitely goes to show that a knowledge of HTTP basics is helpful, as I was equating form submissions with POST requests like a newbie.  Perhaps there's been too much developing for me over this Thanksgiving weekend :)</p>
+
+<p>Originally I monkey patched a fix in Angular's <code>$httpProvider</code> config to work around this issue.  However, removing the call to <code>ParseForm</code> from my server side code seems to be a much cleaner solution.  Now my Go program can accept Angular POST requests like a charm.</p>
+
+<p>Thanks for reading, and I'll catch you next week.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+
+    </div>
+    <footer>
+        <p>If you find a mistake or issue in this article, please <a id="pull-request-link" taget="_blank" href="">fix it and submit a pull request on Github</a> (must be signed in to your GitHub account).</p>
+        <a target="_blank" style="display: block;" href="https://twitter.com/share?url=http://nathanleclaire.com/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-js/&text=Great article from @upthecyberpunks : " class="social-media-spam">Tweet It</a>
+        <a target="_blank" href="https://news.ycombinator.com/submitlink?u=http://nathanleclaire.com/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-js/&t=" class="social-media-spam">Submit to Hacker News</a>
+        <a target="_blank" style="display: block !important;" href="http://www.reddit.com/submit?url=http://nathanleclaire.com/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-js/&title=" class="social-media-spam">Submit to Reddit</a>
+        <br>
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/blog/categories/angular/'>angular</a>, <a class='category' href='/blog/categories/bugs/'>bugs</a>, <a class='category' href='/blog/categories/form/'>form</a>, <a class='category' href='/blog/categories/golang/'>golang</a>, <a class='category' href='/blog/categories/parseform/'>parseform</a>, <a class='category' href='/blog/categories/post/'>post</a>
+	
+
+ 
+
+        <a target="_blank" style="display: block !important;" href="http://discourse.nathanleclaire.com">Chat in the forum!!</a>
+    
+        <div id="discourse-comments"></div>
+    </footer>
+    
+</article>
+<!-- END OF _includes/article.html -->
+
+
+<!-- END OF _/layouts/post.html -->
+
+			</div>
+			<form class="modal" id="mailing-list-modal" action="http://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<h1>Like what you're reading?</h1>
+					<img src="/images/happy-reader.jpeg"></img>
+					<p style="display: block;" for="mce-EMAIL">Did you enjoy this article?  You might want to sign up for my mailing list.  I send out weekly-ish essays about hot new tech stuff.</p>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL-modal" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+			</form>
+		</div> <!-- // .wrap -->
+	<script type="text/javascript" src="/js/prettify.js"></script>
+	<script>
+	function supports_html5_storage() {
+	  try {
+		return 'localStorage' in window && window['localStorage'] !== null;
+	  } catch (e) {
+		return false;
+	  }
+	}
+
+	$(document).ready(function () {
+	    var fuse;
+
+	    $("code").addClass("prettyprint");
+	    prettyPrint();
+
+	    $.getJSON("/articles.json", function(data) {
+	    	// input:
+	    	// [{title: "Learn Node.js The Troll Way", href: "blahblah"}, { ... }]
+	    	fuse = new Fuse(data, {
+	    	    keys: ['title', 'tags']
+	    	});
+	    });
+	    
+	    $("#archive-search").keyup(function() {
+	    	var $this = $(this);
+	    	var val = $this.val();
+	    	var result = fuse.search(val).slice(0, 1);
+	    	$list = $("#archive-search-populate");
+	    	$list.empty();
+	    	if (result.length > 0 && val !== '') {
+	    	    $.each(result, function(i, e) {
+	    	        $list.append('<li><a href="'+ e.href +'">'+ e.title +'</a></li>');
+	    	    });
+	    	}
+	    });
+	    
+	    $(".social-media-spam").each(function () {
+	        var e = $(this);
+	        var t = e.attr("href");
+	        var n = $("article header h1 a").html();
+	        t += encodeURIComponent(n);
+	        e.attr("href", t)
+	    });
+
+	    var e = window.location.href;
+	    var t = $("#pull-request-link");
+	    var n = "https://github.com/nathanleclaire/blog/edit/master/source/_posts/" + e.split("/").slice(4, 8).join("-") + ".markdown";
+	    t.attr("href", n);
+
+	    // Only offer mailing list once
+		var tryModal = localStorage["modal"] ? false : true;
+
+		// Don't offer mailing list to people on mobile
+		if ($(window).width() < 720) {
+			tryModal = false;
+		}
+
+		$('#mc-embedded-subscribe').click(function() {
+			// Don't offer mailing list if people have
+			// already clicked to try and sign up
+			tryModal = false;
+			localStorage["modal"] = "true";
+		});
+
+		$(window).scroll(function () {
+			if (tryModal && document.URL.indexOf('archives') === -1 && document.URL.indexOf('about') === -1) {
+				if (($(window).scrollTop() + $(window).height()) === $(document).height()) {
+					if (supports_html5_storage()) {
+						window.setTimeout(function() {
+							$('#mailing-list-modal').modal({
+								fadeDuration: 250
+							});
+							$('#mce-EMAIL-modal').focus();
+							tryModal = false;
+							localStorage["modal"] = "true";
+						}, 1000);
+					}
+				}
+			}
+		});
+
+
+	});
+	</script>
+	<script type="text/javascript">
+	if ('/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-js/' !== '/blog/index.html') {
+	  var discourseUrl = "http://discourse.nathanleclaire.com/",
+	      discourseEmbedUrl = 'http://nathanleclaire.com/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-js/';
+
+	  (function() {
+	    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+	      d.src = discourseUrl + 'javascripts/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+	  })();
+	}
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-26758702-2', 'nathanleclaire.com');
+	  ga('send', 'pageview');
+	</script>
+	</body>
+</html>
+<!-- END OF _layouts/default.html -->

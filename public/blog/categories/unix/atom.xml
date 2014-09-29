@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: unix | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/unix/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Bash Scripting and the Legend of the Hidden Bracket]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/09/07/bash-scripting-and-the-legend-of-the-hidden-bracket/"/>
+    <updated>2014-09-07T22:55:23+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/09/07/bash-scripting-and-the-legend-of-the-hidden-bracket</id>
+    <content type="html"><![CDATA[<p><img src="/images/hiddenbracket/temple.jpeg"></p>
+
+<h2>#!/bin/article</h2>
+
+<p>It&#8217;s really amazing sometimes how frequently the shallowness of my UNIX knowledge gets exposed, even though I&#8217;ve been tinkering around with UNIX for ten-odd years and even own a yellow-paged, dusty old copy of Rob Pike and Brian Kernighan&#8217;s excellent book &#8220;THE UNIX PROGRAMMING ENVIRONMENT&#8221;.</p>
+
+<p><img src="/images/hiddenbracket/unixprogrammingenv.gif"></p>
+
+<p>It&#8217;s a great book, and it outlines a lot of the philosophy of UNIX perfectly, as well as regexp, sed, and other fundamental tools that are essential to being a command line power user.  Anyway, lately in my growing pains as a Bash scripter I&#8217;ve stumbled across an incredibly noteworthy fact that I feel compelled to share, if only to save anyone else the pain of learning it the hard way, like me, after years of hiding from writing more intricate Bourne-again shell scripts because I couldn&#8217;t ever remember the difference between <code>-f</code>, <code>-ne</code>, <code>==</code> and so on in comparisons.</p>
+
+<p>It&#8217;s as simple as this: <code>[</code> is just a wrapper for the UNIX <code>test</code> command.</p>
+
+<h1>test</h1>
+
+<p><code>test</code> is one of those classic commands like <code>tr</code>, <code>cut</code>, etc. whose influence touches everyone but largely is cloaked from mere mortals and moderates such as myself.  I hadn&#8217;t realized it until someone recently pointed out that <code>[</code> is not syntax, it&#8217;s a <em>command</em>.</p>
+
+<pre><code>$ which [
+/bin/[
+</code></pre>
+
+<p>I don&#8217;t know about you, I assume my audience for this blog is probably at least a little bit UNIX literate, but this one really threw me for a loop when I found out.  Suddenly my whole outlook on shell scripting shifted as I realized that this was yet another instance of the UNIX &#8220;do one thing and do it right&#8221; way clicking into place for me.  As anyone accustomed to the flexibility afforded you by langauges such as Python and Ruby may be familiar with, I had had many bad experiences trying to cobble together even simple conditionals in impromptu shell scripts due to the seemingly esoteric syntax that <code>if</code>s required, as well as the usage of <code>==</code> and so on.  Perhaps I was spoiled in my UNIX education by being introduced to Python too early, and I should have learned to do things the hard way first.</p>
+
+<p>At any rate, <code>[</code> is just a wrapper for the UNIX <code>test</code> command with the addition of a closing <code>]</code> at the end of the arguments.  That means the available comparisons can be easily looked up with man!</p>
+
+<p><img src="/images/hiddenbracket/man.png" title="I&#8217;ve probably been set back a lot by not knowing about this." ></p>
+
+<p>Having the available comparisons right at my fingertips like this has made me feel so much more empowered with shell scripting.  Previously when I wanted run a test I had to Google around for &#8220;shell script comparisons&#8221; etc., find a website that looked promising, and squint my way through a table or equivalent to find the relevant flags.  Now I can just pop a new terminal window open and use <code>/</code> search inside of <code>man</code>!</p>
+
+<p>Walkthough of some uses of <code>test</code>, for kicks:</p>
+
+<p>Test if two strings are equal:</p>
+
+<pre><code>if [ "$FOO" == "BAR" ]; then
+    echo "FOO environment variable value is equal to \"BAR\""
+fi
+</code></pre>
+
+<p>Check if a given path is a directory:</p>
+
+<pre><code>if [ -d src/ ]; then
+    echo "src exists"
+fi
+</code></pre>
+
+<p>Check if output of command was a certain value:</p>
+
+<pre><code>(exit 2)
+if [ $? -eq 2 ]; then
+    echo "Received error exit code"
+fi
+</code></pre>
+
+<h1>fin</h1>
+
+<p>Anyway, that&#8217;s my bit of bash-nerdery for the day.  I hope I can help some people out, who may have been struggling with the same issue as me: a combination of over-thinking things and a lack of someone showing me the correct way early on.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Fixing Cygwin's SSL issues with git clone / c_rehash bug]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/03/24/cygwin-git-clone-ssl-issue-c_rehash-openssl-not-found/"/>
+    <updated>2014-03-24T19:44:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/03/24/cygwin-git-clone-ssl-issue-c_rehash-openssl-not-found</id>
+    <content type="html"><![CDATA[<h1>Cygwin&#8217;s git clone drama</h1>
+
+<p><img src="/images/cygwin-ssl/cygwin.png"></p>
+
+<h2>Oh, you.</h2>
+
+<p>When I am working on Windows for the various reasons which compel one to work on Windows I often use <a href="http://www.cygwin.com">Cygwin</a> to provide UNIX-like functionality on the command line (cmd.exe leaves a lot to be desired).  Since a vital part of my workflow on any OS is <a href="http://git-scm.com">git</a> I happily installed git using the Install.exe workflow that Cygwin provides.</p>
+
+<p>To my surprise (and, I&#8217;m not going to deny it, slight nerd-rage) when I attempted to <code>git clone</code> a repository from Github I was greeted by an error message like this one:</p>
+
+<pre><code>$ git clone https://github.com/foo/bar
+error: SSL certificate problem, verify that the CA cert is OK. Details:
+error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed
+</code></pre>
+
+<p>OK, so I have an SSL issue.  Running through the Setup.exe with Cygwin again and installing <code>ca-certificates</code> and <code>openssl</code> didn&#8217;t fix it, and eventually I came across <a href="http://stackoverflow.com/questions/3777075/ssl-certificate-rejected-trying-to-access-github-over-https-behind-firewall">this Stack Overflow post</a> which described my exact issue.</p>
+
+<h1>On the hunt for solutions</h1>
+
+<h2>One proposed solution</h2>
+
+<pre><code>$ git config --global http.sslVerify false
+</code></pre>
+
+<p>SERIOUSLY!?!?</p>
+
+<p>No way I&#8217;m going to turn off SSL just to try and workaround this issue.  I don&#8217;t like getting MITMed.</p>
+
+<h2>A much better proposed solution</h2>
+
+<p>Also from Stack Overflow:</p>
+
+<pre><code>$ cd /usr/ssl/certs
+$  curl http://curl.haxx.se/ca/cacert.pem | awk 'split_after==1{n++;split_after=0} /-----END CERTIFICATE-----/ {split_after=1} {print &gt; "cert" n ".pem"}'
+$ c_rehash
+</code></pre>
+
+<p>OK, this is headed in the right direction, I can tell.  I had to manually create the <code>/usr/ssl/certs</code> directory (probably because I hadn&#8217;t installed OpenSSL yet when I tried this), but even after getting OpenSSL <code>c_rehash</code> was giving me an error:</p>
+
+<pre><code>$ c_rehash
+c_rehash: rehashing skipped ('openssl' program not available)
+</code></pre>
+
+<p>Pretty odd, since just typing <code>openssl</code> on the CLI clearly indicated that it was present.</p>
+
+<h2>Debuggin&#8217; some Perl code</h2>
+
+<p>Nothing too fruitful was turning up on Google for this (the <a href="http://koti.kapsi.fi/ptk/postfix/c_rehash.txt">original program source</a> was, though :P) so I dug into the program source (Perl) and found this bit at the top:</p>
+
+<pre><code>my $openssl;
+
+my $dir = "/usr/lib/ssl";
+
+if(defined $ENV{OPENSSL}) {
+    $openssl = $ENV{OPENSSL};
+} else {
+    $openssl = "openssl";
+    $ENV{OPENSSL} = $openssl;
+}
+
+$ENV{PATH} .= ":$dir/bin";
+
+if(! -x $openssl) {
+    my $found = 0;
+    foreach (split /:/, $ENV{PATH}) {
+        if(-x "$_/$openssl") {
+            $found = 1;
+            last;
+        }   
+    }
+    if($found == 0) {
+        print STDERR "c_rehash: rehashing skipped ('openssl' program not available)\n";
+        exit 0;
+    }
+}
+</code></pre>
+
+<p>Sprinkling some liberal debugging statements into that yielded me the information that <code>c_rehash</code> was finding the relevant directories (and consequently the <code>openssl</code> binary) but the file wasn&#8217;t showing up as executable.  Some Googling turned up stuff like <a href="http://cygwin.com/ml/cygwin/2007-05/msg00681.html">this</a>, which made me wonder&#8230;</p>
+
+<h2>If <em>this</em> solution would work</h2>
+
+<pre><code>$ which openssl
+/cygdrive/c/Program Files (x86)/Git/bin/openssl
+$ chmod +x /cygdrive/c/Program\ Files\ \(x86\)/Git/bin/openssl
+</code></pre>
+
+<p>It did!  You have to run Cygwin as administrator to have the proper permissions though to change those file permissions though.</p>
+
+<p><code>c_rehash</code> then went through without a hitch, Which finally allowed <code>git clone</code> to work.</p>
+
+<h1>Conclusion</h1>
+
+<p>Whew!  That was exhausting.  Time to do some programming to unwind :)</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[5 Cool Unix Hacks For Fun and Productivity]]></title>
+    <link href="http://nathanleclaire.com/blog/2013/10/27/5-cool-unix-hacks-for-fun-and-productivity/"/>
+    <updated>2013-10-27T19:44:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2013/10/27/5-cool-unix-hacks-for-fun-and-productivity</id>
+    <content type="html"><![CDATA[<p>In my workflow I am always looking for ways to be more productive, and to have more fun while developing.  There&#8217;s nothing quite like the feeling of flying through a sequence of commands in <code>bash</code> that you know would take your peers twice as long to execute.  Have you ever :</p>
+
+<ul>
+<li>Raged silently at a coworker for spamming the left arrow key to get to the beginning of their terminal prompt when they could have just pressed CTRL + A ?</li>
+<li>Watched someone as they enter the same command over and over when they could have just prefaced it with <code>!</code> ?</li>
+<li>Rolled your eyes as your buddy expounds at length on the virtues of IDEs when you know that you could &#8220;roflstomp&#8221; him or her using <code>vim</code> ?</li>
+</ul>
+
+
+<p>If so, then these tips might be for you.</p>
+
+<p><em>DISCLAIMER:</em> There&#8217;s an admitted bias towards <code>vim</code>, <code>git</code>, and the terminal here.  I don&#8217;t intend to start a holy war about terminal vs. IDEs, just have some fun and point out these fun tricks that work well for me.</p>
+
+<h1>git add -p</h1>
+
+<p>If you&#8217;ve worked with <code>git</code> for any non-trivial amount of time you hopefully have come across the notion of making <a href="http://stackoverflow.com/questions/6543913/git-commit-best-practices">atomic commits</a>.  Essentially, the notion is that a commit should contain only interrelated details, and not anything that&#8217;s logically unrelated to the things you are committing.  For example, it makes sense to commit changes to a class and its corresponding unit test in one commit, but if you&#8217;ve made changes to another class that deal with completely different business logic then those should be in another commit.</p>
+
+<p>However, what happens when you are working within one file that contains multiple unrelated changes, or changes that you&#8217;d like to split up into more than one commit in case you need to revert them separately?  Or you have sprinkled logging statements all over the file that you don&#8217;t want to commit to the repo?  The normal sequence of git commands that people use fails us here:</p>
+
+<pre><code>$ git diff
+diff --git a/some-file.c b/some-file.c
+index f383179..09e4e35 100644
+--- a/some-file.c
++++ b/some-file.c
+@@ -2,6 +2,8 @@
+
+ int main(void) {
+        printf("doing some stuff\n");
+-       printf("doing some more stuff\n");
++       do_some_stuff();
++       printf("doing some unrelated stuff\n");
++       do_some_unrelated_stuff();
+        return 0;
+ }
+$ git add some-file.c
+$ git commit
+[master 1938906] some unrelated stuff, cramming it all in one commit 'cause I'm lazy
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+$ echo "Whoops we just committed unrelated stuff.  Not very modular of us."
+</code></pre>
+
+<p>The <code>-p</code> (standing for patch) flag for <code>git add</code> is ridiculously useful for these kinds of cases.  This tells <code>git add</code> that we want to do a <em>partial</em> add of the file, and we&#8217;re presented with a nice interative menu which allows us to specify with a lovely amount of detail exactly which parts of the file we want to stage.  <code>git</code> splits the changes into hunks automatically, which you can approve or reject with <code>y</code> or <code>n</code> respectively, or use <code>s</code> to split up into finer grained hunks.  If <code>git</code> can&#8217;t split the hunks up the way you want automatically, you can specify as much detail as you want with the <code>e</code> (edit) option.</p>
+
+<p><img src="/images/five-tips/git-add-minus-p.jpeg" title="And now our commits are nice and tidy." ></p>
+
+<p>See here for more details on <code>git add -p</code>: <a href="http://stackoverflow.com/questions/1085162/how-can-i-commit-only-part-of-a-file-in-git">How can I commit only part of a file in git?</a></p>
+
+<p><em>EDIT:</em> Some commenters have pointed out that this usage of <code>-p</code> flag also works for commands such as <code>git checkout --</code>.  Therefore you could hypothetically send only part of a file back to the way it was at HEAD, and keep your other changes.  Handy!</p>
+
+<h1>vim&#8217;s CTRL-P / CTRL-N autocomplete feature</h1>
+
+<p>This is one of those killer features of <code>vim</code> that I am surprised to find out people (even experienced <code>vim</code> gurus) don&#8217;t use more frequently.  Even if you are a casual user (hop into <code>vim</code> to edit some config files while <code>ssh</code>ed into a box) it has the potential to help you out quite a bit.  One of the reasons people claim they couldn&#8217;t live without IDEs is the existence of features such as Intellisense that provide autocompletion of variable/function names.  These features are very nice since they cut down on mistakes due to misspelling properties and thereby speed up the compile/run/debug cycle a fair bit.  Many people don&#8217;t seem to realize that there is an analog which comes straight out of the box in <code>vim</code>, no plugins needed.</p>
+
+<p>You can press CTRL-N to move down the list of suggested completions when typing in INSERT mode (which vim draws from the current buffers, and from the <code>tags</code> file if you have one), or CTRL-P to move back up (representing &#8220;NEXT&#8221; and &#8220;PREVIOUS&#8221; if you didn&#8217;t catch the mnemonic).  If there is only one possible completion, <code>vim</code> will just go ahead and insert it.  Very handy and speedy, especially in codebases with a lot of long variable / method / constant names.</p>
+
+<p>CTRL-P/CTRL-N have a lot of synergy with the next tip as well, as touched upon briefly in the above paragraph.</p>
+
+<p><img src="/images/five-tips/ctrl-n-vim.jpeg" title="And you barely need to leave the home row." ></p>
+
+<h1>exuberant ctags</h1>
+
+<p>Everyone who uses <code>vim</code> knows that it can be a bit of a kerfluffle sometimes to open a file in a distant directory (tab completion helps ease this with <code>:e</code>, but it&#8217;s still not usually instantaneous).  If you happen to be working on a team, or a very large project, the ability to do this quickly will likely be a vital part of your workflow.</p>
+
+<p><a href="http://ctags.sourceforge.net/">Exuberant Ctags</a> is a tool that makes this worlds easier than it would be without.  With ctags, you can  you just run a command in the top directory of the project you&#8217;re working on to generate a &#8220;tags&#8221; file, then you can use CTRL-] to &#8220;pop into&#8221; the definition of whatever it is your cursor is over (say, a class name).  Press CTRL+T to get back to where you were before.</p>
+
+<p>You can even set up a <a href="http://tbaggery.com/2011/08/08/effortless-ctags-with-git.html">post-commit hook in git</a> to generate your ctags file automatically when you make a commit!  Nice.</p>
+
+<h1>CTRL-R in bash and zsh</h1>
+
+<p>Ever been typing in a command at the terminal, when you suddenly find yourself wishing that there was an easy way to just autofill the prompt with something that you&#8217;d entered previously so you can edit it or just run it again?  If so, then I&#8217;ve got good news for you:  You can!  Just press CTRL+R and start typing the thing that you are looking for.  The terminal will fill in what it thinks you are looking for, and if there is more than one option you can cycle through them by pressing CTRL+R repeatedly.  When you&#8217;ve found the thing you&#8217;re after, you can break out of the prompt with any of the usual movement commands (CTRL+A, CTRL+E, arrow keys, etc. if you have standard <code>bash</code> keybindings).  Try it out!  Very handy if you can&#8217;t remember the name of the box you want to <code>ssh</code> into.</p>
+
+<p><img src="/images/five-tips/ctrl-r.jpeg" title="What was that IP address again?" ></p>
+
+<p><code>history | grep $COMMAND</code> will treat you well too, if you just want to review all of the times you&#8217;ve run that command in recent times.</p>
+
+<h1>vim macros</h1>
+
+<p>A lot of the time when you&#8217;re writing code, or doing related tasks, you find yourself in need of a way to repeat the same editor commands over and over, perhaps with a slight variation.  Different editors provide slightly different ways of addressing this.  <a href="http://www.sublimetext.com/">Sublime Text</a>, for example, has a &#8220;killer feature&#8221; where you are able to place multiple cursors in various locations and edit away.  In <code>vim</code> (and in <code>emacs</code> too, but here we&#8217;ll be covering the <code>vim</code> method) you record and playback keyboard macros to accomplish this.  It is a tool with an absurd amount of power and flexibility, and offers the chance to speed up productivity on repetitive editing tasks by an order of magnitude.</p>
+
+<p>To make a macro, press <code>q</code> in normal mode, then press another key to &#8220;name&#8221; the macro (usually I use <code>q</code> again).  <code>vim</code> will start recording your keystrokes.  <code>vim</code> will remember which keystrokes you make until you press <code>q</code> again to save the macro.  You can replay with <code>@</code>-letter in normal mode, so I am usually pressing <code>@q</code>.  You can also preface the <code>@</code>/replay command with a number so that you can rapidly execute your macro over and over (like much in <code>vim</code>-land, the &#8220;grammar&#8221; behaves as you would be accustomed to).  If you&#8217;re accustomed to using <code>vim</code>&#8217;s fancy movement commands (for instance, using <code>/</code> search to navigate), and practice a little bit, you will soon be able to whip up thunderous macros that will leave your mouse-dependent colleagues in the dust.</p>
+
+<p><img src="/images/five-tips/vim-macros.gif" title="Who needs multiple cursors?" ></p>
+
+<p>For more info on <code>vim</code> macros, see here: <a href="http://vim.wikia.com/wiki/Macros">Vim Wiki (Macros)</a></p>
+
+<p>That&#8217;s all for now, folks.  Hope you enjoyed and I&#8217;ll see you next week!</p>
+]]></content>
+  </entry>
+  
+</feed>

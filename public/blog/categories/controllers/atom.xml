@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: controllers | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/controllers/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Banging Your Head Against an AngularJS Issue?  Try This]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/01/31/banging-your-head-against-an-angularjs-issue-try-this/"/>
+    <updated>2014-01-31T19:53:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/01/31/banging-your-head-against-an-angularjs-issue-try-this</id>
+    <content type="html"><![CDATA[<p><img src="/images/scope-apply/frustration.jpg" title="Have you been debugging something that seems trivial in Angular for so long that your face looks like this?" ></p>
+
+<p>As I&#8217;ve gotten a <a href="http://nathanleclaire.com/blog/2014/01/04/5-smooth-angularjs-application-tips/">little</a> <a href="http://nathanleclaire.com/blog/2014/01/11/dragging-and-dropping-images-from-one-browser-tab-to-another-in-angularjs/">into</a> <a href="http://angularjs.org">AngularJS</a> I&#8217;ve been surprised by how often my assumptions about how things will work have turned out to be wrong.  When you start to form a basic mental model of how Angular works and you hit your first stumbling block where your model turns out to be incorrect it can be really, really, frustrating.  In particular I had one issue that kept cropping up so often I began trying it before running to Google for help if something wasn&#8217;t working the way I would have expected (all my views should just magically sync up with what&#8217;s on <code>$scope</code>, right?).  This solution is to make sure <code>$scope.$apply</code> is getting used in the proper manner when updates to <code>$scope</code> are happening, especially if they are happening in unusual places e.g. inside of directives.  Since I don&#8217;t really like &#8220;magical&#8221; or knee-jerk fixes to problems I highly recommend Jim Hoskins&#8217;s article on <code>$scope.$apply</code> which you can find <a href="http://jimhoskins.com/2012/12/17/angularjs-and-apply.html">here</a>.</p>
+
+<h1>Use <code>$scope.$apply</code></h1>
+
+<p>During your first foray into Angular you will probably not come across this as it is one of those hidden, quasi-leaky-abstraction sort of things that only becomes well known to you as you work on getting a non-trivial app off the ground.  After all, it&#8217;s not really needed for the <a href="http://todomvc.com/architecture-examples/angularjs/#/">todo-list app</a> of yore but it becomes much more important when you are doing funny things like manipulating scope deep inside of directives and so on.  So, having been bit by the issue multiple times, I recommend trying a call to <code>$scope.$apply</code> (either wrap the changes to <code>$scope</code> properties inside a <code>$scope.apply</code> callback, or call <code>$scope.$apply</code> on its own after <code>$scope</code> properties have been updated)  See the documentation <a href="http://nathanleclaire.com/blog/2014/01/04/5-smooth-angularjs-application-tips/">here</a>.</p>
+
+<p>The issue is around updating properties on <code>$scope</code>, either in directives or in controllers, and not having the updated changes be reflected on the front-end in the manner which you expect (either they will not show up at all, or they will happen in an order which you do not anticipate, which will cause bugs).  This is because Angular has what is known as a digest-watch cycle where all of this gets figured out:</p>
+
+<p><img src="/images/scope-apply/digest-cycle.png"></p>
+
+<p>As automagical as Angular is in some ways, it has no way of knowing when your property has been updated outside of Angular-land (and sometimes doesn&#8217;t even bother when it is updated <em>in</em> Angular-land, as per the example that follows).  So it requires a call to <code>$scope.$apply</code> to stay in sync.</p>
+
+<h1>Example</h1>
+
+<p>Let&#8217;s say you have a list of numbers displayed with <code>ng-repeat</code> and you want to <code>shift</code> one off the list when the user presses the right arrow key, and redisplay them one at a time if the user presses the left arrow key.  Our controller code (on first attempt) would look something like this:</p>
+
+<pre><code class="js">.controller('NumCtrl', function($scope) {
+    var history = [];
+    $scope.numbersDisplayed = [0,1,2,3,4,5];
+
+    $scope.moveRight = function() {
+        history.unshift($scope.numbersDisplayed.shift());
+    };
+
+    $scope.moveLeft = function() {
+        $scope.numbersDisplayed.unshift(history.shift());
+    };
+})
+</code></pre>
+
+<p>We&#8217;re ignoring bounds-checking for the sake of simplicity in this demonstation.  Our directive, designated to watch for user input on the element where this is happening (will be <code>&lt;body&gt;</code> in our case since it is a simple little example), will look like this:</p>
+
+<pre><code class="js">.directive('arrowListener', function() {
+    return {
+        restrict: 'A', // attribute
+        scope: {
+            moveRight: '&amp;', // bind to parent method
+            moveLeft: '&amp;'
+        },
+        link: function(scope, elm, attrs) {
+            elm.bind('keydown', function(e) {
+                if (e.keyCode === 39) {
+                    scope.moveRight();
+                }
+                if (e.keyCode === 37) {
+                    scope.moveLeft();
+                }
+            })
+        }
+    };
+})
+</code></pre>
+
+<p>If you try the above code, you&#8217;ll notice that it doesn&#8217;t work.  The variable on <code>$scope</code> gets changed correctly, but this change is not reflected in the view.  In order to make it work you have to change the controller code to :</p>
+
+<pre><code class="js">.controller('NumCtrl', function($scope) {
+    var history = [];
+    $scope.numbersDisplayed = [0,1,2,3,4,5];
+
+    $scope.moveRight = function() {
+        history.unshift($scope.numbersDisplayed.shift());
+        $scope.$apply();
+    };
+
+    $scope.moveLeft = function() {
+        $scope.numbersDisplayed.unshift(history.shift());
+        $scope.$apply();
+    };
+})
+</code></pre>
+
+<p>You could also invoke <code>scope.$apply</code> in the directive itself.  To be honest, I&#8217;m not sure what the Angular gurus would consider best practice.  Perhaps the latter since it is more DRY.</p>
+
+<p><em>EDIT</em>: I have received an email from a reader, Andrew Greenberg, that indicates the latter is indeed the way to go.  In fact, he points out a deeper flaw in my reasoning/approach:</p>
+
+<blockquote><p>[There&#8217;s a problem with your code] &#8230; that can be the cause of significant bugs down the road, because it calls <code>$apply</code> from a scope inside the controller.  This will fail when that function is called from inside an AngularJS <code>$digest</code> cycle, for example, when the functions are called in any expression in the HTML (unless the directive is created in an isolate scope).</p>
+
+<p>As you know, Angular whines hard when <code>$apply</code> is called inside an <code>$apply</code> or <code>$digest</code>.</p>
+
+<p>The better practice is to call <code>$apply</code> only when you know you are outside of a <code>$digest</code> loop, such as inside the directive link function.  That is, keep the <code>$apply</code> out of a <code>$controller</code>, which is accessible to the declarative code in HTML or in another controller — and do the <code>$apply</code> in the directive link function, when you know you are outside of the <code>$digest</code> loop (I think).</p></blockquote>
+
+<p>So there you have it- reasoning why you should call <code>$scope.$apply</code> or <code>$scope.$digest</code> in the link function of your directives, not in your controllers.  My code revised to meet these requirements would look like this:</p>
+
+<pre><code class="js">.directive('arrowListener', function() {
+    return {
+        restrict: 'A', // attribute
+        scope: {
+            moveRight: '&amp;', // bind to parent method
+            moveLeft: '&amp;'
+        },
+        link: function(scope, elm, attrs) {
+            elm.bind('keydown', function(e) {
+                if (e.keyCode === 39) {
+                    scope.moveRight();
+                }
+                if (e.keyCode === 37) {
+                    scope.moveLeft();
+                }
+                scope.$apply();
+            })
+        }
+    };
+})
+.controller('NumCtrl', function($scope) {
+    var history = [];
+    $scope.numbersDisplayed = [0,1,2,3,4,5];
+
+    $scope.moveRight = function() {
+        history.unshift($scope.numbersDisplayed.shift());
+    };
+
+    $scope.moveLeft = function() {
+        $scope.numbersDisplayed.unshift(history.shift());
+    };
+})
+</code></pre>
+
+<p>Writing it out, this way looks a bit cleaner to me as well.</p>
+
+<p>A Plunker demo of these concepts in action:</p>
+
+<iframe src="http://embed.plnkr.co/agbSSuA2Mwx5pAd8kZSw/preview"></iframe>
+
+
+<h1>Conclusion</h1>
+
+<p>This is one of those nasty issues I wish someone would have pointed out to me from the start.  So here you go, guys, hopefully you can get something out of the suffering I&#8217;ve gone through to develop an almost sixth-sense like awareness of when a <code>$scope.$apply</code> will be needed.</p>
+
+<p>Until next week, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to Unit Test Controllers In AngularJS Without Setting Your Hair On Fire]]></title>
+    <link href="http://nathanleclaire.com/blog/2013/12/13/how-to-unit-test-controllers-in-angularjs-without-setting-your-hair-on-fire/"/>
+    <updated>2013-12-13T23:03:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2013/12/13/how-to-unit-test-controllers-in-angularjs-without-setting-your-hair-on-fire</id>
+    <content type="html"><![CDATA[<p>Developers almost universally agree that unit tests are a <em>VERY GOOD THING</em> when working on a project.  They help you feel like your code is airtight, ensure reliability in production, and let you refactor with confidence when there is a need to do so.</p>
+
+<p><img src="/images/angularjs-unit-testing/test-code-refactor-cycle.png" title="The Test-Driven Development cycle." ></p>
+
+<p>AngularJS code touts its high degree of <a href="http://angularjs.org/#embed-and-inject">testability</a>, which is a reasonable claim.  In much of the documentation end to end tests are provided with the examples.  Like so many things with Angular, however, I was finding that although unit testing was simple, it was not easy.  Examples were sparse and though the <a href="http://docs.angularjs.org/guide/dev_guide.unit-testing">official documentation</a> provided some snippets of examples, putting it all together in my &#8220;real-world&#8221; case was proving challenging.  So here I&#8217;ve written a little bit about how I ended up getting that wonderful green light for a passing build to show up.</p>
+
+<h1>Instant Karma</h1>
+
+<p><a href="http://karma-runner.github.io/">Karma</a> is a test runner for JavaScript that was created by the Angular team.  It is a very useful tool as it allows you to automate tasks that you would otherwise have to do by hand or with your own cobbled-together collection of scripts (such as re-running your test suite or loading up the dependencies for said tests).  Karma and Angular go together like peanut butter and jelly.</p>
+
+<p>With Karma, you simply define a configuration file, start Karma, and then it will take care of the rest, executing the tests in the browser(s) of your choice to ensure that they work in the environments where you plan on deploying to.  You can specify these browsers in the aforementioned configuration file.  <a href="https://github.com/angular/angular-seed">angular-seed</a>, which I highly recommend, comes with a decent out-of-the-box Karma config that will allow you to hit the ground running quickly.   The Karma configuration in my most recent project looks like this:</p>
+
+<pre><code>module.exports = function(config) {
+    config.set({
+        basePath: '../',
+
+        files: [
+            'app/lib/angular/angular.js',
+            'app/lib/angular/angular-*.js',
+            'app/js/**/*.js',
+            'test/lib/recaptcha/recaptcha_ajax.js',
+            'test/lib/angular/angular-mocks.js',
+            'test/unit/**/*.js'
+        ],
+
+        exclude: [
+            'app/lib/angular/angular-loader.js',
+            'app/lib/angular/*.min.js',
+            'app/lib/angular/angular-scenario.js'
+        ],
+
+        autoWatch: true,
+
+        frameworks: ['jasmine'],
+
+        browsers: ['PhantomJS'],
+
+        plugins: [
+            'karma-junit-reporter',
+            'karma-chrome-launcher',
+            'karma-firefox-launcher',
+            'karma-jasmine',
+            'karma-phantomjs-launcher'
+        ],
+
+        junitReporter: {
+            outputFile: 'test_out/unit.xml',
+            suite: 'unit'
+        }
+
+    })
+}
+</code></pre>
+
+<p>Which is very similar to the default configuration in <a href="https://github.com/angular/angular-seed">angular-seed</a>, except for a few things:</p>
+
+<ul>
+<li>I have switched the browser the tests run in from Chrome to <a href="http://phantomjs.org/">PhantomJS</a>, a headless browser, so that they can run without opening a browser window and causing an awkward viewport shuffle in OSX.  Therefore the <code>plugins</code> and <code>browsers</code> settings have been changed.</li>
+<li>I added <code>recaptcha_ajax.js</code>, the minified file that Google provides for their Recaptcha service, since my app depends on it being included.  Having this change be as simple as adding a line in the Karma config file was really nice.</li>
+</ul>
+
+
+<p><code>autoWatch</code> is a particularly cool setting, since it will have Karma re-run your tests whenever they, or the files they test, change.</p>
+
+<p>You can install Karma with:</p>
+
+<pre><code>npm install -g karma
+</code></pre>
+
+<p><a href="https://github.com/angular/angular-seed">angular-seed</a> provides a handy little script for starting the Karma test runner, which is in <code>scripts/test.sh</code>.  Use it!</p>
+
+<h1>Writing Tests With Jasmine</h1>
+
+<p>Most of the resources available at the time of writing for unit testing with Angular use <a href="http://pivotal.github.io/jasmine/">Jasmine</a>, a behavior-driven development framework for testing JavaScript code.  That&#8217;s what I&#8217;ll be describing here.</p>
+
+<p>To unit test an AngularJS controller, you can take advantage of Angular&#8217;s <a href="http://docs.angularjs.org/guide/di">dependency injection</a> and inject your own version of the services those controllers depend on to control the environment in which the test takes place and also to check that the expected results are occurring.  For example, I have this controller defined in my app to control the highlighting of which tab has been navigated to:</p>
+
+<pre><code>app.controller('NavCtrl', function($scope, $location) {
+    $scope.isActive = function(route) {
+        return route === $location.path();
+    };
+})
+</code></pre>
+
+<p>If I want to test the <code>isActive</code> function, how do I do so?  I need to ensure that the <code>$location</code> service returns what is expected, and that the output of the function is what is expected.  So in our test spec we have a <code>beforeEach</code> call that gets made that sets up some local variables to hold our (controlled) version of those services, and injects them into the controller so that those are the ones to get used.  Then in our actual test we have assertions that are congruent with our expectations.  It looks like this:</p>
+
+<pre><code>describe('NavCtrl', function() {
+    var scope, $location, createController;
+
+    beforeEach(inject(function ($rootScope, $controller _$location_) {
+        $location = _$location_;
+        scope = $rootScope.$new();
+
+        createController = function() {
+            return $controller('NavCtrl', {
+                '$scope': scope
+            });
+        };
+    }));
+
+    it('should have a method to check if the path is active', function() {
+        var controller = createController();
+        $location.path('/about');
+        expect($location.path()).toBe('/about');
+        expect(scope.isActive('/about')).toBe(true);
+        expect(scope.isActive('/contact')).toBe(false);
+    });
+});
+</code></pre>
+
+<p>With this basic structure, you can set up all kinds of stuff.  Since we are providing the controller with our own custom scope to start with, you could do stuff like setting a bunch of properties on it and then running a function you have to clear them, then make assertions that they actually were cleared.</p>
+
+<h1><code>$httpBackend</code> Is Cool</h1>
+
+<p>But what if you are doing stuff like using the <code>$http</code> service to call out to your server to get or post data?  Well, Angular provides a way to mock the server with a thing called <code>$httpBackend</code>.  That way, you can set up expectations for what server calls get made, or just ensure that the response can be controlled so the results of the unit tests can be consistent.</p>
+
+<p>This looks like this:</p>
+
+<pre><code>describe('MainCtrl', function() {
+    var scope, httpBackend, createController;
+
+    beforeEach(inject(function($rootScope, $httpBackend, $controller) {
+        httpBackend = $httpBackend;
+        scope = $rootScope.$new();
+
+        createController = function() {
+            return $controller('MainCtrl', {
+                '$scope': scope
+            });
+        };
+    }));
+
+    afterEach(function() {
+        httpBackend.verifyNoOutstandingExpectation();
+        httpBackend.verifyNoOutstandingRequest();
+    });
+
+    it('should run the Test to get the link data from the go backend', function() {
+        var controller = createController();
+        scope.urlToScrape = 'success.com';
+
+        httpBackend.expect('GET', '/slurp?urlToScrape=http:%2F%2Fsuccess.com')
+            .respond({
+                "success": true,
+                "links": ["http://www.google.com", "http://angularjs.org", "http://amazon.com"]
+            });
+
+        // have to use $apply to trigger the $digest which will
+        // take care of the HTTP request
+        scope.$apply(function() {
+            scope.runTest();
+        });
+
+        expect(scope.parseOriginalUrlStatus).toEqual('calling');
+
+        httpBackend.flush();
+
+        expect(scope.retrievedUrls).toEqual(["http://www.google.com", "http://angularjs.org", "http://amazon.com"]);
+        expect(scope.parseOriginalUrlStatus).toEqual('waiting');
+        expect(scope.doneScrapingOriginalUrl).toEqual(true);
+    });
+});
+</code></pre>
+
+<p>As you can see, the <code>beforeEach</code> call is very similar, with the only exception being we are getting <code>$httpBackend</code> from the injector rather than <code>$http</code>.  However, there are a few notable differences with how we set up the other test.  For starters, there is an <code>afterEach</code> call that ensures <code>$httpBackend</code> doesn&#8217;t have any outstanding expecations or requests after each test has been run.  And if you look at the way the test is set up and utilizes <code>$httpBackend</code>, there are a few things that are not exactly intuitive.</p>
+
+<p>The actual call to <code>$httpBackend.expect</code> is fairly self-explanatory, but it is not in itself enough- we have to wrap our call to <code>$scope.runTest</code>, the function we are actually testing in this case, in a function that we pass to <code>$scope.$apply</code>, so that we can trigger the <code>$digest</code> which will actually take care of the HTTP request.  And as you can see, the HTTP request to <code>$httpBackend</code> will not resolve until we call <code>$httpBackend.flush()</code>, so this allows us to test what things should be like when the call is in progress but hasn&#8217;t returned yet (in the example above, the controller&#8217;s <code>$scope.parseOriginalUrlStatus</code> property will be set to <code>'calling'</code> so we can display an in-progress spinny).</p>
+
+<p>The next few lines are assertions about properties on <code>$scope</code> that will change after the call resolves.  Pretty cool, eh?</p>
+
+<p><em>NOTE:</em> In some places users have made it convention to have <code>scope</code> without the dollar sign when it is referenced as a var in setting up unit tests.  This doesn&#8217;t seem to be enforced or emphasized particularly strongly by the Angular docs and I find it a little bit more consistent / readable to just use <code>$scope</code> like you do everywhere else, so that&#8217;s how I&#8217;ve done things here.</p>
+
+<h1>Conclusion</h1>
+
+<p>Maybe this is one of those things that others just take to a bit more naturally than I do, but learning to write unit tests in Angular was pretty painful for me in the beginning.  I found my understanding of how to do so to be mostly cobbled together from various blog posts and sources around the Internet, with no real consistency or definitive best practice other than that established by natural selection.  I wanted to provide some documentation of what I eventually came up with to help other people who might be in a tight spot, and just want to get coding instead of having to learn all of the quirks and idiosyncracies of Angular and Jasmine.  So I hope this article has been of use to you.</p>
+
+<p>Unit next week, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Don't Fear Directives In AngularJS]]></title>
+    <link href="http://nathanleclaire.com/blog/2013/12/07/dont-fear-directives-in-angular-js/"/>
+    <updated>2013-12-07T12:41:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2013/12/07/dont-fear-directives-in-angular-js</id>
+    <content type="html"><![CDATA[<p><img src="/images/directivefear/anghero.jpeg" title="Superheroic." ></p>
+
+<h1>Direct what?</h1>
+
+<p>As I mentioned in <a href="http://nathanleclaire.com/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-dot-js/">last week&#8217;s article</a> I have been working with <a href="http://angularjs.org/">AngularJS</a> for personal projects lately.  This was largely the result of me, approximately six or seven months ago, feeling like I was missing out on the new hotness by not knowing a client-side MV* framework.  I looked around at a lot of options, including:</p>
+
+<ul>
+<li><a href="http://backbonejs.org/">Backbone.js</a> (A crowd favorite, with rock-solid online support/documentation/tutorials)</li>
+<li><a href="http://emberjs.com/">Ember.js</a></li>
+<li><a href="http://knockoutjs.com/">Knockout.js</a></li>
+</ul>
+
+
+<p>Ultimately I fell into learning Angular for a variety of reasons.  Partially it was because I went to a &#8220;Coffee Shop Coders&#8221; presentation where the presenter (<a href="http://www.tauruscolvin.com/">Taurus Colvin</a> - a very friendly dude) explained the basics and impressed me with the possibilities the framework offers.  Maybe it was because I tried to bootstrap a simple Ember project and couldn&#8217;t get anything working.  I don&#8217;t know if it was the documentation, the learning curve, my own shortcomings, or all three, but something about Ember didn&#8217;t click with me.  My choice of Angular was also at least somewhat because I was seduced by <a href="http://yeoman.io/">Yeoman</a> (which, at the time of writing, uses an Angular generator in its usage example) around the time I attempted my first Angular app.  It was a foray which went down in flames, largely because I was so hesitant to make my own directives and services.</p>
+
+<h1>$scope Creep</h1>
+
+<p>One day after I had started getting interested in Angular I mentioned to a coworker that I was developing an app with the framework.</p>
+
+<p>&#8220;Oh yeah,&#8221; he said, &#8220;I watched a presentation about making directives - seems to be where the real power of it is.&#8221;</p>
+
+<p>Since I knew that the funny attributes Angular introduces such as <code>ng-show</code>, <code>ng-class</code>, and <code>ng-repeat</code> were directives, I had a feeling he was onto something.  However, I was a little bit too timid to actually tackle making my own.  After all, directives were something that smart people made, not me.  I&#8217;d have to understand that difficult link/compile stuff, right?  Remember, this was April of 2013 and, though it seems silly to say since at the time of writing only eight months have passed, the quality of documentation, tutorials, and examples for AngularJS was not as good as it is today.  I think <a href="http://egghead.io">egghead.io</a> (an excellent Angular resource if you&#8217;re not aware) was just getting off the ground, but I certianly hadn&#8217;t heard of it.</p>
+
+<p>Less so through concious decision and more so through my own hesitance to learn something I was irrationally afraid of, I began slipping into the trap of creating a tangled mess that stuffed everything possible into <code>$scope</code>, used <code>ng-include</code> when I could have used directives, and relied on <code>$broadcast</code>ing down from <code>$rootScope</code> when I could have used services.</p>
+
+<p>I was a fool.</p>
+
+<h1>How Not To Fear The Directive</h1>
+
+<p>If I could go back and stop myself from making a whole bunch of mistakes in that app, I would have started with explaining that a directive is just a simple little reusable component for describing the way HTML should behave.  The Angular docs try to harp on this but inevitably they make it seem obtuse and complicated.  <em>Note:  Though they could be better I don&#8217;t think it&#8217;s cool to hate on the Angular docs.  They&#8217;ve gotten way better even in the short time I&#8217;ve been using the framework.</em></p>
+
+<p>In my opinion it&#8217;s a very useful tool because it allows you to encapsulate functionality in a semantic way that will (hopefully) make sense to anyone looking at your markup, and keep your functionality well &#8220;chunked&#8221; so that you can keep track of what is happening where instead of dealing with things mutating globally (which most of us hopefully know by now is bad news).</p>
+
+<p>Ever had this happen with jQuery? You need to do some JavaScript magic with a particular element on the page, and so you give it some arbitrary <code>id</code> so you can access it with <code>$('element#id')</code>.  Now you get to write a bunch of JavaScript that listens for the relevant events, checks the element&#8217;s state to see that it is congruent with our expectations, modify its class to change how it is displayed, and so on.  It starts out as a few simple functions using a very powerful tool that soon grows into a complicated mess of callbacks, weird looking selectors, and re-render functions.  It may be strewn across several files with no rhyme or reason.</p>
+
+<p>Not only is it no fun, it makes it very hard for your designer friends to look at your markup and know what the expected behavior for that HTML is.  So, Angular provides us with directives, which are actually pretty simple to create.  So don&#8217;t be scared of them like I was.  You just have to create an Angular app:</p>
+
+<pre><code class="js">var myApp = angular.module('myApp', []);
+</code></pre>
+
+<p>Then attach a simple directive:</p>
+
+<pre><code class="js">myApp.directive('myDirective', function() {
+    return {
+        restrict: 'E',
+        template: '&lt;h1&gt;I made a directive!&lt;/h1&gt;'
+    };
+});
+</code></pre>
+
+<p>That&#8217;s all, you just created a directive!  Now, when you go looking around for some examples of directives online, it&#8217;s easy to get lost in all of the Angular-specific jargon like linking functions, the &#8220;restrict&#8221; property, scope hierarchies and so on.  But I highly recommend that you try not to panic, and realize that there is meaning behind all of the weird symbols and abbreviations you see.  For instance, in the definition for the directive above, I define a <code>restrict: 'E'</code> setting.  What the heck does that mean?</p>
+
+<p>Well, what it means is, &#8220;restrict the usage of this directive to only Elements&#8221;.</p>
+
+<p>So, you can use it in HTML like this:</p>
+
+<pre><code class="js">&lt;body ng-app="myApp"&gt;
+    &lt;myDirective&gt;&lt;/myDirective&gt;
+&lt;/body&gt;
+</code></pre>
+
+<p>But not like this:</p>
+
+<pre><code class="js">&lt;body ng-app="myApp"&gt;
+    &lt;span my-directive&gt;&lt;/span&gt;
+&lt;/body&gt;
+</code></pre>
+
+<p>(Angular &#8220;normalizes&#8221; the <code>hyphen-usage-attribute</code> to <code>camelCase</code> as part of their normalization process for directives - see the <a href="http://docs.angularjs.org/guide/directive">documentation</a>).</p>
+
+<h1>Why is it useful?</h1>
+
+<p>So, other than providing a convenient way to make little repeatable bits of HTML that have their own names, why is this useful?</p>
+
+<p>Well, by default every directive inherits the parent scope but it is also possible for a directive to have its own <a href="http://www.thinkster.io/pick/KnxWvHUW64/angularjs-understanding-isolate-scope">isolate scope</a>.  What this means is, it can have its own little properties that it sets on its own unique <code>$scope</code> that won&#8217;t mess around with any of the other properties that you are setting in the rest of your app.  Especially if you are going to use the component in multiple places, or have it in a <code>ng-repeat</code>, this is incredibly useful.  It allows you to break things down into much more modular components than using some giant <code>BigBallOfMudController</code> (or several <code>BigBallOfMudController</code>s) to control the state of your app (which is usually the essence of what ends up happening in the &#8220;traditional jQuery&#8221; mess described above).  Instead, each directive is responsible for its own data and it works on it in isolation from the other directives.  In Angular this antipattern would look something like having a big array of objects in a central Controller, and updating individual properties of those objects in that controller instead of having a directive to modularize that kind of operation.</p>
+
+<p>Check out this example, where I created a <code>gear</code> directive using <a href="http://fontawesome.io/">Font Awesome</a>&#8217;s spinning gear icon.  The end result is a lot more flexible than an attempt at creating this using jQuery, or vanilla JavaScript.  Each gear keeps track of whether it is currently spinning or not in the new shared scope automagically created by the ngRepeat directive, so they spin or remain stationary indepent of each other.  However, they are all influenced equally by the <code>ng-model</code> properties of the parent scope.</p>
+
+<p>Writing a <code>link</code> function provides even more power and flexibility, but that&#8217;s a little outside the scope of this article.  Perhaps another time.</p>
+
+<iframe src="http://embed.plnkr.co/i2StmWcxKNZCQb0YtYp0/preview"></iframe>
+
+
+<h1>Conclusion</h1>
+
+<p>Enjoy your directives, kids, and never ever be scared of them.  <a href="http://misko.hevery.com/">Miško</a>&#8217;s been up late at night so you can experience HTML as it could have been.</p>
+
+<p>On a more serious/philosophical note, I wanted to close with a thought that I have that creating your own directives reminds me a bit of <a href="http://en.wikipedia.org/wiki/Metcalfe's_law">Metcalfe&#8217;s Law</a> (by analogy of course).  Each directive that gets created increases the power and usefulness of all the other directives.  An Angular in which <code>ng-repeat</code> exists, for instance, is so much more powerful than one in which it doesn&#8217;t.  So, remember that they can be stacked and it makes your webapp that much better.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<p>Cheers,</p>
+
+<p>Nathan</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -11,7 +11,6 @@ source/stylesheets/screen.css
 vendor
 node_modules
 *.swp
-public
 sass
 source/stylesheets
 js

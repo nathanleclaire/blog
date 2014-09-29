@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ctrl-c | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/ctrl-c/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Handling CTRL-C (interrupt signal) in Golang Programs]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/08/24/handling-ctrl-c-interrupt-signal-in-golang-programs/"/>
+    <updated>2014-08-24T19:33:53+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/08/24/handling-ctrl-c-interrupt-signal-in-golang-programs</id>
+    <content type="html"><![CDATA[<h1>Interruptions</h1>
+
+<p><img src="/images/signal.png"></p>
+
+<p>Recently I&#8217;ve been working on a Go program where I will need to do some cleanup work before exiting if the users press <code>CTRL+C</code> (thereby sending an interrupt signal, <code>SIGINT</code>, to the process).  I was unsure how to do this.</p>
+
+<p>As it turns out, <code>signal.Notify</code> is the method by which this is accomplished.</p>
+
+<p>Here is some sample source code:</p>
+
+<pre><code class="go">// Code to set up some services up here...
+
+// After setting everything up!
+// Wait for a SIGINT (perhaps triggered by user with CTRL-C)
+// Run cleanup when signal is received
+signalChan := make(chan os.Signal, 1)
+cleanupDone := make(chan bool)
+signal.Notify(signalChan, os.Interrupt)
+go func() {
+    for _ = range signalChan {
+        fmt.Println("\nReceived an interrupt, stopping services...\n")
+        cleanup(services, c)
+        cleanupDone &lt;- true
+    }
+}()
+&lt;-cleanupDone
+</code></pre>
+
+<p>I like this example because it really illuminates the power of Go&#8217;s concurrency primitives.  Instead of having to worry about complicated process or threading logic I simply abstract away the concurrency details using a goroutine and a couple of channels. In this instance, the main goroutine is blocked by a unbuffered <code>cleanupDone</code> channel because that is what behavior is expected (we&#8217;ve already spin up additional goroutines earlier to do some logging and handling of outside of the context of the main goroutine).</p>
+
+<p>Now I can clean up after my containers when a user interrupts the terminal with CTRL+C.  Awesome!</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

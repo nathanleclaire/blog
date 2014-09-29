@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: node.js | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/node-dot-js/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The Good, The Bad, and The Ugly of Sails.js, Realtime JavaScript MVC Framework]]></title>
+    <link href="http://nathanleclaire.com/blog/2013/12/28/the-good-the-bad-and-the-ugly-of-sails-dot-js-realtime-javascript-mvc-framework/"/>
+    <updated>2013-12-28T15:59:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2013/12/28/the-good-the-bad-and-the-ugly-of-sails-dot-js-realtime-javascript-mvc-framework</id>
+    <content type="html"><![CDATA[<p>Over the Christmas vacation time that I&#8217;ve been taking I&#8217;ve been finding myself drawn back to <a href="http://nodejs.org/">Node.js</a>, mostly for the promise of rapid web application development and not having to switch languages when changing from working on the server-side and the client-side.  As part of my interest in developing applications using <a href="http://www.html5rocks.com/en/tutorials/websockets/basics/">WebSockets</a> for their real-time capabilities, I looked into <a href="http://derbyjs.com/">Derby</a> and <a href="https://www.meteor.com/">Meteor</a> and eventually I stumbled across <a href="http://sailsjs.org/">Sails.js</a>, the new kid on the block.  It seemed very promising and addressed some issues that I had with Derby and with Meteor.  Namely, both of those frameworks seem very tightly coupled from the client to the server and I wanted something that would provide more flexibility while still allowing me to develop rapidly.  So, I decided to begin prototyping out my new side project in Sails and naturally I developed a variety of opinions to rant about.  Enjoy.</p>
+
+<p><img src="/images/sails/clint-eastwood.jpeg" title="My face when developing." ></p>
+
+<h1>The Good</h1>
+
+<p><img src="/images/sails/thegood.jpeg"></p>
+
+<p><a href="http://sailsjs.org/#!">Sails.js</a> makes getting things started ridiculously quick.  You run <code>sails new myApp</code> to create the application skeleton.  Then, to create a Controller and Model for some data that you&#8217;re going to be working with, you run <code>sails generate foo</code> (<code>foo</code> being the name of your model).  You configure the model really simply:</p>
+
+<pre><code class="js">module.exports = {
+    adapter: 'sails-redis',
+    attributes: {
+        content: 'string',
+        userName: 'string',
+        userId: 'int',    // "foreign key"
+        chatroomId: 'int' // "foreign key"
+    }
+};
+</code></pre>
+
+<p>Sails uses <a href="https://npmjs.org/package/waterline">Waterline</a> as its ORM, and it provides a lot of power for developing rapidly.  The <code>adapter</code> field dictates where the data will be stored, and you can mix and match, so you can have some models stored in MySQL and others in Redis, for instance.  I think this is a really cool feature.  You can set validation, etc. on them.  You can write custom methods on your models to extract &#8220;higher-order&#8221; data from them.  Best of all, just having a model gets you a ton of routes (CRUD blueprints and REST endpionts) out of the box (and they <a href="http://sailsjs.org/#!documentation/sockets">all work with Websockets</a>!):</p>
+
+<pre><code># Backbone Conventions
+GET   :    /:controller                 =&gt; findAll()
+GET   :    /:controller/read/:id        =&gt; find(id)
+POST  :    /:controller/create          =&gt; create()
+POST  :    /:controller/create/:id      =&gt; create(id)
+PUT   :    /:controller/update/:id      =&gt; update(id)
+DELETE:    /:controller/destroy/:id     =&gt; destroy(id)
+
+# You can also explicitly state the action
+GET   :    /:controller/find            =&gt; findAll()
+GET   :    /:controller/find/:id        =&gt; find(id)
+POST  :    /:controller/create          =&gt; create(id)
+PUT   :    /:controller/update/:id      =&gt; update(id)
+DELETE:    /:controller/destroy/:id     =&gt; destroy(id)
+</code></pre>
+
+<p>So, for instance, if you run <code>sails lift</code> to start your app, hitting</p>
+
+<pre><code>http://localhost:1337/something/create?content=hello&amp;userName=Nate&amp;userId=1&amp;chatroomId=1
+</code></pre>
+
+<p>will add a new instance of the model to your datastore.  We did nothing manually to address this (so long <code>$_GET</code> and <code>$_POST</code>, it&#8217;s been&#8230; okay).  And you can see everything that&#8217;s been added at <code>localhost:1337/something/</code> without having to configure anything, althogh Sails makes it easy to change things around to your heart&#8217;s content by setting properties in the Controller and <code>config/routes.js</code>.</p>
+
+<p>Underneath the slick outer layer, Sails uses a lot of well-known and proven modules, most notably <a href="http://expressjs.com/">Express</a>, and it makes it easy to reach to the underlying layer to configure things / do something specific/different (but does not awkwardly leak abstractions).  Additionally, serving of static assets never gave me any trouble and I just added new folders when I needed them.  Not having to worry about this was really nice when developing with <a href="http://angularjs.org/">Angular</a>, which mandates a lot of client-side includes.</p>
+
+<p>In summary:</p>
+
+<ul>
+<li>Database-agnostic ORM that is simple, but powerful and flexible as well</li>
+<li>Developing routes / REST APIs is ridiculously fast - writing tiny amounts of code gets you a ton! (including WebSockets support)</li>
+<li>Lots of stuff &#8220;just works&#8221; without making you think about things too much, but Sails does not try to conceal with &#8220;magic&#8221;</li>
+<li>The Sails.js team has done a really good job of laying things out well to be extensible- and they have well-thought-out solutions that address many common issues e.g. <a href="http://sailsjs.org/#!documentation/policies">policies</a></li>
+</ul>
+
+
+<h1>The Bad</h1>
+
+<p><img src="/images/sails/thebad.jpeg"></p>
+
+<p>Sails is a young framework so sometimes issues come up that can be frustrating to address (since there are not that many users yet, therefore there are not that many resources on StackOverflow etc.).  For instace, when I wanted to start using Redis as a datastore for chat room comments, I tried running <code>npm install sails-redis</code>.  This seemed to go off without a hitch but when I ran <code>sails lift</code> I got an error indicating that the <code>sails-redis</code> module could not be found.  It was very bizarre but then I tracked down <a href="https://github.com/balderdashy/sails-redis/issues/3">this Github issue</a> which pointed out there was no source code in the npm package!!  I was able to install the package from GitHub but it was very frustrating to blow time on something like that when ostensibly the framework allows you to develop rapidly.</p>
+
+<p>For me personally (and I think <a href="https://github.com/balderdashy/sails/issues/1239">others share the sentiment</a>) I think that generators should also provide you with unit test skeletons, and that Sails should address this concern a lot better.  If it&#8217;s going to be production-ready top-notch support for testing will be pretty critical.  I wouldn&#8217;t want to deploy an application that didn&#8217;t have at least some unit tests, especially for mission-critical parts of the app.  As it stands right now it&#8217;s not really clear how to test your Sails application.  We need a <code>sails test</code> command and documentation in this regard!</p>
+
+<p>For a framework that touts performance as a major benefit, I find that <code>sails lift</code> takes a pretty long time to start up (granted, it is doing a lot - if you run it with <code>--verbose</code> option you can see all of the route binding etc. it is doing).  This would be okay if you only had to do it once, but every time you change things (models, controllers, routes, etc.) you have to stop and start <code>sails lift</code>.  So, to have either code hot-swapping or a <code>sails lift</code> that starts up lightning-fast would make Sails much more pleasant to use.  I&#8217;m curious if performance can be improved in this regard.</p>
+
+<p>The documentation, particularly when it came to using <a href="http://sailsjs.org/#!documentation/sockets">Sockets</a>, was hard to understand as someone who is a newcomer to <a href="http://socket.io">socket.io</a>.  Their included <code>app.js</code> didn&#8217;t really clarify things too well, and so I had to rely on <a href="http://net.tutsplus.com/tutorials/javascript-ajax/working-with-data-in-sails-js/">this example from NetTuts</a> to make sense of how to accomplish what I was trying to do.  So I think you could say that the documentation, though absolutely stellar in some areas, could use some bit of work.</p>
+
+<p>In summary:</p>
+
+<ul>
+<li>Since it is new, it can cause frustrating problems you will likely never run into with Django etc.</li>
+<li>In my opinion generators should also include tests (at least make it optional)</li>
+<li>Documentation is lacking in some ways</li>
+<li><code>sails lift</code> takes longer than I&#8217;d like to start up and has to be restarted frequently</li>
+</ul>
+
+
+<h1>The Ugly</h1>
+
+<p><img src="/images/sails/theugly.jpeg"></p>
+
+<p>At the time of writing, <a href="https://travis-ci.org/balderdashy/sails">their build is listed as not passing on TravisCI</a>, and the sticker on their Github page says so.  That doesn&#8217;t exactly send the right kind of message you want to send with your project.  Now, be aware that I cloned the repository and ran all of the tests locally, and they all passed with Node <code>v0.10.24</code> and <code>v0.11.9</code>, but not with a previous version of <code>v0.10.*</code> that I had (can&#8217;t remember which unfortunately).  So, perhaps it&#8217;s more of a TravisCI / versioning issue than a Sails issue, but I think that&#8217;s a big public-facing thing to overlook.</p>
+
+<p>Something that&#8217;s really unfortunate about <a href="https://github.com/balderdashy/waterline">Waterline</a>, the aforementioned ORM that Sails uses, is that it does not support associations (relational data) at the moment.  This seems like a really huge issue / something that I would expect to be a huge cornerstone of any ORM to not have support for right away, and it was really frustrating to find out midway through starting to put together an app that has a lot of relational data.  That being said, they are <a href="https://github.com/balderdashy/sails/issues/124">aware of the issue</a> and are working to fix it, but I really want my <code>JOIN</code>s available for working with in the framework I&#8217;m using <em>now</em>, without having to use an unstable/bleeding-edge pre-release version of Waterline.  In order to do so right now in Sails I have to use <code>Model.query</code>, which is kind of awkward (plugging in raw SQL).  Having to code up things one way as a workaround and then go back and rip them out for official associations when they&#8217;re supported is really a turn off.    I kind of wonder if it&#8217;s not partially a result of NoSQL/MongoDB being very hot right now and developers not giving as much love to traditional relational things as they might have in the past.  Since it&#8217;s an area of interest for me I&#8217;d like to contribute but other than a few guidelines in <code>CONTRIBUTING.md</code> there&#8217;s not much communication from the core devs on this front.</p>
+
+<p>A lot of what is rough around the edges about Sails right now is summed up really well in this <a href="https://github.com/balderdashy/sails/pull/1058#issuecomment-30498745">Github pull request comment</a> by <a href="https://github.com/yoshuawuyts">yoshuawuyts</a>:</p>
+
+<blockquote><p>I know you&#8217;ve been very busy, but I feel I need to share this. As much as I&#8217;ve enjoyed Sails in the past, right now I feel very disconnected from it. For me the amount of outdated documentation, piling issues on the tracker and unclear direction make it hard to keep investing into Sails. The prolonged absence of core members like yourself and delayed responses on most issues make it hard to keep investing. If you want to lead Sails forward, I urge you to invest in clarity.</p></blockquote>
+
+<p>His suggestions for improvement:</p>
+
+<ul>
+<li>Rigorous issue smackdown; close everything that isn&#8217;t relevant, combine duplicates into new issues.</li>
+<li>Create a roadmap; add all feature suggestions to the roadmap and close corresponding issues.</li>
+<li>Add code coverage via coveralls; it entices users to write more tests and fill up the bar.</li>
+</ul>
+
+
+<p>And a very good point:</p>
+
+<blockquote><p>I don&#8217;t think you should prioritize getting new contributors in, I think they&#8217;ll come naturally once the points above have been addressed.</p></blockquote>
+
+<p>After working with Sails for a week or so, I agree heartily with his take.</p>
+
+<p>In summary:</p>
+
+<ul>
+<li>Build is broken on TravisCI at the time of writing</li>
+<li>No support for associations (though they are coming)</li>
+<li>Issues on Github are piling up without being addressed</li>
+<li>Devs have not been very responsive lately (ever?)</li>
+</ul>
+
+
+<h1>Conclusion</h1>
+
+<p>I don&#8217;t want the Sails team to feel like I&#8217;m ragging on them, they&#8217;ve done awesome work and I really feel like Sails has a great future if it can take care of some of the things I&#8217;ve brought up in the past two sections.  I know that when everything was running smoothly developing with Sails it was pure bliss on my end.</p>
+
+<p>For those readers interested or with a bunch of time on thier hands, it would be great to have people throw a bunch of pull requests Sails&#8217; way, since I sort of have a feeling that they are overwhelmed by the sheer scope of the project.  However, if the core developers don&#8217;t start piping up soon, it&#8217;s going to be hard to maintain interest / continue to invest my own valuable time and willpower into the project.  It has a ton of potential and in my opinion the vision, fully implemented and fleshed out, would be truly amazing.</p>
+
+<p>So that&#8217;s my take on Sails.js.  Happy New Year, I hope you enjoyed.  Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+
+<p><em>EDIT:</em> I absentmindedly pushed with a bunch of broken links.  Fixed now, sorry guys.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Learn Node.js The Troll Way]]></title>
+    <link href="http://nathanleclaire.com/blog/2013/02/06/learn-node-dot-js-the-troll-way/"/>
+    <updated>2013-02-06T20:31:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2013/02/06/learn-node-dot-js-the-troll-way</id>
+    <content type="html"><![CDATA[<h2>Server Side JavaScript</h2>
+
+<p>As many of you are probably aware, <a href="http://nodejs.org/">Node.js</a> is all the rage with the kids these days.  It&#8217;s so popular that users even have the nerve to <a href="http://code.google.com/p/v8/issues/detail?id=847#c15">gall Google developers</a>, insisting that the V8 JavaScript engine is important for things outside of mere Chrome.  Node has rapidly been evolving and maturing into the new hotness of the web development community.  Its core is driven by the idea of asynchronous input and output,
+a way to manage the latency inherent in developing applications for the web.  With Node, you gain the ability to write JavaScript which runs on the server-side of an application- and the somewhat eyebrow-raising ability to create a server within JavaScript itself.</p>
+
+<p>Throw in a sweet package manager for every sort of JS voodoo you can imagine (<a href="https://npmjs.org/">npm</a>), and you&#8217;ve suddenly opened up the door to a whole new world of handy tools and tricks, accessible to many developers due to the ubiquitous nature of JavaScript on the modern web.  The V8 JavaScript engine on which it is based is has performed pretty well for a web-based language in <a href="http://shootout.alioth.debian.org/u32/which-programming-languages-are-fastest.php">benchmarks</a>.  We all know that benchmarks are even worse dirty lies than statistics, so what I personally think is really cool about Node is that it mandates one to approach concurrency with a direct focus from the start of application development.  Surely there&#8217;s a lot to be said for not having to rip off and reinvent the wheel of horizontal scalability.  But I digress.</p>
+
+<h2>Screen Scraping With Node.js</h2>
+
+<p><img src="/images/skyrim-guard.jpeg" title="Go cast your fancy JavaScript somewhere else!" ></p>
+
+<p>The purpose of this article is to give a quick flyby example, in which I will be demonstrating Node.js by constructing a screen-scraping bot to troll my brother on Reddit.  I had an idea to build an application which uses the Reddit API, to spam my brother&#8217;s account with Skyrim quotes/dialogue in comments for entertainment purposes.  If he ever were to reply, bewildered, my bot would ping back: <em>&#8220;Problem, theonewhoquestions?&#8221;</em></p>
+
+<p>Naturally, in order to do this, I needed to gather the Skyrim intel (quotes) first.  Originally I set out to write the crawler in Python as I have some experience with the venerable <a href="http://www.crummy.com/software/BeautifulSoup/">BeautifulSoup</a> Module.  But I was already using Node a bit as a result of Twitter&#8217;s Bootstrap framework, and I was curious to challenge myself to actually build something with it for fun and comprehensive learning.  So, I decided to investigate.</p>
+
+<p>Turns out there are a few modules that come in handy for a task like this in Node.
+<code>javascript
+    var jsdom = require('jsdom');
+</code>
+This is the idiomatic way to import modules in Node.  The jsdom module for Node enables us to simulate a DOM environment which many of us familiar with (working with client side code) for use in our Node script.  And naturally, it&#8217;s as easy as one, two, callback!</p>
+
+<p>Since I am familiar with using jQuery to parse the DOM, I opted to use it to extract the quotes from <a href="http://www.uesp.net/wiki/Skyrim:Guard">this website</a>, where they are contained within table cells ripe for the picking.  To do this with the jsdom module, you call the <code>jsdom.env</code> method.  As arguments we pass in the address of the HTML we wish to parse.
+&#8220;` javascript
+    jsdom.env(&#8216;http://www.uesp.net/wiki/Skyrim:Guard&#8217;,
+      [ &#8216;http://code.jquery.com/jquery.min.js&#8217; ],
+      function(errors, window) {
+        var $ = window.$;
+        $ = stripTags($);</p>
+
+<pre><code>    var $skyrim_quotes = $('tr td').filter( function(element, index, array) {
+        if ( $(index).html().match(/^".*"$/) ) {
+          return true;
+        } else {
+          return false;
+        }
+    });
+
+    $skyrim_quotes.each( function() {
+      var $scopedElem = $(this);
+      var content = $scopedElem.html().stripHTMLSpecialChars().stripDoubleQuotes();
+
+      console.log( content );
+
+    }); 
+  });
+</code></pre>
+
+<pre><code>There's a lot going on here that merits explanation, so I will take a second to break down in more detail what is going on in this chunk of code.  We have an instance of the `jsdom` object so we can call the `env` method to bootstrap up a DOM to parse.  The first argument to this method (`'http://www.uesp.net/wiki/Skyrim:Guard'`) is the URL to query for the HTML to instantiate this DOM with.  You can also just pass in plain old HTML as a string if you happen to have some of that laying around in dire need of parsing.
+
+The second argument to the `env` method is a list of scripts to be included in the virtual window (DOM).
+</code></pre>
+
+<pre><code>[ 'http://code.jquery.com/jquery.min.js' ],
+</code></pre>
+
+<pre><code>In this instance and many of the examples given on the `jsdom` [Github page](https://github.com/tmpvar/jsdom), we include the jQuery library.  If one wanted to use Mootools or Underscore.js, I imagine that is also totally doable, although I have no anecdotal evidence to support this hypothesis.  For my purposes, jQuery was a comfortable and effective fit.
+
+The *third* argument to the `jsdom.env` method, and arguably the most critical, is a callback function to be executed once the response has been received from the server (or immediately, in the case of passing in your own HTML).  
+</code></pre>
+
+<pre><code>  function(errors, window) {
+    // ...
+  }
+</code></pre>
+
+<pre><code>It takes two arguments:  The first is called `errors` and is an list of errors which you can inspect if something in the `env` method goes wonky (in the code I've presented here `errors` is ignored, although you still need to have it in the definition of your callback function).  The second is called `window` and it is the coup de grâce of what we are seeking: a bootstrapped, "invisible" DOM that our script can parse.
+
+It's worth pausing for a second here to think about why the "Node way" results in what may seem to some people to result in an expansive sea of callback spaghetti (if JavaScript didn't already appear to you to be an expansive sea of said callback spaghetti).  Any time that Node encounters a situation which otherwise might block the execution of code (such as an HTTP GET request to an external service), it simply defines a callback function to be executed when that *event* occurs (i.e. when your GET request is finished).  
+
+But onward to the trolling we must progress!  The very first thing I do in this brave new callback where we will be doing our DOM parsing is define a few variables.
+</code></pre>
+
+<pre><code>var $ = window.$;
+$ = stripTags($);
+</code></pre>
+
+<pre><code>`jsdom` allows access to the jQuery object through the `window` object, and as I would be accessing it often enough to justify a shorthand method of access, that is what `var $ = window.$;` is all about.  So what's with that `stripTags` call?  Well, the values that I was after were plain text without any HTML inside, as said HTML in a Reddit comment might shatter the illusion that it could be a person typing said Skyrim quotes instead of a robot.  So, for example, some of the entries in the table cells have words *in italics* and I needed to get rid of these tags.  Ergo, my `stripTags` function.
+</code></pre>
+
+<pre><code>/* consumes jQuery object
+   returns jQuery object */
+
+function stripTags($) {
+
+  // Cleaning out anchor tags, italics, and one span which is a warning not
+  // to edit for nice, readable quotes
+
+  $('tr td a').contents().unwrap();
+  $('tr td i').contents().unwrap();
+  $('span').contents().unwrap();
+  $('small').contents().unwrap();
+
+  return $;
+}
+</code></pre>
+
+<p><code>``
+Using</code>unwrap()` on client-side code willy-nilly like this would more likely than not b0rk some critical piece of functionality in your app, but I only care about the data that I am scraping so it&#8217;s not really relevant here.  It gets the job done, which is to turn quotes which in their raw form look like</p>
+
+<blockquote>&#8220;You here to see the &lt;a href=&#8221;http://nathanleclaire.com/wiki/Skyrim:Igmund&#8221; title=&#8221;Skyrim:Igmund&#8221;&gt;Jarl&lt;/a&gt;? No sudden moves, understand?&#8221;</blockquote>
+
+
+<p>into a nice clean version that looks like this:</p>
+
+<blockquote>&#8220;You here to see the Jarl? No sudden moves, understand?&#8221;</blockquote>
+
+
+<p>Thanks to that <code>$('tr td a').contents().unwrap();</code> statement.  It&#8217;s a little bit of extra work, but trolling is serious business, and well worth the investment.  And as I said before, applying these operations globally to the DOM on a large-scale project would be overkill, but for my purposes here it was grand.</p>
+
+<p>The next step was the find the quotes themselves.  A simple little <code>$('tr td')</code> yielded very good results, mostly what I was looking for, but there happened to be a bit of extra flotsam and jetsam table cells which contained content I was not after at all.  So I needed some way to differentiate the Skyrim quotes from anything else that happened to be in a table cell which was not relevant to the task at hand.  Hm, surely I can come up with a regular expression to help with that?
+<code>javascript
+    var $skyrim_quotes = $('tr td').filter( function(element, index, array) {
+        if ( $(index).html().match(/^".*"$/) ) {
+          return true;
+        } else {
+          return false;
+        }
+    });
+</code>
+Here we have the lovely jQuery method <code>filter</code> being used to apply the simple regexp pattern <code>/^".*"$/</code> to our selection and returning only the elements that match.  This knocks out everything which does not adhere strictly to the &#8220;quote&#8221; pattern (string&#8217;s first and last character are a double quote - <code>"</code>).</p>
+
+<p>Almost there now- still I needed to strip some HTML special characters such as <code>&amp;lt;</code> and <code>&amp;gt;</code> to get them especially clean.  And, of course, to strip the double quotes for aesthetic purposes.  I decided to bring a gun to a knife fight and add methods to <code>String</code>&#8217;s prototype.
+&#8220;` javascript
+    String.prototype.stripHTMLSpecialChars = function () {
+      // There&#8217;s a few quirks in the soup
+      var str = this.replace(/&lt;/, &#8221;);
+      str = str.replace(/&gt;/, &#8221;);
+      str = str.replace(/&nbsp;[sic]/, &#8216;y&#8217;);
+      return str;
+    };</p>
+
+<pre><code>String.prototype.stripDoubleQuotes = function() {
+  return this.slice(1, this.length - 1);
+};
+</code></pre>
+
+<pre><code>The solution for `stripDoubleQuotes()` feels a little bit kludgey, so I'd be curious to hear if anyone else has a better idea (I'm sure JavaScript is capable of sed-like string manipulation antics but this was this quickest way I could think of accomplishing the goal).  `stripHTMLSpecialChars()`'s removal of these "quirks" was based on a quick grepping of the results I was getting back to see what HTML special characters were being returned.  Used in the `jsdom` callback, our "sanitizing" and printing to the console of these quotes looks like this:
+</code></pre>
+
+<pre><code>$skyrim_quotes.each( function() {
+  var $scopedElem = $(this);
+  var content = $scopedElem.html().stripHTMLSpecialChars().stripDoubleQuotes();
+  console.log(content);
+}
+</code></pre>
+
+<p><code>``
+Bravo!  Now we have our hot, fresh, Skyrim quotes, eager to troll unsuspecting brothers with.  I opted to stash these quotes in a database (sqlite3) so I didn't have to ping the Skyrim wiki's servers every time they were needed (and also to keep track of which ones had been used already).  I won't go into a lot of gory details here about how working with a database in Node.js is, but suffice it to say for my purposes it was actually fairly straightforward.  Node has a handy</code>sqlite3` module that made working with the database fairly simple.  As it turns out, JavaScript being single-threaded-async is quite handy for tasks like this because the thread isn&#8217;t going to block on the expensive IO operations.  If you want to pick on PHP, for instance, just note how long it takes a PHP application to make, say, 25 requests to external servers versus Node&#8217;s same attempt with concurrency.</p>
+
+<p>Stay tuned for the followup where I create the actual robot to talk to my brother, and if you&#8217;re keen feel free to <a href="https://github.com/nathanleclaire/learnnodethetrollway">check out the source</a> on Github.</p>
+]]></content>
+  </entry>
+  
+</feed>

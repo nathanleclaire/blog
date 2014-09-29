@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: phoenix | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/phoenix/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Back from the Dead]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/06/26/back-from-the-dead/"/>
+    <updated>2014-06-26T20:58:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/06/26/back-from-the-dead</id>
+    <content type="html"><![CDATA[<p><img src="/images/dead/phoenix.jpeg" title="Me." ></p>
+
+<p>Hey all, really sorry that I haven&#8217;t been writing my usual weekly articles.  The good news is that the reason I haven&#8217;t been doing so is that I&#8217;ve been getting settled in in San Francisco, California!  I have started a new job as a Solutions Engineer at <a href="http://www.docker.com">Docker Inc.</a>.</p>
+
+<p><img src="/images/dead/docker.jpeg"></p>
+
+<p>I&#8217;m going back to writing weekly articles, don&#8217;t be surprised to see me writing a fair bit about Docker too :)</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

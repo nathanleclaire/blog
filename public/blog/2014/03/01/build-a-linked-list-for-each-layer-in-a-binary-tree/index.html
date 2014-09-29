@@ -1,0 +1,369 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html style="display:none;" lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="I'm a solution delivery and technology expert.  I write about code (back-end and front-end), entrepreneurship, and life.  I'm obsessed with application performance, user experience, and shipping." name="description">
+		<meta content="nathan leclaire" name="author">
+		
+		<title>Build a Linked List For Each Layer in a Binary Tree &mdash; nathan leclaire | I care, I share, I'm Nathan LeClaire.</title>
+		
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href="/stylesheets/main.css" rel="stylesheet">
+		
+		<script>
+		   if(self == top) {
+			   document.documentElement.style.display = 'block'; 
+		   } else {
+			   top.location = self.location; 
+		   }
+		</script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+		<script src="/js/jquery.modal.min.js"></script>
+		<script src="/js/fuse.min.js"></script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div id="sidebar">
+				<header>
+					<div class="title">
+						<a href="http://nathanleclaire.com">
+							<img src="/images/nateface.jpeg" class="nateface" /> 
+							nathan leclaire 
+						</a>
+					</div>
+					<p class="slogan">I care, I share, I'm Nathan LeClaire.</p>
+					<div class="navi">
+						<ul>
+							<li><a href="/about/">About</a></li>
+							<li><a href="/blog/archives">Archives</a></li>
+							<li><a href="/atom.xml">RSS</a></li>
+						</ul>
+					</div> <!-- // .navi -->
+					<div id="sidebar-email">
+						<a href="mailto:nathan.leclaire@gmail.com">nathan.leclaire@gmail.com</a>
+					</div>
+				</header>
+				<span id="shameless-self-promotion">
+				<!-- Begin MailChimp Signup Form -->
+
+				<div id="mc_embed_signup">
+				<form action="https://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<label for="mce-EMAIL">Get my essays about tech delivered to your inbox</label>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+				</form>
+				</div>
+				<!--End mc_embed_signup-->
+				
+				<p>Quickly search the archive:</p>
+				<input type="text" placeholder="Fuzzy search by keyword (e.g. Angular)" id="archive-search">
+				<img src="/images/magnifying-glass.png" id="search-icon" />
+				<ul id="archive-search-populate">
+				</ul>
+				
+				</span>
+			</div>
+			<div id="content">
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+    <header>
+        <h1>
+            <a href="/blog/2014/03/01/build-a-linked-list-for-each-layer-in-a-binary-tree/">Build a Linked List For Each Layer in a Binary Tree</a>
+        </h1>
+        <h3 style="text-align: center;">by Nathan LeClaire</h3>
+        <time>01 March 2014</time>
+    </header>
+    <div>
+        <p><img src="/images/linkedListTree/binary_tree.png"></p>
+
+<p>I've been going through problems in <a href="http://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/098478280X">Cracking the Coding Interview</a> to keep my chops strong and for giggles and this one took a little bit of wrangling for me to get:</p>
+
+<blockquote><p>Given a binary search tree, design an algorithm which creates a linked list of all the
+nodes at each depth (i e , if you have a tree with depth D, you’ll have D linked lists)</p></blockquote>
+
+<p>So a binary tree such as :</p>
+
+<pre>
+       (1)
+      /   \
+     /     \
+   (2)     (3)
+  /  \     / \
+(4)  (5) (6) (7)
+</pre>
+
+
+<p>Will return linked lists:</p>
+
+<pre>
+(1) => NULL
+(2) => (3) => NULL
+(4) => (5) => (6) => (7) => NULL
+</pre>
+
+
+<p>I wrote up my solution to this in Python, and I'm going to share it with you to study and critique.</p>
+
+<h1>Solution</h1>
+
+<h2>The Linked List Implementation</h2>
+
+<p>If you've ever seen or written a linked list implementation before, you'll probably realize there's nothing particularly brilliant or innovative about this one.  Just a good old-fashioned, simple singly linked list.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=python><code>class LinkedList:
+    next = None
+    val = None
+ 
+    def __init__(self, val):
+        self.val = val
+ 
+    def add(self, val):
+        if self.next == None:
+            self.next = LinkedList(val)
+        else:
+            self.next.add(val)
+ 
+    def __str__(self):
+        return &quot;({val}) &quot;.format(val=self.val) + str(self.next)</code></pre></figure></notextile></div>
+
+
+<p>Usage:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=python><code>ll = LinkedList(1)
+ll.add(2)
+ll.add(3)</code></pre></figure></notextile></div>
+
+
+<h2>The Binary Tree Implementation</h2>
+
+<p>The binary tree implementation is similarly from scratch, and simlarly simple.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=python><code>class BinaryTree:
+    val = None
+    left = None
+    right = None
+    
+    def __init__(self, val):
+        self.val = val
+ 
+    def __str__(self):
+        return &quot;&lt;Binary Tree (val is {val}). \n\tleft is {left} \n\tright is {right}&gt;&quot;.format(val=self.val, left=self.left, right=self.right)</code></pre></figure></notextile></div>
+
+
+<p>No methods, I do all of the tree manipulation by hand.  This works okay for problems of this (considerably small) scale.</p>
+
+<h2>The Algorithm</h2>
+
+<p>The algorithm that I came up with is actually slightly different than what is listed as the solution in the book, and depends a bit of idiosyncracies of Python that aren't in Java (which all of the solutions from the book are written in).  Namely, it uses optional arguments to avoid wrapper methods and it uses a dictionary instead of a <code>ArrayList&lt;LinkedList&lt;BinaryTree&gt;&gt;</code>.</p>
+
+<p>I also differ from the solution in the book in that I grab the depth of the tree once and use that to determine the linked list's index, which is slightly less efficient than the solution that they provide.  If I'm not mistaken, however, the asymptotic complexity is still the same (<code>O(n)</code>).</p>
+
+<p>My depth function is exactly what you'd expect (recursive):</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=python><code>def depth(tree):
+    if tree == None:
+        return 0
+    if tree.left == None and tree.right == None:
+        return 1
+    else:
+        depthLeft = 1+depth(tree.left)
+        depthRight = 1+depth(tree.right)
+        if depthLeft &gt; depthRight:
+            return depthLeft
+        else:
+            return depthRight</code></pre></figure></notextile></div>
+
+
+<p>My <code>tree_to_linked_lists</code> function does a <a href="http://en.wikipedia.org/wiki/Tree_traversal#Pre-order">pre-order traversal</a>, adding nodes to their corresponding linked list (based on depth) in the dictionary <code>lists</code> as the tree is traversed.  <code>lists</code> is passed into, and returned from (in its mutated state), each call to <code>tree_to_linked_lists</code>.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=python><code>def tree_to_linked_lists(tree, lists={}, d=None):
+    if d == None:
+        d = depth(tree)
+    if lists.get(d) == None:
+        lists[d] = LinkedList(tree.val)
+    else:
+        lists[d].add(tree.val)
+        if d == 1:
+            return lists
+    if tree.left != None:
+        lists = tree_to_linked_lists(tree.left, lists, d-1)
+    if tree.right != None:
+        lists = tree_to_linked_lists(tree.right, lists, d-1)
+    return lists</code></pre></figure></notextile></div>
+
+
+<p>This produces a result that is sort of in reverse order compared to the solution provided by the book, but it still satisfies the problem description to provide a collection of linked lists.</p>
+
+<h1>Conclusion</h1>
+
+<p>You can find the entirety of the code <a href="https://gist.github.com/nathanleclaire/9292861">here</a>.</p>
+
+<p>I need to be better at data structures and algorithms.  They are fun.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+
+    </div>
+    <footer>
+        <p>If you find a mistake or issue in this article, please <a id="pull-request-link" taget="_blank" href="">fix it and submit a pull request on Github</a> (must be signed in to your GitHub account).</p>
+        <a target="_blank" style="display: block;" href="https://twitter.com/share?url=http://nathanleclaire.com/blog/2014/03/01/build-a-linked-list-for-each-layer-in-a-binary-tree/&text=Great article from @upthecyberpunks : " class="social-media-spam">Tweet It</a>
+        <a target="_blank" href="https://news.ycombinator.com/submitlink?u=http://nathanleclaire.com/blog/2014/03/01/build-a-linked-list-for-each-layer-in-a-binary-tree/&t=" class="social-media-spam">Submit to Hacker News</a>
+        <a target="_blank" style="display: block !important;" href="http://www.reddit.com/submit?url=http://nathanleclaire.com/blog/2014/03/01/build-a-linked-list-for-each-layer-in-a-binary-tree/&title=" class="social-media-spam">Submit to Reddit</a>
+        <br>
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/blog/categories/binary-tree/'>binary tree</a>, <a class='category' href='/blog/categories/data-structures/'>data structures</a>, <a class='category' href='/blog/categories/linked-list/'>linked list</a>, <a class='category' href='/blog/categories/python/'>python</a>
+	
+
+ 
+
+        <a target="_blank" style="display: block !important;" href="http://discourse.nathanleclaire.com">Chat in the forum!!</a>
+    
+        <div id="discourse-comments"></div>
+    </footer>
+    
+</article>
+<!-- END OF _includes/article.html -->
+
+
+<!-- END OF _/layouts/post.html -->
+
+			</div>
+			<form class="modal" id="mailing-list-modal" action="http://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<h1>Like what you're reading?</h1>
+					<img src="/images/happy-reader.jpeg"></img>
+					<p style="display: block;" for="mce-EMAIL">Did you enjoy this article?  You might want to sign up for my mailing list.  I send out weekly-ish essays about hot new tech stuff.</p>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL-modal" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+			</form>
+		</div> <!-- // .wrap -->
+	<script type="text/javascript" src="/js/prettify.js"></script>
+	<script>
+	function supports_html5_storage() {
+	  try {
+		return 'localStorage' in window && window['localStorage'] !== null;
+	  } catch (e) {
+		return false;
+	  }
+	}
+
+	$(document).ready(function () {
+	    var fuse;
+
+	    $("code").addClass("prettyprint");
+	    prettyPrint();
+
+	    $.getJSON("/articles.json", function(data) {
+	    	// input:
+	    	// [{title: "Learn Node.js The Troll Way", href: "blahblah"}, { ... }]
+	    	fuse = new Fuse(data, {
+	    	    keys: ['title', 'tags']
+	    	});
+	    });
+	    
+	    $("#archive-search").keyup(function() {
+	    	var $this = $(this);
+	    	var val = $this.val();
+	    	var result = fuse.search(val).slice(0, 1);
+	    	$list = $("#archive-search-populate");
+	    	$list.empty();
+	    	if (result.length > 0 && val !== '') {
+	    	    $.each(result, function(i, e) {
+	    	        $list.append('<li><a href="'+ e.href +'">'+ e.title +'</a></li>');
+	    	    });
+	    	}
+	    });
+	    
+	    $(".social-media-spam").each(function () {
+	        var e = $(this);
+	        var t = e.attr("href");
+	        var n = $("article header h1 a").html();
+	        t += encodeURIComponent(n);
+	        e.attr("href", t)
+	    });
+
+	    var e = window.location.href;
+	    var t = $("#pull-request-link");
+	    var n = "https://github.com/nathanleclaire/blog/edit/master/source/_posts/" + e.split("/").slice(4, 8).join("-") + ".markdown";
+	    t.attr("href", n);
+
+	    // Only offer mailing list once
+		var tryModal = localStorage["modal"] ? false : true;
+
+		// Don't offer mailing list to people on mobile
+		if ($(window).width() < 720) {
+			tryModal = false;
+		}
+
+		$('#mc-embedded-subscribe').click(function() {
+			// Don't offer mailing list if people have
+			// already clicked to try and sign up
+			tryModal = false;
+			localStorage["modal"] = "true";
+		});
+
+		$(window).scroll(function () {
+			if (tryModal && document.URL.indexOf('archives') === -1 && document.URL.indexOf('about') === -1) {
+				if (($(window).scrollTop() + $(window).height()) === $(document).height()) {
+					if (supports_html5_storage()) {
+						window.setTimeout(function() {
+							$('#mailing-list-modal').modal({
+								fadeDuration: 250
+							});
+							$('#mce-EMAIL-modal').focus();
+							tryModal = false;
+							localStorage["modal"] = "true";
+						}, 1000);
+					}
+				}
+			}
+		});
+
+
+	});
+	</script>
+	<script type="text/javascript">
+	if ('/blog/2014/03/01/build-a-linked-list-for-each-layer-in-a-binary-tree/' !== '/blog/index.html') {
+	  var discourseUrl = "http://discourse.nathanleclaire.com/",
+	      discourseEmbedUrl = 'http://nathanleclaire.com/blog/2014/03/01/build-a-linked-list-for-each-layer-in-a-binary-tree/';
+
+	  (function() {
+	    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+	      d.src = discourseUrl + 'javascripts/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+	  })();
+	}
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-26758702-2', 'nathanleclaire.com');
+	  ga('send', 'pageview');
+	</script>
+	</body>
+</html>
+<!-- END OF _layouts/default.html -->

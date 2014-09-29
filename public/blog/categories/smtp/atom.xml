@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: smtp | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/smtp/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Sending Email From Gmail Using Golang]]></title>
+    <link href="http://nathanleclaire.com/blog/2013/12/17/sending-email-from-gmail-using-golang/"/>
+    <updated>2013-12-17T23:38:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2013/12/17/sending-email-from-gmail-using-golang</id>
+    <content type="html"><![CDATA[<p>As part of the soon-to-be-deployed <a href="http://github.com/nathanleclaire/checkforbrokenlinks">checkforbrokenlinks</a> app, I found myself faced with the task of creating a contact form that would allow users to send me feedback on the app, so I could improve it and make it better in the future.  In order to do so I had to figure out a way to configure my server-side backend, written in Golang, to perform all of the neccessary steps in order to send me an e-mail from the front-end (written in <a href="http://angularjs.org">AngularJS</a>).  Looking into it, I don&#8217;t see too many e-mail sending implementations in Golang available easily online, so I&#8217;m putting the results of my research out there for all to see.</p>
+
+<p><img src="/images/golang-gmail/gopher_mail.jpeg" title="A helpful little gopher." ></p>
+
+<h1><code>net/smtp</code></h1>
+
+<p>Golang provides a <code>smtp</code> (<a href="http://golang.org/pkg/net/smtp/">Simple Mail Transfer Protocol</a>) library as part of its <code>net</code> package.  <code>"net/smtp"</code> exposes some useful functionality right out of the box.  As it turns out, it&#8217;s <a href="">not too hard</a> to connect to <a href="">Gmail</a> using <code>net/smtp</code>, which saved me some serious misgivings I was having about setting up and configuring my own mail server (I&#8217;ve no doubt it could be done, but I was looking for a quick and simple solution).  So I signed up for a <a href="https://accounts.google.com/SignUp?service=mail&amp;hl=en_us&amp;continue=http%3A%2F%2Fmail.google.com%2Fmail%2F%3Fpc%3Den-ha-na-us-bk&amp;utm_campaign=en&amp;utm_source=en-ha-na-us-bk&amp;utm_medium=ha">new Gmail account</a> and connected to that to send e-mails to my primary address from the Check For Broken Links app form.  As it turns out, doing so with <code>"net/smtp"</code> is fairly straightforward.  You call <code>smtp.PlainAuth</code> with the proper credentials and domain name, and it returns you back an instance of <code>smtp.Auth</code> that you can use to send e-mails.  I use a custom-defined <code>struct</code> called <code>EmailUser</code> to define the parameters for that call for clarity&#8217;s sake, and so that I can keep them defined in a configuration file.</p>
+
+<p>This is an example usage:</p>
+
+<pre><code>type EmailUser struct {
+    Username    string
+    Password    string
+    EmailServer string
+    Port        int
+}
+
+emailUser := &amp;EmailUser{'yourGmailUsername', 'password', 'smtp.gmail.com', 587}
+
+auth := smtp.PlainAuth("",
+    emailUser.Username,
+    emailUser.Password,
+    emailUser.EmailServer
+)
+</code></pre>
+
+<h1>Templating Mail</h1>
+
+<p>Odds are good that you don&#8217;t want to send identical e-mails all of the time, so I&#8217;ll walk you through setting up some basic templated e-mails and then show you how to send them using <code>net/smtp</code> after we&#8217;ve already connected to Gmail.  When you format an e-mail sent with SMTP correctly, useful information about the sender, subject, and so on will be parsed out of the e-mail&#8217;s body and interpreted/displayed by the recipients e-mail client in the manner that one would expect.  You can also use more complex template structures to generate e-mails that have more user-specific data, for example if you wanted to send your customers a customized report of their server&#8217;s bandwidth usage over time via e-mail, or a list of the items they purchased and their invoicing status.</p>
+
+<p>I use a struct called <code>SmtpTemplateData</code> to keep track of the basic information for templating the e-mail.  In this case, we know the value of the e-mail body text ahead of time, but we could also run a template for the body template if we wanted to include business-specific logic such as mentioned above.  We import <code>"text/template"</code> and <code>"bytes"</code>, then:</p>
+
+<pre><code>type SmtpTemplateData struct {
+    From    string
+    To      string
+    Subject string
+    Body    string
+}
+
+const emailTemplate = `From: &amp;#123;&amp;#123;.From&amp;#125;&amp;#125;
+To: &amp;#123;&amp;#123;.To&amp;#125;&amp;#125;
+Subject: &amp;#123;&amp;#123;.Subject&amp;#125;&amp;#125;
+
+&amp;#123;&amp;#123;.Body&amp;#125;&amp;#125;
+
+Sincerely,
+
+&amp;#123;&amp;#123;.From&amp;#125;&amp;#125;
+`
+var err error
+var doc bytes.Buffer
+
+context := &amp;SmtpTemplateData{
+    "SmtpEmailSender",
+    "recipient@domain.com",
+    "This is the e-mail subject line!",
+    "Hello, this is a test e-mail body."
+}
+t := template.New("emailTemplate")
+t, err = t.Parse(emailTemplate)
+if err != nil {
+    log.Print("error trying to parse mail template")
+}
+err = t.Execute(&amp;doc, context)
+if err != nil {
+    log.Print("error trying to execute mail template")
+}
+</code></pre>
+
+<p>Then, you can send mail with <code>smtp.SendMail</code>, passing a list of recipients as well as the <code>bytes.Buffer</code> buffer for the body of the e-mail:</p>
+
+<pre><code>err = smtp.SendMail(emailUser.EmailServer+":"+strconv.Itoa(emailUser.Port), // in our case, "smtp.google.com:587"
+    auth,
+    emailUser.Username,
+    []string{"nathanleclaire@gmail.com"},
+    doc.Bytes())
+if err != nil {
+    log.Print("ERROR: attempting to send a mail ", err)
+}
+</code></pre>
+
+<p>If you want to send e-mails concurrently, or just not block in a HTTP handler, you can encapsulate the above functionality in a function and invoke it with <code>go sendMail(/* params ... */)</code>.</p>
+
+<h1>Conclusion</h1>
+
+<p><code>"net/smtp"</code> gets the job done, but specifically for the task of sending e-mails from Gmail it takes a little bit of setup.  I may take a whack at making a simple, clean implementation of a library for this purpose (also providing support for boilerplate templating).</p>
+
+<p>Hope this article has been useful and you have a Merry Christmas.  And as always, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

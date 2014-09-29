@@ -1,0 +1,340 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html style="display:none;" lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="I'm a solution delivery and technology expert.  I write about code (back-end and front-end), entrepreneurship, and life.  I'm obsessed with application performance, user experience, and shipping." name="description">
+		<meta content="nathan leclaire" name="author">
+		
+		<title>5 Reasons We Won Startup Weekend &mdash; nathan leclaire | I care, I share, I'm Nathan LeClaire.</title>
+		
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href="/stylesheets/main.css" rel="stylesheet">
+		
+		<script>
+		   if(self == top) {
+			   document.documentElement.style.display = 'block'; 
+		   } else {
+			   top.location = self.location; 
+		   }
+		</script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+		<script src="/js/jquery.modal.min.js"></script>
+		<script src="/js/fuse.min.js"></script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div id="sidebar">
+				<header>
+					<div class="title">
+						<a href="http://nathanleclaire.com">
+							<img src="/images/nateface.jpeg" class="nateface" /> 
+							nathan leclaire 
+						</a>
+					</div>
+					<p class="slogan">I care, I share, I'm Nathan LeClaire.</p>
+					<div class="navi">
+						<ul>
+							<li><a href="/about/">About</a></li>
+							<li><a href="/blog/archives">Archives</a></li>
+							<li><a href="/atom.xml">RSS</a></li>
+						</ul>
+					</div> <!-- // .navi -->
+					<div id="sidebar-email">
+						<a href="mailto:nathan.leclaire@gmail.com">nathan.leclaire@gmail.com</a>
+					</div>
+				</header>
+				<span id="shameless-self-promotion">
+				<!-- Begin MailChimp Signup Form -->
+
+				<div id="mc_embed_signup">
+				<form action="https://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<label for="mce-EMAIL">Get my essays about tech delivered to your inbox</label>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+				</form>
+				</div>
+				<!--End mc_embed_signup-->
+				
+				<p>Quickly search the archive:</p>
+				<input type="text" placeholder="Fuzzy search by keyword (e.g. Angular)" id="archive-search">
+				<img src="/images/magnifying-glass.png" id="search-icon" />
+				<ul id="archive-search-populate">
+				</ul>
+				
+				</span>
+			</div>
+			<div id="content">
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+    <header>
+        <h1>
+            <a href="/blog/2014/02/10/5-reasons-we-won-startup-weekend/">5 Reasons We Won Startup Weekend</a>
+        </h1>
+        <h3 style="text-align: center;">by Nathan LeClaire</h3>
+        <time>10 February 2014</time>
+    </header>
+    <div>
+        <p>This previous weekend I participated in <a href="http://annarbor.startupweekend.org/">Ann Arbor Startup Weekend</a> and had a blast.  Our company's name is <a href="http://fixworthy.co">Fixworthy</a> and we built a photo-based bug tracking app for real life (think Github Issues meets Instagram).</p>
+
+<p><img src="/images/swaa/fixworthy.jpeg" title="Hail to the victors." ></p>
+
+<p>Of course we worked hard on it, lost some sleep etc. but everyone does that.  There were some special factors at play in our case that helped us win such as:</p>
+
+<ol>
+<li><a href="http://www.vagrantup.com/">Vagrant</a> and Frequent Deploying</li>
+<li>Emphasizing "Done Is Better Than Perfect"</li>
+<li>Good Design and Aesthetics</li>
+<li>Finding a Use For Everybody (especially developers)</li>
+<li>Following the Pain and the Money</li>
+</ol>
+
+
+<p>Of course, all of these are forces stem from having a smart, talented, and easy-to-work-with team as well.  Let's get into some specifics, shall we?</p>
+
+<h1>Vagrant and Frequent Deploying</h1>
+
+<p><img src="/images/swaa/vagrant.png" title="Up up and away." ></p>
+
+<p>I'm going to start off with a technical point to hook in my fellow nerds here.</p>
+
+<p>The very first technical thing that we (the developers) did, on Friday night after working our way through the vision of the product and what we thought its most important features should be, was to get started hacking.  We knew that to ship a working product quickly it would be an enourmous boon to be:</p>
+
+<ol>
+<li>Working on the same platform so that any issues which came up would have ubiquitous solutions, <em>and</em>:</li>
+<li>Working in an environment that was extremely close to the environment we would be deploying our production solution to (ever have those awkward it-worked-on-my-machine production bugs?)</li>
+</ol>
+
+
+<p>Most companies account for this by having everyone work in the cloud on EC2 instances or what have you, or simply by forcing their developers to all use the same operating system (which we kind of did a variant of).  In our case there was no way developing in the cloud was going to work (we had too little time or money) and our dev team was split about 50/50 between OSX and Windows so we decided to use <a href="http://www.vagrantup.com/">Vagrant</a>, a "free and open-source software for creating and configuring virtual development environments".</p>
+
+<p>Vagrant is awesome, although I'm a little disappointed they have moved away from their original logo which features this scrappy dude:</p>
+
+<p><img src="/images/swaa/vagrant_chilling.png"></p>
+
+<p>We made everyone download and install Vagrant / VirtualBox (which Vagrant depends on) and use <a href="https://github.com/bryannielsen/Laravel4-Vagrant">this configuration</a>, which orchestrates the installation of a LAMP stack and the <a href="http://laravel.com/">Laravel framework</a> using Puppet.  It took a little while for all of the dependencies to install on everyone's computer but we were able to sit back and sip a little beer while Puppet did most of the heavy lifting.  Once Puppet was all done, everyone could point their host OS's browser to <code>http://localhost:8888</code> and be greeted by a freshly minted Laravel install.  Shared folders allowed us all to get started hacking right away, which was seriously awesome for productivity.</p>
+
+<p>This system also made it super easy to deploy frequently, since we just pulled in our changes to a git repo hosted on the prod server, ran the migrations and database seeds and <em>voila</em>, we were done deploying.  No nasty production surprises.</p>
+
+<p>One last point here, on the geeky technical side of things:  There was no squabbling over PHP vs. Rails or CodeIgniter vs. CakePHP or any of that kind of stuff that you are surely familiar with, we simply all worked towards the common good however we could.  We had a couple of guys who traditionally stuck to Ruby or .NET, for instance, that picked up front-end work since it was where the could be the most productive, the quickest.  This kind of put-the-team-first mentality is priceless for getting things done quickly.</p>
+
+<h1>Emphasizing "Done Is Better Than Perfect"</h1>
+
+<p><img src="/images/swaa/done_is_better.png" title="Lookin' good." ></p>
+
+<p>We've all probably heard this one <a href="http://www.etsy.com/blog/en/2013/why-done-is-better-than-perfect/">a ton of times</a>, so I won't spend <em>too</em> much time on it, but I do believe it played a huge role in our ability to push forward as a team and succeed.  Especially on front-end stuff I have way too much of a tendency towards "perfectionism" that can be counterproductive at best and harmful at worst as I am stricken by analysis paralysis and self-doubt.</p>
+
+<p>Whenever we had moments of self-doubt about the product, or our implementation (though these were surprisingly rare on the tech side) we asked ourselves: "Is this helping us to deliver a quality product that is aligned with our vision for what this should be?" and if the answer was no, we stoically carried onward.  There were definitely parts of the app that left something to be desired (security concerns are a notable one on the backend side- though hopefully the framework helps a bit with that), but there always are, and for a weekend project I was ecstatically happy with the end result.</p>
+
+<p>I was shocked how quickly we could ship something that was working, if not ideal, and begin validating it with users and prospective clients.  That creates a tight feedback loop and gets the commits a-flyin'.</p>
+
+<h1>Good Design and Aesthetics</h1>
+
+<p><img src="/images/swaa/fw_logo.png" title="Lookin' good." ></p>
+
+<p>Did you know that users begin forming impressions of a website's "visual appeal" in <a href="http://www.websiteoptimization.com/speed/tweak/blink/">as little as 50 milliseconds</a>?  That's 50 milliseconds quicker than the <a href="http://stackoverflow.com/questions/536300/what-is-the-shortest-perceivable-application-response-delay">minimum application response delay humans are able to perceive</a>.  In other words, users decide if your website is beautiful or if it is garbage very, <em>very</em>, quickly.</p>
+
+<p><a href="http://www.klsy.co/">Kelsey</a> was our design ringer and boy am I ever glad she was on our team.  There's no doubt that <a href="http://en.wikipedia.org/wiki/A_picture_is_worth_a_thousand_words">a picture is worth a thousand words</a> and having a designer allowed us to take our website from "awkward-Bootstrap-import-and-fuhgettaboutit" to "clean, lean, eye-candy <em>machine</em>".  A logo is a condensed visual statement-of-purpose-of-sorts and I was super happy with the logo designed for Fixworthy, which you can see above (I'm a little biased because my favorite color is orange).</p>
+
+<p>Having good design instantly improves your social media presence (check that backdrop on our <a href="twitter.com/fixworthy">Twitter page</a>!), the initial reaction that your users have as they begin forming a relationship with your product, and more.  It's well known that <a href="http://econsultancy.com/blog/62391-do-bigger-images-mean-improved-conversion-rates-three-case-studies">big images increase conversion rates</a>, and having those design chops on our side really gave us some serious momentum on our side towards converting the people who really needed to be swayed in this case- the judges.</p>
+
+<h1>Finding a Use For Everybody (especially developers)</h1>
+
+<p><img src="/images/swaa/steve_ballmer_is_awesome.gif" title="This man knows." ></p>
+
+<p>When some of the hopefuls pitched their ideas or were trying to sell them to get people to join their team, there were a few who stood on stage and said in all honesty "I'm not looking for any other developers to join" while all the devs in the room's collective jaws dropped.  Our feelings of surprise were validated late on Saturday when about three or four companies went up to the mic again to try and persuade developers already engaged with one team to switch to their own.</p>
+
+<p>In a sense I can see how a technical founder might not want to run the risk of having a bunch of newbies or bad programmers stomping around in their precious self-written code, but at the same time it stunned me that anyone would turn away someone willing to help with such a short deadline in tow (especially with how tight the demand is for technical talent).  The odds of getting a real stinker in your group were pretty low, considering that it was a University of Michigan-centric event, and it struck me more as vanity than anything else that people were willing to turn away perfectly good (free!) talent.</p>
+
+<p>Our company didn't turn anyone away and tried to find a use for everyone.  As mentioned, some of the developers were a little more comfortable with back-end stacks other than LAMP, and so they cordially agreed to work on the front-end.  Our team member <a href="http://wilsonproductive.com/">Greg</a> felt that he was best at social media / marketing stuff, so he whipped up an Instagram and Twitter presence at lightning speed.  Our business team began pounding the pavement by doing market research, performing user testing, and getting in touch with potential customers (organizations for whom this technology would be useful, perhaps if they wanted private issue tracking).</p>
+
+<p>All in all, we made a hugely concentrated effort to rake in as much value as possible from every single person who wanted to help.  This helped bolster everyone's moral and enthusiasm, let them play to their strengths, and paid off for us as a team.</p>
+
+<h1>Following the Pain and the Money</h1>
+
+<p><img src="/images/swaa/mo_money_mo_problems.jpeg"></p>
+
+<p>This is still a major pivot/focus point for the startup if we continue going (and there's a lot of wind in our sails right now), but I think that a large part of why the group was able to be successful was that we didn't kid ourselves about the fact that we were building something to create wealth by:</p>
+
+<ol>
+<li>Easing pain points for people, especially those with cash to throw at the problem e.g. businesses and universities</li>
+<li>Making money.</li>
+</ol>
+
+
+<p>Granted, there was a lot of hand-wringing about <em>how</em> we were going to accomplish this, but I think several of the core engineers (particularly <a href="http://scottdlowe.com/">Scott</a>) had a vision about this product was going to fly, and didn't let a relentless enthusiasm for making a fantastically great product interfere with the reality that we needed to make money from this somehow.  A favorite line to throw at our business team, when they would try to persuade us to take the product in a different direction, was "get us someone who will write us a check for the V1 of this app when it is finished".  That really put things into perspective.  Shouldn't every aspiring entrepreneur hear, "Yeah, but who's going to use (and pay for) that?" in response to one of their ideas?</p>
+
+<p>This kind of zeal prevented us from making yet another recipe app or a product with questionable monetization potential.  I feel confident that at the very least the core Fixworthy product could make moves into a space where they were making life easier for powerful (read: those with budgets to spend on sotware) people's lifes a bit easier, and especially given the generally low standard for UI on enterprise software I'm optimistic about the opportunities in that market for easy-to-use products that are marketed well.</p>
+
+<h1>Conclusion</h1>
+
+<p>I had a blast and learned a ton about technology and leading / working with a decent sized team.  We started the weekend with nothing and ended up with a company, however small and scrappy it was.  Best of all, we won.  <a href="http://www.youtube.com/watch?v=GGXzlRoNtHU&amp;feature=kp">Who doesn't like to win</a>?</p>
+
+<p>I had an inkling that it might be so when we were some of the last participants to get shooed out of the common space on Saturday night, but I didn't want to jinx us by bringing it up.  Besides, as all pseudo-mystics and hippies are so fond of pointing out, the journey is the destination.  Given that my last Startup Weekend company was less than satisfactory (though it was a long time ago), I couldn't be any happier.</p>
+
+<p>Until next time, stay sassy Internet.  And don't forget to keep hustlin'.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+
+    </div>
+    <footer>
+        <p>If you find a mistake or issue in this article, please <a id="pull-request-link" taget="_blank" href="">fix it and submit a pull request on Github</a> (must be signed in to your GitHub account).</p>
+        <a target="_blank" style="display: block;" href="https://twitter.com/share?url=http://nathanleclaire.com/blog/2014/02/10/5-reasons-we-won-startup-weekend/&text=Great article from @upthecyberpunks : " class="social-media-spam">Tweet It</a>
+        <a target="_blank" href="https://news.ycombinator.com/submitlink?u=http://nathanleclaire.com/blog/2014/02/10/5-reasons-we-won-startup-weekend/&t=" class="social-media-spam">Submit to Hacker News</a>
+        <a target="_blank" style="display: block !important;" href="http://www.reddit.com/submit?url=http://nathanleclaire.com/blog/2014/02/10/5-reasons-we-won-startup-weekend/&title=" class="social-media-spam">Submit to Reddit</a>
+        <br>
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/blog/categories/entrepreneurship/'>entrepreneurship</a>, <a class='category' href='/blog/categories/fixworthy/'>fixworthy</a>, <a class='category' href='/blog/categories/hacking/'>hacking</a>, <a class='category' href='/blog/categories/reasons/'>reasons</a>, <a class='category' href='/blog/categories/startups/'>startups</a>, <a class='category' href='/blog/categories/vagrant/'>vagrant</a>
+	
+
+ 
+
+        <a target="_blank" style="display: block !important;" href="http://discourse.nathanleclaire.com">Chat in the forum!!</a>
+    
+        <div id="discourse-comments"></div>
+    </footer>
+    
+</article>
+<!-- END OF _includes/article.html -->
+
+
+<!-- END OF _/layouts/post.html -->
+
+			</div>
+			<form class="modal" id="mailing-list-modal" action="http://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<h1>Like what you're reading?</h1>
+					<img src="/images/happy-reader.jpeg"></img>
+					<p style="display: block;" for="mce-EMAIL">Did you enjoy this article?  You might want to sign up for my mailing list.  I send out weekly-ish essays about hot new tech stuff.</p>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL-modal" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+			</form>
+		</div> <!-- // .wrap -->
+	<script type="text/javascript" src="/js/prettify.js"></script>
+	<script>
+	function supports_html5_storage() {
+	  try {
+		return 'localStorage' in window && window['localStorage'] !== null;
+	  } catch (e) {
+		return false;
+	  }
+	}
+
+	$(document).ready(function () {
+	    var fuse;
+
+	    $("code").addClass("prettyprint");
+	    prettyPrint();
+
+	    $.getJSON("/articles.json", function(data) {
+	    	// input:
+	    	// [{title: "Learn Node.js The Troll Way", href: "blahblah"}, { ... }]
+	    	fuse = new Fuse(data, {
+	    	    keys: ['title', 'tags']
+	    	});
+	    });
+	    
+	    $("#archive-search").keyup(function() {
+	    	var $this = $(this);
+	    	var val = $this.val();
+	    	var result = fuse.search(val).slice(0, 1);
+	    	$list = $("#archive-search-populate");
+	    	$list.empty();
+	    	if (result.length > 0 && val !== '') {
+	    	    $.each(result, function(i, e) {
+	    	        $list.append('<li><a href="'+ e.href +'">'+ e.title +'</a></li>');
+	    	    });
+	    	}
+	    });
+	    
+	    $(".social-media-spam").each(function () {
+	        var e = $(this);
+	        var t = e.attr("href");
+	        var n = $("article header h1 a").html();
+	        t += encodeURIComponent(n);
+	        e.attr("href", t)
+	    });
+
+	    var e = window.location.href;
+	    var t = $("#pull-request-link");
+	    var n = "https://github.com/nathanleclaire/blog/edit/master/source/_posts/" + e.split("/").slice(4, 8).join("-") + ".markdown";
+	    t.attr("href", n);
+
+	    // Only offer mailing list once
+		var tryModal = localStorage["modal"] ? false : true;
+
+		// Don't offer mailing list to people on mobile
+		if ($(window).width() < 720) {
+			tryModal = false;
+		}
+
+		$('#mc-embedded-subscribe').click(function() {
+			// Don't offer mailing list if people have
+			// already clicked to try and sign up
+			tryModal = false;
+			localStorage["modal"] = "true";
+		});
+
+		$(window).scroll(function () {
+			if (tryModal && document.URL.indexOf('archives') === -1 && document.URL.indexOf('about') === -1) {
+				if (($(window).scrollTop() + $(window).height()) === $(document).height()) {
+					if (supports_html5_storage()) {
+						window.setTimeout(function() {
+							$('#mailing-list-modal').modal({
+								fadeDuration: 250
+							});
+							$('#mce-EMAIL-modal').focus();
+							tryModal = false;
+							localStorage["modal"] = "true";
+						}, 1000);
+					}
+				}
+			}
+		});
+
+
+	});
+	</script>
+	<script type="text/javascript">
+	if ('/blog/2014/02/10/5-reasons-we-won-startup-weekend/' !== '/blog/index.html') {
+	  var discourseUrl = "http://discourse.nathanleclaire.com/",
+	      discourseEmbedUrl = 'http://nathanleclaire.com/blog/2014/02/10/5-reasons-we-won-startup-weekend/';
+
+	  (function() {
+	    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+	      d.src = discourseUrl + 'javascripts/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+	  })();
+	}
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-26758702-2', 'nathanleclaire.com');
+	  ga('send', 'pageview');
+	</script>
+	</body>
+</html>
+<!-- END OF _layouts/default.html -->

@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/09/14/dont-be-scared-of-git-rebase/</loc>
+    
+    <lastmod>2014-09-14T14:38:31+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/09/07/bash-scripting-and-the-legend-of-the-hidden-bracket/</loc>
+    
+    <lastmod>2014-09-07T22:55:23+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/08/31/why-codegangstas-cli-package-is-the-bomb-and-you-should-use-it/</loc>
+    
+    <lastmod>2014-08-31T06:18:50+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/08/24/handling-ctrl-c-interrupt-signal-in-golang-programs/</loc>
+    
+    <lastmod>2014-08-24T19:33:53+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/08/17/automagical-deploys-from-docker-hub/</loc>
+    
+    <lastmod>2014-08-17T05:52:12+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang/</loc>
+    
+    <lastmod>2014-08-09T11:14:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/08/03/write-a-function-similar-to-underscore-dot-jss-debounce-in-golang/</loc>
+    
+    <lastmod>2014-08-03T17:22:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/07/19/demystifying-golangs-io-dot-reader-and-io-dot-writer-interfaces/</loc>
+    
+    <lastmod>2014-07-19T19:35:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/07/12/10-docker-tips-and-tricks-that-will-make-you-sing-a-whale-song-of-joy/</loc>
+    
+    <lastmod>2014-07-12T17:35:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/07/01/rethinkdb-is-quietly-changing-the-way-we-think-about-data/</loc>
+    
+    <lastmod>2014-07-01T23:10:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/06/28/original-content-vultures-are-evil-and-what-you-can-do-to-protect-yourself/</loc>
+    
+    <lastmod>2014-06-28T17:58:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/06/26/back-from-the-dead/</loc>
+    
+    <lastmod>2014-06-26T20:58:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/05/02/do-we-need-a-community-for-vagrantfiles/</loc>
+    
+    <lastmod>2014-05-02T03:50:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/04/27/a-surprising-feature-of-golang-that-colored-me-impressed/</loc>
+    
+    <lastmod>2014-04-27T00:16:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/04/19/5-angularjs-antipatterns-and-pitfalls/</loc>
+    
+    <lastmod>2014-04-19T13:58:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/04/12/unit-testing-services-in-angularjs-for-fun-and-for-profit/</loc>
+    
+    <lastmod>2014-04-12T23:14:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/04/05/implementing-a-concurrent-floodfill-with-golang/</loc>
+    
+    <lastmod>2014-04-05T13:34:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/03/24/cygwin-git-clone-ssl-issue-c_rehash-openssl-not-found/</loc>
+    
+    <lastmod>2014-03-24T19:44:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/03/22/what-is-this-docker-thing-that-everyone-is-so-hyped-about/</loc>
+    
+    <lastmod>2014-03-22T20:38:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/03/15/angularjs-isnt-mvc-its-sdc/</loc>
+    
+    <lastmod>2014-03-15T12:38:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/03/08/five-dos-and-donts-for-technical-recruiters/</loc>
+    
+    <lastmod>2014-03-08T19:58:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/03/01/build-a-linked-list-for-each-layer-in-a-binary-tree/</loc>
+    
+    <lastmod>2014-03-01T15:52:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/02/21/how-to-wait-for-all-goroutines-to-finish-executing-before-continuing-part-two-fixing-my-ooops/</loc>
+    
+    <lastmod>2014-02-21T17:03:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/02/15/how-to-wait-for-all-goroutines-to-finish-executing-before-continuing/</loc>
+    
+    <lastmod>2014-02-15T15:23:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/02/10/5-reasons-we-won-startup-weekend/</loc>
+    
+    <lastmod>2014-02-10T18:27:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/02/08/the-number-one-dev-killer/</loc>
+    
+    <lastmod>2014-02-08T15:29:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/01/31/banging-your-head-against-an-angularjs-issue-try-this/</loc>
+    
+    <lastmod>2014-01-31T19:53:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/01/20/speed-up-your-workflow-by-running-phpunit-tests-inside-of-vim/</loc>
+    
+    <lastmod>2014-01-20T23:30:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/01/18/i-love-hackathons-i-hate-hackathons/</loc>
+    
+    <lastmod>2014-01-18T22:05:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/01/11/dragging-and-dropping-images-from-one-browser-tab-to-another-in-angularjs/</loc>
+    
+    <lastmod>2014-01-11T17:21:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2014/01/04/5-smooth-angularjs-application-tips/</loc>
+    
+    <lastmod>2014-01-04T14:24:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2013/12/28/the-good-the-bad-and-the-ugly-of-sails-dot-js-realtime-javascript-mvc-framework/</loc>
+    
+    <lastmod>2013-12-28T15:59:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2013/12/17/sending-email-from-gmail-using-golang/</loc>
+    
+    <lastmod>2013-12-17T23:38:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2013/12/13/how-to-unit-test-controllers-in-angularjs-without-setting-your-hair-on-fire/</loc>
+    
+    <lastmod>2013-12-13T23:03:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2013/12/07/dont-fear-directives-in-angular-js/</loc>
+    
+    <lastmod>2013-12-07T12:41:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-js/</loc>
+    
+    <lastmod>2013-11-30T14:40:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2013/11/23/how-i-automated-finding-almost-anyones-email-address/</loc>
+    
+    <lastmod>2013-11-23T17:22:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2013/11/16/the-javascript-question-i-bombed-in-an-interview-with-a-y-combinator-startup/</loc>
+    
+    <lastmod>2013-11-16T17:30:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2013/11/04/want-to-work-with-databases-in-golang-lets-try-some-gorp/</loc>
+    
+    <lastmod>2013-11-04T18:58:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2013/10/27/5-cool-unix-hacks-for-fun-and-productivity/</loc>
+    
+    <lastmod>2013-10-27T19:44:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2013/10/22/three-elements-that-sum-to-zero/</loc>
+    
+    <lastmod>2013-10-22T00:02:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2013/10/16/commit-every-day/</loc>
+    
+    <lastmod>2013-10-16T23:46:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/2013/02/06/learn-node-dot-js-the-troll-way/</loc>
+    
+    <lastmod>2013-02-06T20:31:00+00:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  
+  <url>
+    <loc>http://nathanleclaire.com/</loc>
+    <lastmod>2014-09-29T03:13:10+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/</loc>
+    <lastmod>2014-09-29T03:13:10+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/blog/archives/</loc>
+    <lastmod>2014-09-29T03:13:10+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>http://nathanleclaire.com/about/</loc>
+    <lastmod>2014-09-29T03:13:10+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  
+  
+</urlset>

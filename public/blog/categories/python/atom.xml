@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: python | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/python/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Build a Linked List For Each Layer in a Binary Tree]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/03/01/build-a-linked-list-for-each-layer-in-a-binary-tree/"/>
+    <updated>2014-03-01T15:52:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/03/01/build-a-linked-list-for-each-layer-in-a-binary-tree</id>
+    <content type="html"><![CDATA[<p><img src="/images/linkedListTree/binary_tree.png"></p>
+
+<p>I&#8217;ve been going through problems in <a href="http://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/098478280X">Cracking the Coding Interview</a> to keep my chops strong and for giggles and this one took a little bit of wrangling for me to get:</p>
+
+<blockquote><p>Given a binary search tree, design an algorithm which creates a linked list of all the
+nodes at each depth (i e , if you have a tree with depth D, you’ll have D linked lists)</p></blockquote>
+
+<p>So a binary tree such as :</p>
+
+<pre>
+       (1)
+      /   \
+     /     \
+   (2)     (3)
+  /  \     / \
+(4)  (5) (6) (7)
+</pre>
+
+
+<p>Will return linked lists:</p>
+
+<pre>
+(1) => NULL
+(2) => (3) => NULL
+(4) => (5) => (6) => (7) => NULL
+</pre>
+
+
+<p>I wrote up my solution to this in Python, and I&#8217;m going to share it with you to study and critique.</p>
+
+<h1>Solution</h1>
+
+<h2>The Linked List Implementation</h2>
+
+<p>If you&#8217;ve ever seen or written a linked list implementation before, you&#8217;ll probably realize there&#8217;s nothing particularly brilliant or innovative about this one.  Just a good old-fashioned, simple singly linked list.</p>
+
+<pre><code class="python">class LinkedList:
+    next = None
+    val = None
+
+    def __init__(self, val):
+        self.val = val
+
+    def add(self, val):
+        if self.next == None:
+            self.next = LinkedList(val)
+        else:
+            self.next.add(val)
+
+    def __str__(self):
+        return "({val}) ".format(val=self.val) + str(self.next)
+</code></pre>
+
+<p>Usage:</p>
+
+<pre><code class="python">ll = LinkedList(1)
+ll.add(2)
+ll.add(3)
+</code></pre>
+
+<h2>The Binary Tree Implementation</h2>
+
+<p>The binary tree implementation is similarly from scratch, and simlarly simple.</p>
+
+<pre><code class="python">class BinaryTree:
+    val = None
+    left = None
+    right = None
+
+    def __init__(self, val):
+        self.val = val
+
+    def __str__(self):
+        return "&lt;Binary Tree (val is {val}). \n\tleft is {left} \n\tright is {right}&gt;".format(val=self.val, left=self.left, right=self.right)
+</code></pre>
+
+<p>No methods, I do all of the tree manipulation by hand.  This works okay for problems of this (considerably small) scale.</p>
+
+<h2>The Algorithm</h2>
+
+<p>The algorithm that I came up with is actually slightly different than what is listed as the solution in the book, and depends a bit of idiosyncracies of Python that aren&#8217;t in Java (which all of the solutions from the book are written in).  Namely, it uses optional arguments to avoid wrapper methods and it uses a dictionary instead of a <code>ArrayList&lt;LinkedList&lt;BinaryTree&gt;&gt;</code>.</p>
+
+<p>I also differ from the solution in the book in that I grab the depth of the tree once and use that to determine the linked list&#8217;s index, which is slightly less efficient than the solution that they provide.  If I&#8217;m not mistaken, however, the asymptotic complexity is still the same (<code>O(n)</code>).</p>
+
+<p>My depth function is exactly what you&#8217;d expect (recursive):</p>
+
+<pre><code class="python">def depth(tree):
+    if tree == None:
+        return 0
+    if tree.left == None and tree.right == None:
+        return 1
+    else:
+        depthLeft = 1+depth(tree.left)
+        depthRight = 1+depth(tree.right)
+        if depthLeft &gt; depthRight:
+            return depthLeft
+        else:
+            return depthRight
+</code></pre>
+
+<p>My <code>tree_to_linked_lists</code> function does a <a href="http://en.wikipedia.org/wiki/Tree_traversal#Pre-order">pre-order traversal</a>, adding nodes to their corresponding linked list (based on depth) in the dictionary <code>lists</code> as the tree is traversed.  <code>lists</code> is passed into, and returned from (in its mutated state), each call to <code>tree_to_linked_lists</code>.</p>
+
+<pre><code class="python">def tree_to_linked_lists(tree, lists={}, d=None):
+    if d == None:
+        d = depth(tree)
+    if lists.get(d) == None:
+        lists[d] = LinkedList(tree.val)
+    else:
+        lists[d].add(tree.val)
+        if d == 1:
+            return lists
+    if tree.left != None:
+        lists = tree_to_linked_lists(tree.left, lists, d-1)
+    if tree.right != None:
+        lists = tree_to_linked_lists(tree.right, lists, d-1)
+    return lists
+</code></pre>
+
+<p>This produces a result that is sort of in reverse order compared to the solution provided by the book, but it still satisfies the problem description to provide a collection of linked lists.</p>
+
+<h1>Conclusion</h1>
+
+<p>You can find the entirety of the code <a href="https://gist.github.com/nathanleclaire/9292861">here</a>.</p>
+
+<p>I need to be better at data structures and algorithms.  They are fun.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How I Automated "Finding Almost Anyone's Email Address"]]></title>
+    <link href="http://nathanleclaire.com/blog/2013/11/23/how-i-automated-finding-almost-anyones-email-address/"/>
+    <updated>2013-11-23T17:22:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2013/11/23/how-i-automated-finding-almost-anyones-email-address</id>
+    <content type="html"><![CDATA[<p><img src="/images/autorap/demo-fast.gif" title="A demo, complete with colors." ></p>
+
+<p><em>EDIT:  The original article author, Rob Ousbey, has popped up on various social media sites to remind everyone to use this tool/knowledge responsibly.  I agree.  Please be responsible.</em></p>
+
+<p>Not too long ago I came across an article on <a href="https://news.ycombinator.com">Hacker News</a> called &#8221;<a href="http://www.startupmoon.com/how-i-got-meetings-at-twitter-linkedin-and-github-using-cold-emails/">The cold emails that got me meetings at Twitter, LinkedIn and GitHub</a>&#8221;.  It&#8217;s by a woman named Iris Shoor who is a co-founder of a startup called <a href="http://www.takipi.com/">Takipi</a>.  In the article she describes how she used a certain technique originally presented <a href="http://www.distilled.net/blog/miscellaneous/find-almost-anybodys-email-address/">here</a> to obtain access to the emails of decision makers at tech companies and cold email them to glean meetings which resulted in sales of her product.  Both of the articles are engaging reads and I highly recommend them, especially if you are interested in &#8220;growth hacking&#8221;, or &#8220;sales and marketing&#8221; if you insist on using boring non-buzzwords.</p>
+
+<h1>How Does It Work?</h1>
+
+<p>In the original &#8220;How To Find Almost Anyone&#8217;s Email Address&#8221; article, Rob Ousbey presents a Google Doc spreadsheet that will generate a large number of possible emails for someone based on their name and the domain name of the company they work for.  <a href="http://bit.ly/name2email">Go ahead, try it out</a>.  Many peoples&#8217; emails are something along the lines of <em>[firstname].[lastname]@[company].com</em>, so there&#8217;s a high likelihood that their email will be in the list of generated possibilities.</p>
+
+<p>Then, users are encouraged to exhaustively test each possibility in their Gmail account using the <a href="https://rapportive.com/">Rapportive</a> Chrome extension until they come across a &#8216;hit&#8217; (although a little bit of creative Googling will sometimes yield the desired result for you in less time).</p>
+
+<p>When trying this out for the first time on a recruiter I was interested in contacting, I found myself clicking the generated permutations in succession with a looming disbelief that this trick would actually work.  Then, suddenly, Rapportive lit up with their portrait and social media info and I felt a funny buzzing sensation in my head as the possibilities swirled around in it.</p>
+
+<p><img src="/images/autorap/larry.png" title="I feel funny about this." ></p>
+
+<p>However, doing it this way was exhausting and tedious, as it required a lot of focus and time.  My programmer instincts revved up and I became convinced that I could automate the process.</p>
+
+<h1>Automating It</h1>
+
+<p>I won&#8217;t be publishing my full source code because this has so much potential for abuse, but I will talk a little bit here about how I accomplished automating this.  I chose to reach for my old friend Python to write the script to automate this process.  I wanted to get things done quickly and easily and Python proved to be a great boon here, even providing the excellent <code>argparse</code> module to make the script much more usable from the command line.</p>
+
+<p><img src="/images/autorap/copy-as-curl.jpeg" title="Useful Developer Tools are useful." ></p>
+
+<p>First, I got an example cURL request using Chrome&#8217;s handy developer tools.</p>
+
+<p>Then, I called the &#8220;secret&#8221; Rapportive API using <code>pycurl</code>.  There&#8217;s a few fields that can be used to identify whether a response has come back for the suggested user, and we use that to determine whether the user, and consequently their email address, has been found.  We also check it against the returned full name to ensure that we haven&#8217;t gotten back a false positive (for example, Rapportive may return something for &#8220;larry@google.com&#8221;, but it may not be the Larry we are looking for).  Outputting all of the emails we try to the terminal, we color the bunk addresses red, the &#8220;false positive&#8221; emails yellow, and the successful return results green.  Like good Internet citizens, we wait for a specified interval in between calls to the Rapportive server (2 seconds in the demo at the top of this page).  Upon finding the email for the person we&#8217;re looking for, the program exits.</p>
+
+<p>The Rapportive API is surprisingly flexible on what you send it as far as HTTP headers goes, seeming to rely mostly on the <code>X-Session-Token</code> header for user authentication.</p>
+
+<p>The main loop in Python looks like this:</p>
+
+<pre><code class="python">if __name__ == '__main__':
+    args = argument_handler.handle_args()   
+    rap_client = RapportiveClient(args.name, verbose=args.verbose)
+    permutator = Permutator(args.name, args.domain) 
+    permutations = permutator.get_permutations()
+
+    for permutation in permutations:
+        output = permutation 
+        rap_client.perform(permutation)
+        if args.should_color:
+            output = colorer.color(permutation, rap_client)
+        if not args.quiet: 
+            print output 
+            if rap_client.was_user_found() and rap_client.name_match():
+                sys.exit(0)
+        else:
+            if rap_client.was_user_found():
+                print output
+                sys.exit(0) 
+        time.sleep(args.wait_interval)
+</code></pre>
+
+<h1>Conclusion</h1>
+
+<p>Rapportive is a subsidiary of LinkedIn and LinkedIn has been catching a lot of heat lately for everything from their <a href="http://engineering.linkedin.com/mobile/linkedin-intro-doing-impossible-ios">iOS MITM hack</a> to their <a href="http://blog.linkedin.com/2012/06/06/linkedin-member-passwords-compromised/">notorious password breach</a>.  They&#8217;re a popular company to love to hate.  However, I think their tools have as much potential for cool stuff as they do for abuse.  Honestly, I&#8217;m surprised that the trick described in this article is not more well-known.  I haven&#8217;t cold emailed anyone whose address I have obtained this way, but if I needed to do so I&#8217;d be very pleased to have this tool at my disposal.</p>
+
+<p>Cheers and I&#8217;ll see you next week.</p>
+
+<p>Nathan</p>
+]]></content>
+  </entry>
+  
+</feed>

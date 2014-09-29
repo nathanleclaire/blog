@@ -1,0 +1,331 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html style="display:none;" lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="I'm a solution delivery and technology expert.  I write about code (back-end and front-end), entrepreneurship, and life.  I'm obsessed with application performance, user experience, and shipping." name="description">
+		<meta content="nathan leclaire" name="author">
+		
+		<title>Don't Fear Directives In AngularJS &mdash; nathan leclaire | I care, I share, I'm Nathan LeClaire.</title>
+		
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href="/stylesheets/main.css" rel="stylesheet">
+		
+		<script>
+		   if(self == top) {
+			   document.documentElement.style.display = 'block'; 
+		   } else {
+			   top.location = self.location; 
+		   }
+		</script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+		<script src="/js/jquery.modal.min.js"></script>
+		<script src="/js/fuse.min.js"></script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div id="sidebar">
+				<header>
+					<div class="title">
+						<a href="http://nathanleclaire.com">
+							<img src="/images/nateface.jpeg" class="nateface" /> 
+							nathan leclaire 
+						</a>
+					</div>
+					<p class="slogan">I care, I share, I'm Nathan LeClaire.</p>
+					<div class="navi">
+						<ul>
+							<li><a href="/about/">About</a></li>
+							<li><a href="/blog/archives">Archives</a></li>
+							<li><a href="/atom.xml">RSS</a></li>
+						</ul>
+					</div> <!-- // .navi -->
+					<div id="sidebar-email">
+						<a href="mailto:nathan.leclaire@gmail.com">nathan.leclaire@gmail.com</a>
+					</div>
+				</header>
+				<span id="shameless-self-promotion">
+				<!-- Begin MailChimp Signup Form -->
+
+				<div id="mc_embed_signup">
+				<form action="https://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<label for="mce-EMAIL">Get my essays about tech delivered to your inbox</label>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+				</form>
+				</div>
+				<!--End mc_embed_signup-->
+				
+				<p>Quickly search the archive:</p>
+				<input type="text" placeholder="Fuzzy search by keyword (e.g. Angular)" id="archive-search">
+				<img src="/images/magnifying-glass.png" id="search-icon" />
+				<ul id="archive-search-populate">
+				</ul>
+				
+				</span>
+			</div>
+			<div id="content">
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+    <header>
+        <h1>
+            <a href="/blog/2013/12/07/dont-fear-directives-in-angular-js/">Don't Fear Directives In AngularJS</a>
+        </h1>
+        <h3 style="text-align: center;">by Nathan LeClaire</h3>
+        <time>07 December 2013</time>
+    </header>
+    <div>
+        <p><img src="/images/directivefear/anghero.jpeg" title="Superheroic." ></p>
+
+<h1>Direct what?</h1>
+
+<p>As I mentioned in <a href="http://nathanleclaire.com/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-dot-js/">last week's article</a> I have been working with <a href="http://angularjs.org/">AngularJS</a> for personal projects lately.  This was largely the result of me, approximately six or seven months ago, feeling like I was missing out on the new hotness by not knowing a client-side MV* framework.  I looked around at a lot of options, including:</p>
+
+<ul>
+<li><a href="http://backbonejs.org/">Backbone.js</a> (A crowd favorite, with rock-solid online support/documentation/tutorials)</li>
+<li><a href="http://emberjs.com/">Ember.js</a></li>
+<li><a href="http://knockoutjs.com/">Knockout.js</a></li>
+</ul>
+
+
+<p>Ultimately I fell into learning Angular for a variety of reasons.  Partially it was because I went to a "Coffee Shop Coders" presentation where the presenter (<a href="http://www.tauruscolvin.com/">Taurus Colvin</a> - a very friendly dude) explained the basics and impressed me with the possibilities the framework offers.  Maybe it was because I tried to bootstrap a simple Ember project and couldn't get anything working.  I don't know if it was the documentation, the learning curve, my own shortcomings, or all three, but something about Ember didn't click with me.  My choice of Angular was also at least somewhat because I was seduced by <a href="http://yeoman.io/">Yeoman</a> (which, at the time of writing, uses an Angular generator in its usage example) around the time I attempted my first Angular app.  It was a foray which went down in flames, largely because I was so hesitant to make my own directives and services.</p>
+
+<h1>$scope Creep</h1>
+
+<p>One day after I had started getting interested in Angular I mentioned to a coworker that I was developing an app with the framework.</p>
+
+<p>"Oh yeah," he said, "I watched a presentation about making directives - seems to be where the real power of it is."</p>
+
+<p>Since I knew that the funny attributes Angular introduces such as <code>ng-show</code>, <code>ng-class</code>, and <code>ng-repeat</code> were directives, I had a feeling he was onto something.  However, I was a little bit too timid to actually tackle making my own.  After all, directives were something that smart people made, not me.  I'd have to understand that difficult link/compile stuff, right?  Remember, this was April of 2013 and, though it seems silly to say since at the time of writing only eight months have passed, the quality of documentation, tutorials, and examples for AngularJS was not as good as it is today.  I think <a href="http://egghead.io">egghead.io</a> (an excellent Angular resource if you're not aware) was just getting off the ground, but I certianly hadn't heard of it.</p>
+
+<p>Less so through concious decision and more so through my own hesitance to learn something I was irrationally afraid of, I began slipping into the trap of creating a tangled mess that stuffed everything possible into <code>$scope</code>, used <code>ng-include</code> when I could have used directives, and relied on <code>$broadcast</code>ing down from <code>$rootScope</code> when I could have used services.</p>
+
+<p>I was a fool.</p>
+
+<h1>How Not To Fear The Directive</h1>
+
+<p>If I could go back and stop myself from making a whole bunch of mistakes in that app, I would have started with explaining that a directive is just a simple little reusable component for describing the way HTML should behave.  The Angular docs try to harp on this but inevitably they make it seem obtuse and complicated.  <em>Note:  Though they could be better I don't think it's cool to hate on the Angular docs.  They've gotten way better even in the short time I've been using the framework.</em></p>
+
+<p>In my opinion it's a very useful tool because it allows you to encapsulate functionality in a semantic way that will (hopefully) make sense to anyone looking at your markup, and keep your functionality well "chunked" so that you can keep track of what is happening where instead of dealing with things mutating globally (which most of us hopefully know by now is bad news).</p>
+
+<p>Ever had this happen with jQuery? You need to do some JavaScript magic with a particular element on the page, and so you give it some arbitrary <code>id</code> so you can access it with <code>$('element#id')</code>.  Now you get to write a bunch of JavaScript that listens for the relevant events, checks the element's state to see that it is congruent with our expectations, modify its class to change how it is displayed, and so on.  It starts out as a few simple functions using a very powerful tool that soon grows into a complicated mess of callbacks, weird looking selectors, and re-render functions.  It may be strewn across several files with no rhyme or reason.</p>
+
+<p>Not only is it no fun, it makes it very hard for your designer friends to look at your markup and know what the expected behavior for that HTML is.  So, Angular provides us with directives, which are actually pretty simple to create.  So don't be scared of them like I was.  You just have to create an Angular app:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=js><code>var myApp = angular.module('myApp', []);</code></pre></figure></notextile></div>
+
+
+<p>Then attach a simple directive:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=js><code>myApp.directive('myDirective', function() {
+    return {
+        restrict: 'E',
+        template: '&lt;h1&gt;I made a directive!&lt;/h1&gt;'
+    };
+});</code></pre></figure></notextile></div>
+
+
+<p>That's all, you just created a directive!  Now, when you go looking around for some examples of directives online, it's easy to get lost in all of the Angular-specific jargon like linking functions, the "restrict" property, scope hierarchies and so on.  But I highly recommend that you try not to panic, and realize that there is meaning behind all of the weird symbols and abbreviations you see.  For instance, in the definition for the directive above, I define a <code>restrict: 'E'</code> setting.  What the heck does that mean?</p>
+
+<p>Well, what it means is, "restrict the usage of this directive to only Elements".</p>
+
+<p>So, you can use it in HTML like this:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=js><code>&lt;body ng-app=&quot;myApp&quot;&gt;
+    &lt;myDirective&gt;&lt;/myDirective&gt;
+&lt;/body&gt;</code></pre></figure></notextile></div>
+
+
+<p>But not like this:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=js><code>&lt;body ng-app=&quot;myApp&quot;&gt;
+    &lt;span my-directive&gt;&lt;/span&gt;
+&lt;/body&gt;</code></pre></figure></notextile></div>
+
+
+<p>(Angular "normalizes" the <code>hyphen-usage-attribute</code> to <code>camelCase</code> as part of their normalization process for directives - see the <a href="http://docs.angularjs.org/guide/directive">documentation</a>).</p>
+
+<h1>Why is it useful?</h1>
+
+<p>So, other than providing a convenient way to make little repeatable bits of HTML that have their own names, why is this useful?</p>
+
+<p>Well, by default every directive inherits the parent scope but it is also possible for a directive to have its own <a href="http://www.thinkster.io/pick/KnxWvHUW64/angularjs-understanding-isolate-scope">isolate scope</a>.  What this means is, it can have its own little properties that it sets on its own unique <code>$scope</code> that won't mess around with any of the other properties that you are setting in the rest of your app.  Especially if you are going to use the component in multiple places, or have it in a <code>ng-repeat</code>, this is incredibly useful.  It allows you to break things down into much more modular components than using some giant <code>BigBallOfMudController</code> (or several <code>BigBallOfMudController</code>s) to control the state of your app (which is usually the essence of what ends up happening in the "traditional jQuery" mess described above).  Instead, each directive is responsible for its own data and it works on it in isolation from the other directives.  In Angular this antipattern would look something like having a big array of objects in a central Controller, and updating individual properties of those objects in that controller instead of having a directive to modularize that kind of operation.</p>
+
+<p>Check out this example, where I created a <code>gear</code> directive using <a href="http://fontawesome.io/">Font Awesome</a>'s spinning gear icon.  The end result is a lot more flexible than an attempt at creating this using jQuery, or vanilla JavaScript.  Each gear keeps track of whether it is currently spinning or not in the new shared scope automagically created by the ngRepeat directive, so they spin or remain stationary indepent of each other.  However, they are all influenced equally by the <code>ng-model</code> properties of the parent scope.</p>
+
+<p>Writing a <code>link</code> function provides even more power and flexibility, but that's a little outside the scope of this article.  Perhaps another time.</p>
+
+<iframe src="http://embed.plnkr.co/i2StmWcxKNZCQb0YtYp0/preview"></iframe>
+
+
+<h1>Conclusion</h1>
+
+<p>Enjoy your directives, kids, and never ever be scared of them.  <a href="http://misko.hevery.com/">Miško</a>'s been up late at night so you can experience HTML as it could have been.</p>
+
+<p>On a more serious/philosophical note, I wanted to close with a thought that I have that creating your own directives reminds me a bit of <a href="http://en.wikipedia.org/wiki/Metcalfe's_law">Metcalfe's Law</a> (by analogy of course).  Each directive that gets created increases the power and usefulness of all the other directives.  An Angular in which <code>ng-repeat</code> exists, for instance, is so much more powerful than one in which it doesn't.  So, remember that they can be stacked and it makes your webapp that much better.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<p>Cheers,</p>
+
+<p>Nathan</p>
+
+    </div>
+    <footer>
+        <p>If you find a mistake or issue in this article, please <a id="pull-request-link" taget="_blank" href="">fix it and submit a pull request on Github</a> (must be signed in to your GitHub account).</p>
+        <a target="_blank" style="display: block;" href="https://twitter.com/share?url=http://nathanleclaire.com/blog/2013/12/07/dont-fear-directives-in-angular-js/&text=Great article from @upthecyberpunks : " class="social-media-spam">Tweet It</a>
+        <a target="_blank" href="https://news.ycombinator.com/submitlink?u=http://nathanleclaire.com/blog/2013/12/07/dont-fear-directives-in-angular-js/&t=" class="social-media-spam">Submit to Hacker News</a>
+        <a target="_blank" style="display: block !important;" href="http://www.reddit.com/submit?url=http://nathanleclaire.com/blog/2013/12/07/dont-fear-directives-in-angular-js/&title=" class="social-media-spam">Submit to Reddit</a>
+        <br>
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/blog/categories/angular/'>angular</a>, <a class='category' href='/blog/categories/controllers/'>controllers</a>, <a class='category' href='/blog/categories/directives/'>directives</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+	
+
+ 
+
+        <a target="_blank" style="display: block !important;" href="http://discourse.nathanleclaire.com">Chat in the forum!!</a>
+    
+        <div id="discourse-comments"></div>
+    </footer>
+    
+</article>
+<!-- END OF _includes/article.html -->
+
+
+<!-- END OF _/layouts/post.html -->
+
+			</div>
+			<form class="modal" id="mailing-list-modal" action="http://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<h1>Like what you're reading?</h1>
+					<img src="/images/happy-reader.jpeg"></img>
+					<p style="display: block;" for="mce-EMAIL">Did you enjoy this article?  You might want to sign up for my mailing list.  I send out weekly-ish essays about hot new tech stuff.</p>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL-modal" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+			</form>
+		</div> <!-- // .wrap -->
+	<script type="text/javascript" src="/js/prettify.js"></script>
+	<script>
+	function supports_html5_storage() {
+	  try {
+		return 'localStorage' in window && window['localStorage'] !== null;
+	  } catch (e) {
+		return false;
+	  }
+	}
+
+	$(document).ready(function () {
+	    var fuse;
+
+	    $("code").addClass("prettyprint");
+	    prettyPrint();
+
+	    $.getJSON("/articles.json", function(data) {
+	    	// input:
+	    	// [{title: "Learn Node.js The Troll Way", href: "blahblah"}, { ... }]
+	    	fuse = new Fuse(data, {
+	    	    keys: ['title', 'tags']
+	    	});
+	    });
+	    
+	    $("#archive-search").keyup(function() {
+	    	var $this = $(this);
+	    	var val = $this.val();
+	    	var result = fuse.search(val).slice(0, 1);
+	    	$list = $("#archive-search-populate");
+	    	$list.empty();
+	    	if (result.length > 0 && val !== '') {
+	    	    $.each(result, function(i, e) {
+	    	        $list.append('<li><a href="'+ e.href +'">'+ e.title +'</a></li>');
+	    	    });
+	    	}
+	    });
+	    
+	    $(".social-media-spam").each(function () {
+	        var e = $(this);
+	        var t = e.attr("href");
+	        var n = $("article header h1 a").html();
+	        t += encodeURIComponent(n);
+	        e.attr("href", t)
+	    });
+
+	    var e = window.location.href;
+	    var t = $("#pull-request-link");
+	    var n = "https://github.com/nathanleclaire/blog/edit/master/source/_posts/" + e.split("/").slice(4, 8).join("-") + ".markdown";
+	    t.attr("href", n);
+
+	    // Only offer mailing list once
+		var tryModal = localStorage["modal"] ? false : true;
+
+		// Don't offer mailing list to people on mobile
+		if ($(window).width() < 720) {
+			tryModal = false;
+		}
+
+		$('#mc-embedded-subscribe').click(function() {
+			// Don't offer mailing list if people have
+			// already clicked to try and sign up
+			tryModal = false;
+			localStorage["modal"] = "true";
+		});
+
+		$(window).scroll(function () {
+			if (tryModal && document.URL.indexOf('archives') === -1 && document.URL.indexOf('about') === -1) {
+				if (($(window).scrollTop() + $(window).height()) === $(document).height()) {
+					if (supports_html5_storage()) {
+						window.setTimeout(function() {
+							$('#mailing-list-modal').modal({
+								fadeDuration: 250
+							});
+							$('#mce-EMAIL-modal').focus();
+							tryModal = false;
+							localStorage["modal"] = "true";
+						}, 1000);
+					}
+				}
+			}
+		});
+
+
+	});
+	</script>
+	<script type="text/javascript">
+	if ('/blog/2013/12/07/dont-fear-directives-in-angular-js/' !== '/blog/index.html') {
+	  var discourseUrl = "http://discourse.nathanleclaire.com/",
+	      discourseEmbedUrl = 'http://nathanleclaire.com/blog/2013/12/07/dont-fear-directives-in-angular-js/';
+
+	  (function() {
+	    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+	      d.src = discourseUrl + 'javascripts/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+	  })();
+	}
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-26758702-2', 'nathanleclaire.com');
+	  ga('send', 'pageview');
+	</script>
+	</body>
+</html>
+<!-- END OF _layouts/default.html -->

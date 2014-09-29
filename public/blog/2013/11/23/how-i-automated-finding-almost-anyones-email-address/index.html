@@ -1,0 +1,298 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html style="display:none;" lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="I'm a solution delivery and technology expert.  I write about code (back-end and front-end), entrepreneurship, and life.  I'm obsessed with application performance, user experience, and shipping." name="description">
+		<meta content="nathan leclaire" name="author">
+		
+		<title>How I Automated "Finding Almost Anyone's Email Address" &mdash; nathan leclaire | I care, I share, I'm Nathan LeClaire.</title>
+		
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href="/stylesheets/main.css" rel="stylesheet">
+		
+		<script>
+		   if(self == top) {
+			   document.documentElement.style.display = 'block'; 
+		   } else {
+			   top.location = self.location; 
+		   }
+		</script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+		<script src="/js/jquery.modal.min.js"></script>
+		<script src="/js/fuse.min.js"></script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div id="sidebar">
+				<header>
+					<div class="title">
+						<a href="http://nathanleclaire.com">
+							<img src="/images/nateface.jpeg" class="nateface" /> 
+							nathan leclaire 
+						</a>
+					</div>
+					<p class="slogan">I care, I share, I'm Nathan LeClaire.</p>
+					<div class="navi">
+						<ul>
+							<li><a href="/about/">About</a></li>
+							<li><a href="/blog/archives">Archives</a></li>
+							<li><a href="/atom.xml">RSS</a></li>
+						</ul>
+					</div> <!-- // .navi -->
+					<div id="sidebar-email">
+						<a href="mailto:nathan.leclaire@gmail.com">nathan.leclaire@gmail.com</a>
+					</div>
+				</header>
+				<span id="shameless-self-promotion">
+				<!-- Begin MailChimp Signup Form -->
+
+				<div id="mc_embed_signup">
+				<form action="https://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<label for="mce-EMAIL">Get my essays about tech delivered to your inbox</label>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+				</form>
+				</div>
+				<!--End mc_embed_signup-->
+				
+				<p>Quickly search the archive:</p>
+				<input type="text" placeholder="Fuzzy search by keyword (e.g. Angular)" id="archive-search">
+				<img src="/images/magnifying-glass.png" id="search-icon" />
+				<ul id="archive-search-populate">
+				</ul>
+				
+				</span>
+			</div>
+			<div id="content">
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+    <header>
+        <h1>
+            <a href="/blog/2013/11/23/how-i-automated-finding-almost-anyones-email-address/">How I Automated "Finding Almost Anyone's Email Address"</a>
+        </h1>
+        <h3 style="text-align: center;">by Nathan LeClaire</h3>
+        <time>23 November 2013</time>
+    </header>
+    <div>
+        <p><img src="/images/autorap/demo-fast.gif" title="A demo, complete with colors." ></p>
+
+<p><em>EDIT:  The original article author, Rob Ousbey, has popped up on various social media sites to remind everyone to use this tool/knowledge responsibly.  I agree.  Please be responsible.</em></p>
+
+<p>Not too long ago I came across an article on <a href="https://news.ycombinator.com">Hacker News</a> called "<a href="http://www.startupmoon.com/how-i-got-meetings-at-twitter-linkedin-and-github-using-cold-emails/">The cold emails that got me meetings at Twitter, LinkedIn and GitHub</a>".  It's by a woman named Iris Shoor who is a co-founder of a startup called <a href="http://www.takipi.com/">Takipi</a>.  In the article she describes how she used a certain technique originally presented <a href="http://www.distilled.net/blog/miscellaneous/find-almost-anybodys-email-address/">here</a> to obtain access to the emails of decision makers at tech companies and cold email them to glean meetings which resulted in sales of her product.  Both of the articles are engaging reads and I highly recommend them, especially if you are interested in "growth hacking", or "sales and marketing" if you insist on using boring non-buzzwords.</p>
+
+<h1>How Does It Work?</h1>
+
+<p>In the original "How To Find Almost Anyone's Email Address" article, Rob Ousbey presents a Google Doc spreadsheet that will generate a large number of possible emails for someone based on their name and the domain name of the company they work for.  <a href="http://bit.ly/name2email">Go ahead, try it out</a>.  Many peoples' emails are something along the lines of <em>[firstname].[lastname]@[company].com</em>, so there's a high likelihood that their email will be in the list of generated possibilities.</p>
+
+<p>Then, users are encouraged to exhaustively test each possibility in their Gmail account using the <a href="https://rapportive.com/">Rapportive</a> Chrome extension until they come across a 'hit' (although a little bit of creative Googling will sometimes yield the desired result for you in less time).</p>
+
+<p>When trying this out for the first time on a recruiter I was interested in contacting, I found myself clicking the generated permutations in succession with a looming disbelief that this trick would actually work.  Then, suddenly, Rapportive lit up with their portrait and social media info and I felt a funny buzzing sensation in my head as the possibilities swirled around in it.</p>
+
+<p><img src="/images/autorap/larry.png" title="I feel funny about this." ></p>
+
+<p>However, doing it this way was exhausting and tedious, as it required a lot of focus and time.  My programmer instincts revved up and I became convinced that I could automate the process.</p>
+
+<h1>Automating It</h1>
+
+<p>I won't be publishing my full source code because this has so much potential for abuse, but I will talk a little bit here about how I accomplished automating this.  I chose to reach for my old friend Python to write the script to automate this process.  I wanted to get things done quickly and easily and Python proved to be a great boon here, even providing the excellent <code>argparse</code> module to make the script much more usable from the command line.</p>
+
+<p><img src="/images/autorap/copy-as-curl.jpeg" title="Useful Developer Tools are useful." ></p>
+
+<p>First, I got an example cURL request using Chrome's handy developer tools.</p>
+
+<p>Then, I called the "secret" Rapportive API using <code>pycurl</code>.  There's a few fields that can be used to identify whether a response has come back for the suggested user, and we use that to determine whether the user, and consequently their email address, has been found.  We also check it against the returned full name to ensure that we haven't gotten back a false positive (for example, Rapportive may return something for "larry@google.com", but it may not be the Larry we are looking for).  Outputting all of the emails we try to the terminal, we color the bunk addresses red, the "false positive" emails yellow, and the successful return results green.  Like good Internet citizens, we wait for a specified interval in between calls to the Rapportive server (2 seconds in the demo at the top of this page).  Upon finding the email for the person we're looking for, the program exits.</p>
+
+<p>The Rapportive API is surprisingly flexible on what you send it as far as HTTP headers goes, seeming to rely mostly on the <code>X-Session-Token</code> header for user authentication.</p>
+
+<p>The main loop in Python looks like this:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=python><code>if __name__ == '__main__':
+    args = argument_handler.handle_args()   
+    rap_client = RapportiveClient(args.name, verbose=args.verbose)
+    permutator = Permutator(args.name, args.domain) 
+    permutations = permutator.get_permutations()
+
+    for permutation in permutations:
+        output = permutation 
+        rap_client.perform(permutation)
+        if args.should_color:
+            output = colorer.color(permutation, rap_client)
+        if not args.quiet: 
+            print output 
+            if rap_client.was_user_found() and rap_client.name_match():
+                sys.exit(0)
+        else:
+            if rap_client.was_user_found():
+                print output
+                sys.exit(0) 
+        time.sleep(args.wait_interval)</code></pre></figure></notextile></div>
+
+
+<h1>Conclusion</h1>
+
+<p>Rapportive is a subsidiary of LinkedIn and LinkedIn has been catching a lot of heat lately for everything from their <a href="http://engineering.linkedin.com/mobile/linkedin-intro-doing-impossible-ios">iOS MITM hack</a> to their <a href="http://blog.linkedin.com/2012/06/06/linkedin-member-passwords-compromised/">notorious password breach</a>.  They're a popular company to love to hate.  However, I think their tools have as much potential for cool stuff as they do for abuse.  Honestly, I'm surprised that the trick described in this article is not more well-known.  I haven't cold emailed anyone whose address I have obtained this way, but if I needed to do so I'd be very pleased to have this tool at my disposal.</p>
+
+<p>Cheers and I'll see you next week.</p>
+
+<p>Nathan</p>
+
+    </div>
+    <footer>
+        <p>If you find a mistake or issue in this article, please <a id="pull-request-link" taget="_blank" href="">fix it and submit a pull request on Github</a> (must be signed in to your GitHub account).</p>
+        <a target="_blank" style="display: block;" href="https://twitter.com/share?url=http://nathanleclaire.com/blog/2013/11/23/how-i-automated-finding-almost-anyones-email-address/&text=Great article from @upthecyberpunks : " class="social-media-spam">Tweet It</a>
+        <a target="_blank" href="https://news.ycombinator.com/submitlink?u=http://nathanleclaire.com/blog/2013/11/23/how-i-automated-finding-almost-anyones-email-address/&t=" class="social-media-spam">Submit to Hacker News</a>
+        <a target="_blank" style="display: block !important;" href="http://www.reddit.com/submit?url=http://nathanleclaire.com/blog/2013/11/23/how-i-automated-finding-almost-anyones-email-address/&title=" class="social-media-spam">Submit to Reddit</a>
+        <br>
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/blog/categories/api/'>api</a>, <a class='category' href='/blog/categories/curl/'>curl</a>, <a class='category' href='/blog/categories/growth-hacking/'>growth hacking</a>, <a class='category' href='/blog/categories/marketing/'>marketing</a>, <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/rapportive/'>rapportive</a>, <a class='category' href='/blog/categories/sales/'>sales</a>
+	
+
+ 
+
+        <a target="_blank" style="display: block !important;" href="http://discourse.nathanleclaire.com">Chat in the forum!!</a>
+    
+        <div id="discourse-comments"></div>
+    </footer>
+    
+</article>
+<!-- END OF _includes/article.html -->
+
+
+<!-- END OF _/layouts/post.html -->
+
+			</div>
+			<form class="modal" id="mailing-list-modal" action="http://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<h1>Like what you're reading?</h1>
+					<img src="/images/happy-reader.jpeg"></img>
+					<p style="display: block;" for="mce-EMAIL">Did you enjoy this article?  You might want to sign up for my mailing list.  I send out weekly-ish essays about hot new tech stuff.</p>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL-modal" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+			</form>
+		</div> <!-- // .wrap -->
+	<script type="text/javascript" src="/js/prettify.js"></script>
+	<script>
+	function supports_html5_storage() {
+	  try {
+		return 'localStorage' in window && window['localStorage'] !== null;
+	  } catch (e) {
+		return false;
+	  }
+	}
+
+	$(document).ready(function () {
+	    var fuse;
+
+	    $("code").addClass("prettyprint");
+	    prettyPrint();
+
+	    $.getJSON("/articles.json", function(data) {
+	    	// input:
+	    	// [{title: "Learn Node.js The Troll Way", href: "blahblah"}, { ... }]
+	    	fuse = new Fuse(data, {
+	    	    keys: ['title', 'tags']
+	    	});
+	    });
+	    
+	    $("#archive-search").keyup(function() {
+	    	var $this = $(this);
+	    	var val = $this.val();
+	    	var result = fuse.search(val).slice(0, 1);
+	    	$list = $("#archive-search-populate");
+	    	$list.empty();
+	    	if (result.length > 0 && val !== '') {
+	    	    $.each(result, function(i, e) {
+	    	        $list.append('<li><a href="'+ e.href +'">'+ e.title +'</a></li>');
+	    	    });
+	    	}
+	    });
+	    
+	    $(".social-media-spam").each(function () {
+	        var e = $(this);
+	        var t = e.attr("href");
+	        var n = $("article header h1 a").html();
+	        t += encodeURIComponent(n);
+	        e.attr("href", t)
+	    });
+
+	    var e = window.location.href;
+	    var t = $("#pull-request-link");
+	    var n = "https://github.com/nathanleclaire/blog/edit/master/source/_posts/" + e.split("/").slice(4, 8).join("-") + ".markdown";
+	    t.attr("href", n);
+
+	    // Only offer mailing list once
+		var tryModal = localStorage["modal"] ? false : true;
+
+		// Don't offer mailing list to people on mobile
+		if ($(window).width() < 720) {
+			tryModal = false;
+		}
+
+		$('#mc-embedded-subscribe').click(function() {
+			// Don't offer mailing list if people have
+			// already clicked to try and sign up
+			tryModal = false;
+			localStorage["modal"] = "true";
+		});
+
+		$(window).scroll(function () {
+			if (tryModal && document.URL.indexOf('archives') === -1 && document.URL.indexOf('about') === -1) {
+				if (($(window).scrollTop() + $(window).height()) === $(document).height()) {
+					if (supports_html5_storage()) {
+						window.setTimeout(function() {
+							$('#mailing-list-modal').modal({
+								fadeDuration: 250
+							});
+							$('#mce-EMAIL-modal').focus();
+							tryModal = false;
+							localStorage["modal"] = "true";
+						}, 1000);
+					}
+				}
+			}
+		});
+
+
+	});
+	</script>
+	<script type="text/javascript">
+	if ('/blog/2013/11/23/how-i-automated-finding-almost-anyones-email-address/' !== '/blog/index.html') {
+	  var discourseUrl = "http://discourse.nathanleclaire.com/",
+	      discourseEmbedUrl = 'http://nathanleclaire.com/blog/2013/11/23/how-i-automated-finding-almost-anyones-email-address/';
+
+	  (function() {
+	    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+	      d.src = discourseUrl + 'javascripts/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+	  })();
+	}
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-26758702-2', 'nathanleclaire.com');
+	  ga('send', 'pageview');
+	</script>
+	</body>
+</html>
+<!-- END OF _layouts/default.html -->

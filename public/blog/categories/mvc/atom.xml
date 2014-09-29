@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: mvc | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/mvc/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[AngularJS isn't MVC, it's SDC]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/03/15/angularjs-isnt-mvc-its-sdc/"/>
+    <updated>2014-03-15T12:38:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/03/15/angularjs-isnt-mvc-its-sdc</id>
+    <content type="html"><![CDATA[<h1>Intro</h1>
+
+<p><img src="/images/notmvc/angular-homepage-old.gif"></p>
+
+<p>I first started learning AngularJS because I was interested in exploring the world of MV&#42; JavaScript frameworks for the client side.  There was something intruiging and exciting happening about a year or two ago in that space, as several JS frameworks started to get some steam and critical mass and the mainstream of client-side development (even those boring <a href="http://www.hanselman.com/blog/501DevelopersFamilyAndExcitementAboutTheCraft.aspx">5:01 developers</a> couldn&#8217;t ignore the zeitgeist anymore) seemed to wake up and realize that maybe there was a need for something more than just vanilla jQuery in applications where everything was spiraling way out of control.</p>
+
+<p>So I started looking into Angular for the myriad reasons you usually hear people cite as a reason for using it.  It was backed by Google.  It was easy to get going quickly.  The quality of documentation and tutorials, though not fantastic, was starting to improve relative to Ember or more obscure frameworks.  It was fun.</p>
+
+<p>My first foray went down in flames.</p>
+
+<p><img src="/images/notmvc/javascript.png"></p>
+
+<p>I fell into a common Angular antipattern (I may discuss Angular antipatterns more in a future article) where I stuffed everything into the controller.  Services and directives looked a little scary, and required learning esoteric things like what the meaning of <code>@</code>, <code>&amp;</code>, and <code>=</code> was in a directive, and instead I saw fit to simply stuff everything into <code>$scope</code> and coordinate activities using event broadcasting and listening.</p>
+
+<p>That project became so un-fun to work on that I just stopped.  I had dug myself into a hole deeper than I would ever get out of without a complete rewrite.</p>
+
+<p>Fortunately, partially through writing about Angular a lot, I eventually wised up.</p>
+
+<p>I learned that Angular is structured in some ways that are similar to what we have experienced before, but it also hearkens a little bit to the future of the client side (see <a href="http://www.w3.org/TR/components-intro/">Web Components</a>).  And because of that, it had a little bit of new stuff too that threw me.</p>
+
+<p>You may be used to the Model View Controller pattern- but that&#8217;s not what Angular is.   A subsection of it kind of looks like that, but if you take a step back you will see a bigger picture emerge.</p>
+
+<p>Angular is Service, Directive, Controller.</p>
+
+<h1>The Angular Way</h1>
+
+<p>Angular is all about testability, and testability mandates that we be able to break our application into components.  In most cases, monoliths are considered harmful.  You probably understand why if you&#8217;ve ever worked on one.  Things become too brittle and easy to break.  They become tightly coupled.  It&#8217;s impossible to change codes without introducing bugs in unrelated places.  And so on.</p>
+
+<p>Angular draws lines between separate parts of the architecture so that you can avoid many of these headaches.  In particular, dependency injection treats us well, as we rely on Angular&#8217;s injector to provide us with the things that we need instead of getting them ourselves.  This also allows us more control over how they are provided, which eases testing significantly (the developer has a smaller surface area that he needs to control).</p>
+
+<p>Most applications use these underlying principles to do three things: Retrieve, process, or send out data (usually communicating with the &#8220;outside world&#8221; such as a database or API), present (display) that data to the user in a useful way, and coordinate the general state of the application (this includes features such as routing).</p>
+
+<p>The first things that we mentioned, handling data, is the job of services.</p>
+
+<h2>Services</h2>
+
+<p>The main point of services is to dictate how data flows into or out of your application, not within it.  If you are talking to the outside world, this is a perfect use case for a service.  Controllers use methods and data provided by these services to update properties on <code>$scope</code>, which in turn dictates how the DOM changes when a new digest cycle hits.</p>
+
+<p>When I was new to Angular, I flubbed this.  In particular the difference between <a href="http://stackoverflow.com/questions/15666048/angular-js-service-vs-provider-vs-factory">services and factories</a> wasn&#8217;t clear to me, so I avoided them.  Instead I made <code>$http</code> calls inside of my controllers, which ended up turning my controllers into a confused mess of business and application logic.</p>
+
+<p>This is <em>NOT</em> the way to go.  Instead, anything that involves setting, retrieving, or processing data should happen in services.  The leaner that your controllers are, the better.</p>
+
+<p>Services should NEVER manipulate <code>$scope</code>.  That is the job of the controller.  If you need to change values in <code>$scope</code> based on the result of, say, an AJAX call, use <a href="http://docs.angularjs.org/api/ng/service/$q">promises</a>.  Check out <a href="http://nathanleclaire.com/blog/2014/01/04/5-smooth-angularjs-application-tips/">this blog article I wrote</a> for more details.</p>
+
+<h2>Directives</h2>
+
+<p>Directives are definitely one of the most confusing parts of AngularJS to a newcomer.  The prospect of writing your own is intimidating.  Especialy when I first started learning, the quality of available documentation and tutorials for them was not very high (this has improved a lot in the last year or so though).</p>
+
+<p>But directives, for all that they intimidate the newbie, promise a land of amazing power.  Most people who are coming to Angular from a jQuery way of thinking run the risk of getting themselves in trouble by performing DOM manipulation outside of directives.  They are so used to the old way of doing things, where an element can be accessed willy-nilly by any piece of client side code that needs it.</p>
+
+<p>Directives have several different forms but usually they are either completely new HTML elements, or attributes that you can throw on existing elements, to perform some kind of DOM manipulation.  They can have their own scope and they can be reused, which is one of their most useful properties.</p>
+
+<p>In some ways we are all still fighting our way towards manifesting in reality the Platonic ideal of what directives represent, e.g. I should never have to rewrite a calendar widget if it is already existing, I should just be able to use a <code>&lt;calendar&gt;&lt;/calendar&gt;</code> element and set properties to customize it the way that I like.  But in other ways this <em>is</em> approaching reality, especially as Angular grows in popularity and as systems such as Bower become more useful and flexible.</p>
+
+<p>Directives promise no more spaghetti jQuery code (do they deliver?).  Instead, everything gets broken out into modular components that are far easier to test.</p>
+
+<h2>What about Views?</h2>
+
+<p>In a lot of ways the &#8220;view&#8221; is the same as it&#8217;s ever been, modulo directives which we have already discussed.  <code>ngView</code> promises new, snappy navigation, which is exciting.  Views in AngularJS do the same job they always have and they do it well.  Technically I probably should have called this article &#8220;Angular isn&#8217;t MVC, it&#8217;s SDVC&#8221; but I didn&#8217;t think it had the same ring to it.</p>
+
+<h2>Controllers</h2>
+
+<p>Finally we discuss the piece that ties it all together.  The controller.</p>
+
+<p>Without controllers, directives are useless.  Controllers set properties on <code>$scope</code> for directives to use.</p>
+
+<p>Likewise, without controllers, services are useless.  They are just objects for playing with data.  Therefore controllers are like the &#8220;glue&#8221; of your application.</p>
+
+<p>Controllers should be as lean and lightweight as possible.  It makes it easier to see what&#8217;s going on, and it makes it easier to test them.</p>
+
+<h1>Conclusion</h1>
+
+<p>Angular is a new framework and it requires a new way of thinking.  Trying to apply the old patterns, or being inflexible and unwilling to learn about the different components of Angular and how they fit together will get you in trouble.</p>
+
+<p>Everyone likes jQuery because jQuery is a useful tool.  It is simple and it allows you to build whatever you want.  It isn&#8217;t very opinionated about the way you do so (in fact it provides you with a lot of options).</p>
+
+<p>Angular, on the other hand, is like a house.  It already has a framework and a foundation for how to do things, you just have to furnish it.  Trying to use Angular like a hammer will only result in tears.  It is like trying to use a house to build a house.</p>
+
+<p>I hope that this essay may help to clear some things up to people who are new to Angular.</p>
+
+<p>Until next week, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The Good, The Bad, and The Ugly of Sails.js, Realtime JavaScript MVC Framework]]></title>
+    <link href="http://nathanleclaire.com/blog/2013/12/28/the-good-the-bad-and-the-ugly-of-sails-dot-js-realtime-javascript-mvc-framework/"/>
+    <updated>2013-12-28T15:59:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2013/12/28/the-good-the-bad-and-the-ugly-of-sails-dot-js-realtime-javascript-mvc-framework</id>
+    <content type="html"><![CDATA[<p>Over the Christmas vacation time that I&#8217;ve been taking I&#8217;ve been finding myself drawn back to <a href="http://nodejs.org/">Node.js</a>, mostly for the promise of rapid web application development and not having to switch languages when changing from working on the server-side and the client-side.  As part of my interest in developing applications using <a href="http://www.html5rocks.com/en/tutorials/websockets/basics/">WebSockets</a> for their real-time capabilities, I looked into <a href="http://derbyjs.com/">Derby</a> and <a href="https://www.meteor.com/">Meteor</a> and eventually I stumbled across <a href="http://sailsjs.org/">Sails.js</a>, the new kid on the block.  It seemed very promising and addressed some issues that I had with Derby and with Meteor.  Namely, both of those frameworks seem very tightly coupled from the client to the server and I wanted something that would provide more flexibility while still allowing me to develop rapidly.  So, I decided to begin prototyping out my new side project in Sails and naturally I developed a variety of opinions to rant about.  Enjoy.</p>
+
+<p><img src="/images/sails/clint-eastwood.jpeg" title="My face when developing." ></p>
+
+<h1>The Good</h1>
+
+<p><img src="/images/sails/thegood.jpeg"></p>
+
+<p><a href="http://sailsjs.org/#!">Sails.js</a> makes getting things started ridiculously quick.  You run <code>sails new myApp</code> to create the application skeleton.  Then, to create a Controller and Model for some data that you&#8217;re going to be working with, you run <code>sails generate foo</code> (<code>foo</code> being the name of your model).  You configure the model really simply:</p>
+
+<pre><code class="js">module.exports = {
+    adapter: 'sails-redis',
+    attributes: {
+        content: 'string',
+        userName: 'string',
+        userId: 'int',    // "foreign key"
+        chatroomId: 'int' // "foreign key"
+    }
+};
+</code></pre>
+
+<p>Sails uses <a href="https://npmjs.org/package/waterline">Waterline</a> as its ORM, and it provides a lot of power for developing rapidly.  The <code>adapter</code> field dictates where the data will be stored, and you can mix and match, so you can have some models stored in MySQL and others in Redis, for instance.  I think this is a really cool feature.  You can set validation, etc. on them.  You can write custom methods on your models to extract &#8220;higher-order&#8221; data from them.  Best of all, just having a model gets you a ton of routes (CRUD blueprints and REST endpionts) out of the box (and they <a href="http://sailsjs.org/#!documentation/sockets">all work with Websockets</a>!):</p>
+
+<pre><code># Backbone Conventions
+GET   :    /:controller                 =&gt; findAll()
+GET   :    /:controller/read/:id        =&gt; find(id)
+POST  :    /:controller/create          =&gt; create()
+POST  :    /:controller/create/:id      =&gt; create(id)
+PUT   :    /:controller/update/:id      =&gt; update(id)
+DELETE:    /:controller/destroy/:id     =&gt; destroy(id)
+
+# You can also explicitly state the action
+GET   :    /:controller/find            =&gt; findAll()
+GET   :    /:controller/find/:id        =&gt; find(id)
+POST  :    /:controller/create          =&gt; create(id)
+PUT   :    /:controller/update/:id      =&gt; update(id)
+DELETE:    /:controller/destroy/:id     =&gt; destroy(id)
+</code></pre>
+
+<p>So, for instance, if you run <code>sails lift</code> to start your app, hitting</p>
+
+<pre><code>http://localhost:1337/something/create?content=hello&amp;userName=Nate&amp;userId=1&amp;chatroomId=1
+</code></pre>
+
+<p>will add a new instance of the model to your datastore.  We did nothing manually to address this (so long <code>$_GET</code> and <code>$_POST</code>, it&#8217;s been&#8230; okay).  And you can see everything that&#8217;s been added at <code>localhost:1337/something/</code> without having to configure anything, althogh Sails makes it easy to change things around to your heart&#8217;s content by setting properties in the Controller and <code>config/routes.js</code>.</p>
+
+<p>Underneath the slick outer layer, Sails uses a lot of well-known and proven modules, most notably <a href="http://expressjs.com/">Express</a>, and it makes it easy to reach to the underlying layer to configure things / do something specific/different (but does not awkwardly leak abstractions).  Additionally, serving of static assets never gave me any trouble and I just added new folders when I needed them.  Not having to worry about this was really nice when developing with <a href="http://angularjs.org/">Angular</a>, which mandates a lot of client-side includes.</p>
+
+<p>In summary:</p>
+
+<ul>
+<li>Database-agnostic ORM that is simple, but powerful and flexible as well</li>
+<li>Developing routes / REST APIs is ridiculously fast - writing tiny amounts of code gets you a ton! (including WebSockets support)</li>
+<li>Lots of stuff &#8220;just works&#8221; without making you think about things too much, but Sails does not try to conceal with &#8220;magic&#8221;</li>
+<li>The Sails.js team has done a really good job of laying things out well to be extensible- and they have well-thought-out solutions that address many common issues e.g. <a href="http://sailsjs.org/#!documentation/policies">policies</a></li>
+</ul>
+
+
+<h1>The Bad</h1>
+
+<p><img src="/images/sails/thebad.jpeg"></p>
+
+<p>Sails is a young framework so sometimes issues come up that can be frustrating to address (since there are not that many users yet, therefore there are not that many resources on StackOverflow etc.).  For instace, when I wanted to start using Redis as a datastore for chat room comments, I tried running <code>npm install sails-redis</code>.  This seemed to go off without a hitch but when I ran <code>sails lift</code> I got an error indicating that the <code>sails-redis</code> module could not be found.  It was very bizarre but then I tracked down <a href="https://github.com/balderdashy/sails-redis/issues/3">this Github issue</a> which pointed out there was no source code in the npm package!!  I was able to install the package from GitHub but it was very frustrating to blow time on something like that when ostensibly the framework allows you to develop rapidly.</p>
+
+<p>For me personally (and I think <a href="https://github.com/balderdashy/sails/issues/1239">others share the sentiment</a>) I think that generators should also provide you with unit test skeletons, and that Sails should address this concern a lot better.  If it&#8217;s going to be production-ready top-notch support for testing will be pretty critical.  I wouldn&#8217;t want to deploy an application that didn&#8217;t have at least some unit tests, especially for mission-critical parts of the app.  As it stands right now it&#8217;s not really clear how to test your Sails application.  We need a <code>sails test</code> command and documentation in this regard!</p>
+
+<p>For a framework that touts performance as a major benefit, I find that <code>sails lift</code> takes a pretty long time to start up (granted, it is doing a lot - if you run it with <code>--verbose</code> option you can see all of the route binding etc. it is doing).  This would be okay if you only had to do it once, but every time you change things (models, controllers, routes, etc.) you have to stop and start <code>sails lift</code>.  So, to have either code hot-swapping or a <code>sails lift</code> that starts up lightning-fast would make Sails much more pleasant to use.  I&#8217;m curious if performance can be improved in this regard.</p>
+
+<p>The documentation, particularly when it came to using <a href="http://sailsjs.org/#!documentation/sockets">Sockets</a>, was hard to understand as someone who is a newcomer to <a href="http://socket.io">socket.io</a>.  Their included <code>app.js</code> didn&#8217;t really clarify things too well, and so I had to rely on <a href="http://net.tutsplus.com/tutorials/javascript-ajax/working-with-data-in-sails-js/">this example from NetTuts</a> to make sense of how to accomplish what I was trying to do.  So I think you could say that the documentation, though absolutely stellar in some areas, could use some bit of work.</p>
+
+<p>In summary:</p>
+
+<ul>
+<li>Since it is new, it can cause frustrating problems you will likely never run into with Django etc.</li>
+<li>In my opinion generators should also include tests (at least make it optional)</li>
+<li>Documentation is lacking in some ways</li>
+<li><code>sails lift</code> takes longer than I&#8217;d like to start up and has to be restarted frequently</li>
+</ul>
+
+
+<h1>The Ugly</h1>
+
+<p><img src="/images/sails/theugly.jpeg"></p>
+
+<p>At the time of writing, <a href="https://travis-ci.org/balderdashy/sails">their build is listed as not passing on TravisCI</a>, and the sticker on their Github page says so.  That doesn&#8217;t exactly send the right kind of message you want to send with your project.  Now, be aware that I cloned the repository and ran all of the tests locally, and they all passed with Node <code>v0.10.24</code> and <code>v0.11.9</code>, but not with a previous version of <code>v0.10.*</code> that I had (can&#8217;t remember which unfortunately).  So, perhaps it&#8217;s more of a TravisCI / versioning issue than a Sails issue, but I think that&#8217;s a big public-facing thing to overlook.</p>
+
+<p>Something that&#8217;s really unfortunate about <a href="https://github.com/balderdashy/waterline">Waterline</a>, the aforementioned ORM that Sails uses, is that it does not support associations (relational data) at the moment.  This seems like a really huge issue / something that I would expect to be a huge cornerstone of any ORM to not have support for right away, and it was really frustrating to find out midway through starting to put together an app that has a lot of relational data.  That being said, they are <a href="https://github.com/balderdashy/sails/issues/124">aware of the issue</a> and are working to fix it, but I really want my <code>JOIN</code>s available for working with in the framework I&#8217;m using <em>now</em>, without having to use an unstable/bleeding-edge pre-release version of Waterline.  In order to do so right now in Sails I have to use <code>Model.query</code>, which is kind of awkward (plugging in raw SQL).  Having to code up things one way as a workaround and then go back and rip them out for official associations when they&#8217;re supported is really a turn off.    I kind of wonder if it&#8217;s not partially a result of NoSQL/MongoDB being very hot right now and developers not giving as much love to traditional relational things as they might have in the past.  Since it&#8217;s an area of interest for me I&#8217;d like to contribute but other than a few guidelines in <code>CONTRIBUTING.md</code> there&#8217;s not much communication from the core devs on this front.</p>
+
+<p>A lot of what is rough around the edges about Sails right now is summed up really well in this <a href="https://github.com/balderdashy/sails/pull/1058#issuecomment-30498745">Github pull request comment</a> by <a href="https://github.com/yoshuawuyts">yoshuawuyts</a>:</p>
+
+<blockquote><p>I know you&#8217;ve been very busy, but I feel I need to share this. As much as I&#8217;ve enjoyed Sails in the past, right now I feel very disconnected from it. For me the amount of outdated documentation, piling issues on the tracker and unclear direction make it hard to keep investing into Sails. The prolonged absence of core members like yourself and delayed responses on most issues make it hard to keep investing. If you want to lead Sails forward, I urge you to invest in clarity.</p></blockquote>
+
+<p>His suggestions for improvement:</p>
+
+<ul>
+<li>Rigorous issue smackdown; close everything that isn&#8217;t relevant, combine duplicates into new issues.</li>
+<li>Create a roadmap; add all feature suggestions to the roadmap and close corresponding issues.</li>
+<li>Add code coverage via coveralls; it entices users to write more tests and fill up the bar.</li>
+</ul>
+
+
+<p>And a very good point:</p>
+
+<blockquote><p>I don&#8217;t think you should prioritize getting new contributors in, I think they&#8217;ll come naturally once the points above have been addressed.</p></blockquote>
+
+<p>After working with Sails for a week or so, I agree heartily with his take.</p>
+
+<p>In summary:</p>
+
+<ul>
+<li>Build is broken on TravisCI at the time of writing</li>
+<li>No support for associations (though they are coming)</li>
+<li>Issues on Github are piling up without being addressed</li>
+<li>Devs have not been very responsive lately (ever?)</li>
+</ul>
+
+
+<h1>Conclusion</h1>
+
+<p>I don&#8217;t want the Sails team to feel like I&#8217;m ragging on them, they&#8217;ve done awesome work and I really feel like Sails has a great future if it can take care of some of the things I&#8217;ve brought up in the past two sections.  I know that when everything was running smoothly developing with Sails it was pure bliss on my end.</p>
+
+<p>For those readers interested or with a bunch of time on thier hands, it would be great to have people throw a bunch of pull requests Sails&#8217; way, since I sort of have a feeling that they are overwhelmed by the sheer scope of the project.  However, if the core developers don&#8217;t start piping up soon, it&#8217;s going to be hard to maintain interest / continue to invest my own valuable time and willpower into the project.  It has a ton of potential and in my opinion the vision, fully implemented and fleshed out, would be truly amazing.</p>
+
+<p>So that&#8217;s my take on Sails.js.  Happy New Year, I hope you enjoyed.  Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+
+<p><em>EDIT:</em> I absentmindedly pushed with a bunch of broken links.  Fixed now, sorry guys.</p>
+]]></content>
+  </entry>
+  
+</feed>

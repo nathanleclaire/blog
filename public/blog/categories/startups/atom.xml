@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: startups | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/startups/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[5 Reasons We Won Startup Weekend]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/02/10/5-reasons-we-won-startup-weekend/"/>
+    <updated>2014-02-10T18:27:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/02/10/5-reasons-we-won-startup-weekend</id>
+    <content type="html"><![CDATA[<p>This previous weekend I participated in <a href="http://annarbor.startupweekend.org/">Ann Arbor Startup Weekend</a> and had a blast.  Our company&#8217;s name is <a href="http://fixworthy.co">Fixworthy</a> and we built a photo-based bug tracking app for real life (think Github Issues meets Instagram).</p>
+
+<p><img src="/images/swaa/fixworthy.jpeg" title="Hail to the victors." ></p>
+
+<p>Of course we worked hard on it, lost some sleep etc. but everyone does that.  There were some special factors at play in our case that helped us win such as:</p>
+
+<ol>
+<li><a href="http://www.vagrantup.com/">Vagrant</a> and Frequent Deploying</li>
+<li>Emphasizing &#8220;Done Is Better Than Perfect&#8221;</li>
+<li>Good Design and Aesthetics</li>
+<li>Finding a Use For Everybody (especially developers)</li>
+<li>Following the Pain and the Money</li>
+</ol>
+
+
+<p>Of course, all of these are forces stem from having a smart, talented, and easy-to-work-with team as well.  Let&#8217;s get into some specifics, shall we?</p>
+
+<h1>Vagrant and Frequent Deploying</h1>
+
+<p><img src="/images/swaa/vagrant.png" title="Up up and away." ></p>
+
+<p>I&#8217;m going to start off with a technical point to hook in my fellow nerds here.</p>
+
+<p>The very first technical thing that we (the developers) did, on Friday night after working our way through the vision of the product and what we thought its most important features should be, was to get started hacking.  We knew that to ship a working product quickly it would be an enourmous boon to be:</p>
+
+<ol>
+<li>Working on the same platform so that any issues which came up would have ubiquitous solutions, <em>and</em>:</li>
+<li>Working in an environment that was extremely close to the environment we would be deploying our production solution to (ever have those awkward it-worked-on-my-machine production bugs?)</li>
+</ol>
+
+
+<p>Most companies account for this by having everyone work in the cloud on EC2 instances or what have you, or simply by forcing their developers to all use the same operating system (which we kind of did a variant of).  In our case there was no way developing in the cloud was going to work (we had too little time or money) and our dev team was split about 50/50 between OSX and Windows so we decided to use <a href="http://www.vagrantup.com/">Vagrant</a>, a &#8220;free and open-source software for creating and configuring virtual development environments&#8221;.</p>
+
+<p>Vagrant is awesome, although I&#8217;m a little disappointed they have moved away from their original logo which features this scrappy dude:</p>
+
+<p><img src="/images/swaa/vagrant_chilling.png"></p>
+
+<p>We made everyone download and install Vagrant / VirtualBox (which Vagrant depends on) and use <a href="https://github.com/bryannielsen/Laravel4-Vagrant">this configuration</a>, which orchestrates the installation of a LAMP stack and the <a href="http://laravel.com/">Laravel framework</a> using Puppet.  It took a little while for all of the dependencies to install on everyone&#8217;s computer but we were able to sit back and sip a little beer while Puppet did most of the heavy lifting.  Once Puppet was all done, everyone could point their host OS&#8217;s browser to <code>http://localhost:8888</code> and be greeted by a freshly minted Laravel install.  Shared folders allowed us all to get started hacking right away, which was seriously awesome for productivity.</p>
+
+<p>This system also made it super easy to deploy frequently, since we just pulled in our changes to a git repo hosted on the prod server, ran the migrations and database seeds and <em>voila</em>, we were done deploying.  No nasty production surprises.</p>
+
+<p>One last point here, on the geeky technical side of things:  There was no squabbling over PHP vs. Rails or CodeIgniter vs. CakePHP or any of that kind of stuff that you are surely familiar with, we simply all worked towards the common good however we could.  We had a couple of guys who traditionally stuck to Ruby or .NET, for instance, that picked up front-end work since it was where the could be the most productive, the quickest.  This kind of put-the-team-first mentality is priceless for getting things done quickly.</p>
+
+<h1>Emphasizing &#8220;Done Is Better Than Perfect&#8221;</h1>
+
+<p><img src="/images/swaa/done_is_better.png" title="Lookin&#8217; good." ></p>
+
+<p>We&#8217;ve all probably heard this one <a href="http://www.etsy.com/blog/en/2013/why-done-is-better-than-perfect/">a ton of times</a>, so I won&#8217;t spend <em>too</em> much time on it, but I do believe it played a huge role in our ability to push forward as a team and succeed.  Especially on front-end stuff I have way too much of a tendency towards &#8220;perfectionism&#8221; that can be counterproductive at best and harmful at worst as I am stricken by analysis paralysis and self-doubt.</p>
+
+<p>Whenever we had moments of self-doubt about the product, or our implementation (though these were surprisingly rare on the tech side) we asked ourselves: &#8220;Is this helping us to deliver a quality product that is aligned with our vision for what this should be?&#8221; and if the answer was no, we stoically carried onward.  There were definitely parts of the app that left something to be desired (security concerns are a notable one on the backend side- though hopefully the framework helps a bit with that), but there always are, and for a weekend project I was ecstatically happy with the end result.</p>
+
+<p>I was shocked how quickly we could ship something that was working, if not ideal, and begin validating it with users and prospective clients.  That creates a tight feedback loop and gets the commits a-flyin&#8217;.</p>
+
+<h1>Good Design and Aesthetics</h1>
+
+<p><img src="/images/swaa/fw_logo.png" title="Lookin&#8217; good." ></p>
+
+<p>Did you know that users begin forming impressions of a website&#8217;s &#8220;visual appeal&#8221; in <a href="http://www.websiteoptimization.com/speed/tweak/blink/">as little as 50 milliseconds</a>?  That&#8217;s 50 milliseconds quicker than the <a href="http://stackoverflow.com/questions/536300/what-is-the-shortest-perceivable-application-response-delay">minimum application response delay humans are able to perceive</a>.  In other words, users decide if your website is beautiful or if it is garbage very, <em>very</em>, quickly.</p>
+
+<p><a href="http://www.klsy.co/">Kelsey</a> was our design ringer and boy am I ever glad she was on our team.  There&#8217;s no doubt that <a href="http://en.wikipedia.org/wiki/A_picture_is_worth_a_thousand_words">a picture is worth a thousand words</a> and having a designer allowed us to take our website from &#8220;awkward-Bootstrap-import-and-fuhgettaboutit&#8221; to &#8220;clean, lean, eye-candy <em>machine</em>&#8221;.  A logo is a condensed visual statement-of-purpose-of-sorts and I was super happy with the logo designed for Fixworthy, which you can see above (I&#8217;m a little biased because my favorite color is orange).</p>
+
+<p>Having good design instantly improves your social media presence (check that backdrop on our <a href="twitter.com/fixworthy">Twitter page</a>!), the initial reaction that your users have as they begin forming a relationship with your product, and more.  It&#8217;s well known that <a href="http://econsultancy.com/blog/62391-do-bigger-images-mean-improved-conversion-rates-three-case-studies">big images increase conversion rates</a>, and having those design chops on our side really gave us some serious momentum on our side towards converting the people who really needed to be swayed in this case- the judges.</p>
+
+<h1>Finding a Use For Everybody (especially developers)</h1>
+
+<p><img src="/images/swaa/steve_ballmer_is_awesome.gif" title="This man knows." ></p>
+
+<p>When some of the hopefuls pitched their ideas or were trying to sell them to get people to join their team, there were a few who stood on stage and said in all honesty &#8220;I&#8217;m not looking for any other developers to join&#8221; while all the devs in the room&#8217;s collective jaws dropped.  Our feelings of surprise were validated late on Saturday when about three or four companies went up to the mic again to try and persuade developers already engaged with one team to switch to their own.</p>
+
+<p>In a sense I can see how a technical founder might not want to run the risk of having a bunch of newbies or bad programmers stomping around in their precious self-written code, but at the same time it stunned me that anyone would turn away someone willing to help with such a short deadline in tow (especially with how tight the demand is for technical talent).  The odds of getting a real stinker in your group were pretty low, considering that it was a University of Michigan-centric event, and it struck me more as vanity than anything else that people were willing to turn away perfectly good (free!) talent.</p>
+
+<p>Our company didn&#8217;t turn anyone away and tried to find a use for everyone.  As mentioned, some of the developers were a little more comfortable with back-end stacks other than LAMP, and so they cordially agreed to work on the front-end.  Our team member <a href="http://wilsonproductive.com/">Greg</a> felt that he was best at social media / marketing stuff, so he whipped up an Instagram and Twitter presence at lightning speed.  Our business team began pounding the pavement by doing market research, performing user testing, and getting in touch with potential customers (organizations for whom this technology would be useful, perhaps if they wanted private issue tracking).</p>
+
+<p>All in all, we made a hugely concentrated effort to rake in as much value as possible from every single person who wanted to help.  This helped bolster everyone&#8217;s moral and enthusiasm, let them play to their strengths, and paid off for us as a team.</p>
+
+<h1>Following the Pain and the Money</h1>
+
+<p><img src="/images/swaa/mo_money_mo_problems.jpeg"></p>
+
+<p>This is still a major pivot/focus point for the startup if we continue going (and there&#8217;s a lot of wind in our sails right now), but I think that a large part of why the group was able to be successful was that we didn&#8217;t kid ourselves about the fact that we were building something to create wealth by:</p>
+
+<ol>
+<li>Easing pain points for people, especially those with cash to throw at the problem e.g. businesses and universities</li>
+<li>Making money.</li>
+</ol>
+
+
+<p>Granted, there was a lot of hand-wringing about <em>how</em> we were going to accomplish this, but I think several of the core engineers (particularly <a href="http://scottdlowe.com/">Scott</a>) had a vision about this product was going to fly, and didn&#8217;t let a relentless enthusiasm for making a fantastically great product interfere with the reality that we needed to make money from this somehow.  A favorite line to throw at our business team, when they would try to persuade us to take the product in a different direction, was &#8220;get us someone who will write us a check for the V1 of this app when it is finished&#8221;.  That really put things into perspective.  Shouldn&#8217;t every aspiring entrepreneur hear, &#8220;Yeah, but who&#8217;s going to use (and pay for) that?&#8221; in response to one of their ideas?</p>
+
+<p>This kind of zeal prevented us from making yet another recipe app or a product with questionable monetization potential.  I feel confident that at the very least the core Fixworthy product could make moves into a space where they were making life easier for powerful (read: those with budgets to spend on sotware) people&#8217;s lifes a bit easier, and especially given the generally low standard for UI on enterprise software I&#8217;m optimistic about the opportunities in that market for easy-to-use products that are marketed well.</p>
+
+<h1>Conclusion</h1>
+
+<p>I had a blast and learned a ton about technology and leading / working with a decent sized team.  We started the weekend with nothing and ended up with a company, however small and scrappy it was.  Best of all, we won.  <a href="http://www.youtube.com/watch?v=GGXzlRoNtHU&amp;feature=kp">Who doesn&#8217;t like to win</a>?</p>
+
+<p>I had an inkling that it might be so when we were some of the last participants to get shooed out of the common space on Saturday night, but I didn&#8217;t want to jinx us by bringing it up.  Besides, as all pseudo-mystics and hippies are so fond of pointing out, the journey is the destination.  Given that my last Startup Weekend company was less than satisfactory (though it was a long time ago), I couldn&#8217;t be any happier.</p>
+
+<p>Until next time, stay sassy Internet.  And don&#8217;t forget to keep hustlin&#8217;.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The (JavaScript) Question I Bombed In An Interview With a Y Combinator Startup]]></title>
+    <link href="http://nathanleclaire.com/blog/2013/11/16/the-javascript-question-i-bombed-in-an-interview-with-a-y-combinator-startup/"/>
+    <updated>2013-11-16T17:30:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2013/11/16/the-javascript-question-i-bombed-in-an-interview-with-a-y-combinator-startup</id>
+    <content type="html"><![CDATA[<p>About a year and a half ago, I was on the hunt for my first &#8220;real&#8221; job.  I knew that I wanted to be a &#8220;web developer&#8221; (whatever <em>that</em> entails) but I had no idea where to begin.  I knew just a smidge of PHP.  I was developing websites in Classic ASP at my current internship, but I knew that was an antiquidated technology which was unlikely to help me in the modern job market.  As I had recently begun stomping around <a href="https://news.ycombinator.com">Hacker News</a>, I noticed that they had a &#8220;jobs&#8221; section in their header.  So I looked into things, saw that a few companies were hiring, and sent a few e-mails to companies that looked nice.</p>
+
+<p><img src="/images/y-comb/y-combinator-logo.gif" title="To hack and start things up." ></p>
+
+<h1>The Hunt</h1>
+
+<p>A few e-mailed me back and I managed to set up a phone screen with a company that does next-level web analytics.  Going into the interview I was filled with a mixture of apprehension and excitement.  After all, I knew that Silicon Valley was where the action was at, and I had no idea what kind of intricate or crazy questions they might ask me.  They had listed in their description a desire for strong JavaScript skills, which was appealing to me as I was rapidly learning to enjoy developing in this weird little language created by Brendan Eich.  <em>&#8220;I know jQuery pretty well,&#8221;</em>, I thought- <em>&#8220;What could possibly go wrong?&#8221;</em></p>
+
+<p>The developer who did my screen was pretty courteous and eased me into things a bit by talking about my background and experience.  I sheepishly admitted that I had studied philosophy in college, not computer science, and he put my concerns at ease by telling me that their founder had never finished college.  That made me feel better about things, since part of the reason I love technology so much is that it is so meritocratic.</p>
+
+<p>So, without further ado, we began to investigate a coding problem.</p>
+
+<h1>The Problem</h1>
+
+<p>INTERVIEWER: You&#8217;re familiar with jQuery, right?</p>
+
+<p>ME:  Yes, I&#8217;ve used it at work.  I like JavaScript.</p>
+
+<p>INTERVIEWER: Great.  So, you&#8217;re familiar with something like this, right?  Let&#8217;s say you have a textbox and you want to make a call to the server to get some data every time the user does some typing, if you wanted to make autocomplete suggestions, for example&#8230; <em>(begins typing into a shared/remote codepad)</em></p>
+
+<pre><code class="js">$(document).ready(function() {
+    $('input').keypress(function() {
+        $.ajax({
+            // Call the server for some goodness...
+        });
+    });
+});
+</code></pre>
+
+<p>ME: Oh yes, I see.  When the user presses down a key on the element, we will make a call.</p>
+
+<p>INTERVIEWER: So, you may be able to guess, that there is a problem with this code.  It is very inefficient.  If you type a string with 30 characters into the text box, the server gets called 30 times.  Not good, we are having all kinds of issues with scalability so we can&#8217;t afford to be writing code like this.</p>
+
+<p>DEMO:</p>
+
+<p><input id="myBox1" type="text" placeholder="Type some stuff in me!" style="width: 30%;" /> <strong>Called Server <span id="called_times1">0</span> times&#8230;</strong></p>
+
+<script>
+$(document).ready(function() {
+    $('#myBox1').keypress(function() {
+        if (!this.count)
+            this.count = 0;
+        this.count++;
+        $('#called_times1').html(this.count);
+    });
+});
+</script>
+
+
+<p>ME: I see.</p>
+
+<p>INTERVIEWER: So we only want to call the server after the user has been typing, then stops typing for 200 milliseconds.  That will give it the illusion of being instantaneous while saving a lot of load on our servers and a lot of ajax handling in the JavaScript.  How would we do that?</p>
+
+<p>ME:  Uh&#8230;</p>
+
+<h1>What Really Happened</h1>
+
+<p>ME:  I think I would use&#8230; Um&#8230;</p>
+
+<p>INTERVIEWER:  Well, do you know what a closure is?</p>
+
+<p>ME:  Yeah!  Closures.  I&#8217;ve heard of those.</p>
+
+<p>INTERVIEWER: What about <code>window.setTimeout</code> ?  Do you know about that?</p>
+
+<p>ME:  I think that&#8217;s JavaScript&#8217;s version of a <code>sleep</code> function?</p>
+
+<p>INTERVIEWER:  Kind of&#8230;</p>
+
+<p>ME:  I think I would&#8230; <em>typing awkwardly and struggling for 30 seconds</em>  I guess I&#8217;m not sure.</p>
+
+<p>INTERVIEWER:  I appreciate your time but perhaps this isn&#8217;t a good fit.</p>
+
+<h1>What Should Have Happened</h1>
+
+<p>ME:  Hm, that&#8217;s an interesting problem.  So, if we use <code>window.setTimeout</code> we can delay the call for 200 milliseconds.</p>
+
+<p>INTERVIEWER:  Right.</p>
+
+<p>ME:  But that&#8217;s not going to help us in the case where the user is typing fast, or even just normal speed.  So we need a way to interrupt the timeout if the user keeps typing.</p>
+
+<p>INTERVIEWER:  Exactly.</p>
+
+<p>ME:  So, I know that when you call <code>window.setTimeout</code>, you get back an ID that uniquely references the timeout.  And you can use it to cancel the timeout if need be!  So we should just store the timeout ID in the <code>keypress</code> function closure, and if the user triggers a keypress event again before the timeout function triggers, we&#8217;ll just cancel it and set a new one!</p>
+
+<p>(<em>EDIT:</em> Some commenters have pointed out that due to the fact that <code>this</code> in jQuery callbacks refers to the DOM node in question, not the function closure, the ID is actually being stored as a property of the DOM node.  They are correct.)</p>
+
+<p>INTERVIEWER:  Sounds great!  What would that look like in code?</p>
+
+<p>ME:  It&#8217;d look a little something like this&#8230;</p>
+
+<pre><code class="js">$(document).ready(function() {
+    $('input').keypress(function() {
+        if (this.timeoutId) 
+            window.clearTimeout(this.timeoutId);
+        this.timeoutId = window.setTimeout(function () {
+            $.ajax({
+                // do some stuff
+            });
+        }, 200);
+    });
+});
+</code></pre>
+
+<p>INTERVIEWER:  Clever.</p>
+
+<p>ME:  I try.</p>
+
+<p>DEMO:</p>
+
+<p><input id="myBox2" type="text" placeholder="Type some stuff in me!" style="width: 30%;" /> <strong>Called Server <span id="called_times2">0</span> times&#8230;</strong></p>
+
+<script>
+$(document).ready(function() {
+    $('#myBox2').keypress(function() {
+        if (!this.count)
+            this.count = 0;
+        if (this.timeoutId)
+            window.clearTimeout(this.timeoutId);
+        var that = this;
+        this.timeoutId = window.setTimeout(function() {
+            that.count++;
+            $('#called_times2').html(that.count);
+        }, 200);
+    });
+});
+</script>
+
+
+<p>INTERVIEWER:  Now on to the next question&#8230;</p>
+
+<h1>Conclusion</h1>
+
+<p>I bombed this interview but I learned something from it.  I know I could go in more confident and capable today.  It just goes to show you that not every setback in life has to be a bad thing.  Someday in the future I would like to work with Y Combinator or a Y Combinator-based startup, largely because I think there&#8217;s so much opportunity for learning and growth.</p>
+
+<p>Thanks for reading and I&#8217;ll catch you next week,</p>
+
+<p>Nathan</p>
+
+<p><em>EDIT</em>: Some commenters have pointed out my misuse of <code>clearInterval</code> as opposed to <code>clearTimeout</code>.  It turns out that this (mostly) works to clear timeouts, but is clearly not correct (it&#8217;s meant to be used with <code>window.setInterval</code>).  I have fixed this now.</p>
+]]></content>
+  </entry>
+  
+</feed>

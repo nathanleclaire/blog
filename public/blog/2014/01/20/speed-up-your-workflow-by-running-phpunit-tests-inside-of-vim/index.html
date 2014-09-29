@@ -1,0 +1,338 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html style="display:none;" lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="I'm a solution delivery and technology expert.  I write about code (back-end and front-end), entrepreneurship, and life.  I'm obsessed with application performance, user experience, and shipping." name="description">
+		<meta content="nathan leclaire" name="author">
+		
+		<title>Speed Up Your Workflow By Running PHPUnit Tests Inside of Vim &mdash; nathan leclaire | I care, I share, I'm Nathan LeClaire.</title>
+		
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href="/stylesheets/main.css" rel="stylesheet">
+		
+		<script>
+		   if(self == top) {
+			   document.documentElement.style.display = 'block'; 
+		   } else {
+			   top.location = self.location; 
+		   }
+		</script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+		<script src="/js/jquery.modal.min.js"></script>
+		<script src="/js/fuse.min.js"></script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div id="sidebar">
+				<header>
+					<div class="title">
+						<a href="http://nathanleclaire.com">
+							<img src="/images/nateface.jpeg" class="nateface" /> 
+							nathan leclaire 
+						</a>
+					</div>
+					<p class="slogan">I care, I share, I'm Nathan LeClaire.</p>
+					<div class="navi">
+						<ul>
+							<li><a href="/about/">About</a></li>
+							<li><a href="/blog/archives">Archives</a></li>
+							<li><a href="/atom.xml">RSS</a></li>
+						</ul>
+					</div> <!-- // .navi -->
+					<div id="sidebar-email">
+						<a href="mailto:nathan.leclaire@gmail.com">nathan.leclaire@gmail.com</a>
+					</div>
+				</header>
+				<span id="shameless-self-promotion">
+				<!-- Begin MailChimp Signup Form -->
+
+				<div id="mc_embed_signup">
+				<form action="https://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<label for="mce-EMAIL">Get my essays about tech delivered to your inbox</label>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+				</form>
+				</div>
+				<!--End mc_embed_signup-->
+				
+				<p>Quickly search the archive:</p>
+				<input type="text" placeholder="Fuzzy search by keyword (e.g. Angular)" id="archive-search">
+				<img src="/images/magnifying-glass.png" id="search-icon" />
+				<ul id="archive-search-populate">
+				</ul>
+				
+				</span>
+			</div>
+			<div id="content">
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+    <header>
+        <h1>
+            <a href="/blog/2014/01/20/speed-up-your-workflow-by-running-phpunit-tests-inside-of-vim/">Speed Up Your Workflow By Running PHPUnit Tests Inside of Vim</a>
+        </h1>
+        <h3 style="text-align: center;">by Nathan LeClaire</h3>
+        <time>20 January 2014</time>
+    </header>
+    <div>
+        <p><img src="/images/vim-phpunit/phpunitdemo.gif" title="No more CTRL Z for me." ></p>
+
+<p>If you're a dev that cares about nice, clean, working code you should probably be writing unit tests.  I've discussed unit testing in <a href="http://angularjs.org">AngularJS</a> a bit in <a href="http://nathanleclaire.com/blog/2013/12/13/how-to-unit-test-controllers-in-angularjs-without-setting-your-hair-on-fire/">one of my previous posts</a>, but what if you are working on the server side with one of the <a href="http://langpop.com/">most wildly popular web application languages of all time</a>?  That's right folks, I'm talking about <a href="http://php.net/">PHP</a> and whether you love it or hate it if you are working with it there's a damn good chance that you are unit testing it with the venerable <a href="http://phpunit.de/">PHPUnit</a> (if you're not unit testing at all, you're on the naughty list).  At the time of writing, this is what I do at my day job (my night job is as a costumed crusader fighting crime in the mean streets of <a href="http://www.a2gov.org/Pages/default.aspx">Ann Arbor, Michigan</a>.  For a long time the unit testing part of my development workflow in PHP went something like this:</p>
+
+<ol>
+<li>Be editing a PHP file and the file that tests it inside of <code>vim</code> over <code>ssh</code></li>
+<li>Change something in the test or the class that is likely to break the test, or add new tests</li>
+<li>Pop out of <code>vim</code> using <code>CTRL+Z</code> to suspend the process, and run the test on the command line using <code>phpunit --colors FileTest.php</code></li>
+<li>Note the results of the test.</li>
+<li>Type <code>fg</code> to get back into <code>vim</code></li>
+<li>Change the files to correspond <em>OR</em> Wait, what was the thing that was off again?</li>
+<li><code>GOTO 1</code></li>
+</ol>
+
+
+<p>Needless to say it's a little exhausting, especially on those days where your brain's moving slower than your fingers and you just can't seem to inject enough coffee into your system.  But if your workflow is like this, you might be excited to find out that there is a better way.</p>
+
+<h1>Let's Write Some VimScript</h1>
+
+<blockquote><p>And when you gaze long into an abyss the abyss also gazes into you.</p>
+
+<ul>
+<li><a href="http://en.wikiquote.org/wiki/Friedrich_Nietzsche">Friedrich Nietzsche</a></li>
+</ul>
+</blockquote>
+
+<p>If you're a <code>vim</code> poweruser, or even just a regular user, your first impulse towards solving this problem might be to execute commands using <code>:!phpunit @%</code>.  In case you're not familiar with this syntax, you just learned that you can preface commands with <code>!</code> (bang) to run them in the shell and that <code>@%</code> refers to the file opened in the current buffer.  This could work pretty well (and does) in a lot of cases, however it has a few disadvantages:</p>
+
+<ul>
+<li>You have to type out the whole sequence every time, which is really annoying even if you are a fast typer and it adds a second or two onto your "writecode-runtest-repeat" cycle each time that really begins to add up quickly</li>
+<li>You can't see the results inside a <code>vim</code> buffer and manipulate them side-by-side with the test and code under test.  You could theoretically use <code>screen</code> for this, but I've always run into issues getting <code>screen</code> to work perfectly with my <code>vim</code> setup</li>
+<li>In my use case (not sure if this is universal), PHPUnit is finnicky about <em>where</em> you run the tests from, and for a variety of reasons I don't like to <code>:cd</code> away from the home directory of the project I'm working on very often (not to mention that's an extra step in the cycle).  <code>:set autochdir</code> would fix this, but for large projects I'm not often a fan of <code>autochdir</code>.</li>
+</ul>
+
+
+<p>You could also try to look for a plugin, but who wants yet <em>another</em> <code>vim</code> plugin / coloring theme / whatever to juggle?</p>
+
+<p>So what's a unit testing junkie to do?  We have to dig into VimScript to automate this.  Hoo boy.  But have no fear, thanks to <a href="http://stevelosh.com/">Steve Losh</a>'s <a href="http://learnvimscriptthehardway.stevelosh.com/">Learn VimScript the Hard Way</a> I've figured out a great solution for you.</p>
+
+<p>Put this code inside of your <code>.vimrc</code> file:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><pre><code>function! RunPHPUnitTest()
+    cd %:p:h
+    let result = system(&quot;phpunit &quot; . bufname(&quot;%&quot;))
+    split __PHPUnit_Result__
+    normal! ggdG
+    setlocal buftype=nofile
+    call append(0, split(result, '\v\n'))
+    cd -
+endfunction
+
+nnoremap &lt;leader&gt;u :call RunPHPUnitTest()&lt;cr&gt;</code></pre></figure></notextile></div>
+
+
+<p>This will remap the keyboard shortcut <code>&lt;leader&gt;u</code> (run in normal mode) to run <code>phpunit</code> on the file you're currently editing (hopefully a test, or else there will be no result) in the directory where it is based, and spit out the results into a new window.  In case you're unfamiliar, the <code>&lt;leader&gt;</code> key in <code>vim</code> is <code>'\'</code> by default, but frequently it gets remapped to other keys (mine is mapped to <code>','</code>).</p>
+
+<p>I really like this shortcut since it allows me to look at the test results side by side with the files I'm working on.  This code generates a new test result window each time you run it, so you have to <code>:q</code> out of old ones manually.  This has never bothered me <em>too</em> much, but if you know of a way to change it so that it kills old windows automatically I'd love to hear from you.</p>
+
+<p>If you have a file with a lot of test methods in it, <code>vim</code> will be somewhat awkardly locked up for a minute waiting for the results, which it will spit out all at once when it is finished instead of in real-time like when you run <code>phpunit</code> on the command line, but at this time <code>vim</code> does not support streaming input buffers as far as I am aware.  So it's something that has to be lived with if you want to use the functionality this way.  If you know of a workaround for this, you should <a href="mailto:nathanleclaire@gmail.com">let me know</a>.  Or, you can use the next tip to execute just a few tests at a time.</p>
+
+<h1>But Can We Do Better?</h1>
+
+<p>Sure, we can always do better.  I really like using phpunit with the <code>--filter</code> option, since it allows you to focus on only running the tests you are interested in, instead of the whole kit and kaboodle.  This speeds things up really significantly.  How can we include this in our little VimScript function?</p>
+
+<p>We'll pass a parameter to our <code>RunPHPUnitTest()</code> function to indicate whether we want to do a <code>--filter</code> run or not, and if so we will yank the current word to use as the argument for the <code>--filter</code> parameter.  So, in our use case, if our vim cursor is hovering over the name of the function we want to run in the test file (as in <code>function testWhatever()</code>), and we press <code>&lt;leader&gt;f</code>, it will run PHPUnit just for that test.  Revised, the code in our <code>.vimrc</code> file looks like this:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><pre><code>function! RunPHPUnitTest(filter)
+    cd %:p:h
+    if a:filter
+        normal! T yw
+        let result = system(&quot;phpunit --filter &quot; . @&quot; . &quot; &quot; . bufname(&quot;%&quot;))
+    else
+        let result = system(&quot;phpunit &quot; . bufname(&quot;%&quot;))
+    endif
+    split __PHPUnit_Result__
+    normal! ggdG
+    setlocal buftype=nofile
+    call append(0, split(result, '\v\n'))
+    cd -
+endfunction
+
+nnoremap &lt;leader&gt;u :call RunPHPUnitTest(0)&lt;cr&gt;
+nnoremap &lt;leader&gt;f :call RunPHPUnitTest(1)&lt;cr&gt;</code></pre></figure></notextile></div>
+
+
+<p>In action:</p>
+
+<p><img src="/images/vim-phpunit/phpunitdemofilter.gif" title="So much faster, especially in big files." ></p>
+
+<h1>Conclusion</h1>
+
+<p>I'd rather script my editor in Python.  JUST KIDDING.  Kind of.</p>
+
+<p>Until next week, stay sassy Internet.  And keep that code coverage strong.</p>
+
+<p>Cheers,</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+
+    </div>
+    <footer>
+        <p>If you find a mistake or issue in this article, please <a id="pull-request-link" taget="_blank" href="">fix it and submit a pull request on Github</a> (must be signed in to your GitHub account).</p>
+        <a target="_blank" style="display: block;" href="https://twitter.com/share?url=http://nathanleclaire.com/blog/2014/01/20/speed-up-your-workflow-by-running-phpunit-tests-inside-of-vim/&text=Great article from @upthecyberpunks : " class="social-media-spam">Tweet It</a>
+        <a target="_blank" href="https://news.ycombinator.com/submitlink?u=http://nathanleclaire.com/blog/2014/01/20/speed-up-your-workflow-by-running-phpunit-tests-inside-of-vim/&t=" class="social-media-spam">Submit to Hacker News</a>
+        <a target="_blank" style="display: block !important;" href="http://www.reddit.com/submit?url=http://nathanleclaire.com/blog/2014/01/20/speed-up-your-workflow-by-running-phpunit-tests-inside-of-vim/&title=" class="social-media-spam">Submit to Reddit</a>
+        <br>
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/blog/categories/bash/'>bash</a>, <a class='category' href='/blog/categories/php/'>php</a>, <a class='category' href='/blog/categories/phpunit/'>phpunit</a>, <a class='category' href='/blog/categories/unit-testing/'>unit testing</a>, <a class='category' href='/blog/categories/vim/'>vim</a>, <a class='category' href='/blog/categories/vimscript/'>vimscript</a>
+	
+
+ 
+
+        <a target="_blank" style="display: block !important;" href="http://discourse.nathanleclaire.com">Chat in the forum!!</a>
+    
+        <div id="discourse-comments"></div>
+    </footer>
+    
+</article>
+<!-- END OF _includes/article.html -->
+
+
+<!-- END OF _/layouts/post.html -->
+
+			</div>
+			<form class="modal" id="mailing-list-modal" action="http://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<h1>Like what you're reading?</h1>
+					<img src="/images/happy-reader.jpeg"></img>
+					<p style="display: block;" for="mce-EMAIL">Did you enjoy this article?  You might want to sign up for my mailing list.  I send out weekly-ish essays about hot new tech stuff.</p>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL-modal" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+			</form>
+		</div> <!-- // .wrap -->
+	<script type="text/javascript" src="/js/prettify.js"></script>
+	<script>
+	function supports_html5_storage() {
+	  try {
+		return 'localStorage' in window && window['localStorage'] !== null;
+	  } catch (e) {
+		return false;
+	  }
+	}
+
+	$(document).ready(function () {
+	    var fuse;
+
+	    $("code").addClass("prettyprint");
+	    prettyPrint();
+
+	    $.getJSON("/articles.json", function(data) {
+	    	// input:
+	    	// [{title: "Learn Node.js The Troll Way", href: "blahblah"}, { ... }]
+	    	fuse = new Fuse(data, {
+	    	    keys: ['title', 'tags']
+	    	});
+	    });
+	    
+	    $("#archive-search").keyup(function() {
+	    	var $this = $(this);
+	    	var val = $this.val();
+	    	var result = fuse.search(val).slice(0, 1);
+	    	$list = $("#archive-search-populate");
+	    	$list.empty();
+	    	if (result.length > 0 && val !== '') {
+	    	    $.each(result, function(i, e) {
+	    	        $list.append('<li><a href="'+ e.href +'">'+ e.title +'</a></li>');
+	    	    });
+	    	}
+	    });
+	    
+	    $(".social-media-spam").each(function () {
+	        var e = $(this);
+	        var t = e.attr("href");
+	        var n = $("article header h1 a").html();
+	        t += encodeURIComponent(n);
+	        e.attr("href", t)
+	    });
+
+	    var e = window.location.href;
+	    var t = $("#pull-request-link");
+	    var n = "https://github.com/nathanleclaire/blog/edit/master/source/_posts/" + e.split("/").slice(4, 8).join("-") + ".markdown";
+	    t.attr("href", n);
+
+	    // Only offer mailing list once
+		var tryModal = localStorage["modal"] ? false : true;
+
+		// Don't offer mailing list to people on mobile
+		if ($(window).width() < 720) {
+			tryModal = false;
+		}
+
+		$('#mc-embedded-subscribe').click(function() {
+			// Don't offer mailing list if people have
+			// already clicked to try and sign up
+			tryModal = false;
+			localStorage["modal"] = "true";
+		});
+
+		$(window).scroll(function () {
+			if (tryModal && document.URL.indexOf('archives') === -1 && document.URL.indexOf('about') === -1) {
+				if (($(window).scrollTop() + $(window).height()) === $(document).height()) {
+					if (supports_html5_storage()) {
+						window.setTimeout(function() {
+							$('#mailing-list-modal').modal({
+								fadeDuration: 250
+							});
+							$('#mce-EMAIL-modal').focus();
+							tryModal = false;
+							localStorage["modal"] = "true";
+						}, 1000);
+					}
+				}
+			}
+		});
+
+
+	});
+	</script>
+	<script type="text/javascript">
+	if ('/blog/2014/01/20/speed-up-your-workflow-by-running-phpunit-tests-inside-of-vim/' !== '/blog/index.html') {
+	  var discourseUrl = "http://discourse.nathanleclaire.com/",
+	      discourseEmbedUrl = 'http://nathanleclaire.com/blog/2014/01/20/speed-up-your-workflow-by-running-phpunit-tests-inside-of-vim/';
+
+	  (function() {
+	    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+	      d.src = discourseUrl + 'javascripts/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+	  })();
+	}
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-26758702-2', 'nathanleclaire.com');
+	  ga('send', 'pageview');
+	</script>
+	</body>
+</html>
+<!-- END OF _layouts/default.html -->

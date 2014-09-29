@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: nosql | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/nosql/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[RethinkDB is Quietly Changing the Way We Think About Data]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/07/01/rethinkdb-is-quietly-changing-the-way-we-think-about-data/"/>
+    <updated>2014-07-01T23:10:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/07/01/rethinkdb-is-quietly-changing-the-way-we-think-about-data</id>
+    <content type="html"><![CDATA[<h1>meet up</h1>
+
+<p>This past week I attended a meetup at <a href="http://firebase.io">Firebase</a> headquarters in downtown San Francisco.  No joke, there is photographic evidence.</p>
+
+<p><img src="/images/rethinkfire/meetup.jpeg" title="Me!" ></p>
+
+<p>It was a very intruiging event since the focus of the conversation was on building real-time apps, and what the future of that is going to look like.  Essentially real-time apps are websites or native device applications where the interaction with other users is nearly instantaneous.  For instance, if you&#8217;ve ever edited a Google Doc at the same time as someone else, you will recall that you could see changes that they made in real-time, and vice versa, and so on.</p>
+
+<p>There were a lot of great speakers, including Sara Robinson from <a href="http://firebase.io">Firebase</a> and Vincent Woo from <a href="http://coderpad.io">CoderPad</a>, but here I&#8217;m going to discuss a little about what RethinkDB demoed.</p>
+
+<p>In case you&#8217;re not familiar, <a href="http://rethinkdb.com">RethinkDB</a> is a JSON data store similar in some ways to <a href="http://mongodb.com">MongoDB</a>.  The comparison has been done to death so I won&#8217;t rehash as it&#8217;s easy to <a href="http://lmgtfy.com/?q=difference+between+rethinkdb+and+mongodb">Google</a>, I want to talk here about some new features that RethinkDB has been introducing which I find very innovative.</p>
+
+<h1>http as a query (HaaQ)</h1>
+
+<p><img src="/images/rethinkfire/rethinkquer.gif"></p>
+
+<p>RethinkDB just introduced a new feature that allows users to query APIs directly from their &#8220;Data Explorer&#8221; view (which is amazingly cool by the way, you should check it out - I really wish there was a demo of it online for people to play with).</p>
+
+<p>It&#8217;s called <code>http</code> and it&#8217;s a part of ReQL, their query language.  What it does is connect to a remote server to retrieve JSON, which you can then dump into RethinkDB directly and/or query with a very expressive query language (the ReQL API is based on JavaScript so it contains many familiar patterns, however there are many bindings for other languages as well).  This task traditionally is done using a scripting language like Ruby, Perl, or Python to keep the feedback loop tight, but being able to do it directly from Rethink makes the feedback loop even tighter.</p>
+
+<p>I suspect this sort of mutation will be a winning one in the end.  Just thinking about the possibilities, it reminded me of many times where I had to do some sort of straightforward data manipulation task based on external data and I was forced to reach for Python et al. for their networking capabilities.  It&#8217;s really interesting to, say, be able to very quickly access information from APIs such as who are the top committers for your project on GitHub, what are your most popular submissions to <a href="http://reddit.com/r/javascript">/r/javascript</a>, and so on, and then query that information in a very richly interactive and intuitive manner.</p>
+
+<p>Expect to see more http-as-a-query (HaaQ) and similar features popping up in technologies the future.</p>
+
+<h1>changefeeds</h1>
+
+<p>Now this is really fascinating.  You can set a query so that, when changes occur to it, your program gets notified.</p>
+
+<p>Why is this useful?  For starters, a given client can subscribe to be notified when a value changes with another user (their score increased, they got further along the map, they typed something in to the document, etc.).</p>
+
+<pre><code class="python">feed = r.table('users').changes().run(conn)
+for change in feed:
+    print change
+</code></pre>
+
+<p>I imagine doing this in a Goroutine or a similar type of lightweight thread.</p>
+
+<p>And perhaps more interestingly, you can also subscribe to just a certain kind of event (e.g. the user&#8217;s gotten a new high score):</p>
+
+<pre><code class="python">r.table('scores').changes().filter(
+    lambda change: change['new_val']['score'] &gt; change['old_val']['score']
+)['new_val'].run(conn)
+</code></pre>
+
+<p>Nice!  In the kind of industry sweep that we&#8217;re seeing towards applications which are reactive (I think of them as &#8220;springy&#8221; or &#8220;spongey&#8221;) vs. applications which are sluggish and imperative, this kind of feature will prove invaluable.  I&#8217;m especially keen to see when they have it working with aggregate functions (if I recall correctly eventually it will work with any function parallelizable with Map/Reduce).  Imagine getting notifications every time some kind of complex-to-calculate performance metric changed, or a real-time visualization of data that is constantly being re-crunched on the fly.</p>
+
+<h1>fin</h1>
+
+<p>I was really impressed with Rethink&#8217;s new features and I think they represent a bold new direction for things.  It would have been easy to play it safe and stick to existing features but instead Rethink is really trying to shake things up around how we think about data : storing it, querying it, and delivering it to the end user in real-time.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

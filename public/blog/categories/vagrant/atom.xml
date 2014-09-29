@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: vagrant | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/vagrant/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Do We Need a Community for Vagrantfiles?]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/05/02/do-we-need-a-community-for-vagrantfiles/"/>
+    <updated>2014-05-02T03:50:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/05/02/do-we-need-a-community-for-vagrantfiles</id>
+    <content type="html"><![CDATA[<h1>vagrant up</h1>
+
+<p><img src="/images/swaa/vagrant.png"></p>
+
+<p>For those of you who are unfamiliar, <a href="http://www.vagrantup.com/">Vagrant</a> is &#8220;development environments made easy&#8221;.</p>
+
+<blockquote><p>Create and configure lightweight, reproducible, and portable development environments.</p></blockquote>
+
+<p>Vagrant is a command line tool that aids in the creation and provisioning of development environments.  Why is it important?  Let&#8217;s say that you want to work on a Django application.  In order to get started with even basic work on the application you need Python installed, probably pip and virtualenv, the dependencies on Python libraries including Django itself, and a database program (sqlite, MySQL, and PostgreSQL are all popular choices).  Orchestrating the setup of all of this creates a lot of friction, especially if you are new to the Python ecosystem, and ranges from medium difficulty to &#8220;Dear God why did I ever attempt this&#8221; difficulty on Windows.  Worst of all, when you eventually want to deploy your application so the outside world can use it, you have to juggle all of this stuff <em>again</em> plus more overhead (e.g. installing and configuring nginx) on your server.</p>
+
+<p>Vagrant&#8217;s value proposition is simple:  Get the repo of the project you want to work on, run <code>vagrant up</code> once in the top level directory, wait for the virtual machine to boot and get provisioned, and then you are ready to go.  Point your browser to <code>localhost:8000</code> (or wherever) and there is your app.   Vagrant works with virtualization technologies (<a href="https://www.virtualbox.org/">VirtualBox</a>, <a href="https://www.virtualbox.org/">VmWare</a>, and they recently announced <a href="http://docker.io">Docker</a> support) and provisioners (anything from shell scripts to <a href="https://puppetlabs.com/">Puppet</a> to <a href="http://www.getchef.com/chef/">Chef</a>) behind the scenes and provides a nice clean interface for customization of things such as port forwarding from the guest to the host.  It really is a very flexible and powerful technology.</p>
+
+<p>But it, and related technologies (like Docker), are so new, they still have a big problem.  There&#8217;s no centralized way to find a quality image for what you may be searching for (e.g. Rails).  Someone out there has probably already done the legwork of creating that Vagrantfile and provisioning, right?  But at best we have Google and Github to try and hunt one down, and no assurance that it actually works.  For instance, I once tried to run a Vagrantfile that pretty much required Ansible to be installed on the host machine, and I was on Windows (so it was no good).  There are workarounds, but at that point you&#8217;ve already missed out on the awesome <code>vagrant up</code> workflow.</p>
+
+<h2>The Idea</h2>
+
+<p>About a month ago I got frustrated with the fact that I had to set up all of the weird Ruby stuff on a new computer any time I wanted to blog (because my blog right now is based on <a href="http://octopress.org/">Octopress</a>) so I set about creating a Vagrantfile and a provisioning script to take care of that.  That way, any time I wanted to blog on a new computer, I could just run <code>vagrant up</code> and have Octopress rarin&#8217; to go.</p>
+
+<p>5 hours later, I was still struggling.  For a variety of reasons that I won&#8217;t go into here, including that Windows interfered with several critical <code>rake</code> commands due to shared folder access.  I did eventually get it online, but it might have done me well to know that there was an existing version with these issues resolved floating around.  Indeed, some Googling just now reveals that <a href="http://blog.andrewallen.co.uk/2013/05/13/setting-up-vagrant-for-octopress/">this is the case</a>.  Or is it?  There&#8217;s no way to know if things you find just by Googling work well, on what OSes, whether or not they&#8217;re outdated, and so on.</p>
+
+<p>Which brings me to my point.</p>
+
+<p>I think there should be a community for Vagrantfiles (and their corresponding provisioning scripts), which I envision as being a sort of an awesome mashup of <a href="http://google.com">Google</a>, <a href="http://github.com">Github</a>, and <a href="http://reddit.com">Reddit</a>.  Basically, it would just be a CRUD app where people could submit and vote on Vagrant environments for particular stacks (want a <a href="http://mean.io/#!/">MEAN</a> stack?  Here&#8217;s the definitive one, etc.).  That way, if you wanted to start a new project with a particular stack, you could just <code>git clone</code> the project, optionally delete the <code>.git</code> directory to start fresh, run <code>vagrant up</code> and be done with it.  This is the sort of workflow we used to get going on a Laravel app when we <a href="http://nathanleclaire.com/blog/2014/02/10/5-reasons-we-won-startup-weekend/">won Startup Weekend</a> and it worked incredibly well.</p>
+
+<p>Additionally it would be pretty amazing if there were continuously integrated builds of the box/provisioning under OSX, Windows, and Linux hosts to reasonably assure you that no funny business was going to happen if you built the box with <code>vagrant up</code> locally.  For instance, making things work with a Windows host for me entailed making some pretty drastic changes to the Rakefile to appease SASS.  This would account for stuff like that.</p>
+
+<p>The upvote/downvote and discussion mechanisms would enable people to isolate the builds which are the &#8220;best&#8221; for various reasons, including being actively maintained.</p>
+
+<p>I feel like the <a href="https://index.docker.io">Docker index</a> is sort of headed in the right direction here, but at the time of writing lacks a way to sort search results by relevant paramters e.g. stars.  The code for that is online and written in Python, which I am familiar with, so I may take a stab at implementing it.</p>
+
+<h2>Fin</h2>
+
+<p>Maybe I&#8217;m just barking up the wrong tree here, but if there&#8217;s interest in this as a tool I definitely want to start looking into building and maintaining such a site.  I think we would see so many cool apps come to fruition that otherwise might have languished in dependency hell.  Everyone should know the awesomeness of <code>vagrant up</code>.</p>
+
+<p>Until next time, stay sassy Internet.  And <a href="http://nathanleclaire.com">consider subscribing to my blog</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[What is this Docker thing that everyone is so hyped about?]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/03/22/what-is-this-docker-thing-that-everyone-is-so-hyped-about/"/>
+    <updated>2014-03-22T20:38:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/03/22/what-is-this-docker-thing-that-everyone-is-so-hyped-about</id>
+    <content type="html"><![CDATA[<p><img src="/images/what-is-docker/moby-dick.jpg" title="Just another day in Devops." ></p>
+
+<h1>Docker</h1>
+
+<p>Approximately one year ago I was browsing <a href="http://news.ycombinator.com">Hacker News</a> and I came across this video:</p>
+
+<div style="text-align: center;">
+<iframe style="width: 420px !important;" width="420" height="315" src="//www.youtube.com/embed/wW9CAH9nSLs" frameborder="0" allowfullscreen></iframe>
+</div>
+
+
+<p>I found it profoundly exciting for reasons I could not explain, mostly Solomon&#8217;s infectious enthusiasm and the enthusiasm that the Hacker News commmunity reacted to it with.  When I learned that Docker was being written in <a href="http://golang.org">Go</a> I was even more intruiged.  Especially having played with Go quite a bit, I have a hunch that Go will be a language which dictates the future of the &#8220;cloud&#8221; in a lot of ways.  <a href="http://cloudflare.com">Cloudflare</a>, for instance, has a ton of infrastructure written in Go that powers their CDN and other cool tools they provide such as <a href="https://www.cloudflare.com/railgun">Railgun</a>.  This was definitely a project to keep an eye on.  I mentally dog-eared it.</p>
+
+<p>There was only one problem:  I didn&#8217;t understand what Docker <em>was</em> yet.  There was talk of containers and shipping but I didn&#8217;t understand what it all meant, or what it could be used for.</p>
+
+<p>Then about six months ago, things began to gel and sink in for me.</p>
+
+<h1>The Problem</h1>
+
+<p><img src="/images/what-is-docker/matrix-from-hell.png"></p>
+
+<p>In order to better understand Docker you have to understand the problem it is trying to solve.</p>
+
+<p>Modern day development (I&#8217;ll be focusing on the web here) lives in a world of lots of complexity.  In even the most basic application you are likely to have a back-end language that lives on the server, a front-end language (almost ubiquitously JavaScript) that lives on the client, third-party and in-house libraries for both of these languages to manage, a database, an operating system (often deploying to Linux but developing on God-knows-what OS), and more.  And this is for a <em>basic</em> app!  What if you have utility programs that are written in another language?  What if you have other weird dependencies and requirements?</p>
+
+<p>My point is that this all adds up to a lot of complexity, and worst of all- it is complexity that you have to manage across multiple platforms.  If I got an app up and running on my Macbook, and wanted to deploy to Linux, my options were not great.  If you&#8217;ve ever administrated your own VPS, much less a bare metal server, you know what I mean.  Having to install all of the packages and dependencies that you have in a totally different way is a recipe for headaches and tears.  Getting stuff to production is a completely different ball game from writing it in the first place.  Different technologies on different platforms create a &#8220;Matrix from Hell&#8221; (pictured above) that makes even the most courageous ops person want to set her hair on fire.</p>
+
+<p>Traditionally there have been a variety of solutions that have popped up in response to this, ranging from &#8220;just develop in PHP and FTP is your deploy&#8221; (ew) to <a href="http://heroku.com">Heroku</a> (<code>git push heroku master</code> is your deploy) to virtualization with provisioning (see <a href="http://vagrantup.com">Vagrant</a>).  Vagrant in particular has been gaining a lot of steam lately, for very good reason, and is a great technology (see my post on <a href="http://nathanleclaire.com/blog/2014/02/10/5-reasons-we-won-startup-weekend/">how we won Startup Weekend</a> if you&#8217;re curious why Vagrant was useful to us in that case).  However, virtual machines have several disadvantages as well.  Because the VM software has to simulate actual physical hardware, you take a big performance hit.  They are slow to start up and, especially before Vagrant started to become popular, difficult to get inexperienced developers started on (Download Vagrant and its dependencies and run <code>vagrant up</code> is a lot nicer than going through all of the VirtualBox menus, then provisioning your box manually).</p>
+
+<h1>Containers</h1>
+
+<p><img src="/images/what-is-docker/containers.jpg"></p>
+
+<p><a href="https://linuxcontainers.org/">Containers</a> popped up as a solution to this issue.  They are sort of like virtual machines, but they focus on process isolation and containment instead of emulating a full-fledged physical machine.  The &#8220;guest&#8221; container uses the same kernel as the &#8220;host&#8221; machine (and possibly some other resources as well, but my understanding of this at this time is a little fuzzy).  This allows many of the advantages of virtual machines without some of the aforementioned disadvantages.</p>
+
+<p>Enter <a href="http://docker.io">Docker</a> (from the homepage):</p>
+
+<blockquote><p>Docker is an open-source project to easily create lightweight, portable, self-sufficient containers from any application. The same container that a developer builds and tests on a laptop can run at scale, in production, on VMs, bare metal, OpenStack clusters, public clouds and more.</p></blockquote>
+
+<p><img src="/images/what-is-docker/docker.png"></p>
+
+<p>Docker&#8217;s goal is to provide a software solution that will allow users to &#8220;pack up&#8221; their applications into a standardized container and &#8220;ship it off&#8221; to wherever their heart desires.  A container, once developed, can be deployed anywhere that Docker runs.  They compare these containers to actual <a href="http://en.wikipedia.org/wiki/Containerization">physical shipping containers</a>, pictured above, which revolutionized international trade when it was standardized after World War 2.  From Wikipedia:</p>
+
+<blockquote><p>Containerization dramatically reduced transport costs &#8230; reduced congestion in ports, significantly shortened shipping time, and reduced losses from damage and theft.</p></blockquote>
+
+<p>Sound like benefits that would be nice to have for your business?</p>
+
+<h1>A Cambrian Explosion</h1>
+
+<p><img src="/images/what-is-docker/cambrian.png"></p>
+
+<p>What is really interesting about Docker though, to me personally at least, is the Cambrian Explosion-esque fugue of creativity that it has inspired so far and continues to inspire in people everywhere.  It is being used for things online that aren&#8217;t exactly aligned to its original use case but really hearken to a bold new future of tech.  I know of at least one example where it is being used to make possible a interpreter-by-runnable-code editor for conducting Python interviews.  <a href="http://www.runnable.com">Runnable.com</a> uses Docker to host self-contained executable / editable little code projects where you can look at existing code which you know works, edit it on the fly, and re-run it.  That&#8217;s awesome!</p>
+
+<p>I&#8217;m super optimistic for the future of this technology.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[5 Reasons We Won Startup Weekend]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/02/10/5-reasons-we-won-startup-weekend/"/>
+    <updated>2014-02-10T18:27:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/02/10/5-reasons-we-won-startup-weekend</id>
+    <content type="html"><![CDATA[<p>This previous weekend I participated in <a href="http://annarbor.startupweekend.org/">Ann Arbor Startup Weekend</a> and had a blast.  Our company&#8217;s name is <a href="http://fixworthy.co">Fixworthy</a> and we built a photo-based bug tracking app for real life (think Github Issues meets Instagram).</p>
+
+<p><img src="/images/swaa/fixworthy.jpeg" title="Hail to the victors." ></p>
+
+<p>Of course we worked hard on it, lost some sleep etc. but everyone does that.  There were some special factors at play in our case that helped us win such as:</p>
+
+<ol>
+<li><a href="http://www.vagrantup.com/">Vagrant</a> and Frequent Deploying</li>
+<li>Emphasizing &#8220;Done Is Better Than Perfect&#8221;</li>
+<li>Good Design and Aesthetics</li>
+<li>Finding a Use For Everybody (especially developers)</li>
+<li>Following the Pain and the Money</li>
+</ol>
+
+
+<p>Of course, all of these are forces stem from having a smart, talented, and easy-to-work-with team as well.  Let&#8217;s get into some specifics, shall we?</p>
+
+<h1>Vagrant and Frequent Deploying</h1>
+
+<p><img src="/images/swaa/vagrant.png" title="Up up and away." ></p>
+
+<p>I&#8217;m going to start off with a technical point to hook in my fellow nerds here.</p>
+
+<p>The very first technical thing that we (the developers) did, on Friday night after working our way through the vision of the product and what we thought its most important features should be, was to get started hacking.  We knew that to ship a working product quickly it would be an enourmous boon to be:</p>
+
+<ol>
+<li>Working on the same platform so that any issues which came up would have ubiquitous solutions, <em>and</em>:</li>
+<li>Working in an environment that was extremely close to the environment we would be deploying our production solution to (ever have those awkward it-worked-on-my-machine production bugs?)</li>
+</ol>
+
+
+<p>Most companies account for this by having everyone work in the cloud on EC2 instances or what have you, or simply by forcing their developers to all use the same operating system (which we kind of did a variant of).  In our case there was no way developing in the cloud was going to work (we had too little time or money) and our dev team was split about 50/50 between OSX and Windows so we decided to use <a href="http://www.vagrantup.com/">Vagrant</a>, a &#8220;free and open-source software for creating and configuring virtual development environments&#8221;.</p>
+
+<p>Vagrant is awesome, although I&#8217;m a little disappointed they have moved away from their original logo which features this scrappy dude:</p>
+
+<p><img src="/images/swaa/vagrant_chilling.png"></p>
+
+<p>We made everyone download and install Vagrant / VirtualBox (which Vagrant depends on) and use <a href="https://github.com/bryannielsen/Laravel4-Vagrant">this configuration</a>, which orchestrates the installation of a LAMP stack and the <a href="http://laravel.com/">Laravel framework</a> using Puppet.  It took a little while for all of the dependencies to install on everyone&#8217;s computer but we were able to sit back and sip a little beer while Puppet did most of the heavy lifting.  Once Puppet was all done, everyone could point their host OS&#8217;s browser to <code>http://localhost:8888</code> and be greeted by a freshly minted Laravel install.  Shared folders allowed us all to get started hacking right away, which was seriously awesome for productivity.</p>
+
+<p>This system also made it super easy to deploy frequently, since we just pulled in our changes to a git repo hosted on the prod server, ran the migrations and database seeds and <em>voila</em>, we were done deploying.  No nasty production surprises.</p>
+
+<p>One last point here, on the geeky technical side of things:  There was no squabbling over PHP vs. Rails or CodeIgniter vs. CakePHP or any of that kind of stuff that you are surely familiar with, we simply all worked towards the common good however we could.  We had a couple of guys who traditionally stuck to Ruby or .NET, for instance, that picked up front-end work since it was where the could be the most productive, the quickest.  This kind of put-the-team-first mentality is priceless for getting things done quickly.</p>
+
+<h1>Emphasizing &#8220;Done Is Better Than Perfect&#8221;</h1>
+
+<p><img src="/images/swaa/done_is_better.png" title="Lookin&#8217; good." ></p>
+
+<p>We&#8217;ve all probably heard this one <a href="http://www.etsy.com/blog/en/2013/why-done-is-better-than-perfect/">a ton of times</a>, so I won&#8217;t spend <em>too</em> much time on it, but I do believe it played a huge role in our ability to push forward as a team and succeed.  Especially on front-end stuff I have way too much of a tendency towards &#8220;perfectionism&#8221; that can be counterproductive at best and harmful at worst as I am stricken by analysis paralysis and self-doubt.</p>
+
+<p>Whenever we had moments of self-doubt about the product, or our implementation (though these were surprisingly rare on the tech side) we asked ourselves: &#8220;Is this helping us to deliver a quality product that is aligned with our vision for what this should be?&#8221; and if the answer was no, we stoically carried onward.  There were definitely parts of the app that left something to be desired (security concerns are a notable one on the backend side- though hopefully the framework helps a bit with that), but there always are, and for a weekend project I was ecstatically happy with the end result.</p>
+
+<p>I was shocked how quickly we could ship something that was working, if not ideal, and begin validating it with users and prospective clients.  That creates a tight feedback loop and gets the commits a-flyin&#8217;.</p>
+
+<h1>Good Design and Aesthetics</h1>
+
+<p><img src="/images/swaa/fw_logo.png" title="Lookin&#8217; good." ></p>
+
+<p>Did you know that users begin forming impressions of a website&#8217;s &#8220;visual appeal&#8221; in <a href="http://www.websiteoptimization.com/speed/tweak/blink/">as little as 50 milliseconds</a>?  That&#8217;s 50 milliseconds quicker than the <a href="http://stackoverflow.com/questions/536300/what-is-the-shortest-perceivable-application-response-delay">minimum application response delay humans are able to perceive</a>.  In other words, users decide if your website is beautiful or if it is garbage very, <em>very</em>, quickly.</p>
+
+<p><a href="http://www.klsy.co/">Kelsey</a> was our design ringer and boy am I ever glad she was on our team.  There&#8217;s no doubt that <a href="http://en.wikipedia.org/wiki/A_picture_is_worth_a_thousand_words">a picture is worth a thousand words</a> and having a designer allowed us to take our website from &#8220;awkward-Bootstrap-import-and-fuhgettaboutit&#8221; to &#8220;clean, lean, eye-candy <em>machine</em>&#8221;.  A logo is a condensed visual statement-of-purpose-of-sorts and I was super happy with the logo designed for Fixworthy, which you can see above (I&#8217;m a little biased because my favorite color is orange).</p>
+
+<p>Having good design instantly improves your social media presence (check that backdrop on our <a href="twitter.com/fixworthy">Twitter page</a>!), the initial reaction that your users have as they begin forming a relationship with your product, and more.  It&#8217;s well known that <a href="http://econsultancy.com/blog/62391-do-bigger-images-mean-improved-conversion-rates-three-case-studies">big images increase conversion rates</a>, and having those design chops on our side really gave us some serious momentum on our side towards converting the people who really needed to be swayed in this case- the judges.</p>
+
+<h1>Finding a Use For Everybody (especially developers)</h1>
+
+<p><img src="/images/swaa/steve_ballmer_is_awesome.gif" title="This man knows." ></p>
+
+<p>When some of the hopefuls pitched their ideas or were trying to sell them to get people to join their team, there were a few who stood on stage and said in all honesty &#8220;I&#8217;m not looking for any other developers to join&#8221; while all the devs in the room&#8217;s collective jaws dropped.  Our feelings of surprise were validated late on Saturday when about three or four companies went up to the mic again to try and persuade developers already engaged with one team to switch to their own.</p>
+
+<p>In a sense I can see how a technical founder might not want to run the risk of having a bunch of newbies or bad programmers stomping around in their precious self-written code, but at the same time it stunned me that anyone would turn away someone willing to help with such a short deadline in tow (especially with how tight the demand is for technical talent).  The odds of getting a real stinker in your group were pretty low, considering that it was a University of Michigan-centric event, and it struck me more as vanity than anything else that people were willing to turn away perfectly good (free!) talent.</p>
+
+<p>Our company didn&#8217;t turn anyone away and tried to find a use for everyone.  As mentioned, some of the developers were a little more comfortable with back-end stacks other than LAMP, and so they cordially agreed to work on the front-end.  Our team member <a href="http://wilsonproductive.com/">Greg</a> felt that he was best at social media / marketing stuff, so he whipped up an Instagram and Twitter presence at lightning speed.  Our business team began pounding the pavement by doing market research, performing user testing, and getting in touch with potential customers (organizations for whom this technology would be useful, perhaps if they wanted private issue tracking).</p>
+
+<p>All in all, we made a hugely concentrated effort to rake in as much value as possible from every single person who wanted to help.  This helped bolster everyone&#8217;s moral and enthusiasm, let them play to their strengths, and paid off for us as a team.</p>
+
+<h1>Following the Pain and the Money</h1>
+
+<p><img src="/images/swaa/mo_money_mo_problems.jpeg"></p>
+
+<p>This is still a major pivot/focus point for the startup if we continue going (and there&#8217;s a lot of wind in our sails right now), but I think that a large part of why the group was able to be successful was that we didn&#8217;t kid ourselves about the fact that we were building something to create wealth by:</p>
+
+<ol>
+<li>Easing pain points for people, especially those with cash to throw at the problem e.g. businesses and universities</li>
+<li>Making money.</li>
+</ol>
+
+
+<p>Granted, there was a lot of hand-wringing about <em>how</em> we were going to accomplish this, but I think several of the core engineers (particularly <a href="http://scottdlowe.com/">Scott</a>) had a vision about this product was going to fly, and didn&#8217;t let a relentless enthusiasm for making a fantastically great product interfere with the reality that we needed to make money from this somehow.  A favorite line to throw at our business team, when they would try to persuade us to take the product in a different direction, was &#8220;get us someone who will write us a check for the V1 of this app when it is finished&#8221;.  That really put things into perspective.  Shouldn&#8217;t every aspiring entrepreneur hear, &#8220;Yeah, but who&#8217;s going to use (and pay for) that?&#8221; in response to one of their ideas?</p>
+
+<p>This kind of zeal prevented us from making yet another recipe app or a product with questionable monetization potential.  I feel confident that at the very least the core Fixworthy product could make moves into a space where they were making life easier for powerful (read: those with budgets to spend on sotware) people&#8217;s lifes a bit easier, and especially given the generally low standard for UI on enterprise software I&#8217;m optimistic about the opportunities in that market for easy-to-use products that are marketed well.</p>
+
+<h1>Conclusion</h1>
+
+<p>I had a blast and learned a ton about technology and leading / working with a decent sized team.  We started the weekend with nothing and ended up with a company, however small and scrappy it was.  Best of all, we won.  <a href="http://www.youtube.com/watch?v=GGXzlRoNtHU&amp;feature=kp">Who doesn&#8217;t like to win</a>?</p>
+
+<p>I had an inkling that it might be so when we were some of the last participants to get shooed out of the common space on Saturday night, but I didn&#8217;t want to jinx us by bringing it up.  Besides, as all pseudo-mystics and hippies are so fond of pointing out, the journey is the destination.  Given that my last Startup Weekend company was less than satisfactory (though it was a long time ago), I couldn&#8217;t be any happier.</p>
+
+<p>Until next time, stay sassy Internet.  And don&#8217;t forget to keep hustlin&#8217;.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,368 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html style="display:none;" lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="I'm a solution delivery and technology expert.  I write about code (back-end and front-end), entrepreneurship, and life.  I'm obsessed with application performance, user experience, and shipping." name="description">
+		<meta content="nathan leclaire" name="author">
+		
+		<title>The Good, The Bad, and The Ugly of Sails.js, Realtime JavaScript MVC Framework &mdash; nathan leclaire | I care, I share, I'm Nathan LeClaire.</title>
+		
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href="/stylesheets/main.css" rel="stylesheet">
+		
+		<script>
+		   if(self == top) {
+			   document.documentElement.style.display = 'block'; 
+		   } else {
+			   top.location = self.location; 
+		   }
+		</script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+		<script src="/js/jquery.modal.min.js"></script>
+		<script src="/js/fuse.min.js"></script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div id="sidebar">
+				<header>
+					<div class="title">
+						<a href="http://nathanleclaire.com">
+							<img src="/images/nateface.jpeg" class="nateface" /> 
+							nathan leclaire 
+						</a>
+					</div>
+					<p class="slogan">I care, I share, I'm Nathan LeClaire.</p>
+					<div class="navi">
+						<ul>
+							<li><a href="/about/">About</a></li>
+							<li><a href="/blog/archives">Archives</a></li>
+							<li><a href="/atom.xml">RSS</a></li>
+						</ul>
+					</div> <!-- // .navi -->
+					<div id="sidebar-email">
+						<a href="mailto:nathan.leclaire@gmail.com">nathan.leclaire@gmail.com</a>
+					</div>
+				</header>
+				<span id="shameless-self-promotion">
+				<!-- Begin MailChimp Signup Form -->
+
+				<div id="mc_embed_signup">
+				<form action="https://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<label for="mce-EMAIL">Get my essays about tech delivered to your inbox</label>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+				</form>
+				</div>
+				<!--End mc_embed_signup-->
+				
+				<p>Quickly search the archive:</p>
+				<input type="text" placeholder="Fuzzy search by keyword (e.g. Angular)" id="archive-search">
+				<img src="/images/magnifying-glass.png" id="search-icon" />
+				<ul id="archive-search-populate">
+				</ul>
+				
+				</span>
+			</div>
+			<div id="content">
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+    <header>
+        <h1>
+            <a href="/blog/2013/12/28/the-good-the-bad-and-the-ugly-of-sails-dot-js-realtime-javascript-mvc-framework/">The Good, The Bad, and The Ugly of Sails.js, Realtime JavaScript MVC Framework</a>
+        </h1>
+        <h3 style="text-align: center;">by Nathan LeClaire</h3>
+        <time>28 December 2013</time>
+    </header>
+    <div>
+        <p>Over the Christmas vacation time that I've been taking I've been finding myself drawn back to <a href="http://nodejs.org/">Node.js</a>, mostly for the promise of rapid web application development and not having to switch languages when changing from working on the server-side and the client-side.  As part of my interest in developing applications using <a href="http://www.html5rocks.com/en/tutorials/websockets/basics/">WebSockets</a> for their real-time capabilities, I looked into <a href="http://derbyjs.com/">Derby</a> and <a href="https://www.meteor.com/">Meteor</a> and eventually I stumbled across <a href="http://sailsjs.org/">Sails.js</a>, the new kid on the block.  It seemed very promising and addressed some issues that I had with Derby and with Meteor.  Namely, both of those frameworks seem very tightly coupled from the client to the server and I wanted something that would provide more flexibility while still allowing me to develop rapidly.  So, I decided to begin prototyping out my new side project in Sails and naturally I developed a variety of opinions to rant about.  Enjoy.</p>
+
+<p><img src="/images/sails/clint-eastwood.jpeg" title="My face when developing." ></p>
+
+<h1>The Good</h1>
+
+<p><img src="/images/sails/thegood.jpeg"></p>
+
+<p><a href="http://sailsjs.org/#!">Sails.js</a> makes getting things started ridiculously quick.  You run <code>sails new myApp</code> to create the application skeleton.  Then, to create a Controller and Model for some data that you're going to be working with, you run <code>sails generate foo</code> (<code>foo</code> being the name of your model).  You configure the model really simply:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=js><code>module.exports = {
+    adapter: 'sails-redis',
+    attributes: {
+        content: 'string',
+        userName: 'string',
+        userId: 'int',    // &quot;foreign key&quot;
+        chatroomId: 'int' // &quot;foreign key&quot;
+    }
+};</code></pre></figure></notextile></div>
+
+
+<p>Sails uses <a href="https://npmjs.org/package/waterline">Waterline</a> as its ORM, and it provides a lot of power for developing rapidly.  The <code>adapter</code> field dictates where the data will be stored, and you can mix and match, so you can have some models stored in MySQL and others in Redis, for instance.  I think this is a really cool feature.  You can set validation, etc. on them.  You can write custom methods on your models to extract "higher-order" data from them.  Best of all, just having a model gets you a ton of routes (CRUD blueprints and REST endpionts) out of the box (and they <a href="http://sailsjs.org/#!documentation/sockets">all work with Websockets</a>!):</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=js><code># Backbone Conventions
+GET   :    /:controller                 =&gt; findAll()
+GET   :    /:controller/read/:id        =&gt; find(id)
+POST  :    /:controller/create          =&gt; create()
+POST  :    /:controller/create/:id      =&gt; create(id)
+PUT   :    /:controller/update/:id      =&gt; update(id)
+DELETE:    /:controller/destroy/:id     =&gt; destroy(id)
+
+# You can also explicitly state the action
+GET   :    /:controller/find            =&gt; findAll()
+GET   :    /:controller/find/:id        =&gt; find(id)
+POST  :    /:controller/create          =&gt; create(id)
+PUT   :    /:controller/update/:id      =&gt; update(id)
+DELETE:    /:controller/destroy/:id     =&gt; destroy(id)</code></pre></figure></notextile></div>
+
+
+<p>So, for instance, if you run <code>sails lift</code> to start your app, hitting</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=js><code>http://localhost:1337/something/create?content=hello&amp;userName=Nate&amp;userId=1&amp;chatroomId=1</code></pre></figure></notextile></div>
+
+
+<p>will add a new instance of the model to your datastore.  We did nothing manually to address this (so long <code>$_GET</code> and <code>$_POST</code>, it's been... okay).  And you can see everything that's been added at <code>localhost:1337/something/</code> without having to configure anything, althogh Sails makes it easy to change things around to your heart's content by setting properties in the Controller and <code>config/routes.js</code>.</p>
+
+<p>Underneath the slick outer layer, Sails uses a lot of well-known and proven modules, most notably <a href="http://expressjs.com/">Express</a>, and it makes it easy to reach to the underlying layer to configure things / do something specific/different (but does not awkwardly leak abstractions).  Additionally, serving of static assets never gave me any trouble and I just added new folders when I needed them.  Not having to worry about this was really nice when developing with <a href="http://angularjs.org/">Angular</a>, which mandates a lot of client-side includes.</p>
+
+<p>In summary:</p>
+
+<ul>
+<li>Database-agnostic ORM that is simple, but powerful and flexible as well</li>
+<li>Developing routes / REST APIs is ridiculously fast - writing tiny amounts of code gets you a ton! (including WebSockets support)</li>
+<li>Lots of stuff "just works" without making you think about things too much, but Sails does not try to conceal with "magic"</li>
+<li>The Sails.js team has done a really good job of laying things out well to be extensible- and they have well-thought-out solutions that address many common issues e.g. <a href="http://sailsjs.org/#!documentation/policies">policies</a></li>
+</ul>
+
+
+<h1>The Bad</h1>
+
+<p><img src="/images/sails/thebad.jpeg"></p>
+
+<p>Sails is a young framework so sometimes issues come up that can be frustrating to address (since there are not that many users yet, therefore there are not that many resources on StackOverflow etc.).  For instace, when I wanted to start using Redis as a datastore for chat room comments, I tried running <code>npm install sails-redis</code>.  This seemed to go off without a hitch but when I ran <code>sails lift</code> I got an error indicating that the <code>sails-redis</code> module could not be found.  It was very bizarre but then I tracked down <a href="https://github.com/balderdashy/sails-redis/issues/3">this Github issue</a> which pointed out there was no source code in the npm package!!  I was able to install the package from GitHub but it was very frustrating to blow time on something like that when ostensibly the framework allows you to develop rapidly.</p>
+
+<p>For me personally (and I think <a href="https://github.com/balderdashy/sails/issues/1239">others share the sentiment</a>) I think that generators should also provide you with unit test skeletons, and that Sails should address this concern a lot better.  If it's going to be production-ready top-notch support for testing will be pretty critical.  I wouldn't want to deploy an application that didn't have at least some unit tests, especially for mission-critical parts of the app.  As it stands right now it's not really clear how to test your Sails application.  We need a <code>sails test</code> command and documentation in this regard!</p>
+
+<p>For a framework that touts performance as a major benefit, I find that <code>sails lift</code> takes a pretty long time to start up (granted, it is doing a lot - if you run it with <code>--verbose</code> option you can see all of the route binding etc. it is doing).  This would be okay if you only had to do it once, but every time you change things (models, controllers, routes, etc.) you have to stop and start <code>sails lift</code>.  So, to have either code hot-swapping or a <code>sails lift</code> that starts up lightning-fast would make Sails much more pleasant to use.  I'm curious if performance can be improved in this regard.</p>
+
+<p>The documentation, particularly when it came to using <a href="http://sailsjs.org/#!documentation/sockets">Sockets</a>, was hard to understand as someone who is a newcomer to <a href="http://socket.io">socket.io</a>.  Their included <code>app.js</code> didn't really clarify things too well, and so I had to rely on <a href="http://net.tutsplus.com/tutorials/javascript-ajax/working-with-data-in-sails-js/">this example from NetTuts</a> to make sense of how to accomplish what I was trying to do.  So I think you could say that the documentation, though absolutely stellar in some areas, could use some bit of work.</p>
+
+<p>In summary:</p>
+
+<ul>
+<li>Since it is new, it can cause frustrating problems you will likely never run into with Django etc.</li>
+<li>In my opinion generators should also include tests (at least make it optional)</li>
+<li>Documentation is lacking in some ways</li>
+<li><code>sails lift</code> takes longer than I'd like to start up and has to be restarted frequently</li>
+</ul>
+
+
+<h1>The Ugly</h1>
+
+<p><img src="/images/sails/theugly.jpeg"></p>
+
+<p>At the time of writing, <a href="https://travis-ci.org/balderdashy/sails">their build is listed as not passing on TravisCI</a>, and the sticker on their Github page says so.  That doesn't exactly send the right kind of message you want to send with your project.  Now, be aware that I cloned the repository and ran all of the tests locally, and they all passed with Node <code>v0.10.24</code> and <code>v0.11.9</code>, but not with a previous version of <code>v0.10.*</code> that I had (can't remember which unfortunately).  So, perhaps it's more of a TravisCI / versioning issue than a Sails issue, but I think that's a big public-facing thing to overlook.</p>
+
+<p>Something that's really unfortunate about <a href="https://github.com/balderdashy/waterline">Waterline</a>, the aforementioned ORM that Sails uses, is that it does not support associations (relational data) at the moment.  This seems like a really huge issue / something that I would expect to be a huge cornerstone of any ORM to not have support for right away, and it was really frustrating to find out midway through starting to put together an app that has a lot of relational data.  That being said, they are <a href="https://github.com/balderdashy/sails/issues/124">aware of the issue</a> and are working to fix it, but I really want my <code>JOIN</code>s available for working with in the framework I'm using <em>now</em>, without having to use an unstable/bleeding-edge pre-release version of Waterline.  In order to do so right now in Sails I have to use <code>Model.query</code>, which is kind of awkward (plugging in raw SQL).  Having to code up things one way as a workaround and then go back and rip them out for official associations when they're supported is really a turn off.    I kind of wonder if it's not partially a result of NoSQL/MongoDB being very hot right now and developers not giving as much love to traditional relational things as they might have in the past.  Since it's an area of interest for me I'd like to contribute but other than a few guidelines in <code>CONTRIBUTING.md</code> there's not much communication from the core devs on this front.</p>
+
+<p>A lot of what is rough around the edges about Sails right now is summed up really well in this <a href="https://github.com/balderdashy/sails/pull/1058#issuecomment-30498745">Github pull request comment</a> by <a href="https://github.com/yoshuawuyts">yoshuawuyts</a>:</p>
+
+<blockquote><p>I know you've been very busy, but I feel I need to share this. As much as I've enjoyed Sails in the past, right now I feel very disconnected from it. For me the amount of outdated documentation, piling issues on the tracker and unclear direction make it hard to keep investing into Sails. The prolonged absence of core members like yourself and delayed responses on most issues make it hard to keep investing. If you want to lead Sails forward, I urge you to invest in clarity.</p></blockquote>
+
+<p>His suggestions for improvement:</p>
+
+<ul>
+<li>Rigorous issue smackdown; close everything that isn't relevant, combine duplicates into new issues.</li>
+<li>Create a roadmap; add all feature suggestions to the roadmap and close corresponding issues.</li>
+<li>Add code coverage via coveralls; it entices users to write more tests and fill up the bar.</li>
+</ul>
+
+
+<p>And a very good point:</p>
+
+<blockquote><p>I don't think you should prioritize getting new contributors in, I think they'll come naturally once the points above have been addressed.</p></blockquote>
+
+<p>After working with Sails for a week or so, I agree heartily with his take.</p>
+
+<p>In summary:</p>
+
+<ul>
+<li>Build is broken on TravisCI at the time of writing</li>
+<li>No support for associations (though they are coming)</li>
+<li>Issues on Github are piling up without being addressed</li>
+<li>Devs have not been very responsive lately (ever?)</li>
+</ul>
+
+
+<h1>Conclusion</h1>
+
+<p>I don't want the Sails team to feel like I'm ragging on them, they've done awesome work and I really feel like Sails has a great future if it can take care of some of the things I've brought up in the past two sections.  I know that when everything was running smoothly developing with Sails it was pure bliss on my end.</p>
+
+<p>For those readers interested or with a bunch of time on thier hands, it would be great to have people throw a bunch of pull requests Sails' way, since I sort of have a feeling that they are overwhelmed by the sheer scope of the project.  However, if the core developers don't start piping up soon, it's going to be hard to maintain interest / continue to invest my own valuable time and willpower into the project.  It has a ton of potential and in my opinion the vision, fully implemented and fleshed out, would be truly amazing.</p>
+
+<p>So that's my take on Sails.js.  Happy New Year, I hope you enjoyed.  Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+
+<p><em>EDIT:</em> I absentmindedly pushed with a bunch of broken links.  Fixed now, sorry guys.</p>
+
+    </div>
+    <footer>
+        <p>If you find a mistake or issue in this article, please <a id="pull-request-link" taget="_blank" href="">fix it and submit a pull request on Github</a> (must be signed in to your GitHub account).</p>
+        <a target="_blank" style="display: block;" href="https://twitter.com/share?url=http://nathanleclaire.com/blog/2013/12/28/the-good-the-bad-and-the-ugly-of-sails-dot-js-realtime-javascript-mvc-framework/&text=Great article from @upthecyberpunks : " class="social-media-spam">Tweet It</a>
+        <a target="_blank" href="https://news.ycombinator.com/submitlink?u=http://nathanleclaire.com/blog/2013/12/28/the-good-the-bad-and-the-ugly-of-sails-dot-js-realtime-javascript-mvc-framework/&t=" class="social-media-spam">Submit to Hacker News</a>
+        <a target="_blank" style="display: block !important;" href="http://www.reddit.com/submit?url=http://nathanleclaire.com/blog/2013/12/28/the-good-the-bad-and-the-ugly-of-sails-dot-js-realtime-javascript-mvc-framework/&title=" class="social-media-spam">Submit to Reddit</a>
+        <br>
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/mvc/'>mvc</a>, <a class='category' href='/blog/categories/node-dot-js/'>node.js</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/sails/'>sails</a>, <a class='category' href='/blog/categories/server/'>server</a>, <a class='category' href='/blog/categories/socket-dot-io/'>socket.io</a>
+	
+
+ 
+
+        <a target="_blank" style="display: block !important;" href="http://discourse.nathanleclaire.com">Chat in the forum!!</a>
+    
+        <div id="discourse-comments"></div>
+    </footer>
+    
+</article>
+<!-- END OF _includes/article.html -->
+
+
+<!-- END OF _/layouts/post.html -->
+
+			</div>
+			<form class="modal" id="mailing-list-modal" action="http://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<h1>Like what you're reading?</h1>
+					<img src="/images/happy-reader.jpeg"></img>
+					<p style="display: block;" for="mce-EMAIL">Did you enjoy this article?  You might want to sign up for my mailing list.  I send out weekly-ish essays about hot new tech stuff.</p>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL-modal" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+			</form>
+		</div> <!-- // .wrap -->
+	<script type="text/javascript" src="/js/prettify.js"></script>
+	<script>
+	function supports_html5_storage() {
+	  try {
+		return 'localStorage' in window && window['localStorage'] !== null;
+	  } catch (e) {
+		return false;
+	  }
+	}
+
+	$(document).ready(function () {
+	    var fuse;
+
+	    $("code").addClass("prettyprint");
+	    prettyPrint();
+
+	    $.getJSON("/articles.json", function(data) {
+	    	// input:
+	    	// [{title: "Learn Node.js The Troll Way", href: "blahblah"}, { ... }]
+	    	fuse = new Fuse(data, {
+	    	    keys: ['title', 'tags']
+	    	});
+	    });
+	    
+	    $("#archive-search").keyup(function() {
+	    	var $this = $(this);
+	    	var val = $this.val();
+	    	var result = fuse.search(val).slice(0, 1);
+	    	$list = $("#archive-search-populate");
+	    	$list.empty();
+	    	if (result.length > 0 && val !== '') {
+	    	    $.each(result, function(i, e) {
+	    	        $list.append('<li><a href="'+ e.href +'">'+ e.title +'</a></li>');
+	    	    });
+	    	}
+	    });
+	    
+	    $(".social-media-spam").each(function () {
+	        var e = $(this);
+	        var t = e.attr("href");
+	        var n = $("article header h1 a").html();
+	        t += encodeURIComponent(n);
+	        e.attr("href", t)
+	    });
+
+	    var e = window.location.href;
+	    var t = $("#pull-request-link");
+	    var n = "https://github.com/nathanleclaire/blog/edit/master/source/_posts/" + e.split("/").slice(4, 8).join("-") + ".markdown";
+	    t.attr("href", n);
+
+	    // Only offer mailing list once
+		var tryModal = localStorage["modal"] ? false : true;
+
+		// Don't offer mailing list to people on mobile
+		if ($(window).width() < 720) {
+			tryModal = false;
+		}
+
+		$('#mc-embedded-subscribe').click(function() {
+			// Don't offer mailing list if people have
+			// already clicked to try and sign up
+			tryModal = false;
+			localStorage["modal"] = "true";
+		});
+
+		$(window).scroll(function () {
+			if (tryModal && document.URL.indexOf('archives') === -1 && document.URL.indexOf('about') === -1) {
+				if (($(window).scrollTop() + $(window).height()) === $(document).height()) {
+					if (supports_html5_storage()) {
+						window.setTimeout(function() {
+							$('#mailing-list-modal').modal({
+								fadeDuration: 250
+							});
+							$('#mce-EMAIL-modal').focus();
+							tryModal = false;
+							localStorage["modal"] = "true";
+						}, 1000);
+					}
+				}
+			}
+		});
+
+
+	});
+	</script>
+	<script type="text/javascript">
+	if ('/blog/2013/12/28/the-good-the-bad-and-the-ugly-of-sails-dot-js-realtime-javascript-mvc-framework/' !== '/blog/index.html') {
+	  var discourseUrl = "http://discourse.nathanleclaire.com/",
+	      discourseEmbedUrl = 'http://nathanleclaire.com/blog/2013/12/28/the-good-the-bad-and-the-ugly-of-sails-dot-js-realtime-javascript-mvc-framework/';
+
+	  (function() {
+	    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+	      d.src = discourseUrl + 'javascripts/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+	  })();
+	}
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-26758702-2', 'nathanleclaire.com');
+	  ga('send', 'pageview');
+	</script>
+	</body>
+</html>
+<!-- END OF _layouts/default.html -->

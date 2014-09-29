@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: $scope.$apply | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/$scope-dot-$apply/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Banging Your Head Against an AngularJS Issue?  Try This]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/01/31/banging-your-head-against-an-angularjs-issue-try-this/"/>
+    <updated>2014-01-31T19:53:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/01/31/banging-your-head-against-an-angularjs-issue-try-this</id>
+    <content type="html"><![CDATA[<p><img src="/images/scope-apply/frustration.jpg" title="Have you been debugging something that seems trivial in Angular for so long that your face looks like this?" ></p>
+
+<p>As I&#8217;ve gotten a <a href="http://nathanleclaire.com/blog/2014/01/04/5-smooth-angularjs-application-tips/">little</a> <a href="http://nathanleclaire.com/blog/2014/01/11/dragging-and-dropping-images-from-one-browser-tab-to-another-in-angularjs/">into</a> <a href="http://angularjs.org">AngularJS</a> I&#8217;ve been surprised by how often my assumptions about how things will work have turned out to be wrong.  When you start to form a basic mental model of how Angular works and you hit your first stumbling block where your model turns out to be incorrect it can be really, really, frustrating.  In particular I had one issue that kept cropping up so often I began trying it before running to Google for help if something wasn&#8217;t working the way I would have expected (all my views should just magically sync up with what&#8217;s on <code>$scope</code>, right?).  This solution is to make sure <code>$scope.$apply</code> is getting used in the proper manner when updates to <code>$scope</code> are happening, especially if they are happening in unusual places e.g. inside of directives.  Since I don&#8217;t really like &#8220;magical&#8221; or knee-jerk fixes to problems I highly recommend Jim Hoskins&#8217;s article on <code>$scope.$apply</code> which you can find <a href="http://jimhoskins.com/2012/12/17/angularjs-and-apply.html">here</a>.</p>
+
+<h1>Use <code>$scope.$apply</code></h1>
+
+<p>During your first foray into Angular you will probably not come across this as it is one of those hidden, quasi-leaky-abstraction sort of things that only becomes well known to you as you work on getting a non-trivial app off the ground.  After all, it&#8217;s not really needed for the <a href="http://todomvc.com/architecture-examples/angularjs/#/">todo-list app</a> of yore but it becomes much more important when you are doing funny things like manipulating scope deep inside of directives and so on.  So, having been bit by the issue multiple times, I recommend trying a call to <code>$scope.$apply</code> (either wrap the changes to <code>$scope</code> properties inside a <code>$scope.apply</code> callback, or call <code>$scope.$apply</code> on its own after <code>$scope</code> properties have been updated)  See the documentation <a href="http://nathanleclaire.com/blog/2014/01/04/5-smooth-angularjs-application-tips/">here</a>.</p>
+
+<p>The issue is around updating properties on <code>$scope</code>, either in directives or in controllers, and not having the updated changes be reflected on the front-end in the manner which you expect (either they will not show up at all, or they will happen in an order which you do not anticipate, which will cause bugs).  This is because Angular has what is known as a digest-watch cycle where all of this gets figured out:</p>
+
+<p><img src="/images/scope-apply/digest-cycle.png"></p>
+
+<p>As automagical as Angular is in some ways, it has no way of knowing when your property has been updated outside of Angular-land (and sometimes doesn&#8217;t even bother when it is updated <em>in</em> Angular-land, as per the example that follows).  So it requires a call to <code>$scope.$apply</code> to stay in sync.</p>
+
+<h1>Example</h1>
+
+<p>Let&#8217;s say you have a list of numbers displayed with <code>ng-repeat</code> and you want to <code>shift</code> one off the list when the user presses the right arrow key, and redisplay them one at a time if the user presses the left arrow key.  Our controller code (on first attempt) would look something like this:</p>
+
+<pre><code class="js">.controller('NumCtrl', function($scope) {
+    var history = [];
+    $scope.numbersDisplayed = [0,1,2,3,4,5];
+
+    $scope.moveRight = function() {
+        history.unshift($scope.numbersDisplayed.shift());
+    };
+
+    $scope.moveLeft = function() {
+        $scope.numbersDisplayed.unshift(history.shift());
+    };
+})
+</code></pre>
+
+<p>We&#8217;re ignoring bounds-checking for the sake of simplicity in this demonstation.  Our directive, designated to watch for user input on the element where this is happening (will be <code>&lt;body&gt;</code> in our case since it is a simple little example), will look like this:</p>
+
+<pre><code class="js">.directive('arrowListener', function() {
+    return {
+        restrict: 'A', // attribute
+        scope: {
+            moveRight: '&amp;', // bind to parent method
+            moveLeft: '&amp;'
+        },
+        link: function(scope, elm, attrs) {
+            elm.bind('keydown', function(e) {
+                if (e.keyCode === 39) {
+                    scope.moveRight();
+                }
+                if (e.keyCode === 37) {
+                    scope.moveLeft();
+                }
+            })
+        }
+    };
+})
+</code></pre>
+
+<p>If you try the above code, you&#8217;ll notice that it doesn&#8217;t work.  The variable on <code>$scope</code> gets changed correctly, but this change is not reflected in the view.  In order to make it work you have to change the controller code to :</p>
+
+<pre><code class="js">.controller('NumCtrl', function($scope) {
+    var history = [];
+    $scope.numbersDisplayed = [0,1,2,3,4,5];
+
+    $scope.moveRight = function() {
+        history.unshift($scope.numbersDisplayed.shift());
+        $scope.$apply();
+    };
+
+    $scope.moveLeft = function() {
+        $scope.numbersDisplayed.unshift(history.shift());
+        $scope.$apply();
+    };
+})
+</code></pre>
+
+<p>You could also invoke <code>scope.$apply</code> in the directive itself.  To be honest, I&#8217;m not sure what the Angular gurus would consider best practice.  Perhaps the latter since it is more DRY.</p>
+
+<p><em>EDIT</em>: I have received an email from a reader, Andrew Greenberg, that indicates the latter is indeed the way to go.  In fact, he points out a deeper flaw in my reasoning/approach:</p>
+
+<blockquote><p>[There&#8217;s a problem with your code] &#8230; that can be the cause of significant bugs down the road, because it calls <code>$apply</code> from a scope inside the controller.  This will fail when that function is called from inside an AngularJS <code>$digest</code> cycle, for example, when the functions are called in any expression in the HTML (unless the directive is created in an isolate scope).</p>
+
+<p>As you know, Angular whines hard when <code>$apply</code> is called inside an <code>$apply</code> or <code>$digest</code>.</p>
+
+<p>The better practice is to call <code>$apply</code> only when you know you are outside of a <code>$digest</code> loop, such as inside the directive link function.  That is, keep the <code>$apply</code> out of a <code>$controller</code>, which is accessible to the declarative code in HTML or in another controller — and do the <code>$apply</code> in the directive link function, when you know you are outside of the <code>$digest</code> loop (I think).</p></blockquote>
+
+<p>So there you have it- reasoning why you should call <code>$scope.$apply</code> or <code>$scope.$digest</code> in the link function of your directives, not in your controllers.  My code revised to meet these requirements would look like this:</p>
+
+<pre><code class="js">.directive('arrowListener', function() {
+    return {
+        restrict: 'A', // attribute
+        scope: {
+            moveRight: '&amp;', // bind to parent method
+            moveLeft: '&amp;'
+        },
+        link: function(scope, elm, attrs) {
+            elm.bind('keydown', function(e) {
+                if (e.keyCode === 39) {
+                    scope.moveRight();
+                }
+                if (e.keyCode === 37) {
+                    scope.moveLeft();
+                }
+                scope.$apply();
+            })
+        }
+    };
+})
+.controller('NumCtrl', function($scope) {
+    var history = [];
+    $scope.numbersDisplayed = [0,1,2,3,4,5];
+
+    $scope.moveRight = function() {
+        history.unshift($scope.numbersDisplayed.shift());
+    };
+
+    $scope.moveLeft = function() {
+        $scope.numbersDisplayed.unshift(history.shift());
+    };
+})
+</code></pre>
+
+<p>Writing it out, this way looks a bit cleaner to me as well.</p>
+
+<p>A Plunker demo of these concepts in action:</p>
+
+<iframe src="http://embed.plnkr.co/agbSSuA2Mwx5pAd8kZSw/preview"></iframe>
+
+
+<h1>Conclusion</h1>
+
+<p>This is one of those nasty issues I wish someone would have pointed out to me from the start.  So here you go, guys, hopefully you can get something out of the suffering I&#8217;ve gone through to develop an almost sixth-sense like awareness of when a <code>$scope.$apply</code> will be needed.</p>
+
+<p>Until next week, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

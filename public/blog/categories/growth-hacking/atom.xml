@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: growth hacking | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/growth-hacking/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The Number One Dev Killer]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/02/08/the-number-one-dev-killer/"/>
+    <updated>2014-02-08T15:29:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/02/08/the-number-one-dev-killer</id>
+    <content type="html"><![CDATA[<p><img src="/images/dev-killer/rage.gif" title="One of those days?" ></p>
+
+<p>I frequently find myself fascinated by modern technology.  I mean, we went from computers that are the size of buildings to computers of equivalent power that fit in your pocket in ~50 years (I&#8217;ll leave you to decide if it&#8217;s sad or not that we use them mostly to look at pictures of cats and argue on the Internet).  A pretty impressive feat if you ask me, especially considering that 50 years is just about nothing in geographic terms.</p>
+
+<p>What always fascinates me the most, however, is people and how they interact with (and create!!) new technology.  Especially being immersed in developer culture, I&#8217;ve start to see the same patterns over and over again and begun learning what makes some projects (especially when people are working in isolation) fail to get traction, and what makes some projects so wildly successful.  So today I&#8217;m going to write about a story to demonstrate a point about the thing which is, in my opinion, a huge killer of developer productivity.</p>
+
+<h1>A Story About Mailing Lists</h1>
+
+<p>Do you recognize this guy?</p>
+
+<p><img src="/images/dev-killer/mailchimp.jpg"></p>
+
+<p>Probably at least looks familiar, right?  It&#8217;s the <a href="http://mailchimp.com">MailChimp</a> monkey.  How about this guy?</p>
+
+<p><img src="/images/dev-killer/hermes.jpg"></p>
+
+<p>It&#8217;s <a href="http://en.wikipedia.org/Hermes">Hermes</a>, the Greek god of communication.  But unless you&#8217;re a theology buff, Freddie the MailChimp mascot was probably a lot more meaningful to you in a modern context than Hermes.  So what?  Let me tell you a story to explain what I&#8217;ll be getting at.</p>
+
+<p>Now that I&#8217;ve started getting some traffic to my blog, and received a variety of emails from readers, I wanted to get a mailing list up.  You know, nothing fancy, just an email that I send out every once in a while to give people a chance to catch up with what I&#8217;ve been writing about this week.  So what do I do?</p>
+
+<p>I could use <a href="http://mailchimp.com">MailChimp</a>, a rock-solid and proven standby that is good enough for people like <a href="http://andrewchen.co">Andrew Chen</a> and <a href="http://www.kalzumeus.com">Patrick McKenzie</a> and obviously should be good enough for me.  But what did I do?  Like a &#8220;good&#8221; hacker, I started writing my own (In addition to just wanting a cool project, for some reason I was embarassed about the possibility of people know that I use MailChimp.  I don&#8217;t know why, I guess I just have some kind of weird DIY fetish).  It was going to be called <a href="http://github.com/nathanleclaire/hermes">Hermes</a>, written in Express/Node.js, and I was totally stoked.  Mostly because now I was going to attempt to re-invent MailChimp instead of doing more important, but less sexy, things with my time.</p>
+
+<p>I got about this far (I&#8217;m skipping over some boilerplate):</p>
+
+<pre><code class="javascript">function sendSingleMail(subject, to) {
+    getSignupEmailTemplate({
+        to: to
+    }, function(html) {
+        mailgun.sendRaw("Nathan LeClaire &lt;nathan.leclaire@gmail.com&gt;", [to.email],
+            'From: nathan.leclaire@gmail.com' +
+            '\nTo: ' + to.email +
+            '\nContent-Type: text/html; charset=utf-8' +
+            '\nSubject: ' + subject + '\n\n' +
+            html,
+            function(err) {
+                if (err) console.log("there was an email error", err);
+                else console.log("successfully sent email to " + to.email);
+            }
+        );
+    });
+}
+
+function getSignupEmailTemplate(context, callback) {
+    var tmpl = jade.renderFile("views/signup-email.jade", context, function(err, html) {
+        if (err) {
+            console.log("error rendering jade template");
+        } else {
+            callback(html);
+        }
+    });
+}
+
+function main(conn) {
+    var subscribers = r.db("hermes").table("subscriber");
+    app.post("/email_signup", function(req, res) {
+        var email = req.body.email;
+        subscribers.insert({
+            email: email,
+            name: "",
+            subscriptionConfirmed: false
+        }).run(conn, function(err, result) {
+            if (err) {
+                console.log("[ERROR] failed to insert email from someone... ", err);
+                res.json({
+                    success: false
+                });
+            } else {
+                sendSingleMail("Hi! I hear you'd like to subscribe to my blog.", {
+                    email: email
+                });
+                res.json({
+                    success: true
+                });
+            }
+        });
+    });
+
+    app.listen(3001);
+}
+</code></pre>
+
+<p>Before I started to say to myself: &#8220;Nate, are you being reasonable or are you just being cheap?  And why are you doing this instead of working on other, more low-hanging fruit to make your blog and side-projects more successful?  <a href="http://github.com/nathanleclaire/checkforbrokenlinks">Check For Broken Links</a> <em>still</em> hasn&#8217;t ever been deployed!&#8221;<sup id="foot1return"><a href="#foot1">1</a></sup>.  Though the Check For Broken Links comment was a low blow, I knew I was right.</p>
+
+<h1>Enlightenment</h1>
+
+<p>So I bit the bullet and used MailChimp instead.  You can see the results of my &#8220;labor&#8221; in the left sidebar of my blog, and I&#8217;m actually ecstatic I decided to go with them instead of writing my own mail management system.</p>
+
+<p>Why?  Because all of the time I saved by going the MailChimp route, instead of creating something original but inferior, allowed me to spend more time doing other, more valuable things.  For that matter, the influx of reader emails that I was anticipating and hoping for hasn&#8217;t really materialized, and at the time of writing I have all of two people on my mailing list :D (myself and my girlfriend- though I&#8217;m working on improving this).  I&#8217;m glad to have one less (giant) thing on my todo list, and I don&#8217;t feel like a failure since I didn&#8217;t waste a bunch of time on something that isn&#8217;t paying dividends right away (though I think it will in the future).  And I get all of the niceness, including analytics and a crazy awesome Web UI, for the small price of a MailChimp logo on my signup form.  Sign me up!</p>
+
+<p>Coming back to the Freddie the Chimp vs. Hermes comparison- Why use an untrusted brand / sketchy open source product when you can use a battle-hardened old friend?</p>
+
+<p>The point that I&#8217;m getting at, if you haven&#8217;t guessed it already, is that developers (as I did in this case) oftentimes get their potential productivity murdered, hard, by <a href="http://en.wikipedia.org/wiki/Not_invented_here">Not Invented Here Syndrome</a>.  Who among us has met the stubbornly anti-framework programmers that always insist they could do a better job themselves, even with the absurd wealth of (oftentimes free) tools available for development nowadays?  How many client-side JavaScript MV* frameworks exist because their creators weren&#8217;t satisfied with simply improving existing solutions?  I know it&#8217;s an easy target, but allow me to list a few:</p>
+
+<ul>
+<li><a href="http://angularjs.org">Angular</a></li>
+<li><a href="http://backbonejs.org">Backbone</a></li>
+<li><a href="http://meteor.com/">Meteor</a></li>
+<li><a href="http://facebook.github.io/react/">React</a></li>
+<li><a href="http://twitter.github.io/flight/">Flight</a></li>
+<li><a href="http://fahad19.github.com/singool/">Singool.js</a></li>
+<li><a href="http://knockoutjs.com/">Knockout</a></li>
+<li><a href="http://sammyjs.org/">Sammy.js</a></li>
+<li><a href="http://emberjs.com/">Ember.js</a></li>
+<li><a href="https://github.com/petermichaux/maria">Maria</a></li>
+<li><a href="http://terrifically.org/composer/">Terrific Composer</a></li>
+<li><a href="http://rivetsjs.com/">Rivets.js</a></li>
+<li><a href="http://bruth.github.com/synapse/docs/">Synapse</a></li>
+<li><a href="http://www.ractivejs.org/">Ractive</a></li>
+</ul>
+
+
+<p><img src="/images/dev-killer/incredulous.gif"></p>
+
+<p>Yeah.</p>
+
+<p>Though he is speaking to a slightly different context, I feel that Keith Perhac breaks the issue down nicely in this <a href="http://www.kalzumeus.com/2012/05/18/kalzumeus-podcast-ep-2-with-amy-hoy-pricing-products-and-passion/">Kalzumeus Software Podcast</a>:</p>
+
+<blockquote><p>And really, I think there’s also a… so, this is not just the Hacker News crowd, this is not just the Slashdot crowd, this is not just the techie crowd, there are a lot of people. I think the naysayers are the people who have more time than money, is honestly what it comes down to.</p>
+
+<p>Because, honestly, if I had a ton of time, if I was working a nine-to-five job, had a set number of hours a day I worked at a fixed income, at that, and I needed time-tracking software, I would probably write my own on the weekend because I have more time than I have money at that point.</p>
+
+<p>For someone who’s trying to run or start their own business, they suddenly have more money than they have time. Not that they’re making tons of money but because their time is much more valuable because there are so many other things they could be doing.</p></blockquote>
+
+<p>This seems to be the gospel truth right here.  People can and should be focusing less on reinventing the wheel, and more on their core value proposition.</p>
+
+<p>Note that I&#8217;m mostly talking about things in the context of individual developers working by themselves, or in coordination with fairly small teams, not in large cutting-edge organizations such as the type discussed in <a href="http://www.joelonsoftware.com/articles/fog0000000007.html">this article by Joel Spolsky</a>, where he makes an argument in favor of &#8220;Not Invented Here Syndrome&#8221;.  I agree with many of the points he makes here (no off-the-shelf web server will ever be as crazy fast as Google&#8217;s and that&#8217;s their business advantage), but I also feel like making an argument in favor of NIH is kind of dangerous.  Not that Joel has an obligation to look out for everyone&#8217;s best interests or anything, but I&#8217;d be shocked if he&#8217;d never come across a business situation where a company was investing waaaay too many resources into reinventing the wheel when they could have just bit the bullet.  This is, after all, the man who invented Wasabi, a specialized dialect of Visual Basic roasted hilariously in this post by his <a href="http://www.codinghorror.com/blog/2006/09/has-joel-spolsky-jumped-the-shark.html">future business partner Jeff Atwood</a>:</p>
+
+<blockquote><p>FogBugz is written in Wasabi, a very advanced, functional-programming dialect of Basic with closures and lambdas and Rails-like active records that can be compiled down to VBScript, JavaScript, PHP4 or PHP5. Wasabi is a private, in-house language written by one of our best developers that is optimized specifically for developing FogBugz; the Wasabi compiler itself is written in C#.</p></blockquote>
+
+<p>It may have worked for Fog Creek, but a lot of weird technical decisions have ended up working out for people (like <a href="http://www.hhvm.com/blog/">transpiling PHP to C++</a>).  Would you want to maintain <em>that</em> codebase?</p>
+
+<h1>The Flipside</h1>
+
+<p>The flipside of this, of course, is equally poisionous, and I am going to describe a type of person that you and I both know to illustrate this point.  I think if you are involved in the technology community pretty heavily you will perhaps find this person eerily familiar.</p>
+
+<p>This type of person is passionate about technology.  In fact, they are so passionate about it that they become convinced that it is a panacea for every problem they might possibly encounter.  They put more importance on theoretical wanking and &#8220;purity&#8221; than on execution and delivery, and they jump from framework to framework without ever putting in any actual mental elbow grease.  They are a perennial &#8220;Hello Worlder&#8221;, always chasing after the hot new thing.</p>
+
+<p>They probably mock the PHP or Rails programmers who are too busy getting stuff done to hear or care.  They may have a passion for exploration and learning, which is good, but they lack wisdom and insight.  Often this can be the same kind of person who may be interested in starting their own company, but lacks the practical depth to find something that has good product/market fit.  Instead they may try to solve problems that nobody has, or let the technology choice dictate the business direction instead of the other way around.</p>
+
+<p>I have been this person on and off.  It&#8217;s no more fun them than it is to be around them.  I think one should shy away from being this guy, as much as one should shy away from being a NIHSer.  In my opinion, you should keep an open mind about things and not let your ego get in the way of being a developer who&#8217;s genuinely enjoyable to be on a team with.  Spoiler alert:  you are not right 100% of the time.</p>
+
+<h1>Conclusion</h1>
+
+<p>Go forth and hack, sisters and brothers.  Just put some thought into using the right tool for the right job, and getting things done FAST instead of learning the newest hotness (which may cause you more headaches than it prevents).  There&#8217;s nothing wrong with a box running MySQL as its only database, or using just jQuery on your front end if that&#8217;s all you need, or developing an iOS app instead of an HTML5 one written with PhoneGap and AngularJS.  Let the tool fit the situation, and get things done (especially if you&#8217;re starting a company).</p>
+
+<p>Until next week, stay sassy Internet!  Oh, and subscribe to my mailing list already.  You&#8217;re killing me over here.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+
+<p><span id="foot1"><a href="#foot1return">(1)</a></span> : It&#8217;s kind of like my &#8221;<a href="http://en.wikipedia.org/wiki/Chinese_Democracy">Chinese Democracy</a>&#8221;.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How I Automated "Finding Almost Anyone's Email Address"]]></title>
+    <link href="http://nathanleclaire.com/blog/2013/11/23/how-i-automated-finding-almost-anyones-email-address/"/>
+    <updated>2013-11-23T17:22:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2013/11/23/how-i-automated-finding-almost-anyones-email-address</id>
+    <content type="html"><![CDATA[<p><img src="/images/autorap/demo-fast.gif" title="A demo, complete with colors." ></p>
+
+<p><em>EDIT:  The original article author, Rob Ousbey, has popped up on various social media sites to remind everyone to use this tool/knowledge responsibly.  I agree.  Please be responsible.</em></p>
+
+<p>Not too long ago I came across an article on <a href="https://news.ycombinator.com">Hacker News</a> called &#8221;<a href="http://www.startupmoon.com/how-i-got-meetings-at-twitter-linkedin-and-github-using-cold-emails/">The cold emails that got me meetings at Twitter, LinkedIn and GitHub</a>&#8221;.  It&#8217;s by a woman named Iris Shoor who is a co-founder of a startup called <a href="http://www.takipi.com/">Takipi</a>.  In the article she describes how she used a certain technique originally presented <a href="http://www.distilled.net/blog/miscellaneous/find-almost-anybodys-email-address/">here</a> to obtain access to the emails of decision makers at tech companies and cold email them to glean meetings which resulted in sales of her product.  Both of the articles are engaging reads and I highly recommend them, especially if you are interested in &#8220;growth hacking&#8221;, or &#8220;sales and marketing&#8221; if you insist on using boring non-buzzwords.</p>
+
+<h1>How Does It Work?</h1>
+
+<p>In the original &#8220;How To Find Almost Anyone&#8217;s Email Address&#8221; article, Rob Ousbey presents a Google Doc spreadsheet that will generate a large number of possible emails for someone based on their name and the domain name of the company they work for.  <a href="http://bit.ly/name2email">Go ahead, try it out</a>.  Many peoples&#8217; emails are something along the lines of <em>[firstname].[lastname]@[company].com</em>, so there&#8217;s a high likelihood that their email will be in the list of generated possibilities.</p>
+
+<p>Then, users are encouraged to exhaustively test each possibility in their Gmail account using the <a href="https://rapportive.com/">Rapportive</a> Chrome extension until they come across a &#8216;hit&#8217; (although a little bit of creative Googling will sometimes yield the desired result for you in less time).</p>
+
+<p>When trying this out for the first time on a recruiter I was interested in contacting, I found myself clicking the generated permutations in succession with a looming disbelief that this trick would actually work.  Then, suddenly, Rapportive lit up with their portrait and social media info and I felt a funny buzzing sensation in my head as the possibilities swirled around in it.</p>
+
+<p><img src="/images/autorap/larry.png" title="I feel funny about this." ></p>
+
+<p>However, doing it this way was exhausting and tedious, as it required a lot of focus and time.  My programmer instincts revved up and I became convinced that I could automate the process.</p>
+
+<h1>Automating It</h1>
+
+<p>I won&#8217;t be publishing my full source code because this has so much potential for abuse, but I will talk a little bit here about how I accomplished automating this.  I chose to reach for my old friend Python to write the script to automate this process.  I wanted to get things done quickly and easily and Python proved to be a great boon here, even providing the excellent <code>argparse</code> module to make the script much more usable from the command line.</p>
+
+<p><img src="/images/autorap/copy-as-curl.jpeg" title="Useful Developer Tools are useful." ></p>
+
+<p>First, I got an example cURL request using Chrome&#8217;s handy developer tools.</p>
+
+<p>Then, I called the &#8220;secret&#8221; Rapportive API using <code>pycurl</code>.  There&#8217;s a few fields that can be used to identify whether a response has come back for the suggested user, and we use that to determine whether the user, and consequently their email address, has been found.  We also check it against the returned full name to ensure that we haven&#8217;t gotten back a false positive (for example, Rapportive may return something for &#8220;larry@google.com&#8221;, but it may not be the Larry we are looking for).  Outputting all of the emails we try to the terminal, we color the bunk addresses red, the &#8220;false positive&#8221; emails yellow, and the successful return results green.  Like good Internet citizens, we wait for a specified interval in between calls to the Rapportive server (2 seconds in the demo at the top of this page).  Upon finding the email for the person we&#8217;re looking for, the program exits.</p>
+
+<p>The Rapportive API is surprisingly flexible on what you send it as far as HTTP headers goes, seeming to rely mostly on the <code>X-Session-Token</code> header for user authentication.</p>
+
+<p>The main loop in Python looks like this:</p>
+
+<pre><code class="python">if __name__ == '__main__':
+    args = argument_handler.handle_args()   
+    rap_client = RapportiveClient(args.name, verbose=args.verbose)
+    permutator = Permutator(args.name, args.domain) 
+    permutations = permutator.get_permutations()
+
+    for permutation in permutations:
+        output = permutation 
+        rap_client.perform(permutation)
+        if args.should_color:
+            output = colorer.color(permutation, rap_client)
+        if not args.quiet: 
+            print output 
+            if rap_client.was_user_found() and rap_client.name_match():
+                sys.exit(0)
+        else:
+            if rap_client.was_user_found():
+                print output
+                sys.exit(0) 
+        time.sleep(args.wait_interval)
+</code></pre>
+
+<h1>Conclusion</h1>
+
+<p>Rapportive is a subsidiary of LinkedIn and LinkedIn has been catching a lot of heat lately for everything from their <a href="http://engineering.linkedin.com/mobile/linkedin-intro-doing-impossible-ios">iOS MITM hack</a> to their <a href="http://blog.linkedin.com/2012/06/06/linkedin-member-passwords-compromised/">notorious password breach</a>.  They&#8217;re a popular company to love to hate.  However, I think their tools have as much potential for cool stuff as they do for abuse.  Honestly, I&#8217;m surprised that the trick described in this article is not more well-known.  I haven&#8217;t cold emailed anyone whose address I have obtained this way, but if I needed to do so I&#8217;d be very pleased to have this tool at my disposal.</p>
+
+<p>Cheers and I&#8217;ll see you next week.</p>
+
+<p>Nathan</p>
+]]></content>
+  </entry>
+  
+</feed>

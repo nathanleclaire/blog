@@ -1,0 +1,358 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html style="display:none;" lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="I'm a solution delivery and technology expert.  I write about code (back-end and front-end), entrepreneurship, and life.  I'm obsessed with application performance, user experience, and shipping." name="description">
+		<meta content="nathan leclaire" name="author">
+		
+		<title>Don't Get Bitten by Pointer vs Non-Pointer Method Receivers in Golang &mdash; nathan leclaire | I care, I share, I'm Nathan LeClaire.</title>
+		
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href="/stylesheets/main.css" rel="stylesheet">
+		
+		<script>
+		   if(self == top) {
+			   document.documentElement.style.display = 'block'; 
+		   } else {
+			   top.location = self.location; 
+		   }
+		</script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+		<script src="/js/jquery.modal.min.js"></script>
+		<script src="/js/fuse.min.js"></script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div id="sidebar">
+				<header>
+					<div class="title">
+						<a href="http://nathanleclaire.com">
+							<img src="/images/nateface.jpeg" class="nateface" /> 
+							nathan leclaire 
+						</a>
+					</div>
+					<p class="slogan">I care, I share, I'm Nathan LeClaire.</p>
+					<div class="navi">
+						<ul>
+							<li><a href="/about/">About</a></li>
+							<li><a href="/blog/archives">Archives</a></li>
+							<li><a href="/atom.xml">RSS</a></li>
+						</ul>
+					</div> <!-- // .navi -->
+					<div id="sidebar-email">
+						<a href="mailto:nathan.leclaire@gmail.com">nathan.leclaire@gmail.com</a>
+					</div>
+				</header>
+				<span id="shameless-self-promotion">
+				<!-- Begin MailChimp Signup Form -->
+
+				<div id="mc_embed_signup">
+				<form action="https://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<label for="mce-EMAIL">Get my essays about tech delivered to your inbox</label>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+				</form>
+				</div>
+				<!--End mc_embed_signup-->
+				
+				<p>Quickly search the archive:</p>
+				<input type="text" placeholder="Fuzzy search by keyword (e.g. Angular)" id="archive-search">
+				<img src="/images/magnifying-glass.png" id="search-icon" />
+				<ul id="archive-search-populate">
+				</ul>
+				
+				</span>
+			</div>
+			<div id="content">
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+    <header>
+        <h1>
+            <a href="/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang/">Don't Get Bitten by Pointer vs Non-Pointer Method Receivers in Golang</a>
+        </h1>
+        <h3 style="text-align: center;">by Nathan LeClaire</h3>
+        <time>09 August 2014</time>
+    </header>
+    <div>
+        <p><img src="/images/gopointer/gopherswrench.jpg"></p>
+
+<h1>What?</h1>
+
+<p>People from all sorts of backgrounds are flocking to the <a href="http://golang.org">Go Programming Language</a> and even for those who have written C and C++ before (myself included) it may be confusing to grok Go's approach to pointers, and how they interact with the methods you can attach to Go's structs.</p>
+
+<p>In Go, you define a <em>method receiver</em> to specify which struct to attach a certain function to in order to make it invoke-able as a method.  For instance, <code>func (d Dog)</code> is part which defines the method receiver in the following program:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=go><code>package main
+
+import &quot;fmt&quot;
+
+type Dog struct {
+}
+
+func (d Dog) Say() {
+    fmt.Println(&quot;Woof!&quot;)
+}
+
+func main() {
+    d := &amp;Dog{}
+    d.Say()
+}</code></pre></figure></notextile></div>
+
+
+<h2>Is there confusion?</h2>
+
+<p>There was for me at first over something having to do with method receivers, and I just noticed that another person who I consider to be quite competent had been surprised by this as well, so I decided to write about it.</p>
+
+<p>In Go, you can define methods using both <em>pointer</em> and <em>non-pointer</em> method receivers.  The former looks like <code>func (t *Type)</code> and the latter looks like <code>func (t Type)</code>.  Though <a href="http://golang.org/ref/spec#Method_sets">the spec</a> has very specific details about how the various types of method calls should behave, when I first started programming in Go I felt that pointers and the things that they point to were often conflated in property accesses and method invocations using the <code>.</code> operator.  I was thrown because I am accustomed to having to use the <code>-&gt;</code> operator, a habit carried over from C, as a shorthand for "dereference this struct pointer and use the <code>.</code> operator".  For those unfamiliar, a quick picture of what that looks like:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=c><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Tree {
+    int a;
+    int b;
+};
+
+int main() {
+    struct Tree tree, *pointerToTree;
+    tree.a = 5;
+    tree.b = 7;
+    pointerToTree = malloc(sizeof(struct Tree));
+    pointerToTree-&gt;a = 5;
+    pointerToTree-&gt;b = 7;
+    printf(&quot;tree vals: %d %d\n&quot;, tree.a, tree.b);
+    printf(&quot;pointerToTree: %p %d %d\n&quot;, pointerToTree, pointerToTree-&gt;a, pointerToTree-&gt;b);
+    free(pointerToTree);
+    return 0;
+}</code></pre></figure></notextile></div>
+
+
+<p></p>
+
+<p>In Go you have more freedom of expression, and the type system dictates that:</p>
+
+<blockquote><p>A method call <code>x.m()</code> is valid if the method set of (the type of) <code>x</code> contains <code>m</code> and the argument list can be assigned to the parameter list of <code>m</code>. If <code>x</code> is addressable and <code>&amp;x</code>'s method set contains <code>m</code>, <code>x.m()</code> is shorthand for <code>(&amp;x).m()</code></p></blockquote>
+
+<p>This leads to emergent behavior depending on how you define the method, and in particular, the method receiver.</p>
+
+<h2>So what's the difference between pointer and non-pointer method receivers?</h2>
+
+<p>Simply stated:  you can treat the receiver as if it was an argument being passed to the method.  All the same reasons why you might want to pass by value or pass by reference apply.</p>
+
+<p>Reasons why you would want to pass by reference as opposed to by value:</p>
+
+<ul>
+<li>You want to actually modify the receiver ("read/write" as opposed to just "read")</li>
+<li>The <code>struct</code> is very large and a deep copy is expensive</li>
+<li>Consistency: if some of the methods on the <code>struct</code> have pointer receivers, the rest should too.  This allows predictability of behavior</li>
+</ul>
+
+
+<p>If you need these characteristics on your method call, use a pointer receiver.</p>
+
+<h2>Show me.</h2>
+
+<p>Some code to demonstrate, and an <a href="http://play.golang.org/p/O0O7Nk1SGF">example on the Go playground</a>:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=go><code>package main
+
+import &quot;fmt&quot;
+
+type Mutatable struct {
+    a int
+    b int
+}
+
+func (m Mutatable) StayTheSame() {
+    m.a = 5
+    m.b = 7
+}
+
+func (m *Mutatable) Mutate() {
+    m.a = 5
+    m.b = 7
+}
+
+func main() {
+    m := &amp;Mutatable{0, 0}
+    fmt.Println(m)
+    m.StayTheSame()
+    fmt.Println(m)
+    m.Mutate()
+    fmt.Println(m)
+}</code></pre></figure></notextile></div>
+
+
+<p>You'll notice that the conspicuously named <code>StayTheSame</code> and <code>Mutate</code>  methods have behavior which corresponds to precisely that:  <code>StayTheSame</code> is defined with a non-pointer receiver and doesn't change the values of the <code>struct</code> it is invoked on, and <code>Mutate</code> is defined with a pointer receiver, so it <em>does</em> change the values of the <code>struct</code> upon which it is invoked.</p>
+
+<h1>Fin</h1>
+
+<p>In the process of writing this article I also noticed a <a href="http://golang.org/doc/faq#methods_on_values_or_pointers">great explanation of this</a> in the Go FAQ.  It's definitely worth a read.  It covers many of the same points, and helped me round out my understanding of the issue.</p>
+
+<p>Until next time, stay sassy Internet, and may your code forever be free of race conditions.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+
+    </div>
+    <footer>
+        <p>If you find a mistake or issue in this article, please <a id="pull-request-link" taget="_blank" href="">fix it and submit a pull request on Github</a> (must be signed in to your GitHub account).</p>
+        <a target="_blank" style="display: block;" href="https://twitter.com/share?url=http://nathanleclaire.com/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang/&text=Great article from @upthecyberpunks : " class="social-media-spam">Tweet It</a>
+        <a target="_blank" href="https://news.ycombinator.com/submitlink?u=http://nathanleclaire.com/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang/&t=" class="social-media-spam">Submit to Hacker News</a>
+        <a target="_blank" style="display: block !important;" href="http://www.reddit.com/submit?url=http://nathanleclaire.com/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang/&title=" class="social-media-spam">Submit to Reddit</a>
+        <br>
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/blog/categories/golang/'>golang</a>
+	
+
+ 
+
+        <a target="_blank" style="display: block !important;" href="http://discourse.nathanleclaire.com">Chat in the forum!!</a>
+    
+        <div id="discourse-comments"></div>
+    </footer>
+    
+</article>
+<!-- END OF _includes/article.html -->
+
+
+<!-- END OF _/layouts/post.html -->
+
+			</div>
+			<form class="modal" id="mailing-list-modal" action="http://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<h1>Like what you're reading?</h1>
+					<img src="/images/happy-reader.jpeg"></img>
+					<p style="display: block;" for="mce-EMAIL">Did you enjoy this article?  You might want to sign up for my mailing list.  I send out weekly-ish essays about hot new tech stuff.</p>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL-modal" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+			</form>
+		</div> <!-- // .wrap -->
+	<script type="text/javascript" src="/js/prettify.js"></script>
+	<script>
+	function supports_html5_storage() {
+	  try {
+		return 'localStorage' in window && window['localStorage'] !== null;
+	  } catch (e) {
+		return false;
+	  }
+	}
+
+	$(document).ready(function () {
+	    var fuse;
+
+	    $("code").addClass("prettyprint");
+	    prettyPrint();
+
+	    $.getJSON("/articles.json", function(data) {
+	    	// input:
+	    	// [{title: "Learn Node.js The Troll Way", href: "blahblah"}, { ... }]
+	    	fuse = new Fuse(data, {
+	    	    keys: ['title', 'tags']
+	    	});
+	    });
+	    
+	    $("#archive-search").keyup(function() {
+	    	var $this = $(this);
+	    	var val = $this.val();
+	    	var result = fuse.search(val).slice(0, 1);
+	    	$list = $("#archive-search-populate");
+	    	$list.empty();
+	    	if (result.length > 0 && val !== '') {
+	    	    $.each(result, function(i, e) {
+	    	        $list.append('<li><a href="'+ e.href +'">'+ e.title +'</a></li>');
+	    	    });
+	    	}
+	    });
+	    
+	    $(".social-media-spam").each(function () {
+	        var e = $(this);
+	        var t = e.attr("href");
+	        var n = $("article header h1 a").html();
+	        t += encodeURIComponent(n);
+	        e.attr("href", t)
+	    });
+
+	    var e = window.location.href;
+	    var t = $("#pull-request-link");
+	    var n = "https://github.com/nathanleclaire/blog/edit/master/source/_posts/" + e.split("/").slice(4, 8).join("-") + ".markdown";
+	    t.attr("href", n);
+
+	    // Only offer mailing list once
+		var tryModal = localStorage["modal"] ? false : true;
+
+		// Don't offer mailing list to people on mobile
+		if ($(window).width() < 720) {
+			tryModal = false;
+		}
+
+		$('#mc-embedded-subscribe').click(function() {
+			// Don't offer mailing list if people have
+			// already clicked to try and sign up
+			tryModal = false;
+			localStorage["modal"] = "true";
+		});
+
+		$(window).scroll(function () {
+			if (tryModal && document.URL.indexOf('archives') === -1 && document.URL.indexOf('about') === -1) {
+				if (($(window).scrollTop() + $(window).height()) === $(document).height()) {
+					if (supports_html5_storage()) {
+						window.setTimeout(function() {
+							$('#mailing-list-modal').modal({
+								fadeDuration: 250
+							});
+							$('#mce-EMAIL-modal').focus();
+							tryModal = false;
+							localStorage["modal"] = "true";
+						}, 1000);
+					}
+				}
+			}
+		});
+
+
+	});
+	</script>
+	<script type="text/javascript">
+	if ('/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang/' !== '/blog/index.html') {
+	  var discourseUrl = "http://discourse.nathanleclaire.com/",
+	      discourseEmbedUrl = 'http://nathanleclaire.com/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang/';
+
+	  (function() {
+	    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+	      d.src = discourseUrl + 'javascripts/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+	  })();
+	}
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-26758702-2', 'nathanleclaire.com');
+	  ga('send', 'pageview');
+	</script>
+	</body>
+</html>
+<!-- END OF _layouts/default.html -->

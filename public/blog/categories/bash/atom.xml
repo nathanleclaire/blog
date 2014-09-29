@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: bash | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/bash/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Speed Up Your Workflow By Running PHPUnit Tests Inside of Vim]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/01/20/speed-up-your-workflow-by-running-phpunit-tests-inside-of-vim/"/>
+    <updated>2014-01-20T23:30:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/01/20/speed-up-your-workflow-by-running-phpunit-tests-inside-of-vim</id>
+    <content type="html"><![CDATA[<p><img src="/images/vim-phpunit/phpunitdemo.gif" title="No more CTRL Z for me." ></p>
+
+<p>If you&#8217;re a dev that cares about nice, clean, working code you should probably be writing unit tests.  I&#8217;ve discussed unit testing in <a href="http://angularjs.org">AngularJS</a> a bit in <a href="http://nathanleclaire.com/blog/2013/12/13/how-to-unit-test-controllers-in-angularjs-without-setting-your-hair-on-fire/">one of my previous posts</a>, but what if you are working on the server side with one of the <a href="http://langpop.com/">most wildly popular web application languages of all time</a>?  That&#8217;s right folks, I&#8217;m talking about <a href="http://php.net/">PHP</a> and whether you love it or hate it if you are working with it there&#8217;s a damn good chance that you are unit testing it with the venerable <a href="http://phpunit.de/">PHPUnit</a> (if you&#8217;re not unit testing at all, you&#8217;re on the naughty list).  At the time of writing, this is what I do at my day job (my night job is as a costumed crusader fighting crime in the mean streets of <a href="http://www.a2gov.org/Pages/default.aspx">Ann Arbor, Michigan</a>.  For a long time the unit testing part of my development workflow in PHP went something like this:</p>
+
+<ol>
+<li>Be editing a PHP file and the file that tests it inside of <code>vim</code> over <code>ssh</code></li>
+<li>Change something in the test or the class that is likely to break the test, or add new tests</li>
+<li>Pop out of <code>vim</code> using <code>CTRL+Z</code> to suspend the process, and run the test on the command line using <code>phpunit --colors FileTest.php</code></li>
+<li>Note the results of the test.</li>
+<li>Type <code>fg</code> to get back into <code>vim</code></li>
+<li>Change the files to correspond <em>OR</em> Wait, what was the thing that was off again?</li>
+<li><code>GOTO 1</code></li>
+</ol>
+
+
+<p>Needless to say it&#8217;s a little exhausting, especially on those days where your brain&#8217;s moving slower than your fingers and you just can&#8217;t seem to inject enough coffee into your system.  But if your workflow is like this, you might be excited to find out that there is a better way.</p>
+
+<h1>Let&#8217;s Write Some VimScript</h1>
+
+<blockquote><p>And when you gaze long into an abyss the abyss also gazes into you.</p>
+
+<ul>
+<li><a href="http://en.wikiquote.org/wiki/Friedrich_Nietzsche">Friedrich Nietzsche</a></li>
+</ul>
+</blockquote>
+
+<p>If you&#8217;re a <code>vim</code> poweruser, or even just a regular user, your first impulse towards solving this problem might be to execute commands using <code>:!phpunit @%</code>.  In case you&#8217;re not familiar with this syntax, you just learned that you can preface commands with <code>!</code> (bang) to run them in the shell and that <code>@%</code> refers to the file opened in the current buffer.  This could work pretty well (and does) in a lot of cases, however it has a few disadvantages:</p>
+
+<ul>
+<li>You have to type out the whole sequence every time, which is really annoying even if you are a fast typer and it adds a second or two onto your &#8220;writecode-runtest-repeat&#8221; cycle each time that really begins to add up quickly</li>
+<li>You can&#8217;t see the results inside a <code>vim</code> buffer and manipulate them side-by-side with the test and code under test.  You could theoretically use <code>screen</code> for this, but I&#8217;ve always run into issues getting <code>screen</code> to work perfectly with my <code>vim</code> setup</li>
+<li>In my use case (not sure if this is universal), PHPUnit is finnicky about <em>where</em> you run the tests from, and for a variety of reasons I don&#8217;t like to <code>:cd</code> away from the home directory of the project I&#8217;m working on very often (not to mention that&#8217;s an extra step in the cycle).  <code>:set autochdir</code> would fix this, but for large projects I&#8217;m not often a fan of <code>autochdir</code>.</li>
+</ul>
+
+
+<p>You could also try to look for a plugin, but who wants yet <em>another</em> <code>vim</code> plugin / coloring theme / whatever to juggle?</p>
+
+<p>So what&#8217;s a unit testing junkie to do?  We have to dig into VimScript to automate this.  Hoo boy.  But have no fear, thanks to <a href="http://stevelosh.com/">Steve Losh</a>&#8217;s <a href="http://learnvimscriptthehardway.stevelosh.com/">Learn VimScript the Hard Way</a> I&#8217;ve figured out a great solution for you.</p>
+
+<p>Put this code inside of your <code>.vimrc</code> file:</p>
+
+<pre><code>function! RunPHPUnitTest()
+    cd %:p:h
+    let result = system("phpunit " . bufname("%"))
+    split __PHPUnit_Result__
+    normal! ggdG
+    setlocal buftype=nofile
+    call append(0, split(result, '\v\n'))
+    cd -
+endfunction
+
+nnoremap &lt;leader&gt;u :call RunPHPUnitTest()&lt;cr&gt;
+</code></pre>
+
+<p>This will remap the keyboard shortcut <code>&lt;leader&gt;u</code> (run in normal mode) to run <code>phpunit</code> on the file you&#8217;re currently editing (hopefully a test, or else there will be no result) in the directory where it is based, and spit out the results into a new window.  In case you&#8217;re unfamiliar, the <code>&lt;leader&gt;</code> key in <code>vim</code> is <code>'\'</code> by default, but frequently it gets remapped to other keys (mine is mapped to <code>','</code>).</p>
+
+<p>I really like this shortcut since it allows me to look at the test results side by side with the files I&#8217;m working on.  This code generates a new test result window each time you run it, so you have to <code>:q</code> out of old ones manually.  This has never bothered me <em>too</em> much, but if you know of a way to change it so that it kills old windows automatically I&#8217;d love to hear from you.</p>
+
+<p>If you have a file with a lot of test methods in it, <code>vim</code> will be somewhat awkardly locked up for a minute waiting for the results, which it will spit out all at once when it is finished instead of in real-time like when you run <code>phpunit</code> on the command line, but at this time <code>vim</code> does not support streaming input buffers as far as I am aware.  So it&#8217;s something that has to be lived with if you want to use the functionality this way.  If you know of a workaround for this, you should <a href="mailto:nathanleclaire@gmail.com">let me know</a>.  Or, you can use the next tip to execute just a few tests at a time.</p>
+
+<h1>But Can We Do Better?</h1>
+
+<p>Sure, we can always do better.  I really like using phpunit with the <code>--filter</code> option, since it allows you to focus on only running the tests you are interested in, instead of the whole kit and kaboodle.  This speeds things up really significantly.  How can we include this in our little VimScript function?</p>
+
+<p>We&#8217;ll pass a parameter to our <code>RunPHPUnitTest()</code> function to indicate whether we want to do a <code>--filter</code> run or not, and if so we will yank the current word to use as the argument for the <code>--filter</code> parameter.  So, in our use case, if our vim cursor is hovering over the name of the function we want to run in the test file (as in <code>function testWhatever()</code>), and we press <code>&lt;leader&gt;f</code>, it will run PHPUnit just for that test.  Revised, the code in our <code>.vimrc</code> file looks like this:</p>
+
+<pre><code>function! RunPHPUnitTest(filter)
+    cd %:p:h
+    if a:filter
+        normal! T yw
+        let result = system("phpunit --filter " . @" . " " . bufname("%"))
+    else
+        let result = system("phpunit " . bufname("%"))
+    endif
+    split __PHPUnit_Result__
+    normal! ggdG
+    setlocal buftype=nofile
+    call append(0, split(result, '\v\n'))
+    cd -
+endfunction
+
+nnoremap &lt;leader&gt;u :call RunPHPUnitTest(0)&lt;cr&gt;
+nnoremap &lt;leader&gt;f :call RunPHPUnitTest(1)&lt;cr&gt;
+</code></pre>
+
+<p>In action:</p>
+
+<p><img src="/images/vim-phpunit/phpunitdemofilter.gif" title="So much faster, especially in big files." ></p>
+
+<h1>Conclusion</h1>
+
+<p>I&#8217;d rather script my editor in Python.  JUST KIDDING.  Kind of.</p>
+
+<p>Until next week, stay sassy Internet.  And keep that code coverage strong.</p>
+
+<p>Cheers,</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[5 Cool Unix Hacks For Fun and Productivity]]></title>
+    <link href="http://nathanleclaire.com/blog/2013/10/27/5-cool-unix-hacks-for-fun-and-productivity/"/>
+    <updated>2013-10-27T19:44:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2013/10/27/5-cool-unix-hacks-for-fun-and-productivity</id>
+    <content type="html"><![CDATA[<p>In my workflow I am always looking for ways to be more productive, and to have more fun while developing.  There&#8217;s nothing quite like the feeling of flying through a sequence of commands in <code>bash</code> that you know would take your peers twice as long to execute.  Have you ever :</p>
+
+<ul>
+<li>Raged silently at a coworker for spamming the left arrow key to get to the beginning of their terminal prompt when they could have just pressed CTRL + A ?</li>
+<li>Watched someone as they enter the same command over and over when they could have just prefaced it with <code>!</code> ?</li>
+<li>Rolled your eyes as your buddy expounds at length on the virtues of IDEs when you know that you could &#8220;roflstomp&#8221; him or her using <code>vim</code> ?</li>
+</ul>
+
+
+<p>If so, then these tips might be for you.</p>
+
+<p><em>DISCLAIMER:</em> There&#8217;s an admitted bias towards <code>vim</code>, <code>git</code>, and the terminal here.  I don&#8217;t intend to start a holy war about terminal vs. IDEs, just have some fun and point out these fun tricks that work well for me.</p>
+
+<h1>git add -p</h1>
+
+<p>If you&#8217;ve worked with <code>git</code> for any non-trivial amount of time you hopefully have come across the notion of making <a href="http://stackoverflow.com/questions/6543913/git-commit-best-practices">atomic commits</a>.  Essentially, the notion is that a commit should contain only interrelated details, and not anything that&#8217;s logically unrelated to the things you are committing.  For example, it makes sense to commit changes to a class and its corresponding unit test in one commit, but if you&#8217;ve made changes to another class that deal with completely different business logic then those should be in another commit.</p>
+
+<p>However, what happens when you are working within one file that contains multiple unrelated changes, or changes that you&#8217;d like to split up into more than one commit in case you need to revert them separately?  Or you have sprinkled logging statements all over the file that you don&#8217;t want to commit to the repo?  The normal sequence of git commands that people use fails us here:</p>
+
+<pre><code>$ git diff
+diff --git a/some-file.c b/some-file.c
+index f383179..09e4e35 100644
+--- a/some-file.c
++++ b/some-file.c
+@@ -2,6 +2,8 @@
+
+ int main(void) {
+        printf("doing some stuff\n");
+-       printf("doing some more stuff\n");
++       do_some_stuff();
++       printf("doing some unrelated stuff\n");
++       do_some_unrelated_stuff();
+        return 0;
+ }
+$ git add some-file.c
+$ git commit
+[master 1938906] some unrelated stuff, cramming it all in one commit 'cause I'm lazy
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+$ echo "Whoops we just committed unrelated stuff.  Not very modular of us."
+</code></pre>
+
+<p>The <code>-p</code> (standing for patch) flag for <code>git add</code> is ridiculously useful for these kinds of cases.  This tells <code>git add</code> that we want to do a <em>partial</em> add of the file, and we&#8217;re presented with a nice interative menu which allows us to specify with a lovely amount of detail exactly which parts of the file we want to stage.  <code>git</code> splits the changes into hunks automatically, which you can approve or reject with <code>y</code> or <code>n</code> respectively, or use <code>s</code> to split up into finer grained hunks.  If <code>git</code> can&#8217;t split the hunks up the way you want automatically, you can specify as much detail as you want with the <code>e</code> (edit) option.</p>
+
+<p><img src="/images/five-tips/git-add-minus-p.jpeg" title="And now our commits are nice and tidy." ></p>
+
+<p>See here for more details on <code>git add -p</code>: <a href="http://stackoverflow.com/questions/1085162/how-can-i-commit-only-part-of-a-file-in-git">How can I commit only part of a file in git?</a></p>
+
+<p><em>EDIT:</em> Some commenters have pointed out that this usage of <code>-p</code> flag also works for commands such as <code>git checkout --</code>.  Therefore you could hypothetically send only part of a file back to the way it was at HEAD, and keep your other changes.  Handy!</p>
+
+<h1>vim&#8217;s CTRL-P / CTRL-N autocomplete feature</h1>
+
+<p>This is one of those killer features of <code>vim</code> that I am surprised to find out people (even experienced <code>vim</code> gurus) don&#8217;t use more frequently.  Even if you are a casual user (hop into <code>vim</code> to edit some config files while <code>ssh</code>ed into a box) it has the potential to help you out quite a bit.  One of the reasons people claim they couldn&#8217;t live without IDEs is the existence of features such as Intellisense that provide autocompletion of variable/function names.  These features are very nice since they cut down on mistakes due to misspelling properties and thereby speed up the compile/run/debug cycle a fair bit.  Many people don&#8217;t seem to realize that there is an analog which comes straight out of the box in <code>vim</code>, no plugins needed.</p>
+
+<p>You can press CTRL-N to move down the list of suggested completions when typing in INSERT mode (which vim draws from the current buffers, and from the <code>tags</code> file if you have one), or CTRL-P to move back up (representing &#8220;NEXT&#8221; and &#8220;PREVIOUS&#8221; if you didn&#8217;t catch the mnemonic).  If there is only one possible completion, <code>vim</code> will just go ahead and insert it.  Very handy and speedy, especially in codebases with a lot of long variable / method / constant names.</p>
+
+<p>CTRL-P/CTRL-N have a lot of synergy with the next tip as well, as touched upon briefly in the above paragraph.</p>
+
+<p><img src="/images/five-tips/ctrl-n-vim.jpeg" title="And you barely need to leave the home row." ></p>
+
+<h1>exuberant ctags</h1>
+
+<p>Everyone who uses <code>vim</code> knows that it can be a bit of a kerfluffle sometimes to open a file in a distant directory (tab completion helps ease this with <code>:e</code>, but it&#8217;s still not usually instantaneous).  If you happen to be working on a team, or a very large project, the ability to do this quickly will likely be a vital part of your workflow.</p>
+
+<p><a href="http://ctags.sourceforge.net/">Exuberant Ctags</a> is a tool that makes this worlds easier than it would be without.  With ctags, you can  you just run a command in the top directory of the project you&#8217;re working on to generate a &#8220;tags&#8221; file, then you can use CTRL-] to &#8220;pop into&#8221; the definition of whatever it is your cursor is over (say, a class name).  Press CTRL+T to get back to where you were before.</p>
+
+<p>You can even set up a <a href="http://tbaggery.com/2011/08/08/effortless-ctags-with-git.html">post-commit hook in git</a> to generate your ctags file automatically when you make a commit!  Nice.</p>
+
+<h1>CTRL-R in bash and zsh</h1>
+
+<p>Ever been typing in a command at the terminal, when you suddenly find yourself wishing that there was an easy way to just autofill the prompt with something that you&#8217;d entered previously so you can edit it or just run it again?  If so, then I&#8217;ve got good news for you:  You can!  Just press CTRL+R and start typing the thing that you are looking for.  The terminal will fill in what it thinks you are looking for, and if there is more than one option you can cycle through them by pressing CTRL+R repeatedly.  When you&#8217;ve found the thing you&#8217;re after, you can break out of the prompt with any of the usual movement commands (CTRL+A, CTRL+E, arrow keys, etc. if you have standard <code>bash</code> keybindings).  Try it out!  Very handy if you can&#8217;t remember the name of the box you want to <code>ssh</code> into.</p>
+
+<p><img src="/images/five-tips/ctrl-r.jpeg" title="What was that IP address again?" ></p>
+
+<p><code>history | grep $COMMAND</code> will treat you well too, if you just want to review all of the times you&#8217;ve run that command in recent times.</p>
+
+<h1>vim macros</h1>
+
+<p>A lot of the time when you&#8217;re writing code, or doing related tasks, you find yourself in need of a way to repeat the same editor commands over and over, perhaps with a slight variation.  Different editors provide slightly different ways of addressing this.  <a href="http://www.sublimetext.com/">Sublime Text</a>, for example, has a &#8220;killer feature&#8221; where you are able to place multiple cursors in various locations and edit away.  In <code>vim</code> (and in <code>emacs</code> too, but here we&#8217;ll be covering the <code>vim</code> method) you record and playback keyboard macros to accomplish this.  It is a tool with an absurd amount of power and flexibility, and offers the chance to speed up productivity on repetitive editing tasks by an order of magnitude.</p>
+
+<p>To make a macro, press <code>q</code> in normal mode, then press another key to &#8220;name&#8221; the macro (usually I use <code>q</code> again).  <code>vim</code> will start recording your keystrokes.  <code>vim</code> will remember which keystrokes you make until you press <code>q</code> again to save the macro.  You can replay with <code>@</code>-letter in normal mode, so I am usually pressing <code>@q</code>.  You can also preface the <code>@</code>/replay command with a number so that you can rapidly execute your macro over and over (like much in <code>vim</code>-land, the &#8220;grammar&#8221; behaves as you would be accustomed to).  If you&#8217;re accustomed to using <code>vim</code>&#8217;s fancy movement commands (for instance, using <code>/</code> search to navigate), and practice a little bit, you will soon be able to whip up thunderous macros that will leave your mouse-dependent colleagues in the dust.</p>
+
+<p><img src="/images/five-tips/vim-macros.gif" title="Who needs multiple cursors?" ></p>
+
+<p>For more info on <code>vim</code> macros, see here: <a href="http://vim.wikia.com/wiki/Macros">Vim Wiki (Macros)</a></p>
+
+<p>That&#8217;s all for now, folks.  Hope you enjoyed and I&#8217;ll see you next week!</p>
+]]></content>
+  </entry>
+  
+</feed>

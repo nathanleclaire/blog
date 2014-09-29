@@ -1,0 +1,377 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html style="display:none;" lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="I'm a solution delivery and technology expert.  I write about code (back-end and front-end), entrepreneurship, and life.  I'm obsessed with application performance, user experience, and shipping." name="description">
+		<meta content="nathan leclaire" name="author">
+		
+		<title>The (JavaScript) Question I Bombed In An Interview With a Y Combinator Startup &mdash; nathan leclaire | I care, I share, I'm Nathan LeClaire.</title>
+		
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href="/stylesheets/main.css" rel="stylesheet">
+		
+		<script>
+		   if(self == top) {
+			   document.documentElement.style.display = 'block'; 
+		   } else {
+			   top.location = self.location; 
+		   }
+		</script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+		<script src="/js/jquery.modal.min.js"></script>
+		<script src="/js/fuse.min.js"></script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div id="sidebar">
+				<header>
+					<div class="title">
+						<a href="http://nathanleclaire.com">
+							<img src="/images/nateface.jpeg" class="nateface" /> 
+							nathan leclaire 
+						</a>
+					</div>
+					<p class="slogan">I care, I share, I'm Nathan LeClaire.</p>
+					<div class="navi">
+						<ul>
+							<li><a href="/about/">About</a></li>
+							<li><a href="/blog/archives">Archives</a></li>
+							<li><a href="/atom.xml">RSS</a></li>
+						</ul>
+					</div> <!-- // .navi -->
+					<div id="sidebar-email">
+						<a href="mailto:nathan.leclaire@gmail.com">nathan.leclaire@gmail.com</a>
+					</div>
+				</header>
+				<span id="shameless-self-promotion">
+				<!-- Begin MailChimp Signup Form -->
+
+				<div id="mc_embed_signup">
+				<form action="https://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<label for="mce-EMAIL">Get my essays about tech delivered to your inbox</label>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+				</form>
+				</div>
+				<!--End mc_embed_signup-->
+				
+				<p>Quickly search the archive:</p>
+				<input type="text" placeholder="Fuzzy search by keyword (e.g. Angular)" id="archive-search">
+				<img src="/images/magnifying-glass.png" id="search-icon" />
+				<ul id="archive-search-populate">
+				</ul>
+				
+				</span>
+			</div>
+			<div id="content">
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+    <header>
+        <h1>
+            <a href="/blog/2013/11/16/the-javascript-question-i-bombed-in-an-interview-with-a-y-combinator-startup/">The (JavaScript) Question I Bombed In An Interview With a Y Combinator Startup</a>
+        </h1>
+        <h3 style="text-align: center;">by Nathan LeClaire</h3>
+        <time>16 November 2013</time>
+    </header>
+    <div>
+        <p>About a year and a half ago, I was on the hunt for my first "real" job.  I knew that I wanted to be a "web developer" (whatever <em>that</em> entails) but I had no idea where to begin.  I knew just a smidge of PHP.  I was developing websites in Classic ASP at my current internship, but I knew that was an antiquidated technology which was unlikely to help me in the modern job market.  As I had recently begun stomping around <a href="https://news.ycombinator.com">Hacker News</a>, I noticed that they had a "jobs" section in their header.  So I looked into things, saw that a few companies were hiring, and sent a few e-mails to companies that looked nice.</p>
+
+<p><img src="/images/y-comb/y-combinator-logo.gif" title="To hack and start things up." ></p>
+
+<h1>The Hunt</h1>
+
+<p>A few e-mailed me back and I managed to set up a phone screen with a company that does next-level web analytics.  Going into the interview I was filled with a mixture of apprehension and excitement.  After all, I knew that Silicon Valley was where the action was at, and I had no idea what kind of intricate or crazy questions they might ask me.  They had listed in their description a desire for strong JavaScript skills, which was appealing to me as I was rapidly learning to enjoy developing in this weird little language created by Brendan Eich.  <em>"I know jQuery pretty well,"</em>, I thought- <em>"What could possibly go wrong?"</em></p>
+
+<p>The developer who did my screen was pretty courteous and eased me into things a bit by talking about my background and experience.  I sheepishly admitted that I had studied philosophy in college, not computer science, and he put my concerns at ease by telling me that their founder had never finished college.  That made me feel better about things, since part of the reason I love technology so much is that it is so meritocratic.</p>
+
+<p>So, without further ado, we began to investigate a coding problem.</p>
+
+<h1>The Problem</h1>
+
+<p>INTERVIEWER: You're familiar with jQuery, right?</p>
+
+<p>ME:  Yes, I've used it at work.  I like JavaScript.</p>
+
+<p>INTERVIEWER: Great.  So, you're familiar with something like this, right?  Let's say you have a textbox and you want to make a call to the server to get some data every time the user does some typing, if you wanted to make autocomplete suggestions, for example... <em>(begins typing into a shared/remote codepad)</em></p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=js><code>$(document).ready(function() {
+    $('input').keypress(function() {
+        $.ajax({
+            // Call the server for some goodness...
+        });
+    });
+});</code></pre></figure></notextile></div>
+
+
+<p>ME: Oh yes, I see.  When the user presses down a key on the element, we will make a call.</p>
+
+<p>INTERVIEWER: So, you may be able to guess, that there is a problem with this code.  It is very inefficient.  If you type a string with 30 characters into the text box, the server gets called 30 times.  Not good, we are having all kinds of issues with scalability so we can't afford to be writing code like this.</p>
+
+<p>DEMO:</p>
+
+<p><input id="myBox1" type="text" placeholder="Type some stuff in me!" style="width: 30%;" /> <strong>Called Server <span id="called_times1">0</span> times...</strong></p>
+
+<script>
+$(document).ready(function() {
+    $('#myBox1').keypress(function() {
+        if (!this.count)
+            this.count = 0;
+        this.count++;
+        $('#called_times1').html(this.count);
+    });
+});
+</script>
+
+
+<p>ME: I see.</p>
+
+<p>INTERVIEWER: So we only want to call the server after the user has been typing, then stops typing for 200 milliseconds.  That will give it the illusion of being instantaneous while saving a lot of load on our servers and a lot of ajax handling in the JavaScript.  How would we do that?</p>
+
+<p>ME:  Uh...</p>
+
+<h1>What Really Happened</h1>
+
+<p>ME:  I think I would use... Um...</p>
+
+<p>INTERVIEWER:  Well, do you know what a closure is?</p>
+
+<p>ME:  Yeah!  Closures.  I've heard of those.</p>
+
+<p>INTERVIEWER: What about <code>window.setTimeout</code> ?  Do you know about that?</p>
+
+<p>ME:  I think that's JavaScript's version of a <code>sleep</code> function?</p>
+
+<p>INTERVIEWER:  Kind of...</p>
+
+<p>ME:  I think I would... <em>typing awkwardly and struggling for 30 seconds</em>  I guess I'm not sure.</p>
+
+<p>INTERVIEWER:  I appreciate your time but perhaps this isn't a good fit.</p>
+
+<h1>What Should Have Happened</h1>
+
+<p>ME:  Hm, that's an interesting problem.  So, if we use <code>window.setTimeout</code> we can delay the call for 200 milliseconds.</p>
+
+<p>INTERVIEWER:  Right.</p>
+
+<p>ME:  But that's not going to help us in the case where the user is typing fast, or even just normal speed.  So we need a way to interrupt the timeout if the user keeps typing.</p>
+
+<p>INTERVIEWER:  Exactly.</p>
+
+<p>ME:  So, I know that when you call <code>window.setTimeout</code>, you get back an ID that uniquely references the timeout.  And you can use it to cancel the timeout if need be!  So we should just store the timeout ID in the <code>keypress</code> function closure, and if the user triggers a keypress event again before the timeout function triggers, we'll just cancel it and set a new one!</p>
+
+<p>(<em>EDIT:</em> Some commenters have pointed out that due to the fact that <code>this</code> in jQuery callbacks refers to the DOM node in question, not the function closure, the ID is actually being stored as a property of the DOM node.  They are correct.)</p>
+
+<p>INTERVIEWER:  Sounds great!  What would that look like in code?</p>
+
+<p>ME:  It'd look a little something like this...</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><pre class=js><code>$(document).ready(function() {
+    $('input').keypress(function() {
+        if (this.timeoutId) 
+            window.clearTimeout(this.timeoutId);
+        this.timeoutId = window.setTimeout(function () {
+            $.ajax({
+                // do some stuff
+            });
+        }, 200);
+    });
+});</code></pre></figure></notextile></div>
+
+
+<p>INTERVIEWER:  Clever.</p>
+
+<p>ME:  I try.</p>
+
+<p>DEMO:</p>
+
+<p><input id="myBox2" type="text" placeholder="Type some stuff in me!" style="width: 30%;" /> <strong>Called Server <span id="called_times2">0</span> times...</strong></p>
+
+<script>
+$(document).ready(function() {
+    $('#myBox2').keypress(function() {
+        if (!this.count)
+            this.count = 0;
+        if (this.timeoutId)
+            window.clearTimeout(this.timeoutId);
+        var that = this;
+        this.timeoutId = window.setTimeout(function() {
+            that.count++;
+            $('#called_times2').html(that.count);
+        }, 200);
+    });
+});
+</script>
+
+
+<p>INTERVIEWER:  Now on to the next question...</p>
+
+<h1>Conclusion</h1>
+
+<p>I bombed this interview but I learned something from it.  I know I could go in more confident and capable today.  It just goes to show you that not every setback in life has to be a bad thing.  Someday in the future I would like to work with Y Combinator or a Y Combinator-based startup, largely because I think there's so much opportunity for learning and growth.</p>
+
+<p>Thanks for reading and I'll catch you next week,</p>
+
+<p>Nathan</p>
+
+<p><em>EDIT</em>: Some commenters have pointed out my misuse of <code>clearInterval</code> as opposed to <code>clearTimeout</code>.  It turns out that this (mostly) works to clear timeouts, but is clearly not correct (it's meant to be used with <code>window.setInterval</code>).  I have fixed this now.</p>
+
+    </div>
+    <footer>
+        <p>If you find a mistake or issue in this article, please <a id="pull-request-link" taget="_blank" href="">fix it and submit a pull request on Github</a> (must be signed in to your GitHub account).</p>
+        <a target="_blank" style="display: block;" href="https://twitter.com/share?url=http://nathanleclaire.com/blog/2013/11/16/the-javascript-question-i-bombed-in-an-interview-with-a-y-combinator-startup/&text=Great article from @upthecyberpunks : " class="social-media-spam">Tweet It</a>
+        <a target="_blank" href="https://news.ycombinator.com/submitlink?u=http://nathanleclaire.com/blog/2013/11/16/the-javascript-question-i-bombed-in-an-interview-with-a-y-combinator-startup/&t=" class="social-media-spam">Submit to Hacker News</a>
+        <a target="_blank" style="display: block !important;" href="http://www.reddit.com/submit?url=http://nathanleclaire.com/blog/2013/11/16/the-javascript-question-i-bombed-in-an-interview-with-a-y-combinator-startup/&title=" class="social-media-spam">Submit to Reddit</a>
+        <br>
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/settimeout/'>settimeout</a>, <a class='category' href='/blog/categories/startups/'>startups</a>, <a class='category' href='/blog/categories/ycombinator/'>ycombinator</a>
+	
+
+ 
+
+        <a target="_blank" style="display: block !important;" href="http://discourse.nathanleclaire.com">Chat in the forum!!</a>
+    
+        <div id="discourse-comments"></div>
+    </footer>
+    
+</article>
+<!-- END OF _includes/article.html -->
+
+
+<!-- END OF _/layouts/post.html -->
+
+			</div>
+			<form class="modal" id="mailing-list-modal" action="http://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<h1>Like what you're reading?</h1>
+					<img src="/images/happy-reader.jpeg"></img>
+					<p style="display: block;" for="mce-EMAIL">Did you enjoy this article?  You might want to sign up for my mailing list.  I send out weekly-ish essays about hot new tech stuff.</p>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL-modal" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+			</form>
+		</div> <!-- // .wrap -->
+	<script type="text/javascript" src="/js/prettify.js"></script>
+	<script>
+	function supports_html5_storage() {
+	  try {
+		return 'localStorage' in window && window['localStorage'] !== null;
+	  } catch (e) {
+		return false;
+	  }
+	}
+
+	$(document).ready(function () {
+	    var fuse;
+
+	    $("code").addClass("prettyprint");
+	    prettyPrint();
+
+	    $.getJSON("/articles.json", function(data) {
+	    	// input:
+	    	// [{title: "Learn Node.js The Troll Way", href: "blahblah"}, { ... }]
+	    	fuse = new Fuse(data, {
+	    	    keys: ['title', 'tags']
+	    	});
+	    });
+	    
+	    $("#archive-search").keyup(function() {
+	    	var $this = $(this);
+	    	var val = $this.val();
+	    	var result = fuse.search(val).slice(0, 1);
+	    	$list = $("#archive-search-populate");
+	    	$list.empty();
+	    	if (result.length > 0 && val !== '') {
+	    	    $.each(result, function(i, e) {
+	    	        $list.append('<li><a href="'+ e.href +'">'+ e.title +'</a></li>');
+	    	    });
+	    	}
+	    });
+	    
+	    $(".social-media-spam").each(function () {
+	        var e = $(this);
+	        var t = e.attr("href");
+	        var n = $("article header h1 a").html();
+	        t += encodeURIComponent(n);
+	        e.attr("href", t)
+	    });
+
+	    var e = window.location.href;
+	    var t = $("#pull-request-link");
+	    var n = "https://github.com/nathanleclaire/blog/edit/master/source/_posts/" + e.split("/").slice(4, 8).join("-") + ".markdown";
+	    t.attr("href", n);
+
+	    // Only offer mailing list once
+		var tryModal = localStorage["modal"] ? false : true;
+
+		// Don't offer mailing list to people on mobile
+		if ($(window).width() < 720) {
+			tryModal = false;
+		}
+
+		$('#mc-embedded-subscribe').click(function() {
+			// Don't offer mailing list if people have
+			// already clicked to try and sign up
+			tryModal = false;
+			localStorage["modal"] = "true";
+		});
+
+		$(window).scroll(function () {
+			if (tryModal && document.URL.indexOf('archives') === -1 && document.URL.indexOf('about') === -1) {
+				if (($(window).scrollTop() + $(window).height()) === $(document).height()) {
+					if (supports_html5_storage()) {
+						window.setTimeout(function() {
+							$('#mailing-list-modal').modal({
+								fadeDuration: 250
+							});
+							$('#mce-EMAIL-modal').focus();
+							tryModal = false;
+							localStorage["modal"] = "true";
+						}, 1000);
+					}
+				}
+			}
+		});
+
+
+	});
+	</script>
+	<script type="text/javascript">
+	if ('/blog/2013/11/16/the-javascript-question-i-bombed-in-an-interview-with-a-y-combinator-startup/' !== '/blog/index.html') {
+	  var discourseUrl = "http://discourse.nathanleclaire.com/",
+	      discourseEmbedUrl = 'http://nathanleclaire.com/blog/2013/11/16/the-javascript-question-i-bombed-in-an-interview-with-a-y-combinator-startup/';
+
+	  (function() {
+	    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+	      d.src = discourseUrl + 'javascripts/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+	  })();
+	}
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-26758702-2', 'nathanleclaire.com');
+	  ga('send', 'pageview');
+	</script>
+	</body>
+</html>
+<!-- END OF _layouts/default.html -->

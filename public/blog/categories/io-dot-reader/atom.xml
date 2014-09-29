@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: io.reader | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/io-dot-reader/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Demystifying Golang's io.Reader and io.Writer Interfaces]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/07/19/demystifying-golangs-io-dot-reader-and-io-dot-writer-interfaces/"/>
+    <updated>2014-07-19T19:35:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/07/19/demystifying-golangs-io-dot-reader-and-io-dot-writer-interfaces</id>
+    <content type="html"><![CDATA[<p><img src="/images/iowriter/aviator.png"></p>
+
+<p>If you&#8217;re coming to <a href="http://golang.org">Go</a> from a more flexible, dynamically typed language like Ruby or Python, there may be some confusion as you adjust to the Go way of doing things.  In my case, I had some trouble wrapping my head around <code>io.Reader</code>, <code>io.Writer</code>, <code>io.ReadCloser</code> etc.  What are they used for, and how can they be included in our Go programs for interesting and helpful results?</p>
+
+<h1>Quick interface review</h1>
+
+<p>To make up for some of the flexibility lost by not having generics, and for other reasons as well, Go provides an abstraction in the form of interfaces.</p>
+
+<p>You can specify an interface and then any consumer of that interface will accept it.</p>
+
+<pre><code class="go">type error interface {
+    Error() string
+}
+</code></pre>
+
+<p>Many standard library components of Go define interfaces.  In fact, the <code>error</code> type you know and love (hate?) is simply an interface which insists that a method named <code>Error</code> which consumes nothing and returns a string must be defined on a struct for the interface to count as satisfied.  Interfaces in Go are set <em>implicitly</em>, so all you have to do is define the required methods on your struct and it will qualify as implementing that interface.</p>
+
+<p>For instance:</p>
+
+<pre><code class="go">package main
+
+import (
+    "fmt"
+    "os"
+)
+
+type Animal interface {
+    Say() string
+    Greet(Animal)
+}
+
+type Person struct {
+}
+
+func (p Person) Say() string {
+    return "Hey there bubba!"
+}
+
+func (p Person) Greet(animalToGreet Animal) {
+    fmt.Println("Hi!")
+}
+
+type Dog struct {
+    age int
+    breed string
+    owner *Person
+}
+
+func (d Dog) Say() string {
+    return "Woof woof!"
+}
+
+func (d Dog) Growl() {
+    fmt.Println("Grrr!")
+}
+
+func (d *Dog) Snuggle() {
+    // snuggle code...
+}
+
+func (d Dog) Sniff(animalToSniff Animal) (bool, error) {
+    // sniff code...
+    return true, nil
+}
+
+func (d Dog) Greet(animalToGreet Animal) {
+    if _, ok := animalToGreet.(Person); ok {
+        d.Snuggle()
+    } else {
+        friendly, err := d.Sniff(animalToGreet)
+        if err != nil {
+            fmt.Fprintln(os.Stderr, "Error sniffing a non-person")
+        }
+        if !friendly {
+            d.Growl()
+        }
+    }
+}
+
+func main() {
+    d1 := Dog{2, "shibe", &amp;Person{}}
+    d2 := Dog{3, "poodle", &amp;Person{}}
+    d2.Greet(d1)
+    fmt.Println("Successfully greeted a dog.")
+}
+</code></pre>
+
+<p>Run here: <a href="http://play.golang.org/p/m_RQeo9N1H">http://play.golang.org/p/m_RQeo9N1H</a></p>
+
+<p>Yup, I &#8220;went there&#8221; with the Animal OO-ish (Go doesn&#8217;t have pure objects) cliché.</p>
+
+<p>When you compile a program containing the above, the Go compiler knows that the <code>Dog</code> struct satisfies the <code>Animal</code> interface provided (it infers this because <code>Dog</code> implements the neccesary methods to qualify), so it won&#8217;t complain if you pass instances of of <code>Dog</code> to functions which demand an <code>Animal</code> type.  This allows for a lot of power and flexibility in your architecture and abstractions, without breaking the type system.</p>
+
+<h1>So what&#8217;s with <code>io</code>?</h1>
+
+<p><code>io</code> is a Golang standard library package that defines flexible interfaces for many operations and usecases around input and output.</p>
+
+<p>See: <a href="http://golang.org/pkg/io/">http://golang.org/pkg/io/</a></p>
+
+<p>You can use the same mechanisms to talk to files on disk, the network, STDIN/STDOUT, and so on.  This allows Go programmers to create re-usable &#8220;Lego brick&#8221; components that work together well without too much shimming or shuffling of components.  They smooth over cross-platform implemenation details, and it&#8217;s all just <code>[]byte</code> getting passed around, so everyone&#8217;s expectations (senders/writers and receivers/readers) are congruent.  You have <code>io.Reader</code>, <code>io.ReadCloser</code>, <code>io.Writer</code>, and so on to use.  Go also provides packages called <code>bufio</code> and <code>ioutil</code> that are packed with useful features related to using these interfaces.</p>
+
+<h1>OK, but what can you do with it.</h1>
+
+<p>Let&#8217;s look at an example to see how combining some of these primitives can be useful in practice.  I&#8217;ve been working on a project where I want to attach to multiple running Docker containers concurrently and stream (multiplex) their output to STDOUT with some metadata (container name) prepended to each log line.  Sounds easy, right? ;)</p>
+
+<p>The Docker REST API bindings written by <a href="http://github.com/fsouza">fsouza</a> provide an abstraction whereby we can pass an <code>io.Writer</code> instance for STDOUT and STDERR of the container we are attaching to.  So we have control of a <code>io.Writer</code> that we inject in, but how do read what gets written by this container one line at a time, and multiplex/label the output together in the fashion I described in the previous paragraph?</p>
+
+<p>We will use a combination of Go&#8217;s concurrency primitives, <code>io.Pipe</code>, and a <code>bufio.Scanner</code> to accomplish this.</p>
+
+<p>Since the call to the API binding&#8217;s <code>AttachContainer</code> method hijacks the HTTP connection and consequently forces the calling goroutine to be blocked, we run each <code>Attach</code> call in its own goroutine.</p>
+
+<p>We need an <code>io.Reader</code> to be able to read and parse the output from the container, but we only have the option to pass in an instance of <code>io.Writer</code> for STDOUT and STDERR.  What to do?  We can use a call to <code>io.Pipe</code> (see <a href="http://golang.org/pkg/io/#Pipe">here</a> for reference).  <code>io.Pipe</code> returns an instance of a <code>PipeReader</code>, and an instance of a <code>PipeWriter</code>, which are connected (calling the <code>Write</code> method on the <code>Writer</code> will lead directly to what comes out of <code>Read</code> in the <code>Reader</code>).  So, we can use the returned <code>Reader</code> to stream the output from the container.</p>
+
+<p>The final step is to use a <code>bufio.Scanner</code> to read the output from the <code>PipeReader</code> line by line.  If you use the <code>Scan</code> method with a <code>range</code> statement, it will iterate line by line as we desire.  We have already generated the prefix earlier and saved it in the <code>Service</code> struct we are working with (<code>Service</code> in my implementation is a very light wrapper around a container).</p>
+
+<p>Therefore, the final method looks like this:</p>
+
+<pre><code class="go">func (s *Service) Attach() error {
+    r, w := io.Pipe()
+    options := apiClient.AttachToContainerOptions{
+        Container:    s.Name,
+        OutputStream: w,
+        ErrorStream:  w,
+        Stream:       true,
+        Stdout:       true,
+        Stderr:       true,
+        Logs:         true,
+    }
+    fmt.Println("Attaching to container", s.Name)
+    go s.api.AttachToContainer(options)
+    go func(reader io.Reader, s Service) {
+        scanner := bufio.NewScanner(reader)
+        for scanner.Scan() {
+            fmt.Printf("%s%s \n", s.LogPrefix, scanner.Text())
+        }
+        if err := scanner.Err(); err != nil {
+            fmt.Fprintln(os.Stderr, "There was an error with the scanner in attached container", err)
+        }
+    }(r, *s)
+    return nil
+}
+</code></pre>
+
+<p>We kick off attaching to, and reading from, the container at the same time- when the attach is complete and starts streaming, the <code>scanner.Scan</code> loop will start logging.</p>
+
+<h1>Conclude</h1>
+
+<p>I had some trouble understanding <code>io.Writer</code>, <code>io.Reader</code>, etc. when getting started with Go (and recently as well), but I think I was over-thinking their simplicity and explicit power.  Additionally, learning about some higher-level abstractions related to them helped a lot.  Hopefully this article is useful for you and clears stuff up in the future.  I know that my Go has accelerated a lot since grokking these concepts, especially since so much (file IO etc.) relies on it.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,272 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html style="display:none;" lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="I'm a solution delivery and technology expert.  I write about code (back-end and front-end), entrepreneurship, and life.  I'm obsessed with application performance, user experience, and shipping." name="description">
+		<meta content="nathan leclaire" name="author">
+		
+		<title>Do We Need a Community for Vagrantfiles? &mdash; nathan leclaire | I care, I share, I'm Nathan LeClaire.</title>
+		
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href="/stylesheets/main.css" rel="stylesheet">
+		
+		<script>
+		   if(self == top) {
+			   document.documentElement.style.display = 'block'; 
+		   } else {
+			   top.location = self.location; 
+		   }
+		</script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+		<script src="/js/jquery.modal.min.js"></script>
+		<script src="/js/fuse.min.js"></script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div id="sidebar">
+				<header>
+					<div class="title">
+						<a href="http://nathanleclaire.com">
+							<img src="/images/nateface.jpeg" class="nateface" /> 
+							nathan leclaire 
+						</a>
+					</div>
+					<p class="slogan">I care, I share, I'm Nathan LeClaire.</p>
+					<div class="navi">
+						<ul>
+							<li><a href="/about/">About</a></li>
+							<li><a href="/blog/archives">Archives</a></li>
+							<li><a href="/atom.xml">RSS</a></li>
+						</ul>
+					</div> <!-- // .navi -->
+					<div id="sidebar-email">
+						<a href="mailto:nathan.leclaire@gmail.com">nathan.leclaire@gmail.com</a>
+					</div>
+				</header>
+				<span id="shameless-self-promotion">
+				<!-- Begin MailChimp Signup Form -->
+
+				<div id="mc_embed_signup">
+				<form action="https://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<label for="mce-EMAIL">Get my essays about tech delivered to your inbox</label>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+				</form>
+				</div>
+				<!--End mc_embed_signup-->
+				
+				<p>Quickly search the archive:</p>
+				<input type="text" placeholder="Fuzzy search by keyword (e.g. Angular)" id="archive-search">
+				<img src="/images/magnifying-glass.png" id="search-icon" />
+				<ul id="archive-search-populate">
+				</ul>
+				
+				</span>
+			</div>
+			<div id="content">
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+    <header>
+        <h1>
+            <a href="/blog/2014/05/02/do-we-need-a-community-for-vagrantfiles/">Do We Need a Community for Vagrantfiles?</a>
+        </h1>
+        <h3 style="text-align: center;">by Nathan LeClaire</h3>
+        <time>02 May 2014</time>
+    </header>
+    <div>
+        <h1>vagrant up</h1>
+
+<p><img src="/images/swaa/vagrant.png"></p>
+
+<p>For those of you who are unfamiliar, <a href="http://www.vagrantup.com/">Vagrant</a> is "development environments made easy".</p>
+
+<blockquote><p>Create and configure lightweight, reproducible, and portable development environments.</p></blockquote>
+
+<p>Vagrant is a command line tool that aids in the creation and provisioning of development environments.  Why is it important?  Let's say that you want to work on a Django application.  In order to get started with even basic work on the application you need Python installed, probably pip and virtualenv, the dependencies on Python libraries including Django itself, and a database program (sqlite, MySQL, and PostgreSQL are all popular choices).  Orchestrating the setup of all of this creates a lot of friction, especially if you are new to the Python ecosystem, and ranges from medium difficulty to "Dear God why did I ever attempt this" difficulty on Windows.  Worst of all, when you eventually want to deploy your application so the outside world can use it, you have to juggle all of this stuff <em>again</em> plus more overhead (e.g. installing and configuring nginx) on your server.</p>
+
+<p>Vagrant's value proposition is simple:  Get the repo of the project you want to work on, run <code>vagrant up</code> once in the top level directory, wait for the virtual machine to boot and get provisioned, and then you are ready to go.  Point your browser to <code>localhost:8000</code> (or wherever) and there is your app.   Vagrant works with virtualization technologies (<a href="https://www.virtualbox.org/">VirtualBox</a>, <a href="https://www.virtualbox.org/">VmWare</a>, and they recently announced <a href="http://docker.io">Docker</a> support) and provisioners (anything from shell scripts to <a href="https://puppetlabs.com/">Puppet</a> to <a href="http://www.getchef.com/chef/">Chef</a>) behind the scenes and provides a nice clean interface for customization of things such as port forwarding from the guest to the host.  It really is a very flexible and powerful technology.</p>
+
+<p>But it, and related technologies (like Docker), are so new, they still have a big problem.  There's no centralized way to find a quality image for what you may be searching for (e.g. Rails).  Someone out there has probably already done the legwork of creating that Vagrantfile and provisioning, right?  But at best we have Google and Github to try and hunt one down, and no assurance that it actually works.  For instance, I once tried to run a Vagrantfile that pretty much required Ansible to be installed on the host machine, and I was on Windows (so it was no good).  There are workarounds, but at that point you've already missed out on the awesome <code>vagrant up</code> workflow.</p>
+
+<h2>The Idea</h2>
+
+<p>About a month ago I got frustrated with the fact that I had to set up all of the weird Ruby stuff on a new computer any time I wanted to blog (because my blog right now is based on <a href="http://octopress.org/">Octopress</a>) so I set about creating a Vagrantfile and a provisioning script to take care of that.  That way, any time I wanted to blog on a new computer, I could just run <code>vagrant up</code> and have Octopress rarin' to go.</p>
+
+<p>5 hours later, I was still struggling.  For a variety of reasons that I won't go into here, including that Windows interfered with several critical <code>rake</code> commands due to shared folder access.  I did eventually get it online, but it might have done me well to know that there was an existing version with these issues resolved floating around.  Indeed, some Googling just now reveals that <a href="http://blog.andrewallen.co.uk/2013/05/13/setting-up-vagrant-for-octopress/">this is the case</a>.  Or is it?  There's no way to know if things you find just by Googling work well, on what OSes, whether or not they're outdated, and so on.</p>
+
+<p>Which brings me to my point.</p>
+
+<p>I think there should be a community for Vagrantfiles (and their corresponding provisioning scripts), which I envision as being a sort of an awesome mashup of <a href="http://google.com">Google</a>, <a href="http://github.com">Github</a>, and <a href="http://reddit.com">Reddit</a>.  Basically, it would just be a CRUD app where people could submit and vote on Vagrant environments for particular stacks (want a <a href="http://mean.io/#!/">MEAN</a> stack?  Here's the definitive one, etc.).  That way, if you wanted to start a new project with a particular stack, you could just <code>git clone</code> the project, optionally delete the <code>.git</code> directory to start fresh, run <code>vagrant up</code> and be done with it.  This is the sort of workflow we used to get going on a Laravel app when we <a href="http://nathanleclaire.com/blog/2014/02/10/5-reasons-we-won-startup-weekend/">won Startup Weekend</a> and it worked incredibly well.</p>
+
+<p>Additionally it would be pretty amazing if there were continuously integrated builds of the box/provisioning under OSX, Windows, and Linux hosts to reasonably assure you that no funny business was going to happen if you built the box with <code>vagrant up</code> locally.  For instance, making things work with a Windows host for me entailed making some pretty drastic changes to the Rakefile to appease SASS.  This would account for stuff like that.</p>
+
+<p>The upvote/downvote and discussion mechanisms would enable people to isolate the builds which are the "best" for various reasons, including being actively maintained.</p>
+
+<p>I feel like the <a href="https://index.docker.io">Docker index</a> is sort of headed in the right direction here, but at the time of writing lacks a way to sort search results by relevant paramters e.g. stars.  The code for that is online and written in Python, which I am familiar with, so I may take a stab at implementing it.</p>
+
+<h2>Fin</h2>
+
+<p>Maybe I'm just barking up the wrong tree here, but if there's interest in this as a tool I definitely want to start looking into building and maintaining such a site.  I think we would see so many cool apps come to fruition that otherwise might have languished in dependency hell.  Everyone should know the awesomeness of <code>vagrant up</code>.</p>
+
+<p>Until next time, stay sassy Internet.  And <a href="http://nathanleclaire.com">consider subscribing to my blog</a>.</p>
+
+    </div>
+    <footer>
+        <p>If you find a mistake or issue in this article, please <a id="pull-request-link" taget="_blank" href="">fix it and submit a pull request on Github</a> (must be signed in to your GitHub account).</p>
+        <a target="_blank" style="display: block;" href="https://twitter.com/share?url=http://nathanleclaire.com/blog/2014/05/02/do-we-need-a-community-for-vagrantfiles/&text=Great article from @upthecyberpunks : " class="social-media-spam">Tweet It</a>
+        <a target="_blank" href="https://news.ycombinator.com/submitlink?u=http://nathanleclaire.com/blog/2014/05/02/do-we-need-a-community-for-vagrantfiles/&t=" class="social-media-spam">Submit to Hacker News</a>
+        <a target="_blank" style="display: block !important;" href="http://www.reddit.com/submit?url=http://nathanleclaire.com/blog/2014/05/02/do-we-need-a-community-for-vagrantfiles/&title=" class="social-media-spam">Submit to Reddit</a>
+        <br>
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/blog/categories/vagrant/'>vagrant</a>
+	
+
+ 
+
+        <a target="_blank" style="display: block !important;" href="http://discourse.nathanleclaire.com">Chat in the forum!!</a>
+    
+        <div id="discourse-comments"></div>
+    </footer>
+    
+</article>
+<!-- END OF _includes/article.html -->
+
+
+<!-- END OF _/layouts/post.html -->
+
+			</div>
+			<form class="modal" id="mailing-list-modal" action="http://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<h1>Like what you're reading?</h1>
+					<img src="/images/happy-reader.jpeg"></img>
+					<p style="display: block;" for="mce-EMAIL">Did you enjoy this article?  You might want to sign up for my mailing list.  I send out weekly-ish essays about hot new tech stuff.</p>
+					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL-modal" placeholder="email@domain.com" required>
+					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+				    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+			</form>
+		</div> <!-- // .wrap -->
+	<script type="text/javascript" src="/js/prettify.js"></script>
+	<script>
+	function supports_html5_storage() {
+	  try {
+		return 'localStorage' in window && window['localStorage'] !== null;
+	  } catch (e) {
+		return false;
+	  }
+	}
+
+	$(document).ready(function () {
+	    var fuse;
+
+	    $("code").addClass("prettyprint");
+	    prettyPrint();
+
+	    $.getJSON("/articles.json", function(data) {
+	    	// input:
+	    	// [{title: "Learn Node.js The Troll Way", href: "blahblah"}, { ... }]
+	    	fuse = new Fuse(data, {
+	    	    keys: ['title', 'tags']
+	    	});
+	    });
+	    
+	    $("#archive-search").keyup(function() {
+	    	var $this = $(this);
+	    	var val = $this.val();
+	    	var result = fuse.search(val).slice(0, 1);
+	    	$list = $("#archive-search-populate");
+	    	$list.empty();
+	    	if (result.length > 0 && val !== '') {
+	    	    $.each(result, function(i, e) {
+	    	        $list.append('<li><a href="'+ e.href +'">'+ e.title +'</a></li>');
+	    	    });
+	    	}
+	    });
+	    
+	    $(".social-media-spam").each(function () {
+	        var e = $(this);
+	        var t = e.attr("href");
+	        var n = $("article header h1 a").html();
+	        t += encodeURIComponent(n);
+	        e.attr("href", t)
+	    });
+
+	    var e = window.location.href;
+	    var t = $("#pull-request-link");
+	    var n = "https://github.com/nathanleclaire/blog/edit/master/source/_posts/" + e.split("/").slice(4, 8).join("-") + ".markdown";
+	    t.attr("href", n);
+
+	    // Only offer mailing list once
+		var tryModal = localStorage["modal"] ? false : true;
+
+		// Don't offer mailing list to people on mobile
+		if ($(window).width() < 720) {
+			tryModal = false;
+		}
+
+		$('#mc-embedded-subscribe').click(function() {
+			// Don't offer mailing list if people have
+			// already clicked to try and sign up
+			tryModal = false;
+			localStorage["modal"] = "true";
+		});
+
+		$(window).scroll(function () {
+			if (tryModal && document.URL.indexOf('archives') === -1 && document.URL.indexOf('about') === -1) {
+				if (($(window).scrollTop() + $(window).height()) === $(document).height()) {
+					if (supports_html5_storage()) {
+						window.setTimeout(function() {
+							$('#mailing-list-modal').modal({
+								fadeDuration: 250
+							});
+							$('#mce-EMAIL-modal').focus();
+							tryModal = false;
+							localStorage["modal"] = "true";
+						}, 1000);
+					}
+				}
+			}
+		});
+
+
+	});
+	</script>
+	<script type="text/javascript">
+	if ('/blog/2014/05/02/do-we-need-a-community-for-vagrantfiles/' !== '/blog/index.html') {
+	  var discourseUrl = "http://discourse.nathanleclaire.com/",
+	      discourseEmbedUrl = 'http://nathanleclaire.com/blog/2014/05/02/do-we-need-a-community-for-vagrantfiles/';
+
+	  (function() {
+	    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+	      d.src = discourseUrl + 'javascripts/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+	  })();
+	}
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-26758702-2', 'nathanleclaire.com');
+	  ga('send', 'pageview');
+	</script>
+	</body>
+</html>
+<!-- END OF _layouts/default.html -->

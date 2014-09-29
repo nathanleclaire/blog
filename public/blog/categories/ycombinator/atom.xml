@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ycombinator | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/ycombinator/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The (JavaScript) Question I Bombed In An Interview With a Y Combinator Startup]]></title>
+    <link href="http://nathanleclaire.com/blog/2013/11/16/the-javascript-question-i-bombed-in-an-interview-with-a-y-combinator-startup/"/>
+    <updated>2013-11-16T17:30:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2013/11/16/the-javascript-question-i-bombed-in-an-interview-with-a-y-combinator-startup</id>
+    <content type="html"><![CDATA[<p>About a year and a half ago, I was on the hunt for my first &#8220;real&#8221; job.  I knew that I wanted to be a &#8220;web developer&#8221; (whatever <em>that</em> entails) but I had no idea where to begin.  I knew just a smidge of PHP.  I was developing websites in Classic ASP at my current internship, but I knew that was an antiquidated technology which was unlikely to help me in the modern job market.  As I had recently begun stomping around <a href="https://news.ycombinator.com">Hacker News</a>, I noticed that they had a &#8220;jobs&#8221; section in their header.  So I looked into things, saw that a few companies were hiring, and sent a few e-mails to companies that looked nice.</p>
+
+<p><img src="/images/y-comb/y-combinator-logo.gif" title="To hack and start things up." ></p>
+
+<h1>The Hunt</h1>
+
+<p>A few e-mailed me back and I managed to set up a phone screen with a company that does next-level web analytics.  Going into the interview I was filled with a mixture of apprehension and excitement.  After all, I knew that Silicon Valley was where the action was at, and I had no idea what kind of intricate or crazy questions they might ask me.  They had listed in their description a desire for strong JavaScript skills, which was appealing to me as I was rapidly learning to enjoy developing in this weird little language created by Brendan Eich.  <em>&#8220;I know jQuery pretty well,&#8221;</em>, I thought- <em>&#8220;What could possibly go wrong?&#8221;</em></p>
+
+<p>The developer who did my screen was pretty courteous and eased me into things a bit by talking about my background and experience.  I sheepishly admitted that I had studied philosophy in college, not computer science, and he put my concerns at ease by telling me that their founder had never finished college.  That made me feel better about things, since part of the reason I love technology so much is that it is so meritocratic.</p>
+
+<p>So, without further ado, we began to investigate a coding problem.</p>
+
+<h1>The Problem</h1>
+
+<p>INTERVIEWER: You&#8217;re familiar with jQuery, right?</p>
+
+<p>ME:  Yes, I&#8217;ve used it at work.  I like JavaScript.</p>
+
+<p>INTERVIEWER: Great.  So, you&#8217;re familiar with something like this, right?  Let&#8217;s say you have a textbox and you want to make a call to the server to get some data every time the user does some typing, if you wanted to make autocomplete suggestions, for example&#8230; <em>(begins typing into a shared/remote codepad)</em></p>
+
+<pre><code class="js">$(document).ready(function() {
+    $('input').keypress(function() {
+        $.ajax({
+            // Call the server for some goodness...
+        });
+    });
+});
+</code></pre>
+
+<p>ME: Oh yes, I see.  When the user presses down a key on the element, we will make a call.</p>
+
+<p>INTERVIEWER: So, you may be able to guess, that there is a problem with this code.  It is very inefficient.  If you type a string with 30 characters into the text box, the server gets called 30 times.  Not good, we are having all kinds of issues with scalability so we can&#8217;t afford to be writing code like this.</p>
+
+<p>DEMO:</p>
+
+<p><input id="myBox1" type="text" placeholder="Type some stuff in me!" style="width: 30%;" /> <strong>Called Server <span id="called_times1">0</span> times&#8230;</strong></p>
+
+<script>
+$(document).ready(function() {
+    $('#myBox1').keypress(function() {
+        if (!this.count)
+            this.count = 0;
+        this.count++;
+        $('#called_times1').html(this.count);
+    });
+});
+</script>
+
+
+<p>ME: I see.</p>
+
+<p>INTERVIEWER: So we only want to call the server after the user has been typing, then stops typing for 200 milliseconds.  That will give it the illusion of being instantaneous while saving a lot of load on our servers and a lot of ajax handling in the JavaScript.  How would we do that?</p>
+
+<p>ME:  Uh&#8230;</p>
+
+<h1>What Really Happened</h1>
+
+<p>ME:  I think I would use&#8230; Um&#8230;</p>
+
+<p>INTERVIEWER:  Well, do you know what a closure is?</p>
+
+<p>ME:  Yeah!  Closures.  I&#8217;ve heard of those.</p>
+
+<p>INTERVIEWER: What about <code>window.setTimeout</code> ?  Do you know about that?</p>
+
+<p>ME:  I think that&#8217;s JavaScript&#8217;s version of a <code>sleep</code> function?</p>
+
+<p>INTERVIEWER:  Kind of&#8230;</p>
+
+<p>ME:  I think I would&#8230; <em>typing awkwardly and struggling for 30 seconds</em>  I guess I&#8217;m not sure.</p>
+
+<p>INTERVIEWER:  I appreciate your time but perhaps this isn&#8217;t a good fit.</p>
+
+<h1>What Should Have Happened</h1>
+
+<p>ME:  Hm, that&#8217;s an interesting problem.  So, if we use <code>window.setTimeout</code> we can delay the call for 200 milliseconds.</p>
+
+<p>INTERVIEWER:  Right.</p>
+
+<p>ME:  But that&#8217;s not going to help us in the case where the user is typing fast, or even just normal speed.  So we need a way to interrupt the timeout if the user keeps typing.</p>
+
+<p>INTERVIEWER:  Exactly.</p>
+
+<p>ME:  So, I know that when you call <code>window.setTimeout</code>, you get back an ID that uniquely references the timeout.  And you can use it to cancel the timeout if need be!  So we should just store the timeout ID in the <code>keypress</code> function closure, and if the user triggers a keypress event again before the timeout function triggers, we&#8217;ll just cancel it and set a new one!</p>
+
+<p>(<em>EDIT:</em> Some commenters have pointed out that due to the fact that <code>this</code> in jQuery callbacks refers to the DOM node in question, not the function closure, the ID is actually being stored as a property of the DOM node.  They are correct.)</p>
+
+<p>INTERVIEWER:  Sounds great!  What would that look like in code?</p>
+
+<p>ME:  It&#8217;d look a little something like this&#8230;</p>
+
+<pre><code class="js">$(document).ready(function() {
+    $('input').keypress(function() {
+        if (this.timeoutId) 
+            window.clearTimeout(this.timeoutId);
+        this.timeoutId = window.setTimeout(function () {
+            $.ajax({
+                // do some stuff
+            });
+        }, 200);
+    });
+});
+</code></pre>
+
+<p>INTERVIEWER:  Clever.</p>
+
+<p>ME:  I try.</p>
+
+<p>DEMO:</p>
+
+<p><input id="myBox2" type="text" placeholder="Type some stuff in me!" style="width: 30%;" /> <strong>Called Server <span id="called_times2">0</span> times&#8230;</strong></p>
+
+<script>
+$(document).ready(function() {
+    $('#myBox2').keypress(function() {
+        if (!this.count)
+            this.count = 0;
+        if (this.timeoutId)
+            window.clearTimeout(this.timeoutId);
+        var that = this;
+        this.timeoutId = window.setTimeout(function() {
+            that.count++;
+            $('#called_times2').html(that.count);
+        }, 200);
+    });
+});
+</script>
+
+
+<p>INTERVIEWER:  Now on to the next question&#8230;</p>
+
+<h1>Conclusion</h1>
+
+<p>I bombed this interview but I learned something from it.  I know I could go in more confident and capable today.  It just goes to show you that not every setback in life has to be a bad thing.  Someday in the future I would like to work with Y Combinator or a Y Combinator-based startup, largely because I think there&#8217;s so much opportunity for learning and growth.</p>
+
+<p>Thanks for reading and I&#8217;ll catch you next week,</p>
+
+<p>Nathan</p>
+
+<p><em>EDIT</em>: Some commenters have pointed out my misuse of <code>clearInterval</code> as opposed to <code>clearTimeout</code>.  It turns out that this (mostly) works to clear timeouts, but is clearly not correct (it&#8217;s meant to be used with <code>window.setInterval</code>).  I have fixed this now.</p>
+]]></content>
+  </entry>
+  
+</feed>

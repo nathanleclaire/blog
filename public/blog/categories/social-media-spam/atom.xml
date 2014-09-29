@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: social media spam | nathan leclaire]]></title>
+  <link href="http://nathanleclaire.com/blog/categories/social-media-spam/atom.xml" rel="self"/>
+  <link href="http://nathanleclaire.com/"/>
+  <updated>2014-09-29T03:13:10+00:00</updated>
+  <id>http://nathanleclaire.com/</id>
+  <author>
+    <name><![CDATA[Nathan LeClaire]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Original Content Vultures are Evil, and What You Can Do To Protect Yourself]]></title>
+    <link href="http://nathanleclaire.com/blog/2014/06/28/original-content-vultures-are-evil-and-what-you-can-do-to-protect-yourself/"/>
+    <updated>2014-06-28T17:58:00+00:00</updated>
+    <id>http://nathanleclaire.com/blog/2014/06/28/original-content-vultures-are-evil-and-what-you-can-do-to-protect-yourself</id>
+    <content type="html"><![CDATA[<h1>Here we go</h1>
+
+<p><img src="/images/tg/ouch.png"></p>
+
+<p>So lately I&#8217;ve had this problem where people will e-mail me, or complain on Twitter, that my website looks pretty mangled on their <code>[OS|browser]</code>.  This of course upsets me since I want the experience of using my site to be smooth and simple.  I&#8217;m no designer but I tried to make something that was both usable (loads quite quickly) and not too hard to look at.</p>
+
+<p>So of course I investigate, and I&#8217;m led to find out that in several of these cases the unsuspecting viewers are stumbling across my site through a &#8220;gray hat&#8221; lead farming site.  It&#8217;s called Tweetganic, and I&#8217;m sure it&#8217;s not the only one of its kind but in case you&#8217;re not familiar, here&#8217;s what it does:</p>
+
+<ol>
+<li>Users sign up to use Tweetganic</li>
+<li>Users harvest links to other people&#8217;s content and Tweetganic proxies them at a Tweetganic URL</li>
+<li>Users then share the links on social media.  When viewers access the URL they are bombarded with lead generating tactics such as a &#8220;Hire Great Angular Developers&#8221; banner or a modal which prompts them to sign up for the Tweetganic user&#8217;s mailing list (NOT the generator of the original content!!).</li>
+</ol>
+
+
+<p>It is a lead (your precious eyeballs) farming mechanism used by content vultures and it must be destroyed.</p>
+
+<h1>Why is it so bad ?</h1>
+
+<p>Good question.</p>
+
+<p>Initially I was intruiged by the premise of Tweetganic and even considered using it myself to promote my mailing list.  However, I decided against it due to my values which emphasize the importance of &#8220;consent-based marketing&#8221;, where I make sure people <em>want</em> to receive my content (such as a mailing list) before sending it to them.  Tweetganic links try to trap users in a marketing funnel they don&#8217;t neccessarily want to be in.</p>
+
+<p>I get that people want to generate leads, and there&#8217;s nothing wrong with generating leads.  But, and this brings me to my first specific beef with Tweetganic, these leads are non-consensual (to the content owners/producers) and they do nothing to give back to the content producers who are the true value creators here.  No outreach, no offers to pay for the privelege, no classy referral link.</p>
+
+<p>Finding people using your stuff, greedily, for their own personal gain with no thought towards the blood, sweat, and tears that went into generating it feels like a dagger to the heart.</p>
+
+<h2>Tweetganic promotes non-consensual re-use of original content with no respect or payment to the authors.</h2>
+
+<p>Many of us (writers) do what we do because we want the community to learn and grown and develop.  Yes we&#8217;re also promoting ourselves, but we&#8217;re also putting in the elbow grease to make it happen.  Without being derivative.  By building legitimate value.</p>
+
+<p>My second specific beef with this practice ties into the first:</p>
+
+<h2>Tweetganic will completely maul your website and make it look like utter crap.</h2>
+
+<p>This is how I found out it was being done to me.  People were complaining in various ways that my website looked bad.  I knew most of them probably weren&#8217;t using older versions of IE (my website looks like crap in IE&lt;8 ☺ ) so I investigated.</p>
+
+<p>Yeah, it turns out that Tweetganic is just really, really, bad at front end.  I guess that&#8217;s what happens when you use other people&#8217;s content cross-domain without their consent or knowledge, and can&#8217;t modify their page directly.  You have to shove your hideous spam layer on top.</p>
+
+<p>Taking my content is one thing.  But to take away the last tiny little scrap of aesthetic value that my hilariously-made-by-a-programmer-not-a-designer blog has?  That&#8217;s war.</p>
+
+<p>If you care about your content follow the tip below and participate in a community discussion about how to stop them, and all of their ilk.  If you want to be a good person then don&#8217;t use tools such as this.</p>
+
+<h1>I don&#8217;t want this to happen to me.  What can I do about it?</h1>
+
+<p>EDIT: I&#8217;ve swapped out the &#8220;shaming&#8221; text for a trick which simply redirects to the original page (listed below), which I had previously just assumed wasn&#8217;t possible due to cross-domain policies in browsers.</p>
+
+<p>I&#8217;ve put the following piece of JavaScript/CSS on many of my pages, and you might want to follow suit with a similar snippet:</p>
+
+<p>&#8220;`</p>
+
+
+
+<script>
+   if(self == top) {
+       document.documentElement.style.display = 'block'; 
+   } else {
+       top.location = self.location; 
+   }
+</script>
+
+
+<p>&#8220;`</p>
+
+<p>Source: <a href="http://en.wikipedia.org/wiki/Framekiller">Wikipedia</a></p>
+
+<p>Basically what it does is makes content unrendered by default and redirects the page to the original domain if the site is loaded in an iframe.</p>
+
+<p>You could also set the <code>X-Frame-Options</code> HTTP header to <code>DENY</code> in your server config (if you don&#8217;t need your page to load in iframes, and for 90% of sites why would you?).</p>
+
+<h1>I was featured on Tweetganic and all I got was this lousy rant.</h1>
+
+<p>Let&#8217;s cheerily call out offenders as we see them too, eh?</p>
+
+<p>For instance, I have one offender for you to ruthlessly unfollow: the Twitter account @AngularJS_News.  In my opinion they should not be promoting the use of such a tool, it literally exists only to screw over content creators for personal gain.</p>
+
+<p>That&#8217;s about all from me on this topic for the time being.  Moral of the story: If you&#8217;re going to make my website look like crap at least offer to pay me.</p>
+
+<p>Until next time, stay sassy Internet.</p>
+
+<ul>
+<li>Nathan</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
