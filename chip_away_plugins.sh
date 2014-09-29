@@ -1,22 +1,19 @@
 #!/bin/bash
 
-# Reset
-Color_Off='\e[0m'       # Text Reset
+RESTORE='\033[0m'
 
-# High Intensity
-IBlack='\e[0;90m'       # Black
-IRed='\e[0;91m'         # Red
-IGreen='\e[0;92m'       # Green
-IYellow='\e[0;93m'      # Yellow
-IBlue='\e[0;94m'        # Blue
-IPurple='\e[0;95m'      # Purple
-ICyan='\e[0;96m'        # Cyan
-IWhite='\e[0;97m'       # White
+RED='\033[00;31m'
+GREEN='\033[00;32m'
+YELLOW='\033[00;33m'
+BLUE='\033[00;34m'
+PURPLE='\033[00;35m'
+CYAN='\033[00;36m'
+LIGHTGRAY='\033[00;37m'
 
 echo "stashing working directory changes..."
 STASH_MSG=$(git stash)
 for plugin in plugins/*; do
-    echo "${ICyan}=> Trying out removing plugin ${plugin}..."
+    echo "${CYAN}=> Trying out removing plugin ${plugin}..."
 
     # invalidate public diff so that failed generate will get caught
     echo "invalidate" >>public/index.html
@@ -29,11 +26,11 @@ for plugin in plugins/*; do
 
     DIFF=$(git diff)
     if [[ "$DIFF" != "" ]]; then
-        echo "${IRed}==> There was a difference after removing the plugin ${plugin}!"
+        echo "${RED}==> There was a difference after removing the plugin ${plugin}!"
         git reset HEAD ${plugin}
         git checkout -- ${plugin} public/
     else
-        echo "${IGreen}Great success removing plugin!"
+        echo "${GREEN}Great success removing plugin!"
     fi
 done
 echo "restoring working directory changes..."
