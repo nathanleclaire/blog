@@ -13,7 +13,7 @@ LIGHTGRAY='\033[00;37m'
 echo "stashing working directory changes..."
 STASH_MSG=$(git stash)
 for plugin in plugins/*; do
-    echo "${CYAN}=> Trying out removing plugin ${plugin}..."
+    echo -e "${CYAN}=> Trying out removing plugin ${plugin}..."
 
     # invalidate public diff so that failed generate will get caught
     echo "invalidate" >>public/index.html
@@ -26,11 +26,11 @@ for plugin in plugins/*; do
 
     DIFF=$(git diff)
     if [[ "$DIFF" != "" ]]; then
-        echo "${RED}==> There was a difference after removing the plugin ${plugin}!"
+        echo -e "${RED}==> There was a difference after removing the plugin ${plugin}!"
         git reset HEAD ${plugin}
         git checkout -- ${plugin} public/
     else
-        echo "${GREEN}Great success removing plugin!"
+        echo -e "${GREEN}Great success removing plugin!"
     fi
 done
 echo "restoring working directory changes..."
