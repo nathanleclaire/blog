@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "stashing working directory changes..."
-git stash >/dev/null
+$STASH_MSG = $(git stash)
 for plugin in plugins/*; do
     echo "=> Trying out removing plugin ${plugin}..."
     git rm ${plugin}
@@ -15,4 +15,6 @@ for plugin in plugins/*; do
     fi
 done
 echo "restoring working directory changes..."
-git stash pop >/dev/null
+if [ "$STASH_MSG" != "No local changes to save" ]; then
+    git stash pop >/dev/null
+fi
