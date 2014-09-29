@@ -44,9 +44,12 @@ chip_away_at_plugins () {
 case "$1" in 
     apply)
         chip_away_at_plugins
+        ;;
     rollback)
         git reset HEAD plugins/
         git checkout -- plugins
+        ;;
     *)
         echo "Usage: $0 {apply|rollback}"
+        exit 1
 esac
