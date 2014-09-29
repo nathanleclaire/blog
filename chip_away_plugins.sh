@@ -34,6 +34,6 @@ for plugin in plugins/*; do
     fi
 done
 echo "restoring working directory changes..."
-if [ "$STASH_MSG" != "No local changes to save" ]; then
+if [[ "$STASH_MSG" != "No local changes to save" ]]; then
     git stash pop >/dev/null
 fi
