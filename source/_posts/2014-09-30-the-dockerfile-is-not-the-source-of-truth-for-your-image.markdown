@@ -54,7 +54,7 @@ FROM ubuntu:14.04
 MAINTAINER Nathan LeClaire 
 
 RUN apt-get update && \
-    apt-get install curl wget python
+    apt-get install -y curl wget python
 ADD . /code
 WORKDIR /code
 CMD ["python", "/code/app.py"]
