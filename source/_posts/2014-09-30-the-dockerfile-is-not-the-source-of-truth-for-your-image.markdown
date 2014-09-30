@@ -72,7 +72,7 @@ So, the Dockerfile generally works beautifully for the class of problem for whic
 
 Therefore the point of this article: The Dockerfile is not the source of truth for your image.
 
-The Dockerfile is a tool for creating images, but it is not the only weapon in your arsenal. With the popularity of Automated Builds (and I'm quite pleased with that feature, though I'm not going to stop pestering ldlework for a version which somehow - magically - uses caching), it is essential for users to recognize that the Dockerfile is not the end-all be-all of image creation and verification. Solutions for this need to continue to thrive and evolve in the community.
+The Dockerfile is a tool for creating images, but it is not the only weapon in your arsenal. With the popularity of Automated Builds (and I'm quite pleased with that feature, though I'm not going to stop pestering [ldlework](http://github.com/dustinlacewell) for a version which somehow - magically - uses caching), it is essential for users to recognize that the Dockerfile is not the end-all be-all of image creation and verification. Solutions for this need to continue to thrive and evolve in the community.
 
 This is why some people were so grumbly about Automated Builds originally being "Trusted Builds". It's not a very compelling label when a security breach upstream might actually compromise the contents of my image too. Rootkits for everyone!
 
