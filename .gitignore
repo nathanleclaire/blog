@@ -12,5 +12,6 @@ vendor
 node_modules
 *.swp
 sass
+public
 source/stylesheets
 js
