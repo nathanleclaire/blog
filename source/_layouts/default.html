@@ -11,54 +11,8 @@
 		
 		<title>{% if page.title %}{{ page.title }} &mdash; {% endif %}{{ site.title }} | I care, I share, I'm Nathan LeClaire.</title>
 		
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 		<link href="{{ root_url }}/stylesheets/main.css" rel="stylesheet">
-		<style>
-		/* Modal Styles */
-		.modal {
-		  display: none;
-		  width: 400px;
-		  background: #fff;
-		  padding: 15px 30px;
-		  -webkit-border-radius: 8px;
-		  -moz-border-radius: 8px;
-		  -o-border-radius: 8px;
-		  -ms-border-radius: 8px;
-		  border-radius: 8px;
-		  -webkit-box-shadow: 0 0 10px #000;
-		  -moz-box-shadow: 0 0 10px #000;
-		  -o-box-shadow: 0 0 10px #000;
-		  -ms-box-shadow: 0 0 10px #000;
-		  box-shadow: 0 0 10px #000;
-		}
-
-		.modal a.close-modal {
-		  position: absolute;
-		  top: -12.5px;
-		  right: -12.5px;
-		  display: block;
-		  width: 30px;
-		  height: 30px;
-		  text-indent: -9999px;
-		  background: url(/images/close.png) no-repeat 0 0;
-		}
-
-		.modal-spinner {
-		  display: none;
-		  width: 64px;
-		  height: 64px;
-		  position: fixed;
-		  top: 50%;
-		  left: 50%;
-		  margin-right: -32px;
-		  margin-top: -32px;
-		  background: url(spinner.gif) #111 no-repeat center center;
-		  -webkit-border-radius: 8px;
-		  -moz-border-radius: 8px;
-		  -o-border-radius: 8px;
-		  -ms-border-radius: 8px;
-		  border-radius: 8px;
-		}
-		</style>
 		
 		<script>
 		   if(self == top) {
@@ -98,7 +52,7 @@
 
 				<div id="mc_embed_signup">
 				<form action="https://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-					<label for="mce-EMAIL">Get my awesome essays about tech delivered to your inbox</label>
+					<label for="mce-EMAIL">Get my essays about tech delivered to your inbox</label>
 					<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email@domain.com" required>
 					<input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
 					<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
@@ -155,11 +109,10 @@
 	    $("#archive-search").keyup(function() {
 	    	var $this = $(this);
 	    	var val = $this.val();
-	    	var result = fuse.search(val).slice(0, 3);
+	    	var result = fuse.search(val).slice(0, 1);
 	    	$list = $("#archive-search-populate");
 	    	$list.empty();
 	    	if (result.length > 0 && val !== '') {
-				console.log(val);
 	    	    $.each(result, function(i, e) {
 	    	        $list.append('<li><a href="'+ e.href +'">'+ e.title +'</a></li>');
 	    	    });
@@ -211,7 +164,20 @@
 			}
 		});
 
+
 	});
+	</script>
+	<script type="text/javascript">
+	if ('{{ page.url }}' !== '/blog/index.html') {
+	  var discourseUrl = "http://discourse.nathanleclaire.com/",
+	      discourseEmbedUrl = 'http://nathanleclaire.com{{ page.url }}';
+
+	  (function() {
+	    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+	      d.src = discourseUrl + 'javascripts/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+	  })();
+	}
 	</script>
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

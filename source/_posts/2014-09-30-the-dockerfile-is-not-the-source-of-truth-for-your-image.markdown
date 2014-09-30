@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The Dockerfile is not the source of truth for your image."
-date: 2013-02-06 20:31
+date: 2014-09-29 14:38:31 +0000
 comments: true
 categories: [docker,go,dockerfile]
 ---
@@ -57,7 +57,7 @@ RUN apt-get update && \
     apt-get install curl wget python
 ADD . /code
 WORKDIR /code
-CMD ['python', '/code/app.py']
+CMD ["python", "/code/app.py"]
 </pre>
 
 Additionally it allows you to define some metadata about the image, such as a `MAINTAINER` you see above, and `CMD`, which is actually a runtime configuration property.
