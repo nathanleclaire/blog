@@ -51,11 +51,15 @@ end
 #######################
 
 desc "Generate jekyll site"
-task :generate do
+task :generate, [:limit] do |t, args|
   raise "### You haven't set anything up yet. First run `rake install` to set up an Octopress theme." unless File.directory?(source_dir)
   puts "## Generating Site with Jekyll"
   system "compass compile --css-dir #{source_dir}/stylesheets"
-  system "jekyll build"
+  if args[:limit] == 'limit'
+    system "jekyll build --limit_posts 1"
+  else
+    system "jekyll build"
+  end
 end
 
 desc "Watch the site and regenerate when it changes"
@@ -63,7 +67,7 @@ task :watch do
   raise "### You haven't set anything up yet. First run `rake install` to set up an Octopress theme." unless File.directory?(source_dir)
   puts "Starting to watch source with Jekyll and Compass."
   system "compass compile --css-dir #{source_dir}/stylesheets" unless File.exist?("#{source_dir}/stylesheets/screen.css")
-  jekyllPid = Process.spawn({"OCTOPRESS_ENV"=>"preview"}, "jekyll build --watch")
+  jekyllPid = Process.spawn({"OCTOPRESS_ENV"=>"preview"}, "jekyll build --watch --limit_posts 1")
   compassPid = Process.spawn("compass watch")
 
   trap("INT") {
