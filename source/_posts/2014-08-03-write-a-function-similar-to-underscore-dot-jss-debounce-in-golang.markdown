@@ -29,7 +29,7 @@ $(window).resize(lazyLayout);
 
 Go usually eschews the JavaScript callback continuation-passing style in favor of using goroutines and channels for concurrency.  It's a very nice language feature, and elegant, but sometimes you want use a "debounce" to respond to, say, a bunch of values coming over a channel in rapid bursts.  So how do you do this in Go?
 
-The answer is to use `time.Timer`'s `Stop` and `AfterFunc` methods in tandem like you would otherwise use `window.setTimeout` and `window.clearTimeout`.
+**EDIT**: Though previously this code was implemented using `time.AfterFunc`, Github user [mechmind](https://github.com/mechmind) proposed a different method using `time.After` and a channel for the input.
 
 Example code:
 
