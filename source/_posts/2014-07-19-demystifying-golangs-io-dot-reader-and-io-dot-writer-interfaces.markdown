@@ -121,7 +121,7 @@ Since the call to the API binding's `AttachContainer` method hijacks the HTTP co
 
 We need an `io.Reader` to be able to read and parse the output from the container, but we only have the option to pass in an instance of `io.Writer` for STDOUT and STDERR.  What to do?  We can use a call to `io.Pipe` (see [here](http://golang.org/pkg/io/#Pipe) for reference).  `io.Pipe` returns an instance of a `PipeReader`, and an instance of a `PipeWriter`, which are connected (calling the `Write` method on the `Writer` will lead directly to what comes out of `Read` in the `Reader`).  So, we can use the returned `Reader` to stream the output from the container.
 
-The final step is to use a `bufio.Scanner` to read the output from the `PipeReader` line by line.  If you use the `Scan` method with a `range` statement, it will iterate line by line as we desire.  We have already generated the prefix earlier and saved it in the `Service` struct we are working with (`Service` in my implementation is a very light wrapper around a container).
+The final step is to use a `bufio.Scanner` to read the output from the `PipeReader` line by line.  We have already generated the prefix earlier and saved it in the `Service` struct we are working with (`Service` in my implementation is a very light wrapper around a container).
 
 Therefore, the final method looks like this:
 
