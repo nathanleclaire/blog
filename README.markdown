@@ -1,1 +1,3 @@
-Editing some stuff to test git hooks.
+# blog
+
+This is the blog repo for https://nathanleclaire.com.
