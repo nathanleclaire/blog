@@ -1,4 +1,4 @@
-# foo bar spam
+# widget quux
 
 from debian:wheezy
 
