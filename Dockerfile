@@ -14,4 +14,5 @@ workdir /blog
 run bundle install -j16
 
 add . /blog
+run rake install['pageburner'] && rake generate
 cmd ["bash"]
