@@ -1,3 +1,5 @@
+# foo bar spam
+
 from debian:wheezy
 
 run apt-get update && \
