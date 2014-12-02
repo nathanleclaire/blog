@@ -20,32 +20,49 @@ Some things that should be pretty straightforward, like navigating from tab to t
 
 # Highlighting the active tab for the view
 
-I touched on this a little bit in my unit testing article.  In many applications (single-page ones especially) you'll want to assign or get rid of classes on tabs or other navigation features to help the user understand where they're navigating to or from (see Bootstrap's `.active` class).  How do we set these conditionally in Angular when we are using partials, and the default routing solution rednering in the `ng-view` directive?  Simple.  We can use the `$location` service and declare an `ng-class` attribute that depends on the result of a simple `$scope` method.
+I touched on this a little bit in my unit testing article.  In many applications (single-page ones especially) you'll want to assign or get rid of classes on tabs or other navigation features to help the user understand where they're navigating to or from (see Bootstrap's `.active` class).  How do we set these conditionally in Angular when we are using partials, and the default routing solution rednering in the `ng-view` directive?  Simple.  We can use the `$location` service and create an `active-link` directive that listens for the `$routeChangeSuccess` event.
 
-In the controller:
+In the directive:
 
 ```js
-app.controller('NavCtrl', function($scope, $location) {
-    $scope.isActive = function(route) {
-        return route === $location.path();
-    };
-});
+app.directive('activeLink', ['$location', function($location) {
+  return {
+    restrict: 'A', //use as attribute 
+    replace: false,
+    link: function(scope, elem) {
+        //after the route has changed
+        scope.$on("$routeChangeSuccess", function () {
+                var hrefs = ['/#' + $location.path(),
+                             '#' + $location.path(), //html5: false
+                             $location.path()]; //html5: true
+                angular.forEach(elem.find('a'), function (a) {
+                        a = angular.element(a);
+                    	if (-1 !== hrefs.indexOf(a.attr('href'))) {
+                        	a.parent().addClass('active');
+                    	} else {
+                        	a.parent().removeClass('active');   
+                    	};
+                });     
+         });   
+     }
+  }
+}]);
 ```
 
 In the view:
 
 ```
-<ul class="nav navbar-nav">
-    <li ng-class="{active: isActive('/profile')}">
+<ul class="nav nav-pills" active-link>
+    <li>
         <a href="#/profile"><i class="fa fa-dashboard"></i> You</a>
     </li>
-    <li ng-class="{active: isActive('/find')}">
+    <li>
         <a href="#/find"><i class="fa fa-bar-chart-o"></i> Find Friends</a>
     </li>
-    <li ng-class="{active: isActive('/network')}">
+    <li>
         <a href="#/network"><i class="fa fa-table"></i> Network </a>
     </li>
-    <li ng-class="{active: isActive('/chat')}">
+    <li>
         <a href="#/chat"><i class="fa fa-edit"></i> Chat Room </a>
     </li>
 </ul>
@@ -53,7 +70,7 @@ In the view:
 
 Plunker demo of this concept:
 
-<iframe src="http://embed.plnkr.co/Yci9oM/preview"></iframe>
+<iframe src="http://embed.plnkr.co/ydiXhwpZqpVjqzCQMS4u/preview"></iframe>
 
 Very useful and IMO, very clean.
 
