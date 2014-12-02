@@ -180,7 +180,7 @@ It's really tempting, especially when first learning Angular, and directives in 
 
 Things should be done in Angular, when they can.  Angular provides so much niceness in the form of built-in directives, services (`$window`, `$timeout`, `$http` et al. wrap these things for you so you don't have to worry about accidentally interfering with Angular's internals!) that we should only reach for custom solutions when we have to (and believe me, you will - just think carefully before doing so).  Just wrapping jQuery code in a directive doesn't do us any good, and creates complications when we need to start doing stuff like chucking `$scope.$apply` into things.  So think things through, and do them the Angular way.
 
-Likewise dependencies that you had before (modules you are relying on etc.) should be refactored into e.g. factories for increased ease of use and testability.  If you have the time to use Angular into your project, you have the time to do this too.  Angular will reward you with layers of increased richness.
+Likewise, dependencies that you had before (modules you are relying on etc.) should be refactored into e.g. factories for increased ease of use and testability.  If you have the time to use Angular in your project, you have the time to do this too.  Angular will reward you with layers of increased richness.
 
 # Fin
 
