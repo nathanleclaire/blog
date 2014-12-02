@@ -22,7 +22,7 @@ type error interface {
 }
 ```
 
-Many standard library components of Go define interfaces.  In fact, the `error` type you know and love (hate?) is simply an interface which insists that a method named `Error` which consumes nothing and returns a string must be defined on a struct for the interface to count as satisfied.  Interfaces in Go are set *implicitly*, so all you have to do is define the required methods on your struct and it will qualify as implementing that interface.
+Many standard library components of Go define interfaces.  In fact, the `error` type you know and love (hate?) is simply an interface which insists that a method named `Error` which consumes nothing and returns a string must be defined on a struct for the interface to count as satisfied.  Interfaces in Go are set *implicitly*, so all you have to do is define the required methods on your type and it will qualify as implementing that interface.
 
 For instance:
 
