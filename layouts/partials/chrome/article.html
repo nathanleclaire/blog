@@ -1,0 +1,18 @@
+<article>
+    <header>
+        <h1><a href="{{ lower .Permalink }}">{{ .Title }}</a>
+        </h1>
+        <time>{{ .Date.Format "2 Jan 2006" }}</time>
+    </header>
+    <div>
+        {{ .Content }}
+    </div>
+    <footer>
+        <p>If you find a mistake or issue in this article, please <a id="pull-request-link" taget="_blank" href="">fix it and submit a pull request on Github</a> (must be signed in to your GitHub account).</p>
+        <p>I offer a bounty of one coffee, beer, or tea for each pull request that gets merged in. :)</p>
+        <a target="_blank" style="display: block;" href="https://twitter.com/share?url={{ .Site.BaseUrl }}{{ .Url }}&text=Must-read article from @upthecyberpunks : " class="social-media-spam">Tweet It</a>
+        <a target="_blank" href="https://news.ycombinator.com/submitlink?u={{ .Site.BaseUrl }}{{ .Url }}&t=" class="social-media-spam">Submit to Hacker News</a>
+        <a target="_blank" style="display: block !important;" href="http://www.reddit.com/submit?url={{ .Site.BaseUrl }}{{ .Url }}&title=" class="social-media-spam">Submit to Reddit</a>
+        <br>
+    </footer>
+</article>

@@ -1,0 +1,19 @@
+{{ partial "chrome/header.html" . }}
+
+<div class="wrap">
+    {{ partial "chrome/sidebar.html" . }}
+    <div id="content">
+        {{ partial "chrome/article.html" . }}
+        <form class="modal" id="mailing-list-modal" action="http://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <h1>Like what you're reading?</h1>
+    <img src="/images/happy-reader.jpeg"></img>
+    <p style="display: block;" for="mce-EMAIL">Did you enjoy this article? You might want to sign up for my mailing list. I send out weekly-ish essays about hot new tech stuff.</p>
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL-modal" placeholder="email@domain.com" required>
+    <input type="submit" value="Go" name="subscribe" id="mc-embedded-subscribe" class="button">
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
+    </form>
+    </div>
+</div>
+
+{{ partial "chrome/footer.html" . }}

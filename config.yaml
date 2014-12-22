@@ -1,0 +1,11 @@
+---
+baseurl: "http://nathanleclaire.com"
+title: "nathan leclaire"
+layoutdir: "layouts"
+contentdir: "content"
+publishdir: "public"
+indexes:
+    category: "categories"
+permalinks:
+    post: /blog/:year/:month/:day/:title/
+---

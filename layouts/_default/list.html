@@ -1,0 +1,26 @@
+{{ partial "chrome/header.html" . }}
+<div class="wrap">
+	{{ partial "chrome/sidebar.html" . }}
+	<div id="content">
+        <h1> Posts </h1>
+        <table>
+        <tbody>
+          {{ range .Data.Pages }}
+            {{ if eq .Type "post" }}
+              <tr class="post-row">
+              <td class="title-cell">
+                  <a href="{{ lower .Permalink }}">{{ .Title }}</a>
+              </td>
+              <td>
+                  <time> 
+                      {{ .Date.Format "Jan 2 2006" }}
+                  </time>
+              </td>
+              </tr>
+            {{ end }}
+          {{ end }}
+        </tbody>
+        </table>
+	</div>
+</div>
+{{ partial "chrome/footer.html" . }}

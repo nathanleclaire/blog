@@ -1,0 +1,10 @@
+{{ partial "chrome/header.html" . }}
+
+<div class="wrap">
+	{{ partial "chrome/sidebar.html" . }}
+	<div id="content">
+		{{ .Content }}
+	</div>
+</div>
+
+{{ partial "chrome/footer.html" . }}
