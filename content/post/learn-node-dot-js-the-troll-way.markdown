@@ -3,6 +3,7 @@ layout: post
 title: "Learn Node.js The Troll Way"
 date: "2013-02-06"
 comments: true
+url: "/blog/2013/02/06/learn-node-dot-js-the-troll-way/"
 categories: [node.js,javascript,development]
 ---
 

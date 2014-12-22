@@ -3,6 +3,7 @@ layout: post
 title: "Write a Function Similar To Underscore.js's debounce, in Golang"
 date: "2014-08-03"
 comments: true
+url: "/blog/2014/08/03/write-a-function-similar-to-underscore-dot-jss-debounce-in-golang"
 categories: [javascript,golang,underscore,debounce]
 ---
 

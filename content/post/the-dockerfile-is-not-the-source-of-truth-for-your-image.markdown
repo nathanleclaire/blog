@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The Dockerfile is not the source of truth for your image."
+title: "The Dockerfile is not the source of truth for your image"
 date: "2014-09-29"
 comments: true
 categories: [docker,go,dockerfile]

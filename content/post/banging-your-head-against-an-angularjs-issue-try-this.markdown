@@ -3,6 +3,7 @@ layout: post
 title: "Banging Your Head Against an AngularJS Issue?  Try This"
 date: "2014-01-31"
 comments: true
+url: "/blog/2014/01/31/banging-your-head-against-an-angularjs-issue-try-this/"
 categories: [javscript,hacking,angularJS,$scope.$apply,controllers,directives]
 ---
 

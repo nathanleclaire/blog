@@ -3,6 +3,7 @@ layout: post
 title: "Don't Fear Directives In AngularJS"
 redirect_from: blog/2013/12/07/dont-fear-directives-in-angular-dot-js/index.html
 date: "2013-12-07"
+url: "/blog/2013/12/07/dont-fear-directives-in-angular-js/"
 comments: true
 categories: [Angular,Controllers,Directives,JavaScript]
 ---

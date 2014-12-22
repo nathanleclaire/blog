@@ -2,6 +2,7 @@
 layout: post
 title: "Fear and Loathing With Golang and AngularJS"
 redirect_from: /blog/2013/11/30/fear-and-loathing-with-golang-and-angular-dot-js/index.html
+url: "/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-js/"
 date: "2013-11-30"
 comments: true
 categories: [Angular,Golang,Form,Post,ParseForm,Bugs]

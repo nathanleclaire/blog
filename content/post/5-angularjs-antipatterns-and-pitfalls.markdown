@@ -3,6 +3,7 @@ layout: post
 title: "5 AngularJS Antipatterns & Pitfalls"
 date: "2014-04-19"
 comments: true
+url: "/blog/2014/04/19/5-angularjs-antipatterns-and-pitfalls/"
 categories: [angularjs,javascript,pitfall,service,controller]
 ---
 

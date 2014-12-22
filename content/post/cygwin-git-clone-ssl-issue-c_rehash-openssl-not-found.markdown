@@ -3,6 +3,7 @@ layout: post
 title: "Fixing Cygwin's SSL issues with git clone c_rehash bug"
 date: "2014-03-24"
 comments: true
+url: "/blog/2014/03/24/cygwin-git-clone-ssl-issue-c_rehash-openssl-not-found/"
 categories: [unix,cygwin,windows,git,dear god why]
 ---
 

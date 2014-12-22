@@ -3,6 +3,7 @@ layout: post
 title: "The Good, The Bad, and The Ugly of Sails.js, Realtime JavaScript MVC Framework"
 date: "2013-12-28"
 comments: true
+url: "/blog/2013/12/28/the-good-the-bad-and-the-ugly-of-sails-dot-js-realtime-javascript-mvc-framework/"
 categories: [node.js,mvc,socket.io,rails,sails,javascript,server]
 ---
 

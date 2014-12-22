@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Why codegangsta's cli package is the bomb, and you should use it"
-date: "2014-08-30"
+date: "2014-08-31"
 comments: true
 categories: [go]
 ---

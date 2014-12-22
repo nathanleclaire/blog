@@ -3,6 +3,7 @@ layout: post
 title: "I Love Hackathons, Long Live Hackathons. I Hate Hackathons, Hackathons Must Die."
 date: "2014-01-18"
 comments: true
+url: "/blog/2014/01/18/i-love-hackathons-i-hate-hackathons/"
 categories: [hackathons]
 ---
 

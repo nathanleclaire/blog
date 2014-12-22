@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Automagical Deploys from Docker Hub"
-date: "2014-08-16"
+date: "2014-08-17"
 comments: true
 categories: [docker, hub]
 ---

@@ -3,6 +3,7 @@ layout: post
 title: "Demystifying Golang's io.Reader and io.Writer Interfaces"
 date: "2014-07-19"
 comments: true
+url: "/blog/2014/07/19/demystifying-golangs-io-dot-reader-and-io-dot-writer-interfaces/"
 categories: [golang,go,io.reader,io.writer]
 ---
 

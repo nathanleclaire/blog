@@ -2,6 +2,7 @@
 layout: post
 title: "Commit Every Day, Blog Every Week"
 date: "2013-10-16"
+url: "/blog/2013/10/16/commit-every-day/"
 comments: true
 categories: 
 ---

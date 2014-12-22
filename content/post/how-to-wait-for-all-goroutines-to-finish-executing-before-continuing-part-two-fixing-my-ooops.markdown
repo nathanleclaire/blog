@@ -3,6 +3,7 @@ layout: post
 title: "How to Wait for All Goroutines to Finish Executing Before Continuing, Part Two:  Fixing My Oops"
 date: "2014-02-21"
 comments: true
+url: "/blog/2014/02/21/how-to-wait-for-all-goroutines-to-finish-executing-before-continuing-part-two-fixing-my-ooops/"
 categories: [golang,concurrency,goroutines,waitGroup,sync]
 ---
 
