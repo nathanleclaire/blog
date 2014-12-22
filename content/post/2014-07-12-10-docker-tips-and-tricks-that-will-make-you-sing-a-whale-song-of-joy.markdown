@@ -189,33 +189,26 @@ You can do all sorts of awesome flexible things with the `docker inspect` comman
 
 Normally `docker inspect $ID` outputs a big JSON dump, and you access individual properties with templating like:
 
-{% raw %}
 ```
 docker inspect -f '{{ .NetworkSettings.IPAddress }}' $ID
 ```
-{% endraw %}
 
 The argument to `-f` is a Go template.  If you try something like:
 
-{% raw %}
 ```
 $ docker inspect -f '{{ .NetworkSettings }}' $ID
 map[Bridge:docker0 Gateway:172.17.42.1 IPAddress:172.17.0.4 IPPrefixLen:16 PortMapping:<nil> Ports:map[5000/tcp:[map[HostIp:0.0.0.0 HostPort:5000]]]]
 ```
-{% endraw %}
 
 You will not get JSON since Go will actually just dump the data type that Docker is marshalling into JSON for the output you see without `-f`.  But you can do:
 
-{% raw %}
 ```
 $ docker inspect -f '{{ json .NetworkSettings }}' $ID
 {"Bridge":"docker0","Gateway":"172.17.42.1","IPAddress":"172.17.0.4","IPPrefixLen":16,"PortMapping":null,"Ports":{"5000/tcp":[{"HostIp":"0.0.0.0","HostPort":"5000"}]}}
 ```
-{% endraw %}
 
 To get JSON!  And to prettify it, you can pipe it into a Python builtin:
 
-{% raw %}
 ```
 $ docker inspect -f '{{ json .NetworkSettings }}' $ID | python -mjson.tool
 {
@@ -234,15 +227,12 @@ $ docker inspect -f '{{ json .NetworkSettings }}' $ID | python -mjson.tool
     }
 }
 ```
-{% endraw %}
 
 You can also do other fun tricks like access object properties which have non-alphanumeric keys.  Helps to know some Go :P
 
-{% raw %}
 ```
 docker inspect -f '{{ index .Volumes "/host/path" }}' $ID
 ```
-{% endraw %}
 
 This is a very powerful tool for quickly extracting information about your running containers, and is extremely helpful for troubleshooting because it provides a ton of detail.
 

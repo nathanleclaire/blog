@@ -55,7 +55,6 @@ I suspect that a misunderstanding of this (communicating effectively from scope 
 
 The point is, most people new to Angular (and even people who have been doing it for a while) expect this to work :
 
-{% raw %}
 ```
 <p> You have {{dollars}} dollars </p>
 <crazy-awesome-widget ng-repeat="account in accounts" info="dollars">
@@ -77,7 +76,6 @@ angular.module('dotDemo').directive('crazyAwesomeWidget', function() {
 });
 </script>
 ```
-{% endraw %}
 
 Can you spot the bug?  If you've been paying attention, you should be able to pick it out easily.
 
@@ -87,7 +85,6 @@ Come on, intone it with me.  *I need a dot. I need a dot. I need a dot.*
 
 In the above code the input boxes won't update the property in the parent scope.  The prototype chain creates a new property `info` which is unique to the child scope instead of bound to the parent scope.  It won't work this way.  You need an object.  The code should look like this instead:
 
-{% raw %}
 ```
 <p> You have {{customerData.dollars}} dollars </p>
 <crazy-awesome-widget ng-repeat="account in accounts" info="customerData">
@@ -111,7 +108,6 @@ angular.module('dotDemo').directive('crazyAwesomeWidget', function() {
 });
 </script>
 ```
-{% endraw %}
 
 <iframe src="http://embed.plnkr.co/IVkqcNVhwQXd1zQ9nZQ2/preview"></iframe>
 
