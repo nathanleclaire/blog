@@ -2,18 +2,21 @@
     <header>
         <div class="title">
             <a href="http://nathanleclaire.com">
-                <img src="{{ .Site.BaseUrl }}/images/nateface.jpeg" class="nateface" />
-                {{ .Site.Title }}
+                <img src="{{ .Site.BaseUrl }}/images/nateface.jpeg" class="nateface" />{{ .Site.Title }}
             </a>
         </div>
         <p class="slogan">I care, I share, I'm Nathan LeClaire.</p>
         <div class="navi">
             <ul>
-                <li><a href="{{ .Site.BaseUrl }}/about/">About</a></li>
-                <li><a href="{{ .Site.BaseUrl }}/post">Archives</a></li>
-                <li><a href="{{ .Site.BaseUrl }}/atom.xml">RSS</a></li>
+                <li><a href="{{ .Site.BaseUrl }}/about/">About</a>
+                </li>
+                <li><a href="{{ .Site.BaseUrl }}/post">Archives</a>
+                </li>
+                <li><a href="{{ .Site.BaseUrl }}/index.xml">RSS</a>
+                </li>
             </ul>
-        </div> <!-- // .navi -->
+        </div>
+        <!-- // .navi -->
         <div id="sidebar-email">
             <a href="mailto:nathan.leclaire@gmail.com">nathan.leclaire@gmail.com</a>
         </div>
