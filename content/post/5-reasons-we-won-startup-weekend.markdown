@@ -41,7 +41,7 @@ We made everyone download and install Vagrant / VirtualBox (which Vagrant depend
 
 This system also made it super easy to deploy frequently, since we just pulled in our changes to a git repo hosted on the prod server, ran the migrations and database seeds and *voila*, we were done deploying.  No nasty production surprises.
 
-One last point here, on the geeky technical side of things:  There was no squabbling over PHP vs. Rails or CodeIgniter vs. CakePHP or any of that kind of stuff that you are surely familiar with, we simply all worked towards the common good however we could.  We had a couple of guys who traditionally stuck to Ruby or .NET, for instance, that picked up front-end work since it was where the could be the most productive, the quickest.  This kind of put-the-team-first mentality is priceless for getting things done quickly.
+One last point here, on the geeky technical side of things:  There was no squabbling over PHP vs. Rails or CodeIgniter vs. CakePHP or any of that kind of stuff that you are surely familiar with, we simply all worked towards the common good however we could.  We had a couple of guys who traditionally stuck to Ruby or .NET, for instance, that picked up front-end work since it was where they could be the most productive, the quickest.  This kind of put-the-team-first mentality is priceless for getting things done quickly.
 
 # Emphasizing "Done Is Better Than Perfect"
 
