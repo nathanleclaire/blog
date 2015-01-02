@@ -43,7 +43,9 @@ import (
 )
 
 func debounce(interval time.Duration, input chan int, f func(arg int)) {
-    var item = <-input
+    var (
+        item int
+    )
     for {
         select {
         case item = <-input:
