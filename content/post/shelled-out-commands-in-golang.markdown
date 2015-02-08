@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "Shelled-out Commands In Golang"
-date: 2014-11-07 03:13:10 +0000
-comments: true
-categories: [golang]
+date: "2014-12-29"
 ---
 
 # The Nate Shells Out
 
-In a perfect world we would have beautifully designed APIs and bindings for everything that we could possibly desire and that includes things which we might want to invoke the shell to do (e.g. run `imagemagick` commands, invoke `git`, invoke `docker` etc.).  But especially with burgeoning languages such as [Go](), it's not as likely that such a module exists (or that it's easy to use, robust, well-tested, etc.) as it is with a more mature language such as Python.  So, we might become shellouts.
+In a perfect world we would have beautifully designed APIs and bindings for everything that we could possibly desire and that includes things which we might want to invoke the shell to do (e.g. run `imagemagick` commands, invoke `git`, invoke `docker` etc.).  But especially with burgeoning languages such as [Go](http://golang.org/), it's not as likely that such a module exists (or that it's easy to use, robust, well-tested, etc.) as it is with a more mature language such as Python.  So, we might become shellouts.
+
+{{%img src="/images/goshell/shell.png" %}}
 
 
 ## What do you mean?
