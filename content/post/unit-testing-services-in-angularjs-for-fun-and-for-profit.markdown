@@ -239,7 +239,7 @@ For a good reference, see this [Jasmine spy cheatsheet](http://tobyho.com/2011/1
 I found myself in kind of a funny situation at work recently.  We use Angular for structure but the codebase we are working on has a lot of pre-existing bits/modules that were not really moved over to Angular fully due to intense deadline pressure.  So, we find ourselves making XMLHttpRequests outside of `$http` land, but the original programmers still return promises from their outside world modules for us to use (it's kind of an odd setup that we don't really have time to refactor).  So, I just caused the functions that take care of those API calls return promises that I control using `$q`.
 
 ```js
-var mockPromise;
+var mockDeferred;
 mockDeferred = $q.defer();
 someSpyObj.methodThatReturnsAPromise.andCallFake(function () {
   return mockDeferred.promise;
