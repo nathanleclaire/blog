@@ -164,7 +164,7 @@ func main() {
 }
 ```
 
-I stole this idea from the work we've been doing lately on [docker hosts]().  Good times.
+I stole this idea from the work we've been doing lately on [Docker machine](https://github.com/docker/machine).  Good times.
 
 ## What's the downside?
 
