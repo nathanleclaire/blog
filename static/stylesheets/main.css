@@ -211,7 +211,7 @@ pre {
     border-radius: 4px;
     line-height: 1.4em;
     background-color: #fff;
-    overflow: hidden;
+    overflow-x: scroll;
 }
 
 @media only screen and (min-width: 0px) and (max-width: 1200px) {
