@@ -47,7 +47,10 @@ I have "fond" memories of checking the PHP logs for a project inside of that
 directory when things would go blammo and our built-in application logging
 wasn't telling me anything useful.  I'm not really a fan of splitting the logs
 like that (more moving parts == harder to debug), and it's probably better
-practice to have a uniform way to access logs.
+practice to have a uniform way to access logs. Indeed, there is an interesting
+article about this idea (a "Unified Logging Layer")
+[here](http://www.fluentd.org/blog/unified-logging-layer) by Kiyoto Tamura of
+[Fluentd](http://www.fluentd.org), which is a tool similar to Logstash.
 
 So what's different about Docker?  Well, suddenly, instead of having all of
 your logs in files on one uniform place in the host system, they are scattered
