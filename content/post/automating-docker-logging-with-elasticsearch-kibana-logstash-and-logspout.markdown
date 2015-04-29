@@ -450,7 +450,7 @@ people") would love to help you with this ;)
 user level (the demo app leaves everything wide open, so if you run it on the
 public Internet, expect _everyone_ to be able to see it and mess with it)
 4. Adding [container restart
-   policies](ihttp://docs.docker.com/reference/commandline/cli/#restart-policies)
+   policies](http://docs.docker.com/reference/commandline/cli/#restart-policies)
 and
 [monitoring](http://rancher.com/comparing-monitoring-options-for-docker-deployments/)
 to ensure health and uptime of the services.
