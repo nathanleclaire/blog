@@ -62,7 +62,7 @@ Machine sets up automatically for you.
 
 Let's take a look at this in action.
 
-## The Generic Driver in Action
+# The Generic Driver in Action
 
 Note:  If you want to follow along at home, you can grab the most recent
 [release candidate](https://github.com/docker/machine/releases) from GitHub.
