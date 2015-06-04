@@ -6,7 +6,7 @@ comments: true
 categories: [logging,elasticsearch,kibana,docker,Logstash]
 ---
 
-{{%img src="/images/Logstashcontainer.gif" caption="You, too, could Logstash." %}}
+{{%img src="/images/logstashcontainer.gif" caption="You, too, could Logstash." %}}
 
 Say that title five times fast!  Seriously though, I wasn't sure what else to
 call this article so that people would actually find it.
