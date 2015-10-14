@@ -37,8 +37,6 @@ In this article I will walk you through:
 
 1. Concepts for ensuring testability
 2. Four concrete examples to learn how to test effectively in Go
-3. Hacks to start testing more effectively with your codebase today if you are
-working with legacy architecture
 
 By the end, you should be armed with the knowledge you need in order to go
 forth and test.
@@ -130,20 +128,28 @@ Please, please, read the docs, but the basic knowledge you need to get started i
   directory called `foo_test.go`.
 - `go test .` runs the unit tests in the current directory.  `go test ./...`
   will run the tests in the current directory and every directory underneath
-it.  `go test foo_test.go` not work because the file under test is not
-included.
+  it.  `go test foo_test.go` not work because the file under test is not
+  included.
 - The `-v` flag for `go test` is useful because it prints out verbose output
   (the result of each individual test).
 - Tests are functions which accept a `testing.T` struct pointer as an argument
   and are idiomatically called `TestFoo`, where `Foo` is the name of the
-function being tested.
+  function being tested.
 - You usually do not assert that conditions you expect are true like you may be
   accustomed to; rather, you fail the test by calling `t.Fatal` if you
-encounter conditions which are different than you expect.
+  encounter conditions which are different than you expect.
+- Displaying output in tests may not work [how you
+  expect](http://stackoverflow.com/questions/23205419/how-do-you-print-in-a-go-test-using-the-testing-package)
+   -- use the `t.Log` and/or `t.Logf` methods if you need to print information
+  in a test.
 
-### Exercises
+### Examples
 
 Enough discussion of fundamentals; let's write some tests.
+
+If you are curious to check out the source code in its final form for the
+following examples, they are organized in separate directories at
+[https://github.com/nathanleclaire/testing-article](https://github.com/nathanleclaire/testing-article).
 
 ## Example #1: Hello, Testing!
 
