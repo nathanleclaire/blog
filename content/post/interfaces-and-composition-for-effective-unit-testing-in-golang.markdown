@@ -72,9 +72,9 @@ interfaces](http://nathanleclaire.com/blog/2015/03/09/youre-not-using-this-enoug
 
 Long story short:
 
-1. Interfaces let you define a set of methods a `struct` must define to be
-   considered an implementation of that interface.
-2. When any given `struct` implements all the methods of that interface, the Go
+1. Interfaces let you define a set of methods a type (often `struct`) must
+   define to be considered an implementation of that interface.
+2. When any given type implements all the methods of that interface, the Go
    compiler automatically knows that it is allowed to be used as that type.
 
 This is used to great effect in the Go standard library so that, for instance,
