@@ -21,7 +21,7 @@ $(document).ready(function () {
     });
     var e = window.location.href;
     var t = $("#pull-request-link");
-    var n = "https://github.com/nathanleclaire/blog/edit/master/source/_posts/" + e.split("/").slice(4, 8).join("-") + ".markdown";
+    var n = "https://github.com/nathanleclaire/blog";
     t.attr("href", n);
     // Only offer mailing list once
     var tryModal = localStorage["modal"] ? false : true;

@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "Using Ansible with Docker Machine and Docker Compose to Bootstrap Host Nodes"
-date: "2015-11-07"
+title: "Using Ansible with Docker Machine to Bootstrap Host Nodes"
+date: "2015-11-10"
 comments: true
 categories: [docker,machine,ansible,devops]
 ---
 
-{{%img src="/images/ansible/dmansible.jpg" %}}
+{{%img src="/images/ansible/ansibledockermachine.jpg" %}}
 
 I'm a maintainer and big fan of [Docker
 Machine](https://github.com/docker/machine) for quickly generating and using
@@ -26,12 +26,12 @@ prefer [Ansible](http://www.ansible.com/).
 One option is to create the nodes we want to manage with Docker Machine and
 then use an [Ansible dynamic inventory
 plugin](https://github.com/nathanleclaire/dockerfiles/blob/master/ansible/machine.py)
-to run the bootstrap process on the servers.  Indeed, this seems like the best
-bet for managing the configuration of the machines using Ansible in the long
-run.  But, for the initial post-create provisioning, I could not get the idea
-out of my head of simply running it within a Docker container on the created
-machine itself.  This would free us from needing Ansible and the stack of
-associated plugins installed and kept up to date on whichever machine we were
+to run our desired tasks.  Indeed, this seems like the best bet for managing
+the configuration of the machines using Ansible in the long run.  But, for the
+initial post-create provisioning, I could not get the idea out of my head of
+simply running it within a Docker container on the created machine itself.
+This would free us from needing Ansible and the stack of associated plugins
+installed on our gateway box and kept up to date on whichever machine we were
 bootstrapping from.
 
 So how can we do so?  Well, it might not be the most elegant solution in the
@@ -124,13 +124,30 @@ done to lock down the server somewhat and make it more pleasant to
 administrate.  I'm sure it could be improved upon, so I'd love to hear your
 ideas in the comments.
 
-```yaml
+<pre>
 ---
-- name: Trick out Ubuntu server
+- name: Trick out Debian server
   hosts: all
   gather_facts: False
 
   tasks:
+    - name: Install desired packages
+      apt: >
+        package={{ item }}
+        state=present
+        update_cache=yes
+      with_items:
+        - htop
+        - tree
+        - jq
+        - fail2ban
+        - vim
+        - mosh
+        - ufw
+
+    - name: Get simple .vimrc
+      get_url: url=https://raw.githubusercontent.com/amix/vimrc/master/vimrcs/basic.vim dest=/root/.vimrc
+
     - name: Reset UFW firewall
       ufw:
         state=reset
@@ -151,6 +168,15 @@ ideas in the comments.
         - 2376   # Docker daemon API port
         - 3376   # Swarm API port
         - 7946   # Serf port (libnetwork)
+     
+    - name: Open VXLAN and Serf UDP ports
+      ufw: >
+        rule=allow
+        port={{ item }}
+        proto=udp
+      with_items:
+        - 7946 # Serf
+        - 4789 # VXLAN
 
     - name: Set to deny incoming requests by default
       ufw: >
@@ -159,18 +185,7 @@ ideas in the comments.
     - name: Turn on UFW
       ufw: >
         state=enabled
-
-    - name: Install desired packages
-      apt: >
-        package={{ item }}
-        state=present
-        update_cache=yes
-      with_items:
-        - htop
-        - tree
-        - jq
-        - fail2ban
-```
+</pre>
 
 Let's face it, `htop` is ridiculous amounts of fun, and I want it on all my
 servers.  I know some will protest at installing software on the host machine
@@ -188,7 +203,7 @@ server](https://digitalocean.com). I'll use an image generated from the
 Dockerfile mentioned above for shorthand, but you can also build your own from
 the linked repo.
 
-<pre>
+```
 $ export DIGITALOCEAN_ACCESS_TOKEN=...
 $ docker-machine create -d digitalocean ansibleprovision
 ...
@@ -212,13 +227,17 @@ OpenSSH                    ALLOW       Anywhere
 2376/tcp                   ALLOW       Anywhere
 3376/tcp                   ALLOW       Anywhere
 7946/tcp                   ALLOW       Anywhere
+7946/udp                   ALLOW       Anywhere
+4789/udp                   ALLOW       Anywhere
 OpenSSH (v6)               ALLOW       Anywhere (v6)
-80/tcp (v6)                ALLOW       Anywhere (v6)
-443/tcp (v6)               ALLOW       Anywhere (v6)
-2376/tcp (v6)              ALLOW       Anywhere (v6)
-3376/tcp (v6)              ALLOW       Anywhere (v6)
-7946/tcp (v6)              ALLOW       Anywhere (v6)
-</pre>
+80/tcp                     ALLOW       Anywhere (v6)
+443/tcp                    ALLOW       Anywhere (v6)
+2376/tcp                   ALLOW       Anywhere (v6)
+3376/tcp                   ALLOW       Anywhere (v6)
+7946/tcp                   ALLOW       Anywhere (v6)
+7946/udp                   ALLOW       Anywhere (v6)
+4789/udp                   ALLOW       Anywhere (v6)
+```
 
 ## Bonus Round: Using Docker Compose to simplify the process
 
@@ -239,43 +258,11 @@ provision:
 Then, instead of the lengthy `docker run` invocation above, if we have
 `docker-compose` installed we can simply run:
 
-<pre>
+```
 $ docker-compose run --rm provision
-</pre>
+```
 
 Boom!
-
-## Super Double Combo Bonus Round: Docker Killer Bees on the Swarm.
-
-Let's look at extending this workflow to enable the use of [Docker
-Swarm](https://github.com/docker/swarm) and
-[libnetwork](https://github.com/docker/libnetwork) for easy cross-host
-communication using Docker containers.  We'll use [Consul](https://consul.io)
-as the key-value store for service discovery.
-
-First, let's create a host to hold the key-value store:
-
-```
-$ docker-machine create -d digitalocean kvstore
-```
-
-We can define the `consul` sevice in our `docker-compose.yml` file mentioned
-above like so:
-
-```
-consul:
-  image: progrium/consul
-  hostname: consul
-  command: -server -bootstrap
-  ports:
-    - "8500:8500"
-```
-
-Then run it:
-
-<pre>
-$ docker-compose run -d --service-ports consul
-</pre>
 
 # fin
 
@@ -291,12 +278,15 @@ horizon as minimalistic Docker-focused operating systems such as
 containers) and/or other innovations allow us to strip machine-specific lower
 layers away entirely.
 
-Docker Compose isn't really super oriented towards the sort of use case that
-we're using it for here (it is somewhat more strictly expected to bootstrap a
-single application, not infrastructure), so I hope in the future to see more
-positioning supporting these types of use cases out of Docker projects in the
-future.  The Compose folks are really smart and working on getting everything
-right, so I'm optimistic there.
+Likewise, in the future, I'd really like to see a [declarative configuration
+for Machine](https://github.com/docker/machine/issues/773), or just the Docker
+tools in general, that makes this process (including bootstrapping swarms and
+overlay networks) easier.  Docker Compose isn't really super oriented towards
+the sort of use case that we're using it for here (it is somewhat more strictly
+expected to bootstrap a single application, not infrastructure), so I hope in
+the future to see more positioning supporting these types of use cases out of
+Docker projects in the future.  The Compose folks are really smart and working
+on getting everything right, so I'm optimistic there.
 
 Until next time, stay sassy Internet.
 
