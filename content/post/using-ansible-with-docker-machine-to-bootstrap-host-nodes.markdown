@@ -204,7 +204,7 @@ unforeseen reasons, personally I appreciate the escape hatch.
 
 Likewise, check out those last two tasks above.  They enable memory and swap
 accounting so that Docker's `-m` flag can be used (note that the machine has to
-be rebooted for these changes to take effect, which you can do with
+be rebooted for this change to take effect, which you can do with
 `docker-machine restart name`).  This is critical for operations such as
 reserving memory for containers using Docker Swarm and is exactly the type of
 boring boilerplate systems administration task that Ansible excels at making
