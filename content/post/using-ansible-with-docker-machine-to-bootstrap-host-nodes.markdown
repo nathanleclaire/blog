@@ -185,6 +185,15 @@ ideas in the comments.
     - name: Turn on UFW
       ufw: >
         state=enabled
+
+    - name: Set memory limit in GRUB
+      lineinfile: >
+        dest=/etc/default/grub
+        regexp=^GRUB_CMDLINE_LINUX_DEFAULT
+        line='GRUB_CMDLINE_LINUX_DEFAULT="cgroup_enable=memory swapaccount=1"'
+
+    - name: Load new GRUB config
+      command: update-grub
 </pre>
 
 Let's face it, `htop` is ridiculous amounts of fun, and I want it on all my
@@ -192,6 +201,14 @@ servers.  I know some will protest at installing software on the host machine
 instead of running it in containers, and naturally I admire the zealotry, but
 when the Docker daemon crashes or containers start spinning out of control for
 unforeseen reasons, personally I appreciate the escape hatch.
+
+Likewise, check out those last two tasks above.  They enable memory and swap
+accounting so that Docker's `-m` flag can be used (note that the machine has to
+be rebooted for these changes to take effect, which you can do with
+`docker-machine restart name`).  This is critical for operations such as
+reserving memory for containers using Docker Swarm and is exactly the type of
+boring boilerplate systems administration task that Ansible excels at making
+easier and safer.
 
 ## Let's cook
 
