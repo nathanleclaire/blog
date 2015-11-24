@@ -10,13 +10,13 @@ categories: [docker,machine,swarm,compose,networking,overlay,libnetwork,devops]
 
 There have been a lot of good articles popping up lately on the new Docker
 networking features and how to use them with existing Docker tools.  So far,
-most guides will you through setting up VirtualBox, which is great for getting
-started, but nothing beats the feeling of getting your hands on an enormous
-supply of seamlessly networked computing power.  So, this article uses Docker
-Machine, Swarm, and Compose to take it to the cloud and put that power in your
-hands.  I hope to stimulate your imagination as well as set the gears turning
-for you on some complications and potential solutions for actually putting this
-stuff out there in the real world.
+most guides will get you through setting up VirtualBox, which is great for
+getting started, but nothing beats the feeling of getting your hands on an
+enormous supply of seamlessly networked computing power.  So, this article uses
+Docker Machine, Swarm, and Compose to take it to the cloud and put that power
+in your hands.  I hope to stimulate your imagination as well as set the gears
+turning for you on some complications and potential solutions for actually
+putting this stuff out there in the real world.
 
 Today we're going to:
 
