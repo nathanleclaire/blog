@@ -195,6 +195,7 @@ $ eval $(docker-machine env kvstore)
 $ docker run -d \
       -p ${KV_IP}:8500:8500 \
       -h consul \
+      --restart always \
       progrium/consul -server -bootstrap
 ...
 ```
