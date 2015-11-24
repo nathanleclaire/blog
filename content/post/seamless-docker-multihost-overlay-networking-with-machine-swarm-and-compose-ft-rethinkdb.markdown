@@ -575,7 +575,9 @@ $ docker-machine ssh workerbee-2 -fN -L 8080:localhost:8080
 ```
 
 This way, we can open an SSH tunnel to the instance running in the cloud,
-without needing to expose the port publicly on the Internet.
+without needing to expose the port publicly on the Internet.  You should now be
+able to access the RethinkDB admin console at `localhost:8080` on your local
+workstation.
 
 {{%img src="/images/ansible/rethink.png" %}}
 
