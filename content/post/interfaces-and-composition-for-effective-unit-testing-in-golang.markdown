@@ -857,18 +857,18 @@ func TestPollerJobSuspendResume(t *testing.T) {
 		t.Errorf("Expected suspend error to be nil but got %q", err)
 	}
 
-	// If this log writes, we know we are polling the server when we're not
-	// supposed to (job should be suspended).
-	p.ServerPoller = &FakeServerPoller{"", errors.New("Shouldn't be polling (and consequently writing to the log) right now because the job is suspended")}
+	// Fake the log line to detect if poller is still running
+	newExpectedLogLine := "500 Internal Server Error"
+	logger.MessageReader.Msg = newExpectedLogLine
 
 	// Give it a second to poll if it's going to poll
 	time.Sleep(waitBeforeReading)
 
-	if logger.Read() != expectedLogLine {
-		t.Errorf("Line read from logger does not match what was expected:\n\texpected: %q\n\tactual: %q", expectedLogLine, logger.Read())
+	// If this log writes, we know we are polling the server when we're not
+	// supposed to (job should be suspended).
+	if logger.Read() != newExpectedLogLine {
+		t.Errorf("Line read from logger does not match what was expected:\n\texpected: %q\n\tactual: %q", newExpectedLogLine, logger.Read())
 	}
-
-	p.ServerPoller = normalServerPoller
 
 	if err := p.Resume(); err != nil {
 		t.Errorf("Expected resume error to be nil but got %q", err)
