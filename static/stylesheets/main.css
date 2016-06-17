@@ -1,17 +1,17 @@
 @import url(http://fonts.googleapis.com/css?family=Sorts+Mill+Goudy);
 
 *::selection {
-    background: red;
+    background: #ff8e5f;
     color: #fff;
 }
 
 *::-moz-selection {
-    background: red;
+    background: #ff8e5f;
     color: #fff;
 }
 
 *::-webkit-selection {
-    background: red;
+    background: #ff8e5f;
     color: #fff;
 }
 
@@ -82,7 +82,7 @@ header .title {
 
 header .title a {
     text-decoration: none;
-    color: red;
+    color: #094c83;
 }
 
 header .title a:hover {
@@ -110,7 +110,7 @@ header .navi ul li a {
 }
 
 header .navi ul li a:active {
-    color: red;
+    color: #ff540B;
 }
 
 header .navi ul li a:hover {
@@ -120,7 +120,7 @@ header .navi ul li a:hover {
 
 a {
     text-decoration: none;
-    color: red;
+    color: #337BB7;
 }
 
 a:hover {
@@ -161,7 +161,7 @@ article h1 a,article h2 a,article h3 a {
 }
 
 article h1 a:hover,article h2 a:hover,article h3 a:hover {
-    color: red;
+    color: #ff8f5f;
 }
 
 article header {
@@ -253,7 +253,7 @@ p>code,li>code {
 }
 
 .pagination a:hover {
-    color: red;
+    color: #ff540b;
 }
 
 .pagination .newer {
@@ -543,7 +543,7 @@ ol.linenums {
 
 #mc_embed_signup .button {
     clear: both;
-    background-color: red;
+    background-color: #094c83;
     border: 0 none;
     border-radius: 4px;
     color: #FFF;
@@ -562,7 +562,7 @@ ol.linenums {
 }
 
 #mc_embed_signup .button:hover {
-    background-color: DarkRed;
+    background-color: #ff540b;
 }
 
 #mc_embed_signup .small-meta {
