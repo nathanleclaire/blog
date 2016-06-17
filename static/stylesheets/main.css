@@ -205,12 +205,12 @@ article p .word1,article p .word2,article p .word3 {
 }
 
 pre {
+    line-height: 1.2em;
+    color: #fff;
     position: relative;
     border: 1px solid #dfdfdf;
     -webkit-border-radius: 4px;
     border-radius: 4px;
-    line-height: 1.4em;
-    background-color: #fff;
     overflow-x: scroll;
 }
 
@@ -224,7 +224,6 @@ pre {
 code {
     margin: 0.5em 0;
     padding: 0.2em;
-    font-family: "Ubuntu Mono","Monaco","Consolas","Courier New",monospace;
     font-size: 0.8em;
 }
 
@@ -415,99 +414,6 @@ li.title {
 
 #mc-embedded-subscribe-form>label {
     text-align: center;
-}
-
-.pln {
-    color: #111;
-}
-
-@media screen {
-    .kwd,.str {
-        color: #739200;
-    }
-
-    .com {
-        color: #999;
-    }
-
-    .typ {
-        color: #f05;
-    }
-
-    .lit {
-        color: #538192;
-    }
-
-    .clo,.opn,.pun,.tag {
-        color: #111;
-    }
-
-    .atn {
-        color: #739200;
-    }
-
-    .atv {
-        color: #f05;
-    }
-
-    .dec,.var {
-        color: #111;
-    }
-
-    .fun {
-        color: #538192;
-    }
-}
-
-@media print, projection {
-    .str {
-        color: #060;
-    }
-
-    .kwd {
-        color: #006;
-        font-weight: 700;
-    }
-
-    .com {
-        color: #600;
-        font-style: italic;
-    }
-
-    .typ {
-        color: #404;
-        font-weight: 700;
-    }
-
-    .lit {
-        color: #044;
-    }
-
-    .clo,.opn,.pun {
-        color: #440;
-    }
-
-    .tag {
-        color: #006;
-        font-weight: 700;
-    }
-
-    .atn {
-        color: #404;
-    }
-
-    .atv {
-        color: #060;
-    }
-}
-
-.prettyprint ol {
-    color: #ccc;
-}
-
-ol.linenums {
-    margin-top: 0;
-    margin-bottom: 0;
 }
 
 #mc_embed_signup form {

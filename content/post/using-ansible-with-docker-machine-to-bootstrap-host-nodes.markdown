@@ -220,7 +220,7 @@ server](https://digitalocean.com). I'll use an image generated from the
 Dockerfile mentioned above for shorthand, but you can also build your own from
 the linked repo.
 
-```
+```sh
 $ export DIGITALOCEAN_ACCESS_TOKEN=...
 $ docker-machine create -d digitalocean ansibleprovision
 ...
