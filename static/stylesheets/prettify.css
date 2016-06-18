@@ -46,7 +46,7 @@ li.L9 {
   /* keyword */
 
   .kwd {
-    color: #f60;
+    color: #FF980B;
   }
 
   /* comment */
@@ -64,7 +64,7 @@ li.L9 {
   /* literal value */
 
   .lit {
-    color: #458;
+    color: #1265AB;
   }
 
   /* punctuation */

@@ -205,7 +205,7 @@ article p .word1,article p .word2,article p .word3 {
 }
 
 pre {
-    line-height: 1.2em;
+    line-height: 1.3em;
     color: #fff;
     position: relative;
     border: 1px solid #dfdfdf;
@@ -224,7 +224,7 @@ pre {
 code {
     margin: 0.5em 0;
     padding: 0.2em;
-    font-size: 1.0em;
+    font-size: 0.8em;
 }
 
 pre>code {
