@@ -38,7 +38,7 @@ It's simple.  Not easy, but simple.  When Angular runs the code that you define 
 angular.module("foo").controller("NavCtrl", function ($scope, tabService) {
   // ...
 });
-``` 
+```
 
 The order of the parameters on your function doesn't matter.  You could just as easily have said `function (tabService, $scope)` and both of those values would still be set correctly.  That's a nice advantage in itself, and it's why you see funny business like:
 
@@ -86,7 +86,7 @@ Let's say that I'm writing an Angular app which interacts with the Reddit API.  
 
 We are going to write one with a method `getSubredditsSubmittedToBy(user)` which returns a list of which subreddits a user has submitted to recently.  We can use [promise chaining](https://egghead.io/lessons/angularjs-chained-promises) to achieve this (aggregating the big glob of JSON returned by the API call) so that our controller stays super lean.
 
-## Writing the Service 
+## Writing the Service
 
 Usage (inside controller):
 
@@ -114,7 +114,7 @@ function($http) {
         subreddits = posts.map(function(post) {
           return post.data.subreddit;
         });
-        
+
         // de-dupe
         subreddits = subreddits.filter(function(element, position) {
           return subreddits.indexOf(element) === position;
@@ -138,9 +138,9 @@ Using Karma we first tell it what module we're working in (`"reddit"`), run an i
 Notice that in the `inject` method we inject in `_foo_`, with an underscore on either side of the name of the actual service, so that we can set it in the outer `describe` closure.  This is by design, as the Angular maintainers foresaw (or discovered) that:
 
 ```
-var redditService;
-beforeEach(inject(redditService) {
-  redditService = redditService;
+var userService;
+beforeEach(inject(userService) {
+  userService = userService;
 });
 ```
 
@@ -153,12 +153,12 @@ So use `_underscoreNotation_` to get the service that you want to test :)
 "use strict";
 
 describe("reddit api service", function () {
-  var redditService, httpBackend;
+  var userService, httpBackend;
 
   beforeEach(module("reddit"));
 
-  beforeEach(inject(function (_redditService_, $httpBackend) {
-    redditService = _redditService_;
+  beforeEach(inject(function (_userService_, $httpBackend) {
+    userService = _userService_;
     httpBackend = $httpBackend;
   }));
 
@@ -189,7 +189,7 @@ describe("reddit api service", function () {
           ]
         }
     });
-    redditService.getSubredditsSubmittedToBy("yoitsnate").then(function(subreddits) {
+    userService.getSubredditsSubmittedToBy("yoitsnate").then(function(subreddits) {
       expect(subreddits).toEqual(["golang", "javascript"]);
     });
     httpBackend.flush();
