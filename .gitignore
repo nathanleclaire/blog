@@ -1,4 +1,5 @@
 *.swp
+.secrets
 *.swo
 public
 .DS_Store

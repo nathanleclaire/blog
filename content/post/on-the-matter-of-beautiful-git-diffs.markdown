@@ -30,7 +30,7 @@ above.
 To download, you could do something like:
 
 <pre>
-$ sudo wget -O \
+$ sudo wget \
     https://raw.githubusercontent.com/git/git/master/contrib/diff-highlight/diff-highlight \
     -O /usr/local/bin/diff-highlight
 </pre>
