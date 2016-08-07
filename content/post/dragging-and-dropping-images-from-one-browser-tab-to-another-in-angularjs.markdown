@@ -146,7 +146,7 @@ scope.lightenBody();
 
 Pretty cool and useful in my opinion.  Hopefully your imagination is going crazy with possibilities in all sorts of directions right now, since this could be expanded to different types of content, including files from the user's computer and so on.  It'd benefit from a bit of animation and such as well.
 
-I wasn't sure how Plunker/iframes would handle this, so I made a demo viewable [on Github](http://nathanleclaire.github.io/angdragdropdemo).
+I wasn't sure how Plunker/iframes would handle this, so I made a demo viewable [on Github](https://nathanleclaire.github.io/angdragdropdemo).
 
 I'm hotlinking the images here, but please don't do this in production, it's rude (upload them to your own server instead).
 

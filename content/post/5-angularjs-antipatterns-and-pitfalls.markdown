@@ -183,6 +183,6 @@ Likewise, dependencies that you had before (modules you are relying on etc.) sho
 
 I really hope that this article helps people avoid these bad behaviors, or at least see them when they come across them and refactor them into something better.
 
-Until next time, stay sassy Internet.  And [consider subscribing to my mailing list](http://nathanleclaire.com).
+Until next time, stay sassy Internet.  And [consider subscribing to my mailing list](https://nathanleclaire.com).
 
 - Nate

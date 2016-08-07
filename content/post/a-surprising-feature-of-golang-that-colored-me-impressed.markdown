@@ -199,7 +199,7 @@ BenchmarkTimeFormat                3215           714            <span style="co
 
 I love this!  And I love Go.
 
-Until next time, stay sassy Internet.  And [consider subscribing to my mailing list](http://nathanleclaire.com).
+Until next time, stay sassy Internet.  And [consider subscribing to my mailing list](https://nathanleclaire.com).
 
 - Nathan
 

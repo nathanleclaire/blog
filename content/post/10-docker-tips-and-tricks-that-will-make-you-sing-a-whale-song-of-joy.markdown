@@ -10,7 +10,7 @@ categories: [docker,sysadmin,ops]
 
 # docker run -it nathanleclaire/article
 
-As mentioned in a previous post I just started a shiny new job at Docker Inc. and I've been accumulating all sorts of good Docker tips and tricks.  I think there is probably demand for them in the community, where just the sheer amount of information about Docker to take in is very overwhelming.  Once you've mastered the basics, the creative possibilites are endless, and already my mind has been blown by what some of the folks I work with have come up with.  Just like I mentioned in [this post](http://nathanleclaire.com/blog/2014/03/22/what-is-this-docker-thing-that-everyone-is-so-hyped-about/), the Cambrian explosion of creativity it's provoking is extremely exciting.
+As mentioned in a previous post I just started a shiny new job at Docker Inc. and I've been accumulating all sorts of good Docker tips and tricks.  I think there is probably demand for them in the community, where just the sheer amount of information about Docker to take in is very overwhelming.  Once you've mastered the basics, the creative possibilites are endless, and already my mind has been blown by what some of the folks I work with have come up with.  Just like I mentioned in [this post](https://nathanleclaire.com/blog/2014/03/22/what-is-this-docker-thing-that-everyone-is-so-hyped-about/), the Cambrian explosion of creativity it's provoking is extremely exciting.
 
 So I'm going to share some of my favorite tips and tricks with you guys.  Ready?
 
@@ -274,6 +274,6 @@ Welcome!
 
 That's all for now folks, I hope you've learned a bit and you have all sorts of great ideas burning in your head about Docker!!  Enjoy it, join the conversation around it, and above all **BE CREATIVE**.
 
-Until next time, stay sassy Internet.  And consider [signing up for my mailing list](http://nathanleclaire.com).
+Until next time, stay sassy Internet.  And consider [signing up for my mailing list](https://nathanleclaire.com).
 
 - Nathan

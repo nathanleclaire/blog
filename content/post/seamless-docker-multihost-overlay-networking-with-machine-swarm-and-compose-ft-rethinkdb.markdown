@@ -317,7 +317,7 @@ d6adead23e97        swarm:latest        "/swarm join --advert"   20 minutes ago 
 ## Bootstrapping node configuration
 
 We can use [the Ansible trick from this
-article](http://nathanleclaire.com/blog/2015/11/10/using-ansible-with-docker-machine-to-bootstrap-host-nodes/)
+article](https://nathanleclaire.com/blog/2015/11/10/using-ansible-with-docker-machine-to-bootstrap-host-nodes/)
 to bootstrap some basic node configuration once they have been created.  This
 will set up some firewalls, install some sysadmin-friendly software on the
 created instances and configure the GRUB profile to activate memory accounting.

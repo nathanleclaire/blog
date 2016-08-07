@@ -68,7 +68,7 @@ interfaces as soon as possible.
 For those who are unfamiliar with interfaces, I highly recommend you [read the
 official documentation](https://golang.org/doc/effective_go.html#interfaces) to
 understand how they work (I also have an [article on
-interfaces](http://nathanleclaire.com/blog/2015/03/09/youre-not-using-this-enough-part-one-go-interfaces/)).
+interfaces](https://nathanleclaire.com/blog/2015/03/09/youre-not-using-this-enough-part-one-go-interfaces/)).
 
 Long story short:
 
@@ -587,7 +587,7 @@ func (p PollerJob) Resume() error {
 }
 
 func main() {
-	p := NewPollerJob("http://nathanleclaire.com")
+	p := NewPollerJob("https://nathanleclaire.com")
 	go p.Run()
 	time.Sleep(5 * time.Second)
 
@@ -607,19 +607,19 @@ The output of the above program, when run, looks like:
 
 <pre>
 $ go run -race job.go
-2015/10/11 20:37:59 http://nathanleclaire.com -- 200 OK
-2015/10/11 20:38:01 http://nathanleclaire.com -- 200 OK
-2015/10/11 20:38:02 http://nathanleclaire.com -- 200 OK
-2015/10/11 20:38:03 http://nathanleclaire.com -- 200 OK
-2015/10/11 20:38:04 http://nathanleclaire.com -- 200 OK
+2015/10/11 20:37:59 https://nathanleclaire.com -- 200 OK
+2015/10/11 20:38:01 https://nathanleclaire.com -- 200 OK
+2015/10/11 20:38:02 https://nathanleclaire.com -- 200 OK
+2015/10/11 20:38:03 https://nathanleclaire.com -- 200 OK
+2015/10/11 20:38:04 https://nathanleclaire.com -- 200 OK
 2015/10/11 20:38:04 Suspending monitoring of server for 5 seconds...
 2015/10/11 20:38:10 Resuming job...
-2015/10/11 20:38:10 http://nathanleclaire.com -- 200 OK
-2015/10/11 20:38:11 http://nathanleclaire.com -- 200 OK
-2015/10/11 20:38:12 http://nathanleclaire.com -- 200 OK
-2015/10/11 20:38:14 http://nathanleclaire.com -- 200 OK
-2015/10/11 20:38:15 http://nathanleclaire.com -- 200 OK
-2015/10/11 20:38:16 http://nathanleclaire.com -- 200 OK
+2015/10/11 20:38:10 https://nathanleclaire.com -- 200 OK
+2015/10/11 20:38:11 https://nathanleclaire.com -- 200 OK
+2015/10/11 20:38:12 https://nathanleclaire.com -- 200 OK
+2015/10/11 20:38:14 https://nathanleclaire.com -- 200 OK
+2015/10/11 20:38:15 https://nathanleclaire.com -- 200 OK
+2015/10/11 20:38:16 https://nathanleclaire.com -- 200 OK
 </pre>
 
 If we want to test the various complex interactions at play here, how do we do
