@@ -66,7 +66,7 @@ Additionally it allows you to define some metadata about the image, such as a `M
 
 So, the Dockerfile generally works beautifully for the class of problem for which it was designed. But it bears mentioning that:
 
-1. Layer IDs are currently not content-addressable, therefore:
+1. ~~Layer IDs are currently not content-addressable, therefore:~~ __EDIT:__ As of Docker 1.10 this is not true any more.  However, points about reproducibility still stand.
 2. Building two images from the same Dockerfile in different places is not a guarantee that they will consist of the same layers, both by ID and by content. Additionally:
 3. Frequently peoples' Dockerfiles use packages from upstream (apt-get, yum, go get, etc.) which could possibly break on any build without cache.
 
@@ -76,7 +76,7 @@ The Dockerfile is a tool for creating images, but it is not the only weapon in y
 
 This is why some people were so grumbly about Automated Builds originally being "Trusted Builds". It's not a very compelling label when a security breach upstream might actually compromise the contents of my image too. Rootkits for everyone!
 
-It is very useful to be able to link directly to Github or Bitbucket to see the source which was used to build images. But it is the responsibility of the users to actually assess each step of the Dockerfile, track down base images, etc. It is not the Dockerfile's job to provide a perfectly reproducable experience across all environments. You have to construct your images in a way that ensures perfect repeatability. The Dockerfile does not guarantee it for you.
+It is very useful to be able to link directly to Github or Bitbucket to see the source which was used to build images. But it is the responsibility of the users to actually assess each step of the Dockerfile, track down base images, etc. It is not the Dockerfile's job to provide a perfectly reproducible experience across all environments. You have to construct your images in a way that ensures perfect repeatability. The Dockerfile does not guarantee it for you.
 
 ## What's the takeaway?
 
