@@ -3,7 +3,6 @@ layout: post
 title: "cURL with HTTP2 Support - A Minimal Alpine-based Docker Image"
 date: "2016-08-11"
 comments: true
-draft: true
 categories: [curl,linux,alpine,http2,docker]
 ---
 
@@ -49,7 +48,7 @@ local system until you get it into some bespoke state.  Additionally, if you
 script the steps with a `Dockerfile` there will be no messy attempts at
 recalling the build later on -- it will all be documented and automatable via
 `Dockerfile`.  Though it does not [100% guarantee build
-reproducibility](http://localhost:1313/blog/2014/09/29/the-dockerfile-is-not-the-source-of-truth-for-your-image/),
+reproducibility](https://nathanleclaire.com/blog/2014/09/29/the-dockerfile-is-not-the-source-of-truth-for-your-image/),
 it is a dramatic improvement over a hastily scrawled `README`.
 
 Let's build a `Dockerfile` to create a minimal, [Alpine
