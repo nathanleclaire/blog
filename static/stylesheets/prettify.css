@@ -1,12 +1,12 @@
 /*! Color themes for Google Code Prettify | MIT License | github.com/jmblog/color-themes-for-google-code-prettify */
 .prettyprint {
-  background: #000;
-  font-family: Menlo, "Bitstream Vera Sans Mono", "DejaVu Sans Mono", Monaco, Consolas, monospace;
+  background: #232b2b;
+  font-family: monospace;
   border: 0 !important;
 }
 
 pre {
-    background: #000;
+    background: #232b2b;
 }
 
 .pln {

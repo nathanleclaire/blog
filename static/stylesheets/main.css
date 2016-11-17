@@ -19,8 +19,8 @@ body {
     margin: 0;
     padding: 0;
     border-top: 8px solid #333;
-    font-family: "Sorts Mill Goudy","HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
-    font-size: 1em;
+    font-family: "Sorts Mill Goudy","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+    font-size: 16px;
     color: #333;
 }
 
@@ -32,7 +32,7 @@ body {
 
 em {
     font-style: italic;
-    font-family: "Sorts Mill Goudy","HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+    font-family: "Sorts Mill Goudy","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
 }
 
 h1 {
@@ -137,8 +137,8 @@ blockquote {
 
 article {
     padding: 0;
-    font-size: 0.8em;
-    line-height: 1.7em;
+    font-size: 16px;
+    line-height: 1.5em;
     text-align: justify;
 }
 
@@ -224,7 +224,6 @@ pre {
 code {
     margin: 0.5em 0;
     padding: 0.2em;
-    font-size: 0.8em;
 }
 
 pre>code {
@@ -246,7 +245,7 @@ p>code,li>code {
 }
 
 .pagination a {
-    font-family: "Sorts Mill Goudy","HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+    font-family: "Sorts Mill Goudy","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
     font-size: 0.9em;
     color: #333;
 }
@@ -275,14 +274,14 @@ p>code,li>code {
 
 .cat-year {
     padding-top: 1.4em;
-    font-family: "Sorts Mill Goudy","HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+    font-family: "Sorts Mill Goudy","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
     font-weight: bold;
     font-size: 1.2em;
 }
 
 .cat-month {
     margin: 1.9em 0 0.4em 1.9em;
-    font-family: "Sorts Mill Goudy","HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+    font-family: "Sorts Mill Goudy","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
     font-size: 0.9em;
 }
 
@@ -374,7 +373,7 @@ img {
 .caption {
     font-style: italic;
     text-align: center;
-    font-family: "Sorts Mill Goudy","HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+    font-family: "Sorts Mill Goudy","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
     font-size: 0.8em;
 }
 
