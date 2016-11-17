@@ -319,6 +319,7 @@ pre {
 iframe {
     width: 100%;
     resize: vertical;
+    height: 500px;
 }
 
 .nateface {

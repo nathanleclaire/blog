@@ -21,7 +21,7 @@ But neither really gave me what I wanted, which was dragging and dropping from o
 
 # Creating a `<char-flasher>` directive
 
-<iframe src="http://embed.plnkr.co/PmTUfAKXZQOc2dj01pcs/preview"></iframe>
+<iframe src="https://embed.plnkr.co/PmTUfAKXZQOc2dj01pcs/preview"></iframe>
 
 I wanted the ability to display some text on the screen with dots that blinked, as shown above, to display text such as `"Drop image to display in chat..."` to make the process a bit more responsive and encouraging.  This kind of directive would also be reusable for creating fancy flashing text in the future as well (for example, if we wanted to display a `"{{user}} is typing..."` message in chat like many chat clients do).  I quickly cooked up a directive that can be used like so:
 

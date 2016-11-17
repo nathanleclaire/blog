@@ -80,7 +80,7 @@ angular.module('dotDemo').directive('crazyAwesomeWidget', function() {
 
 Can you spot the bug?  If you've been paying attention, you should be able to pick it out easily.
 
-<iframe src="http://embed.plnkr.co/ii8xZoOIRcWw4LlNMayf/preview"></iframe>
+<iframe src="https://embed.plnkr.co/ii8xZoOIRcWw4LlNMayf/preview"></iframe>
 
 Come on, intone it with me.  *I need a dot. I need a dot. I need a dot.*
 
@@ -110,7 +110,7 @@ angular.module('dotDemo').directive('crazyAwesomeWidget', function() {
 </script>
 ```
 
-<iframe src="http://embed.plnkr.co/IVkqcNVhwQXd1zQ9nZQ2/preview"></iframe>
+<iframe src="https://embed.plnkr.co/IVkqcNVhwQXd1zQ9nZQ2/preview"></iframe>
 
 Boom, synchronization from parent scope => isolated child scopes and back again.
 

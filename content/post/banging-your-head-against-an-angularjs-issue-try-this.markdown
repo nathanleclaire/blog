@@ -134,7 +134,7 @@ Writing it out, this way looks a bit cleaner to me as well.
 
 A Plunker demo of these concepts in action:
 
-<iframe src="http://embed.plnkr.co/agbSSuA2Mwx5pAd8kZSw/preview"></iframe>
+<iframe src="https://embed.plnkr.co/agbSSuA2Mwx5pAd8kZSw/preview"></iframe>
 
 # Conclusion
 

@@ -89,7 +89,7 @@ Check out this example, where I created a `gear` directive using [Font Awesome](
 
 Writing a `link` function provides even more power and flexibility, but that's a little outside the scope of this article.  Perhaps another time.
 
-<iframe src="http://embed.plnkr.co/i2StmWcxKNZCQb0YtYp0/preview"></iframe>
+<iframe src="https://embed.plnkr.co/i2StmWcxKNZCQb0YtYp0/preview"></iframe>
 
 # Conclusion
 
