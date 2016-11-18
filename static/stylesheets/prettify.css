@@ -40,31 +40,31 @@ li.L9 {
   /* string content */
 
   .str {
-      color: #7EB1DC;
+    color: #FF980B;
   }
 
   /* keyword */
 
   .kwd {
-    color: #FF980B;
+    color: #7EB1DC;
   }
 
   /* comment */
 
   .com {
-      color: #4442C2;
+    color: #869292;
   }
 
   /* type name */
 
   .typ {
-    color: #337BB7;
+    color: white;
   }
 
   /* literal value */
 
   .lit {
-    color: #1265AB;
+    color: #f7cb15;
   }
 
   /* punctuation */
