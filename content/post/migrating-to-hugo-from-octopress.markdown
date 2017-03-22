@@ -103,7 +103,7 @@ I have a `header.html` partial for the beginning of the HTML, which is mostly th
             {{ .Title }} | I care, I share, I'm Nathan LeClaire.
         </title>
         
-        <link href="{{ .Site.BaseUrl }}stylesheets/main.css" rel="stylesheet">
+        <link href="{{ .Site.BaseURL }}stylesheets/main.css" rel="stylesheet">
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
     </head>
     <body>
@@ -114,8 +114,8 @@ I ended up cutting a lot of stuff out of the original Jekyll template that I don
 I also have a `footer.html` which closes up the page:
 
 ```html
-<script type="text/javascript" src="{{ .Site.BaseUrl }}js/prettify.js"></script>
-<script type="text/javascript" src="{{ .Site.BaseUrl }}js/jquery.modal.min.js"></script>
+<script type="text/javascript" src="{{ .Site.BaseURL }}js/prettify.js"></script>
+<script type="text/javascript" src="{{ .Site.BaseURL }}js/jquery.modal.min.js"></script>
 <!-- other js -->
 </body>
 </html>

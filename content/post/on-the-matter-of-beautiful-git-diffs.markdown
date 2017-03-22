@@ -143,7 +143,7 @@ The cherry on top is that there are some settings for how to color the git
 diffs.  I am cheesin' it up with the Matrix greens and reds but I bet they
 could be used to enable different color schemes if you get creative.  Post your
 screenshots on Twitter and cc
-[@upthecyberpunks](https://twitter.com/upthecyberpunks)!
+[@dotpem](https://twitter.com/dotpem)!
 
 Save these in your `~/.gitconfig` file and you can have Matrix colors too.
 

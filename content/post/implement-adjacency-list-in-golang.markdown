@@ -48,4 +48,4 @@ implement one in Golang.
 Our structure depends on the properties of our data and the solution we want to
 optimize for.  For here, let's pretend we want to model some relationships
 between followers and follow-ees on the social networking website
-[twitter.com](https://twitter.com/upthecyberpunks).
+[twitter.com](https://twitter.com/dotpem).
