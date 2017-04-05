@@ -129,6 +129,21 @@ def tree_to_linked_lists(tree, lists={}, d=None):
 
 This produces a result that is sort of in reverse order compared to the solution provided by the book, but it still satisfies the problem description to provide a collection of linked lists.
 
+Alternatively, you can achieve a similar result, without using the depth function, like so:
+```python
+def tree_to_linked_lists(tree, lists={}, d=1):    
+    if lists.get(d) == None:
+        lists[d] = LinkedList([tree.value])
+    else:
+        lists[d].add(tree.value)   
+        
+    if tree.left != None:
+        lists = tree_to_linked_lists(tree.left, lists, d+1)
+    if tree.right != None:
+        lists = tree_to_linked_lists(tree.right, lists, d+1)
+    return lists
+```
+
 # Conclusion
 
 You can find the entirety of the code [here](https://gist.github.com/nathanleclaire/9292861).
