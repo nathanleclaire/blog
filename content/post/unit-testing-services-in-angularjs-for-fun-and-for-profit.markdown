@@ -91,7 +91,7 @@ We are going to write one with a method `getSubredditsSubmittedToBy(user)` which
 Usage (inside controller):
 
 ```
-userService.getSubredditsSubmittedToBy("yoitsnate").then(function(subreddits) {
+redditService.getSubredditsSubmittedToBy("yoitsnate").then(function(subreddits) {
   $scope.subreddits = subreddits;
 });
 ```
@@ -101,7 +101,7 @@ So nice and readable!
 Our service looks like this:
 
 ```js
-angular.module("reddit").service("userService",
+angular.module("reddit").service("redditService",
 function($http) {
   return {
     getSubredditsSubmittedToBy: function(user) {
