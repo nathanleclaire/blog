@@ -79,6 +79,10 @@ Reasons why you would want to pass by reference as opposed to by value:
 
 If you need these characteristics on your method call, use a pointer receiver.
 
+Updated:
+
+There is a workaround, or even a style of programming, and that is [immutable objects](https://en.wikipedia.org/wiki/Immutable_object). Here we provide a `.WithA()` receiver that does not mutate the object, but returns a new instance with the updated value.
+
 ## Show me.
 
 Some code to demonstrate, and an [example on the Go playground](http://play.golang.org/p/O0O7Nk1SGF):
@@ -98,22 +102,28 @@ func (m Mutatable) StayTheSame() {
     m.b = 7
 }
 
+func (m Mutatable) WithA(a int) Mutatable {
+	return Mutatable{a: a, b : m.b}
+}
+
 func (m *Mutatable) Mutate() {
     m.a = 5
     m.b = 7
 }
 
 func main() {
-    m := &Mutatable{0, 0}
+    m := Mutatable{0, 0}
     fmt.Println(m)
     m.StayTheSame()
     fmt.Println(m)
     m.Mutate()
     fmt.Println(m)
+   	m = m.WithA(15)
+	fmt.Println(m)
 }
 ```
 
-You'll notice that the conspicuously named `StayTheSame` and `Mutate`  methods have behavior which corresponds to precisely that:  `StayTheSame` is defined with a non-pointer receiver and doesn't change the values of the `struct` it is invoked on, and `Mutate` is defined with a pointer receiver, so it *does* change the values of the `struct` upon which it is invoked.
+You'll notice that the conspicuously named `StayTheSame` and `Mutate`  methods have behavior which corresponds to precisely that:  `StayTheSame` is defined with a non-pointer receiver and doesn't change the values of the `struct` it is invoked on, and `Mutate` is defined with a pointer receiver, so it *does* change the values of the `struct` upon which it is invoked. `WithA` is a value receiver, but returns a new value that we print.
 
 # Fin
 
