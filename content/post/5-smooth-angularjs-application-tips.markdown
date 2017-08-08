@@ -201,8 +201,8 @@ But what if you want the service to take care of some more stuff (e.g. parsing t
   "public_gists": 7,
   "followers": 12,
   "following": 9,
-  "created_at": ""2012-02-26"
-  "updated_at": ""2014-01-04"
+  "created_at": "2012-02-26"
+  "updated_at": "2014-01-04"
 }
 ```
 
