@@ -31,7 +31,7 @@ To download, you could do something like:
 
 <pre>
 $ sudo wget \
-    https://raw.githubusercontent.com/git/git/master/contrib/diff-highlight/diff-highlight \
+    https://raw.githubusercontent.com/git/git/3dbfe2b8ae94cbdae5f3d32581aedaa5510fdc87/contrib/diff-highlight/diff-highlight \
     -O /usr/local/bin/diff-highlight
 </pre>
 
