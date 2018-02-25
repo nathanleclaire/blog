@@ -1,9 +1,6 @@
 ---
 layout: page
 title: "About"
-date: "2013-10-26"
-comments: true
-sharing: true
 footer: true
 url: "/about"
 ---
@@ -19,7 +16,7 @@ I originally learned a bit of C++, Linux, and Python as a teenager, but it
 eventually snowballed into all kinds of stuff (after a brief detour into a
 Philosophy degree), and nowadays I mostly program in Golang .
 
-Currently I'm working at [Docker](https://docker.com).
+Currently I'm working at [Honeycomb](https://honeycomb.io).
 
 Areas of interest for me in computing include:
 

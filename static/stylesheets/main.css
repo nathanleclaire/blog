@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Sorts+Mill+Goudy);
+@import url('https://fonts.googleapis.com/css?family=Merriweather');
 
 *::selection {
     background: #ff8e5f;
@@ -19,7 +19,7 @@ body {
     margin: 0;
     padding: 0;
     border-top: 8px solid #333;
-    font-family: "Sorts Mill Goudy","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+    font-family: "Merriweather",serif;
     font-size: 16px;
     color: #333;
 }
@@ -30,9 +30,23 @@ body {
     }
 }
 
+@media only screen and (min-width: 600px) {
+    .wrap {
+        margin: 0px auto;
+        width: 61.8%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .wrap {
+        margin: 0px auto;
+        width: 89.8239%;
+    }
+}
+
 em {
     font-style: italic;
-    font-family: "Sorts Mill Goudy","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+    font-family: "Merriweather",serif;
 }
 
 h1 {
@@ -48,17 +62,6 @@ h2 {
     font-size: 1em;
     font-weight: bold;
     font-style: normal;
-}
-
-.wrap {
-    margin: 0 auto;
-    width: 90%;
-}
-
-@media only screen and (min-width: 0px) and (max-width: 1200px) {
-    .wrap {
-        width: 90%;
-    }
 }
 
 .wrap>footer {
@@ -136,9 +139,10 @@ blockquote {
 }
 
 article {
+    width: 100%;
     padding: 0;
     font-size: 16px;
-    line-height: 1.5em;
+    line-height: 1.2em;
     text-align: justify;
 }
 
@@ -230,12 +234,16 @@ pre>code {
     padding: 0px;
 }
 
+pre {
+    font-size: 0.8em;
+    line-height: 1.2em;
+}
+
 p>code,li>code {
     font-size: 0.8em;
-    border: 1px solid #dfdfdf;
     -webkit-border-radius: 4px;
     border-radius: 4px;
-    background-color: #fff;
+    background-color: #f4f4f4;
     white-space: nowrap;
 }
 
@@ -245,7 +253,7 @@ p>code,li>code {
 }
 
 .pagination a {
-    font-family: "Sorts Mill Goudy","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+    font-family: "Merriweather",serif;
     font-size: 0.9em;
     color: #333;
 }
@@ -274,14 +282,14 @@ p>code,li>code {
 
 .cat-year {
     padding-top: 1.4em;
-    font-family: "Sorts Mill Goudy","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+    font-family: "Merriweather",serif;
     font-weight: bold;
     font-size: 1.2em;
 }
 
 .cat-month {
     margin: 1.9em 0 0.4em 1.9em;
-    font-family: "Sorts Mill Goudy","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+    font-family: "Merriweather",serif;
     font-size: 0.9em;
 }
 
@@ -337,21 +345,15 @@ a {
 }
 
 #sidebar {
-    float: left;
-    position: fixed;
-    width: 250px;
-}
-
-@media only screen and (min-width: 0px) and (max-width: 768px) {
-    #sidebar {
-        float: none;
-        position: relative;
-        width: 100%;
-    }
+    float: none;
+    position: relative;
+    width: 100%;
 }
 
 #shameless-self-promotion {
     text-align: center;
+    margin: 0px auto;
+    width: 50%;
 }
 
 @media only screen and (min-width: 0px) and (max-width: 768px) {
@@ -374,7 +376,7 @@ img {
 .caption {
     font-style: italic;
     text-align: center;
-    font-family: "Sorts Mill Goudy","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+    font-family: "Merriweather",serif;
     font-size: 0.8em;
 }
 
@@ -413,10 +415,12 @@ li.title {
 }
 
 #mc-embedded-subscribe-form>label {
+    width: 100%;
     text-align: center;
 }
 
 #mc_embed_signup form {
+    margin: 0px auto;
     display: block;
     position: relative;
     text-align: left;
@@ -424,7 +428,6 @@ li.title {
 }
 
 #mc_embed_signup h2 {
-    font-weight: 700;
     padding: 0;
     margin: 15px 0;
     font-size: 1.4em;
@@ -485,25 +488,21 @@ li.title {
 }
 
 #mc_embed_signup label {
-    display: block;
     font-size: 16px;
     padding-bottom: 10px;
-    font-weight: 700;
+    width: 100%;
 }
 
 #mc_embed_signup input.email {
     padding: 8px 0;
-    margin: 0 4% 10px 0;
+    margin: 0 3px 10px 0;
     text-indent: 5px;
-    width: 58%;
-    min-width: 130px;
+    width: 75%;
 }
 
 #mc_embed_signup input.button {
-    display: block;
-    width: 35%;
-    margin: 0 0 10px;
-    min-width: 90px;
+    width: 40px;
+    margin: 0 0 3px;
 }
 
 #mc_embed_signup div#mce-responses {
@@ -547,7 +546,7 @@ li.title {
 #mc_embed_signup {
     background: #fff;
     clear: left;
-    font: 14px 'Sorts Mill Goudy',Helvetica,Arial,sans-serif;
+    font: 14px 'Merriweather',serif;
 }
 
 #mce-EMAIL {
@@ -579,16 +578,6 @@ input#archive-search {
 #mc-embedded-subscribe {
     display: inline!important;
     min-width: 20px!important;
-}
-
-div#content {
-    margin-left: 300px;
-}
-
-@media only screen and (min-width: 0px) and (max-width: 768px) {
-    div#content {
-        margin-left: 0px;
-    }
 }
 
 .slogan {
@@ -667,4 +656,76 @@ div#content {
 
 .post-row > td {
     padding-bottom: 10px;
+}
+
+.container:before,
+.container:after {
+    display: table;
+    content: " ";
+}
+
+.container:after {
+    clear: both;
+}
+
+.container {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-right: auto;
+    margin-left: auto;
+    width: 100%;
+}
+
+.row:before,
+.row:after {
+    display: table;
+    content: " ";
+}
+
+.row:after {
+    clear: both;
+}
+
+.row {
+    width: 100%;
+}
+
+.col-one-quarter {
+    width: 24%;
+    float: left;
+    padding-left: 1%;
+    position: relative;
+    min-height: 1px;
+}
+
+.col-three-quarters {
+    width: 74%;
+    float: left;
+    padding-left: 1%;
+    position: relative;
+    min-height: 1px;
+}
+
+.col-half {
+    width: 48%;
+    float: left;
+    padding-left: 2%;
+    position: relative;
+    min-height: 1px;
+}
+
+.col-one-third {
+    width: 32%;
+    float: left;
+    padding-left: 1.33333333333333%;
+    position: relative;
+    min-height: 1px;
+}
+
+.col-quarter > p {
+    margin-top: 0px;
+}
+
+.col-three-quarters > p {
+    margin-top: 0px;
 }
