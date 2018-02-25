@@ -1,0 +1,15 @@
+backend:
+  name: github
+  repo: nathanleclaire/blog
+publish_mode: editorial_workflow
+media_folder: "static/images"
+collections:
+- name: "Posts"
+  extension: "markdown"
+  label: "Posts"
+  folder: "content/post"
+  create: true
+  slug: "{{slug}}"
+  fields:
+  - {label: "Title", name: "title", widget: "string", default: "New Post"}
+  - {label: "Body", name: "body", widget: "markdown"}
