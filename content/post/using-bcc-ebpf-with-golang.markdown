@@ -1,10 +1,5 @@
 ---
-layout: post
-title: "Using BCC/eBPF for Tracing Superpowers with Golang"
-date: "2017-12-28"
-comments: true
-draft: true
-categories: ["tracing", "golang", "ebpf", "performance"]
+title: Using BCC/eBPF for Tracing Superpowers with Golang
 ---
 
 Recently a technology called [eBPF](), popularized by Netflix performance
@@ -492,6 +487,11 @@ while (1):
 --->
 
 ## Getting data to userspace
+
+There are a couple of different options for getting information from a BCC trace to userspace:
+
+1. Reading map values directly using `bpf_read_key`
+2. Submitting them using `perf`
 
 ## Kprobes vs. Uprobes vs. Tracepoints
 
