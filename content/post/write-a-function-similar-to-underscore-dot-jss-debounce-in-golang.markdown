@@ -11,7 +11,7 @@ categories: [javascript,golang,underscore,debounce]
 
 {{%img src="/images/debouncego/debounceit.gif" caption="" %}}
 
-As some of you may recall I wrote [this post about an interview I bombed with a YCombinator Startup](https://nathanleclaire.com/blog/2013/11/16/the-javascript-question-i-bombed-in-an-interview-with-a-y-combinator-startup/) and in it I describe how to implement a `debounce` (term taken from [Underscore.js](http://underscorejs.org/)) type of function from scratch.  Recently I found myself having to implement a similar thing in Golang, so I'm sharing the results of my implementation here.
+As some of you may recall I wrote [this post about an interview I bombed with a YCombinator Startup](/blog/2013/11/16/the-javascript-question-i-bombed-in-an-interview-with-a-y-combinator-startup/) and in it I describe how to implement a `debounce` (term taken from [Underscore.js](http://underscorejs.org/)) type of function from scratch.  Recently I found myself having to implement a similar thing in Golang, so I'm sharing the results of my implementation here.
 
 ## What is it?
 

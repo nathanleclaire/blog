@@ -8,7 +8,7 @@ categories: [docker, hub]
 
 > I want the speed and other advantages of a static site generator, but with the flexibility of a database-backed CMS.
 
-![](https://nathanleclaire.com/images/automagic-dockerhub/hub.png)
+![](/images/automagic-dockerhub/hub.png)
 
 # I want performance, flexibility, _and_ ease of maintenance.
 
@@ -158,7 +158,7 @@ func reloadHandler(msg HubMessage) {
 
 As you can see, there’s nothing too fancy here. It’s just Plain Old Golang and Shell Script. In fact, it could be a lot more sophisticated, but this works just fine- which is part of what pleases me a lot about this setup.
 
-Finally, we use the Docker Hub webhooks configuration to make the `POST` request to the endpoint exposed on the public Internet by this middleware server. In my case, I added an endpoint called `/hubhook` to my nginx configuration that proxies the outside request to the dockerhub-webhook-listener running on `localhost:3000`. The API key is passed as a query string parameter, i.e., the request is to `https://nathanleclaire.com/hubhook?apikey=bigLongRandomApiKeyString`.
+Finally, we use the Docker Hub webhooks configuration to make the `POST` request to the endpoint exposed on the public Internet by this middleware server. In my case, I added an endpoint called `/hubhook` to my nginx configuration that proxies the outside request to the dockerhub-webhook-listener running on `localhost:3000`. The API key is passed as a query string parameter, i.e., the request is to `/hubhook?apikey=bigLongRandomApiKeyString`.
 
 So, pieced together, this is how this all works:
 

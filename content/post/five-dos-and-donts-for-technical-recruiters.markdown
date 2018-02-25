@@ -81,7 +81,7 @@ Hustle.
 
 {{%img src="/images/recruiter/flattery.jpeg" caption="" %}}
 
-Are you mentioning specifics in your pitch about why you think the candidate would be a good fit, down to details such as "I really enjoyed [your article on the Rapportive hack](https://nathanleclaire.com/blog/2013/11/23/how-i-automated-finding-almost-anyones-email-address/)" or "Looks like you are a pretty active JavaScripter on Github.  We love active open source contributors!"?   
+Are you mentioning specifics in your pitch about why you think the candidate would be a good fit, down to details such as "I really enjoyed [your article on the Rapportive hack](/blog/2013/11/23/how-i-automated-finding-almost-anyones-email-address/)" or "Looks like you are a pretty active JavaScripter on Github.  We love active open source contributors!"?   
 
 Many of the *best* candidates have put stuff out there online for the world to see, because people who are great often love to share their greatness.  I would be willing to bet that 90% of recruiters do not flatter these guys and gals.  Perhaps they are simply too lazy or simple-minded.  They can't see things from someone else's perspective.
 

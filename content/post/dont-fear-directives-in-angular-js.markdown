@@ -12,7 +12,7 @@ categories: [Angular,Controllers,Directives,JavaScript]
 
 # Direct what?
 
-As I mentioned in [last week's article](https://nathanleclaire.com/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-dot-js/) I have been working with [AngularJS](http://angularjs.org/) for personal projects lately.  This was largely the result of me, approximately six or seven months ago, feeling like I was missing out on the new hotness by not knowing a client-side MV* framework.  I looked around at a lot of options, including:
+As I mentioned in [last week's article](/blog/2013/11/30/fear-and-loathing-with-golang-and-angular-dot-js/) I have been working with [AngularJS](http://angularjs.org/) for personal projects lately.  This was largely the result of me, approximately six or seven months ago, feeling like I was missing out on the new hotness by not knowing a client-side MV* framework.  I looked around at a lot of options, including:
 
 - [Backbone.js](http://backbonejs.org/) (A crowd favorite, with rock-solid online support/documentation/tutorials)
 - [Ember.js](http://emberjs.com/)

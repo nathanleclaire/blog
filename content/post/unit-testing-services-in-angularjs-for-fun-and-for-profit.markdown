@@ -24,7 +24,7 @@ But as some of you probably know all too well, this is dangerous.  It's like goi
 
 Fortunately Angular treats us really well as far as testing goes.  It just requires some additional explanation, since the quality of resources available for both Angular *and* Jasmine is really not fantastic.  It's better than a year ago, definitely, but not fantastic.
 
-So here I am doing a brain dump of sorts of what I know about testing services, which are part of the [lifeblood](https://nathanleclaire.com/blog/2014/03/15/angularjs-isnt-mvc-its-sdc/) of any Angular application.
+So here I am doing a brain dump of sorts of what I know about testing services, which are part of the [lifeblood](/blog/2014/03/15/angularjs-isnt-mvc-its-sdc/) of any Angular application.
 
 # Section 1: In Which I Proclaim "I love Dependency Injection!"
 
@@ -216,7 +216,7 @@ Note that `$provide` should always be called before your call to `$inject`, sinc
 
 ## Stutter.
 
-If you change a `describe` or `it` block to `ddescribe` or `iit` respectively [Karma](http://karma-runner.github.io/0.12/index.html) ([Angular's test runner](https://nathanleclaire.com/blog/2013/12/13/how-to-unit-test-controllers-in-angularjs-without-setting-your-hair-on-fire/)) will run only that block.  This is called [stuttering](https://github.com/davemo/jasmine-only) and it is very useful if you don't want to run your entire test suite every time, as the larger the codebase gets the longer this will take to do.
+If you change a `describe` or `it` block to `ddescribe` or `iit` respectively [Karma](http://karma-runner.github.io/0.12/index.html) ([Angular's test runner](/blog/2013/12/13/how-to-unit-test-controllers-in-angularjs-without-setting-your-hair-on-fire/)) will run only that block.  This is called [stuttering](https://github.com/davemo/jasmine-only) and it is very useful if you don't want to run your entire test suite every time, as the larger the codebase gets the longer this will take to do.
 
 ## Don't be afraid to rearrange code that is hard to test
 

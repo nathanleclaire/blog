@@ -68,7 +68,7 @@ interfaces as soon as possible.
 For those who are unfamiliar with interfaces, I highly recommend you [read the
 official documentation](https://golang.org/doc/effective_go.html#interfaces) to
 understand how they work (I also have an [article on
-interfaces](https://nathanleclaire.com/blog/2015/03/09/youre-not-using-this-enough-part-one-go-interfaces/)).
+interfaces](/blog/2015/03/09/youre-not-using-this-enough-part-one-go-interfaces/)).
 
 Long story short:
 

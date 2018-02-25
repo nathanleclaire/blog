@@ -48,7 +48,7 @@ When I was new to Angular, I flubbed this.  In particular the difference between
 
 This is *NOT* the way to go.  Instead, anything that involves setting, retrieving, or processing data should happen in services.  The leaner that your controllers are, the better.
 
-Services should NEVER manipulate `$scope`.  That is the job of the controller.  If you need to change values in `$scope` based on the result of, say, an AJAX call, use [promises](http://docs.angularjs.org/api/ng/service/$q).  Check out [this blog article I wrote](https://nathanleclaire.com/blog/2014/01/04/5-smooth-angularjs-application-tips/) for more details.
+Services should NEVER manipulate `$scope`.  That is the job of the controller.  If you need to change values in `$scope` based on the result of, say, an AJAX call, use [promises](http://docs.angularjs.org/api/ng/service/$q).  Check out [this blog article I wrote](/blog/2014/01/04/5-smooth-angularjs-application-tips/) for more details.
 
 ## Directives
 
