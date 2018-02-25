@@ -37,7 +37,7 @@ func main() {
 }
 ```
 
-Cool, running shell commands in Go isn't too bad.  But what if we want to get the output, to display it or parse some information out of it?  We can use `Cmd` struct's `Output` method to get a byte slice.  This is trivially convertable to a string if that is what you're after, too.
+Cool, running shell commands in Go isn't too bad.  But what if we want to get the output, to display it or parse some information out of it?  We can use `Cmd` struct's `Output` method to get a byte slice.  This is trivially convertible to a string if that is what you're after, too.
 
 
 ```go
