@@ -1,19 +1,14 @@
 ---
-layout: post
-title: "Using BCC/eBPF for Tracing Superpowers with Golang"
-date: "2017-12-28"
-comments: true
-draft: false
-categories: ["tracing", "golang", "ebpf", "performance"]
+title: Using BCC/eBPF for Tracing Superpowers with Golang
 ---
 
-Recently a technology called [eBPF](), popularized by Netflix performance
-engineer [Brendan Gregg](), has been gaining popularity due to a large amount
+Recently a technology called [eBPF](http://prototype-kernel.readthedocs.io/en/latest/bpf/), popularized by Netflix performance
+engineer [Brendan Gregg](http://www.brendangregg.com/ebpf.html), has been gaining popularity due to a large amount
 of promise for its potential to provide performant tracing (partially by doing
 aggregations of calculations and events in-kernel without needing to ship
 boatloads of information to userspace). Linux tracing and performance analysis
 in its current form is a patchwork quilt of various tools, explained well in
-[b0rk's article here]().
+[b0rk's article here](https://jvns.ca/blog/2017/07/05/linux-tracing-systems/).
 
 I won't cover too much eBPF/Linux Tracing 101 since they're well detailed in
 other places. Instead I want to focus on explaining some insights and practical
@@ -492,6 +487,11 @@ while (1):
 --->
 
 ## Getting data to userspace
+
+There are a couple of different options for getting information from a BCC trace to userspace:
+
+1. Reading map values directly using `bpf_read_key`
+2. Submitting them using `perf`
 
 ## Kprobes vs. Uprobes vs. Tracepoints
 
