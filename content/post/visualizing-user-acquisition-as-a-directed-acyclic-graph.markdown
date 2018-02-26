@@ -13,6 +13,8 @@ USER: Hm, ok. _(begins bashing screws into wood with the handle)_ This isn't a v
 
 BUSINESS: . . .
 
+![](/images/senior_man_smiling_and_holding_screwdriver_bld027157.jpg)
+
 Good businesses, upon reflection, might consequently feel like their model of user acquisition is not quite right (and God help the business who won't reflect on it at all). They will then take steps to try to remedy this problem. This very frequently involves user education. For instance, the BUSINESS in the silly take above might say "Oh, _(nervous laughter)_ that's not exactly how it's done. Here, let us sign you up for one of our Using a Screwdriver 101 Seminars so you can learn! Then you'll see why our screwdrivers are worth the price."
 
 But _every_ user will have a different learning style, suite of motivations, and journey, which explodes the complexity of doing this effectively. We might get lucky and have a user who loves listening attentively in seminars, but we also might have a user who hates sitting in seminars and happily blows off the "Using a Screwdriver 101" presentation. This user might leave us forever, thinking: _"A hammer was a much better tool than that to get screws into the wood. I'm just going to stick to hammers, that's what I know and they work well enough."_
