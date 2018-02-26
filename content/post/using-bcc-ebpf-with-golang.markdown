@@ -36,11 +36,6 @@ most of the deps are clearly outlined in the [BCC repo](<>), and there are some
 Dockerfiles in that repo which should be able to give you a general idea of how
 to install it too.
 
-I recommend figuring out which version of BCC gobpf master is using, and `git
-checkout` that tag in the BCC repo. Otherwise, errors complaining about not
-passing the right arg count for a BCC method to C and so on might cramp your
-style when you go to play with gobpf.
-
 Then, compile/package BCC, and then the examples in `tools/` in the repo, as well as things like https://github.com/iovisor/gobpf, should work. For
 instance, I'm on Debian, so I did `sudo debuild -b -uc -us`, which dropped all
 of the associated `.deb` files into `..` relative to the source repo, so then I
@@ -53,6 +48,11 @@ You'll need to run programs with `sudo` when using BCC/eBPF:
 ```
 $ sudo ./tools/cpudist.py
 ```
+
+_(optional) If you want to check out the Golang bindings_: I recommend figuring out which version of BCC gobpf master is using (just go look at recently merged PRs, it should be possible to divine), and `git
+checkout` that tag in the BCC repo before installing. Otherwise, errors complaining about not
+passing the right arg count for a BCC method to C and so on might cramp your
+style when you go to play with gobpf.
 
 ## Learning to use BCC
 
