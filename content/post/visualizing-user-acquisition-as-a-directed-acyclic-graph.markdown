@@ -31,15 +31,18 @@ Most people are familiar with the idea of a visualizing user acquisition as a fu
 
 ![](/images/funnel.png)
 
-But even though we model customer acquisition as a singular funnel for convenience's sake, no customer proceeds through one prescriptive linear flow in their process of deciding whether or not to buy, or revew, a product. This is especially true for the complex and multivariate needs of a team. Instead of visualizing customer acquisition only as a pipeline, we could also visaulize it as a [directed acylic graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph).
+But even though we model customer acquisition as a singular funnel for convenience's sake, no customer proceeds through one prescriptive linear flow in their process of deciding whether or not to buy, or revew, a product. This is especially true for the complex and multivariate needs of a team. Instead of visualizing customer acquisition only as a pipeline, we could also visualize it as a [directed acylic graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph). <sup><a href="#fn-4">4<a/></sup>
 
 ![](/images/user_dag.png)
 
 The graph's vertices (blue nodes below) and edges (_directed_ connections between the nodes) flow from one to another, starting with an "entry" node such as a succesful outbound hit. Prospects, in their path towards potentially becoming a successful customer, proceed to various stages at various times, frequently getting stuck at one or the other and running out of "gas".
 
-Indeed, one might imagine that each node has an "activation function" requiring a sufficient level of customer interest or involvement in order to proceed to the next. 
+That's life, other shit is way more important to your users than buying your app. That's doubly true for software - even computers' biggest enthusiasts have been known to suggest that we all chuck the damned little devils out the window sometimes. Working on shipping that new feature so they get a good review, hanging out with their friends and family, and fixing that broken thing on fire over there are all more important to many of your leads than helping you close the deal.
 
-That's the really scary part about trying to do sales - 
+So whether they stall out before they even use your product, during the sales cycle even though they seemed like a promising lead, or when they move from amateur tasks to expert ones, it's not hard to convince them to give up . Indeed, one might imagine that each node has an "activation function" requiring a sufficient level of customer involvement in order to proceed to the next.
+
+Like we mentioned in our screwdriver example above, if we try to woo the user to the next stage with a tactic that _doesn't_ interest them, we will fail. We can loosely reason about the percentage of the total population, or the populations of implicit edge nodes outside the entrypoints to the DAG we are reasoning about, might be.
+
 
 - Breadcrumbs, removing obstacles, & carrots
 - There is a reason why funnel and retention visualizations are so popular in analytics tools like Mixpanel.
@@ -60,6 +63,11 @@ Some of you probably even felt a wave of revulsion wash over you just seeing the
 <li>
 <div id="fn-3">
 I'm being a little tongue in cheek, so don't fly off the handle telling me how untrue this is - but you have to admit, engineers aren't known for being the most social kids on the playground.
+</div>
+</li>
+<li>
+<div id="fn-4">
+It's easy to conjure up ways to visualize it with cycles as well, of course. However, the directionality of <i>successfully closed</i> leads is hard to debate: otherwise, salespeople wouldn't get paid. <i>Something</i> got them to sign, even if it was low-touch.
 </div>
 </li>
 </ol>
