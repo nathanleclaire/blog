@@ -27,13 +27,15 @@ And software engineers, being conditioned as we are to frequently finding an exi
 
 ## User Acquisition as a DAG
 
-Most people are familiar with the idea of a visualizing user acquisition as a funnel. It's so common that I alluded it it above without even introducing the concept. At every stage in trying to close a deal, more and more people will drop out - that's the unfortunate way of life. Hence, the stark and brutish funnel. 
+Most people are familiar with the idea of a visualizing user acquisition as a funnel. It's so common that I alluded it it above without even introducing the concept. At every stage in trying to close a deal, more and more people will drop out - that's the unfortunate way of life. Hence, the stark and brutish funnel.
 
-Therefore, we have ways to track and visualize the various parts of the customer acquistion lifecycle - usually as a singular pipeline where we "leak" various would-be customers along the way. We'd prefer them to get to CLOSED (WON) state, but only a certain % of them will actually get there.
+![](/images/funnel.png)
 
-But even though we model customer acquisition as a singular funnel for convenience's sake, no customer proceeds through one, prescriptive linear flow (especially considering the complex and multivariate needs of a _team_ deciding to purchase or ditch your product). Instead, customer acquisition could be visualized as a [directed acylic graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph), where the vertices (blue nodes below) and edges (_directed_ connections between the nodes) flow from one to another, starting with an "entry" node such as a succesful outbound hit. Prospects, in their path towards potentially becoming a successful customer, proceed to various stages at various times, frequently getting stuck at one or the other and running out of "gas".
+Therefore, we have ways to track and visualize the various parts of the customer acquistion lifecycle - usually as a singular pipeline where we "leak" various would-be customers along the way. We'd prefer them to get to CLOSED (WON) state, but only a certain % of them will actually get there. But even though we model customer acquisition as a singular funnel for convenience's sake, no customer proceeds through one, prescriptive linear flow (especially considering the complex and multivariate needs of a _team_ deciding to purchase or ditch your product). Instead, customer acquisition could be visualized as a [directed acylic graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph).
 
 ![](/images/user_dag.png)
+
+The graph's vertices (blue nodes below) and edges (_directed_ connections between the nodes) flow from one to another, starting with an "entry" node such as a succesful outbound hit. Prospects, in their path towards potentially becoming a successful customer, proceed to various stages at various times, frequently getting stuck at one or the other and running out of "gas".
 
 Indeed, one might imagine that each node has an "activation function" requiring a sufficient level of customer interest or involvement in order to proceed to the next. 
 
