@@ -17,9 +17,9 @@ BUSINESS: . . .
 
 Good businesses, upon reflection, might consequently feel like their model of user acquisition is not quite right (and God help the business who won't reflect on it at all). They will then take steps to try to remedy this problem. This very frequently involves user education. For instance, the BUSINESS in the silly take above might say "Oh, _(nervous laughter)_ that's not exactly how it's done. Here, let us sign you up for one of our Using a Screwdriver 101 Seminars so you can learn! Then you'll see why our screwdrivers are worth the price."
 
-But _every_ user will have a different learning style, suite of motivations, and journey, which explodes the complexity of doing this effectively. We might get lucky and have a user who loves listening attentively in seminars, but we also might have a user who hates sitting in seminars and happily blows off the "Using a Screwdriver 101" presentation. This user might leave us forever, thinking: _"A hammer was a much better tool than that to get screws into the wood. I'm just going to stick to hammers, that's what I know and they work well enough."_
+But _every_ user will have a different learning style, suite of motivations, and journey, which explodes the complexity of doing this effectively. We might get lucky and have a user who loves listening attentively in seminars, but we also might have a user who hates sitting in seminars and happily blows off the "Using a Screwdriver 101" presentation. Consequently, they never learn why screwdrivers are so great and we lose them as a lead.
 
- If your product is highly technical (and I'll address software specifically here since that's my area of expertise), user education becomes even more important - after all, nothing sucks quite like the hurdle of learning _someone else's software_. <sup><a href="#fn-2">2</a></sup> It's like a whirling dervish of a software engineer's least favorite things - being incompetent at stuff, feeling stupid, and having to work with other people. <sup><a href="#fn-3">3</a></sup>
+ If your product is highly technical (and I'll address software specifically here since that's my area of expertise), user education becomes even more important - after all, nothing sucks quite like the hurdle of learning _someone else's software_. <sup><a href="#fn-2">2</a></sup> It's like a whirling dervish of a software engineer's least favorite things - being bad at stuff, feeling stupid, and having to work with other people. <sup><a href="#fn-3">3</a></sup>
 
 It's tempting to believe that we can come up with a generalized, or at least "good enough" solution - the One Funnel to Rule Them All. But there's no bottom to the bucket of crabs. As soon as one door opens, another closes. It's maddening.
 
@@ -27,7 +27,7 @@ And software engineers, being conditioned as we are to frequently finding an exi
 
 ## User Acquisition as a DAG
 
-Most people are familiar with the idea of a visualizing user acquisition as a funnel.
+Most people are familiar with the idea of a visualizing user acquisition as a funnel. It's so common that I alluded it it above without even introducing the concept.
 
 - Breadcrumbs, removing obstacles, & carrots
 - There is a reason why funnel and retention visualizations are so popular in analytics tools like Mixpanel.
