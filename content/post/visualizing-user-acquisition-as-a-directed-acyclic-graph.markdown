@@ -27,6 +27,8 @@ And software engineers, being conditioned as we are to frequently finding an exi
 
 ## User Acquisition as a DAG
 
+![](/images/user_dag.png)
+
 Most people are familiar with the idea of a visualizing user acquisition as a funnel. It's so common that I alluded it it above without even introducing the concept.
 
 - Breadcrumbs, removing obstacles, & carrots
