@@ -114,7 +114,7 @@ You can use the same mechanisms to talk to files on disk, the network, STDIN/STD
 
 Let's look at an example to see how combining some of these primitives can be useful in practice.  I've been working on a project where I want to attach to multiple running Docker containers concurrently and stream (multiplex) their output to STDOUT with some metadata (container name) prepended to each log line.  Sounds easy, right? ;)
 
-The Docker REST API bindings written by [fsouza](http://github.com/fsouza) provide an abstraction whereby we can pass an `io.Writer` instance for STDOUT and STDERR of the container we are attaching to.  So we have control of a `io.Writer` that we inject in, but how do read what gets written by this container one line at a time, and multiplex/label the output together in the fashion I described in the previous paragraph?
+The Docker REST API bindings written by [fsouza](http://github.com/fsouza) provide an abstraction whereby we can pass an `io.Writer` instance for STDOUT and STDERR of the container we are attaching to.  So we have control of a `io.Writer` that we inject in, but how do we read what gets written by this container one line at a time, and multiplex/label the output together in the fashion I described in the previous paragraph?
 
 We will use a combination of Go's concurrency primitives, `io.Pipe`, and a `bufio.Scanner` to accomplish this.
 
