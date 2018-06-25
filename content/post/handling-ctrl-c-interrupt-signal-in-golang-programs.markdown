@@ -23,14 +23,13 @@ Here is some sample source code:
 // Wait for a SIGINT (perhaps triggered by user with CTRL-C)
 // Run cleanup when signal is received
 signalChan := make(chan os.Signal, 1)
-cleanupDone := make(chan bool)
+cleanupDone := make(chan struct{})
 signal.Notify(signalChan, os.Interrupt)
 go func() {
-    for _ = range signalChan {
-        fmt.Println("\nReceived an interrupt, stopping services...\n")
-        cleanup(services, c)
-        cleanupDone <- true
-    }
+    <-signalChan
+    fmt.Println("\nReceived an interrupt, stopping services...\n")
+    cleanup(services, c)
+    close(cleanupDone)
 }()
 <-cleanupDone
 ```
