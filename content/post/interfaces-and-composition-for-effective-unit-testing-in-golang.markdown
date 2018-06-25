@@ -225,7 +225,7 @@ release of a given repo corresponds to.
 
 We _could_ write some code like the following to do so:
 
-```
+```go
 package main
 
 import (
@@ -330,7 +330,7 @@ func (gh GithubReleaseInfoer) GetLatestReleaseTag(repo string) (string, error) {
 And, consequently, update the `getReleaseTagMessage` and `main` functions like
 so:
 
-```
+```go
 // Function to get the message to display to the end user.
 func getReleaseTagMessage(ri ReleaseInfoer, repo string) (string, error) {
 	tag, err := ri.GetLatestReleaseTag(repo)
@@ -361,7 +361,7 @@ the behavior of the method which we depend on is exactly as we expect.
 We could define a `FakeReleaseInfoer` struct which behaves however we want.  We
 simply define what to return in the parameters of the struct.
 
-```
+```go
 package main
 
 import "testing"
@@ -413,7 +413,7 @@ Cheney's article on test
 tables](http://dave.cheney.net/2013/06/09/writing-table-driven-tests-in-go) for
 this idea).
 
-```
+```go
 func TestGetReleaseTagMessage(t *testing.T) {
         cases := []struct {
                 f           FakeReleaseInfoer
@@ -516,7 +516,7 @@ Consider an implementation of a `Job`, `PollerJob`, which can be used for
 questionable homebrew system monitoring software.  My first crack at coding it
 was this:
 
-```
+```go
 package main
 
 import (
