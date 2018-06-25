@@ -90,10 +90,6 @@ type Config interface {
     Set(key, val string) error
 }
 
-var (
-    Cfg InmemConfig
-)
-
 type InmemConfig struct {
     M map[string]string
 }
