@@ -50,7 +50,7 @@ So why are people afraid?
 I am speculating based on anecdata here, but I suspect the general anxiety around rebasing stems from two primary places:
 
 1. Due to the mechanics of `git rebase`, merge conflicts are more frequent and seemingly harder to deal with
-2. Previous experiences with loss of work due to a botched interactive rebase and/or force push (more on this is a second).
+2. Previous experiences with loss of work due to a botched interactive rebase and/or force push (more on this in a second).
 
 The merge conflicts one makes sense, since few things enrage programmers quite like a well-timed merge conflict, but you shouldn't let that keep you from rebasing.  Two reasons for this are:
 
