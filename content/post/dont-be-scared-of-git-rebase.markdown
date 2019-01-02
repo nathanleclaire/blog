@@ -14,9 +14,11 @@ Rebasing, like most of `git`, should be learned and applied to be useful - not f
 
 # What is it?
 
-`git rebase` in its simplest form is a command which will merge another branch into the branch where you are currently working, and move all of the local commits that are ahead of the rebased branch to the top of the history on that branch.
+From the man page: "git rebase: Forward-port local commits to the updated upstream head". LOLWUT?
 
-From the man page: "git rebase: Forward-port local commits to the updated upstream head".
+`git rebase` in its simplest form is a command which will "port" another branch (Branch A) into the branch where you are currently working (Branch B), by applying all of your unique commits from Branch B on top of Branch A and replacing Branch B with this revised version. That way, you can "catch up" to other branches by re-writing git history in your local git. For instance, you might rebase on top of `master` to catch your branch up to the current state of the world in your feature branch.
+
+In a rebase, Branch A is considered "ours" (`git checkout --ours` can be used in a conflict to get this version) because it's where we _started working_ from git's perspective, and Branch B is considered "theirs" (`git checkout --theirs` also exists) because from git's perspective those are the "foreign" commits to port. **`git rebase` likely has an _opposite_ idea than you do about which branch is "ours" vs. "theirs".** In a rebase, you usually are working on a feature branch or locally unique version which you look at and think is "ours", and which you want to port "theirs" into, but from git's perspective in a rebase it's actually the opposite. This is really important to get a grip on and can help you resolve conflicts much more quickly.
 
 If you're still confused, let's look at an example.
 
