@@ -102,7 +102,11 @@ Some open source projects, such as [docker](https://github.com/docker/docker), r
 
 So if you submit a pull request with four or five commits without know to do this, are you hosed?  Will you have to do the `git reset --soft` song and dance and try again on a new branch?
 
-Hell no!  You can use `git rebase -i` to rapidly sign all of your commits the correct way.  Just change `pick` to `edit` for the commits in question, and do a `git commit --amend -s` (no need to change the original message!) and `git rebase --continue` for each commit.  If I recall correctly, you can also do `reword` if you set up signing the commits automatically as a hook in your repo (this has the additional bonus of keeping you from forgetting in the future too).
+Hell no!  You can use `git rebase -i` to rapidly sign all of your commits the correct way.  Just change `pick` to `edit` for the commits in question, and do a `git commit --amend -s` (no need to change the original message!) and `git rebase --continue` for each commit. 
+
+**Edit:** Reader [Wes Toleman](https://github.com/WesToleman) has written in with a good tip about speeding a process like this up with `--exec`:
+
+> This can be sped up with `rebase`'s `exec` option (`git rebase -i --exec "git commit --amend -s --no-edit"`). If I recall correctly, you can also do `reword` if you set up signing the commits automatically as a hook in your repo (this has the additional bonus of keeping you from forgetting in the future too).
 
 Now you can force push (`git push -f`) to the branch on the remote you're making the PR from and the commits will be signed correctly.
 
