@@ -1,5 +1,8 @@
 ---
 title: I'm winding down my mailing list (and it's inspiring me to reboot the site)
+date: "2019-03-02"
+comments: true
+categories: [meta]
 ---
 Unfortunately, despite the best of intentions when I first started out and 1000+ subscribers to my mailing list over the years, my blog has been somewhat stagnant in the past few years. I guess the high demands of startup life took a toll on my desire to hack and write for fun, among the million other things competing for my attention and fucks-to-give in adult life. I do intend to fix that by writing more soon, but in the interim I had an unfortunate surprise - Mailchimp has totally deleted my mailing list due to inactivity.
 
