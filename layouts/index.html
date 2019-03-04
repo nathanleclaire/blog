@@ -5,36 +5,7 @@ div#wrapper {
     width:70%;
     margin:0px auto;
 }
-
-#mce-EMAIL {
-    font-size:24px;
-}
-
-#mc-embedded-subscribe {
-    width:20px;
-}
-
-@font-face {
-    font-family: 'LeagueGothicRegular';
-    src: url('/font/League_Gothic-webfont.eot');
-    src: url('/font/League_Gothic-webfont.eot?#iefix') format('embedded-opentype'),
-            url('/font/League_Gothic-webfont.woff') format('woff'),
-            url('/font/League_Gothic-webfont.ttf') format('truetype'),
-            url('/font/League_Gothic-webfont.svg#LeagueGothicRegular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-
-h1 {
-    text-align: center;
-    font-family: 'LeagueGothicRegular', "Impact", Charcoal, Arial Black, Gadget, Sans serif;
-    text-transform: uppercase;
-    line-height: 1;
-    font-size: 300%;
-    /* Remember to set the correct font weight if using fontface */
-    font-weight: normal;
-}
-
+    
 .gridpic {
     width: 400px;
     max-width: 100%;
@@ -50,53 +21,37 @@ li {
     margin-bottom:20px;
 }
 
-#mc-embedded-subscribe {
-    height: 46px;
-}
-
 .gridpics a {
    text-decoration: none; 
    color: #337BB7;
    transition: 1s ease-in-out all;
+   margin-top: 10px;
 }
 
 .gridpics a:hover {
    color: black;
 }
 
+.welcome-face {
+    margin: 20px auto;
+}
 </style>
-<h1> Hiya.  </h1>
+<h1> Welcome. </h1>
 
-<img src="/images/naaaate.jpg">
+<img class="nateface welcome-face" src="/images/nateface.jpeg">
 
-Welcome, party people.  I'm Nathan LeClaire, a passionate entrepreneur, essayist, and developer with a taste for technology.  Here I put out weekly-ish articles and writings on business and program-ey things.  
+I'm Nathan LeClaire, a passionate entrepreneur, essayist, and engineer.  This website is primarily
+focused on my essays on business and engineering. <a href="/post">Click here</a> to see all of my
+articles and essays.
 
-If you'd like, you can sign up for my mailing list to keep your finger on the pulse:
+<h2> Some posts that people enjoy ... </h2>
 
-<div id="mc_embed_signup">
-<form action="https://nathanleclaire.us3.list-manage.com/subscribe/post?u=bb81abde21debade7a3b6c8f8&amp;id=a77a90269c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email@domain.com" required autofocus>
-    <input type="submit" value="Yes!" name="subscribe" id="mc-embedded-subscribe" class="button">
-    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-    <div style="position: absolute; left: -5000px;"><input type="text" name="b_bb81abde21debade7a3b6c8f8_a77a90269c" value=""></div>
-</form>
-</div>
-
-<h2> Some of my posts have been very popular. </h2>
-
-The following posts have become quite popular on the Interwebs, and continue to bring people back to the site to this day!
+The following posts have become quite popular, and continue to bring people back to the site to this day!
+See if any catch your fancy.
 
 <ul class="gridpics">
-    <li><a href="{{.Site.BaseURL}}blog/2016/06/13/yaml-hcl-toml-and-other-fantastic-beasts/"><img class="gridpic" src="{{.Site.BaseURL}}images/griffin.jpg"><h1 class="article-callout">YAML, HCL, TOML, and Other Fantastic Beasts</h1></a></li>
-    <li><a href="{{.Site.BaseURL}}blog/2015/10/10/interfaces-and-composition-for-effective-unit-testing-in-golang/"><img class="gridpic" src="{{.Site.BaseURL}}images/gounit/magic.png"><h1 class="article-callout">Interfaces and Composition for Effective Unit Testing in Golang</h1></a></li>
-    <li><a href="{{.Site.BaseURL}}blog/2015/04/27/automating-docker-logging-elasticsearch-logstash-kibana-and-logspout/"><img class="gridpic" src="{{.Site.BaseURL}}images/kibanagraph.png"><h1 class="article-callout">Automating Docker Logging: ELK Stack</h1></a></li>
+<li><a href="{{.Site.BaseURL}}blog/2016/06/13/yaml-hcl-toml-and-other-fantastic-beasts/"><img class="gridpic" src="{{.Site.BaseURL}}images/griffin.jpg"><h1 class="article-callout">YAML, HCL, TOML, and Other Fantastic Beasts</h1></a></li>
+<li><a href="{{.Site.BaseURL}}blog/2015/10/10/interfaces-and-composition-for-effective-unit-testing-in-golang/"><img class="gridpic" src="{{.Site.BaseURL}}images/gounit/magic.png"><h1 class="article-callout">Interfaces and Composition for Effective Unit Testing in Golang</h1></a></li>
+<li><a href="{{.Site.BaseURL}}blog/2015/04/27/automating-docker-logging-elasticsearch-logstash-kibana-and-logspout/"><img class="gridpic" src="{{.Site.BaseURL}}images/kibanagraph.png"><h1 class="article-callout">Automating Docker Logging: ELK Stack</h1></a></li>
 </ul>
-
-<h2> I am super jazzed to get to know my readers. </h2>
-
-So hop aboard the SS Mailing List today.
-
-<ul style="list-style-type: circle"><li> Nate </li></ul>
-<h1 style="font-size: 72px;"><a href="/post">Click here to read my articles and essays.</a></h1>
-</div>
 {{ partial "chrome/footer.html" . }}
