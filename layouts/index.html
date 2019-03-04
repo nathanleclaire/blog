@@ -21,14 +21,11 @@ li {
     margin-bottom:20px;
 }
 
-#mc-embedded-subscribe {
-    height: 46px;
-}
-
 .gridpics a {
    text-decoration: none; 
    color: #337BB7;
    transition: 1s ease-in-out all;
+   margin-top: 10px;
 }
 
 .gridpics a:hover {
@@ -36,25 +33,22 @@ li {
 }
 
 </style>
-<h1> Hiya.  </h1>
+<h1> Welcome. </h1>
 
-<img src="/images/nateface.jpg">
+<img class="nateface" src="/images/nateface.jpg">
 
 I'm Nathan LeClaire, a passionate entrepreneur, essayist, and engineer.  This website is primarily
-focused on my essays on business and engineering.
+focused on my essays on business and engineering. <a href="/post">Click here</a> to see all of my
+articles and essays.
 
-<h2> Some of my posts have been very popular. </h2>
+<h2> Some posts that people enjoy ... </h2>
 
-The following posts have become quite popular, and continue to bring people back to the site to this day! See if any catch your fancy.
+The following posts have become quite popular, and continue to bring people back to the site to this day!
+See if any catch your fancy.
 
 <ul class="gridpics">
-    <li><a href="{{.Site.BaseURL}}blog/2016/06/13/yaml-hcl-toml-and-other-fantastic-beasts/"><img class="gridpic" src="{{.Site.BaseURL}}images/griffin.jpg"><h1 class="article-callout">YAML, HCL, TOML, and Other Fantastic Beasts</h1></a></li>
-    <li><a href="{{.Site.BaseURL}}blog/2015/10/10/interfaces-and-composition-for-effective-unit-testing-in-golang/"><img class="gridpic" src="{{.Site.BaseURL}}images/gounit/magic.png"><h1 class="article-callout">Interfaces and Composition for Effective Unit Testing in Golang</h1></a></li>
-    <li><a href="{{.Site.BaseURL}}blog/2015/04/27/automating-docker-logging-elasticsearch-logstash-kibana-and-logspout/"><img class="gridpic" src="{{.Site.BaseURL}}images/kibanagraph.png"><h1 class="article-callout">Automating Docker Logging: ELK Stack</h1></a></li>
+<li><a href="{{.Site.BaseURL}}blog/2016/06/13/yaml-hcl-toml-and-other-fantastic-beasts/"><img class="gridpic" src="{{.Site.BaseURL}}images/griffin.jpg"><h1 class="article-callout">YAML, HCL, TOML, and Other Fantastic Beasts</h1></a></li>
+<li><a href="{{.Site.BaseURL}}blog/2015/10/10/interfaces-and-composition-for-effective-unit-testing-in-golang/"><img class="gridpic" src="{{.Site.BaseURL}}images/gounit/magic.png"><h1 class="article-callout">Interfaces and Composition for Effective Unit Testing in Golang</h1></a></li>
+<li><a href="{{.Site.BaseURL}}blog/2015/04/27/automating-docker-logging-elasticsearch-logstash-kibana-and-logspout/"><img class="gridpic" src="{{.Site.BaseURL}}images/kibanagraph.png"><h1 class="article-callout">Automating Docker Logging: ELK Stack</h1></a></li>
 </ul>
-
-<ul style="list-style-type: circle"><li> Nate </li></ul>
-<div>
-<a href="/post">Click here</a> to see all of my articles and essays.
-</div>
 {{ partial "chrome/footer.html" . }}
