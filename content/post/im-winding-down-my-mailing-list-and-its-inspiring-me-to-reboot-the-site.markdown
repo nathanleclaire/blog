@@ -1,4 +1,5 @@
 ---
+layout: post
 title: I'm winding down my mailing list (and it's inspiring me to reboot the site)
 date: "2019-03-02"
 comments: true
