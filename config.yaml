@@ -8,5 +8,6 @@ indexes:
     category: "categories"
 permalinks:
     post: /blog/:year/:month/:day/:title/
+    relativeURLs: true
 metadataformat: "yaml"
 ---
