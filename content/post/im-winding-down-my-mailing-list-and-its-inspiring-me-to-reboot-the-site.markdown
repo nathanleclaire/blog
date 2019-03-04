@@ -7,10 +7,8 @@ categories: [meta]
 ---
 Unfortunately, despite the best of intentions when I first started out and 1000+ subscribers to my mailing list over the years, my blog has been somewhat stagnant in the past few years. I guess the high demands of startup life took a toll on my desire to hack and write for fun, among the million other things competing for my attention and fucks-to-give in adult life. I do intend to fix that by writing more soon, but in the interim I had an unfortunate surprise - Mailchimp has totally deleted my mailing list due to inactivity.
 
-<center>
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Well, apparently due to inactivity <a href="https://twitter.com/Mailchimp?ref_src=twsrc%5Etfw">@Mailchimp</a> completely deactivated and deleted my account. Years of accumulated newsletter subscribers gone because I didn&#39;t write/email for a couple years... :(</p>&mdash; Nathan LeClaire (@dotpem) <a href="https://twitter.com/dotpem/status/1091531414686683136?ref_src=twsrc%5Etfw">February 2, 2019</a></blockquote>
+<blockquote class="twitter-tweet tw-align-center" data-lang="en"><p lang="en" dir="ltr">Well, apparently due to inactivity <a href="https://twitter.com/Mailchimp?ref_src=twsrc%5Etfw">@Mailchimp</a> completely deactivated and deleted my account. Years of accumulated newsletter subscribers gone because I didn&#39;t write/email for a couple years... :(</p>&mdash; Nathan LeClaire (@dotpem) <a href="https://twitter.com/dotpem/status/1091531414686683136?ref_src=twsrc%5Etfw">February 2, 2019</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-</center>
 
 I can't really fault them for it because I was on the free tier, but I also couldn't find any evidence in my Gmail account to indicate that they gave me a heads up and chance to get my shit together before shutting me off completely. I tried writing their support but got ghosted... However, I'm not going to let this setback get me down! If anything it's inspiring me to kick my butt into gear and write more posts.
 
