@@ -13,8 +13,8 @@ collections:
   fields:
   - label: Title
     name: title
-    widget: string
     default: New Post
+    widget: string
   - label: Layout
     name: layout
     widget: string
