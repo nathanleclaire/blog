@@ -11,5 +11,17 @@ collections:
   create: true
   slug: "{{slug}}"
   fields:
-  - {label: "Title", name: "title", widget: "string", default: "New Post"}
-  - {label: "Body", name: "body", widget: "markdown"}
+  - label: Title
+    name: title
+    widget: string
+    default: New Post
+  - label: Layout
+    name: layout
+    widget: string
+    default: post
+  - label: Date
+    name: date
+    widget: datetime
+  - label: Body
+    name: body
+    widget: markdown
