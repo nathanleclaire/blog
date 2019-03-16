@@ -35,7 +35,7 @@ decided to explore the unknown.
 
 ## Visiting the Warlock
 
-Before departing her home to seek englightenment on this issue, the programmer
+Before departing her home to seek enlightenment on this issue, the programmer
 stopped to seek counsel with the neighborhood warlock.
 
 "Mr. Warlock, I seek to configure my program in a file.  Maybe I could write my
@@ -205,7 +205,7 @@ fatal: unable to auto-detect email address (got 'root@43d93108caaf.(none)')
 remembered that this program stored the results in some kind of file _like...
 was it, `~/.gitconfig`?  Yeah, what's there?_ 
 
- By the time that she snapped out of her thoughts, the little creature had
+By the time that she snapped out of her thoughts, the little creature had
 scampered off again.  Best to look into it later and see what it can do, she
 supposed.  Something about an editor and a pager teased at her thoughts.
 
