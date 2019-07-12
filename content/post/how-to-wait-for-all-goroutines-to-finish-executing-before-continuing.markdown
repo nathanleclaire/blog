@@ -192,6 +192,7 @@ func main() {
 
     var wg sync.WaitGroup
     defer wg.Wait()
+    defer close(jsonResponses)
     wg.Add(len(urls)+1)
 
     for _, url := range urls {
