@@ -191,8 +191,8 @@ func main() {
     jsonResponses := make(chan string)
 
     var wg sync.WaitGroup
-
-    wg.Add(len(urls))
+    defer wg.Wait()
+    wg.Add(len(urls)+1)
 
     for _, url := range urls {
         go func(url string) {
@@ -213,12 +213,11 @@ func main() {
     }
 
     go func() {
+        defer wg.Done()
         for response := range jsonResponses {
             fmt.Println(response)
         }
     }()
-
-    wg.Wait()
 }
 ```
 
