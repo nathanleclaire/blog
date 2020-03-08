@@ -704,7 +704,7 @@ func NewPollerJob(resourceUrl string, waitDuration time.Duration) PollerJob {
 ```
 
 The rest of the code defines the methods on the relevant structs, and is
-available in full [on GitHub here]().
+available in full [on GitHub here](https://github.com/nathanleclaire/testing-article/tree/947474a34598ef32c6ba0df6b9d70d657904b6c7/example3).
 
 This provides us with the flexibility that we need to actually fake out each
 component of the `PollerJob` struct in isolation when we do testing.  Each
