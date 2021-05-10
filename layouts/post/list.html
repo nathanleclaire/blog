@@ -3,7 +3,7 @@
 	{{ partial "chrome/sidebar.html" . }}
 	<div id="post-list">
         <h1> Posts </h1>
-        <table>
+        <table style="margin: 0px auto;">
         <tbody>
           {{ range .Data.Pages }}
             {{ if eq .Type "post" }}
