@@ -654,6 +654,10 @@ input#archive-search {
     width: 80%;
 }
 
+.date-cell {
+    float: right;
+}
+
 .post-row > td {
     padding-bottom: 10px;
 }
