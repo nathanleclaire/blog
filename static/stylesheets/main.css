@@ -198,6 +198,7 @@ article hr {
 #content img {
     max-width: 100%;
     margin: 4px auto;
+    display: block;
 }
 
 article p .word1,article p .word2,article p .word3 {
