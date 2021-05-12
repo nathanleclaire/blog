@@ -41,9 +41,7 @@ To patch those leaks, there are a few strategies you can use.
 
 ![](https://blog.asana.com/wp-content/post-images/TaskCompletion_Loop.gif)
 
-
-
-
+Last but not least, don't forget you can **Offer Help**. Users might be too shy and not wanting to both you, but with a little direct suggestion, they often can be coaxed into looking for help. Having them engage with a real person for support might well be the difference between a customer you obtain, and a customer you lose. For instance, maybe you could add a scheduled email showing off the content in the app as a continual path to re-entering your graph.
 
 #### Footnotes
 
