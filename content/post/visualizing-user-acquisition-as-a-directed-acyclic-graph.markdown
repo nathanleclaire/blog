@@ -15,7 +15,7 @@ We might get lucky and have a user who loves listening attentively in seminars, 
 
  If your product is highly technical, user education becomes even more important - after all, nothing sucks quite like the hurdle of learning *someone else's software*. <sup><a href="#fn-2">2</a></sup> It's like a whirling dervish of a software engineer's least favorite things - being bad at stuff, feeling stupid, and having to work with other people. <sup><a href="#fn-3">3</a></sup>
 
-It's tempting to believe that we can come up with a generalized, or at least "good enough" solution - the One Funnel to Rule Them All. But there's no bottom to the bucket of crabs. As soon as one door opens, another closes. It's maddening.
+It's tempting to believe that we can come up with a generalized, or at least "good enough" solution - the One Funnel to Rule Them All. But there's no end to the tower of turtles. Users act in unpredictable and erratic ways.
 
 And software engineers, being conditioned as we are to frequently finding an existing solution ready-at-hand in polynomnial time on Stack Overflow, are particularly susceptible to being driven mad by the open-endedness of this difficult-to-optimize sandbox. But maybe we can we visualize and reason about the *system* of user acquisition to help drive the specifics?
 
