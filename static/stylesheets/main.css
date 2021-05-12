@@ -195,7 +195,7 @@ article hr {
     background-color: #dfdfdf;
 }
 
-article img {
+#content img {
     max-width: 100%;
     margin: 4px auto;
 }
@@ -366,11 +366,6 @@ a {
     #shameless-self-promotion {
         font-size: 0.9em;
     }
-}
-
-img {
-    display: block;
-    margin: 0px auto;
 }
 
 .caption {
