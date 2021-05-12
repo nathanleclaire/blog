@@ -195,11 +195,9 @@ article hr {
     background-color: #dfdfdf;
 }
 
-article p img {
+article img {
     max-width: 100%;
-    padding: 4px;
-    -webkit-box-shadow: 0 0 0px 1px #b0b0b0;
-    box-shadow: 0 0 0px 1px #b0b0b0;
+    margin: 4px auto;
 }
 
 article p .word1,article p .word2,article p .word3 {
