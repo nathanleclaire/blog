@@ -25,7 +25,7 @@ Usually we visualize user acquisition as a funnel -- a discrete set of logical s
 
 ![](/images/funnel.png)
 
-But even though we model customer acquisition as a singular funnel for convenience's sake, no customer proceeds through one prescriptive linear flow in their process of deciding whether or not to buy, or revew, a product. This is especially true for the complex and multivariate needs of a team of users. Hence, I encourage anyone in the business of trying to obtain users to also think of their user success actions as a [directed acylic graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph). <sup><a href="#fn-4">4<a/></sup>
+But even though we model customer acquisition as a singular funnel for convenience's sake, no customer proceeds through one prescriptive linear flow in their process of deciding whether or not to buy, or revew, a product. This is especially true for the complex and multivariate needs of a team of users. Hence, I encourage anyone in the business of trying to obtain users to also think of their user success actions as a [directed acylic graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph). <sup><a href="#fn-4">4</a></sup>
 
 ![](/images/user_dag.png)
 
