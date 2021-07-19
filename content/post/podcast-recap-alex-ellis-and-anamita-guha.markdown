@@ -13,8 +13,6 @@ Last week I did two great interviews on [Coffee Moguls](https://www.youtube.com/
 
 Alex Ellis, who has built a cache of businesses and income streams around open source software, shares his story and advises us how to think about going independent. Alex describes the dilemma of selling open source, comparing it to a three-legged stool, where one of the legs, the commercial arm of the business, has been sawed down. Alex is chock full of tips for books to read, across multiple disciplines including consulting and marketing, and has the hard-won experience to save you trouble down the line.
 
-I was 
-
 <iframe width="560" height="315" src="https://www.youtube.com/embed/hlCa01TBivc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Anamita Guha
