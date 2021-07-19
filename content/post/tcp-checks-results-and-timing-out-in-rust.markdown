@@ -7,6 +7,7 @@ categories:
   - rust
   - concurrency
   - iqfeed
+comments: true
 ---
 
 For the [Ogmi project](https://twitter.com/ogmiapp), one area I've been working on is ingesting and processing historical financial data from [DTN IQFeed](https://www.iqfeed.net/). I've been using this as an opportunity to both learn Rust, and take advantage of its fast performance, as the code I was previously relying on in Python is often extremely slow, in some cases to the point of being practically unusable.
