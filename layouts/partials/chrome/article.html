@@ -1,20 +1,122 @@
 <article>
-    <header>
-        <h1><a href="{{ lower .Permalink }}">{{ .Title }}</a>
-        </h1>
-        <time>{{ .Date.Format "2 Jan 2006" }}</time>
-    </header>
-    <div>
-        {{ .Content }}
-    </div>
-    <footer>
-        <p>If you find a mistake or issue in this article, please
-            <a target="_blank" href="https://github.com/nathanleclaire/blog/edit/master/content/{{.File.Path}}">fix it and submit a pull request on Github</a> (must be signed in to your GitHub account).
-        </p>
-        <p>I offer a bounty of one coffee, beer, or tea for each pull request that gets merged in. :) Make sure to cc <a href="https://github.com/nathanleclaire">@nathanleclaire</a> in the PR.</p>
-        <a target="_blank" style="display: block;" href="https://twitter.com/share?url={{ lower .Permalink }}&text=Must-read article from @dotpem : " class="social-media-spam">Tweet It</a>
-        <a target="_blank" href="https://news.ycombinator.com/submitlink?u={{ lower .Permalink }}&t=" class="social-media-spam">Submit to Hacker News</a>
-        <a target="_blank" style="display: block !important;" href="http://www.reddit.com/submit?url={{ lower .Permalink }}&title=" class="social-media-spam">Submit to Reddit</a>
-        <br>
-    </footer>
+  <header>
+    <h1><a href="{{ lower .Permalink }}">{{ .Title }}</a></h1>
+    <time>{{ .Date.Format "2 Jan 2006" }}</time>
+  </header>
+  <div>{{ .Content }}</div>
+  <footer>
+    <style>
+      .gumroad-follow-form-embed {
+        zoom: 1;
+      }
+      .gumroad-follow-form-embed:before,
+      .gumroad-follow-form-embed:after {
+        display: table;
+        line-height: 0;
+        content: "";
+      }
+      .gumroad-follow-form-embed:after {
+        clear: both;
+      }
+      .gumroad-follow-form-embed * {
+        margin: 0;
+        border: 0;
+        padding: 0;
+        outline: 0;
+        box-sizing: border-box !important;
+        float: left !important;
+      }
+      .gumroad-follow-form-embed input {
+        border-radius: 4px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        font-family: -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue",
+          Helvetica, Arial, sans-serif;
+        font-size: 15px;
+        line-height: 20px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-right: 0;
+        color: #aaa;
+        padding: 10px;
+        box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.02);
+        background-position: top right;
+        background-repeat: no-repeat;
+        text-rendering: optimizeLegibility;
+        font-smoothing: antialiased;
+        -webkit-appearance: none;
+        -moz-appearance: caret;
+        width: 65% !important;
+        height: 40px !important;
+      }
+      .gumroad-follow-form-embed button {
+        border-radius: 4px;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+        -webkit-transition: all 0.05s ease-in-out;
+        transition: all 0.05s ease-in-out;
+        display: inline-block;
+        padding: 11px 15px 12px;
+        cursor: pointer;
+        color: #fff;
+        font-size: 15px;
+        line-height: 100%;
+        font-family: -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue",
+          Helvetica, Arial, sans-serif;
+        background: #408bed;
+        border: 1px solid #3a7dd5;
+        filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#66b1ff, endColorstr=#3b81db, GradientType=0)";
+        background: -webkit-linear-gradient(#66b1ff, #3b81db);
+        background: linear-gradient(to bottom, #66b1ff, #3b81db);
+        height: 40px !important;
+        width: 35% !important;
+      }
+    </style>
+    <b>Follow me on Gumroad to stay up to date on the latest and greatest in technology.</b>
+    <form
+      action="https://app.gumroad.com/follow_from_embed_form"
+      class="form gumroad-follow-form-embed"
+      method="post"
+    >
+      <input name="seller_id" type="hidden" value="4893752627361" />
+      <input name="email" placeholder="Your email" type="email" />
+      <button data-custom-highlight-color="" type="submit">Follow</button>
+    </form>
+    <p>
+      If you find a mistake or issue in this article, please
+      <a
+        target="_blank"
+        href="https://github.com/nathanleclaire/blog/edit/master/content/{{.File.Path}}"
+        >fix it and submit a pull request on Github</a
+      >
+      (must be signed in to your GitHub account).
+    </p>
+    <p>
+      I offer a bounty of one coffee, beer, or tea for each pull request that
+      gets merged in. :) Make sure to cc
+      <a href="https://github.com/nathanleclaire">@nathanleclaire</a> in the PR.
+    </p>
+    <a
+      target="_blank"
+      style="display: block"
+      href="https://twitter.com/share?url={{ lower .Permalink }}&text=Must-read article from @dotpem : "
+      class="social-media-spam"
+      >Tweet It</a
+    >
+    <a
+      target="_blank"
+      href="https://news.ycombinator.com/submitlink?u={{ lower .Permalink }}&t="
+      class="social-media-spam"
+      >Submit to Hacker News</a
+    >
+    <a
+      target="_blank"
+      style="display: block !important"
+      href="http://www.reddit.com/submit?url={{ lower .Permalink }}&title="
+      class="social-media-spam"
+      >Submit to Reddit</a
+    >
+    <br />
+  </footer>
 </article>
