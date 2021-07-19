@@ -2,6 +2,7 @@
 title: Visualizing User Acquisition as a Directed Acyclic Graph
 layout: page
 date: 2021-05-11T03:49:08.186Z
+comments: true
 ---
 What is the silver bullet to convert people who have expressed an interest in your product (such as if they have signed up for a free trial) into customers? How do you expand existing accounts to make more? These are the age-old questions.
 
