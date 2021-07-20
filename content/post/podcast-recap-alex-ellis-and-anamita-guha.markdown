@@ -10,7 +10,7 @@ comments: true
 ---
 Last week I did two great interviews on [Coffee Moguls](https://www.youtube.com/channel/UCLM8gHUs30Lxp2qPYvBfqfg), the new podcast I've been producing covering Internet entrepreneurs and icons.
 
-![Alex and Anamita's faces, on an image saying podcast recap](/static/images/podcast-recap-alex-anamita.png)
+![Alex and Anamita's faces, on an image saying podcast recap](/images/podcast-recap-alex-anamita.png)
 
 ## Alex Ellis
 
