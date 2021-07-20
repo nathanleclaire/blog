@@ -1,11 +1,12 @@
 ---
 title: "Week of 7/12 Podcast Recap: Alex Ellis and Anamita Guha"
 layout: post
-date: 2021-07-19T06:16:55.821Z
+date: 2021-07-20
 categories:
   - programming
   - podcasting
   - coffee
+comments: true
 ---
 Last week I did two great interviews on [Coffee Moguls](https://www.youtube.com/channel/UCLM8gHUs30Lxp2qPYvBfqfg), the new podcast I've been producing covering Internet entrepreneurs and icons.
 
