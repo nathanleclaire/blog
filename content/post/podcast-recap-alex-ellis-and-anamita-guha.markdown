@@ -22,7 +22,7 @@ We cover ground from how he nurtures his soul with woodworking and the [Growlab]
 
 ## Anamita Guha
 
-Anamita Guha, who just wrapped up a stint at IBM working on Quantum Computing, joins us for a chat about quantum computing, giving an introduction and waxing on its rollout and implications. I connected well wtih Anamita because she has a high level view that is just as focused on the implications of technology as it is on its. We talk about the importance of having critical thinkers, diversity, and philosophers in the room when new paradigms such as quantum computing and artificial intelligence go mainstream.
+Anamita Guha, who just wrapped up a stint at IBM working on Quantum Computing, joins us for a chat about quantum computing, giving an introduction and waxing on its rollout and implications. I connected well with Anamita because she has a high level view that is just as focused on the implications of technology as it is on its. We talk about the importance of having critical thinkers, diversity, and philosophers in the room when new paradigms such as quantum computing and artificial intelligence go mainstream.
 
 We also discuss some fascinating implications for the tech that I hadn't even thought of before -- for instance, the idea that machine learning algorithms will develop to take full advantage of the new platform offered by quantum. This week, Anamita [announced](https://www.linkedin.com/feed/update/urn:li:activity:6823003114023464960/) that she is entering a new role in Product at Facebook, focusing on privacy conscious ML. I'm looking forward to seeing her continue in her career as a rising star!
 
