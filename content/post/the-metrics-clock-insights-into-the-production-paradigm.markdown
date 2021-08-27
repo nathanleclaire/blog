@@ -19,7 +19,7 @@ As it stands today, many of you sample or aggregate your production data somewha
 
 But since I came across the concepts introduced in The Volume Clock and related work from de Prado, I've had a few fresh new ideas how you might be able to do this. To catch you up on the relevant ideas from de Prado, he examines novel approaches to generating "bars" such as you might see in a stock technician's candlestick chart from the underlying tick (trade) data. Almost every data feed offers the traditional "time bars" where you can visualize the open, high, low, and close price traded for that interval over time, but such bars are not ideally suited for machine learning (which is de Prado's main concern). An example of daily time bars is shown below.
 
-![A financial time series candlestick chart showing Apple stock's price over time](/static/images/candlestick.png "Time bars are generated once a uniform interval of time has passed")
+![A financial time series candlestick chart showing Apple stock's price over time](/images/candlestick.png "Time bars are generated once a uniform interval of time has passed")
 
 Despite their ubiquity, time bars have less desirable properties for machine learning use cases than some alternatives we can compute using the underlying tick data. It is well known that financial data in general is not [independent and identically distributed](https://en.wikipedia.org/wiki/Independent_and_identically_distributed_random_variables), as each observation is influenced by its predecessors, and the distribution of returns tends to be highly [leptokurtic](https://en.wikipedia.org/wiki/Fat-tailed_distribution) (i.e., it has fat tails -- you could look up one day and suddenly be up or down a high # of standard deviations). Time bars exacerbate this problem because they bundle up too much information in one observation rather than emitting observations *as new information arrives*.
 
@@ -59,17 +59,17 @@ We have a lot of different ways of measuring such value, and two come to mind th
 
 This is most obviously expressed in the infrastructure metrics that almost every team has available measuring usage of CPU cycles, bandwidth, IOPs and so on. For instance, you could sample more frequently from a given host when its free memory is lower, or when its CPUs are burning hot. That should result in you having more relevant information at your disposal since you'll be more likely to collect telemetry when resource utilization is strained.
 
-![A diagram showing three servers with varying levels of load. The telemetry processor selects more information from the servers with higher load.](/static/images/metrics_sampling.png)
+![A diagram showing three servers with varying levels of load. The telemetry processor selects more information from the servers with higher load.](/images/metrics_sampling.png)
 
 **Sampling based on the value of the underlying customer** -- Not all customers are created equal. Some actually have negative value for us (perhaps they are on a Free tier with no hope of ever upgrading), whereas some represent $XY,000,000 per year contracts. While not as straightforward as a metrics-based method as outlined above, it could reflexively help solve the fear of losing out on important telemetry. Almost by definition, at the end of the day we want to keep data that is worth a lot of money to our company, and ignore data that is worth less.
 
-![](/static/images/dollars_sampling.png)
+![](/images/dollars_sampling.png)
 
 Perhaps someone out there is crazy enough to experiment with ideas such as attaching the Opportunity Amount from SFDC (representing how much $ the customer is projected to be worth) to their tracing data and sampling based on that. You can even imagine yet more sophisticated systems that do projections and factor in yet more dimensions to the mix such as the users' value as an evangelist based on their number of Twitter followers, how important their title looks on LinkedIn, etc. While we all like to feel like we're the most important, I'm sure you will agree that fixing a bug seen by a CTO with purchasing power or a Twitter celebrity is more important than patching issues encountered by some rando.
 
 **Sampling based on excess usage of "operational capital"** -- Of course, underlying resource usage or customer value are only a few obvious dimensions through which we can implement the idea of "value based sampling". You could probably argue that, say, slow requests also use up our "operational capital" in a way, by both frustrating users and sometimes directly [impacting the bottom line](https://www.gigaspaces.com/blog/amazon-found-every-100ms-of-latency-cost-them-1-in-sales). When I was at Honeycomb, we even encouraged users to codify this way of measuring impact as [SLOs](https://www.honeycomb.io/slo). Perhaps we could sample more frequently when we're deviating from the our baseline "budget"?
 
-![](/static/images/latency_sampling.png)
+![](/images/latency_sampling.png)
 
 In de Prado's work some of the more sophisticated bar sampling techniques deal with [information imbalance](https://towardsdatascience.com/information-driven-bars-for-financial-machine-learning-imbalance-bars-dda9233058f0) -- trying to sample when a time series has sufficiently diverged from past history in order to detect large traders who are splitting their orders up. The current `EMADynamicSampler` in Honeycomb's Refinery is a first step towards this direction -- it will sample traces more aggressively when the *count for a particular value of a field* diverges from its exponentially weighted moving average, i.e., when it's abnormal. Think a sudden burst of HTTP 500 level errors when previously there weren't too many happening concurrently.
 
