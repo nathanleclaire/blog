@@ -53,7 +53,7 @@ For instance, a common key to sample on is the HTTP status code. Your service ho
 
 That's a good improvement over sampling randomly, but the idea of sampling relative to *value*, like the way that dollar bars work, has me wondering if we can push it much further. For instance, unlike sampling dollar bars, it does not relate directly to the underlying value or cost associated with the traces it's examining.
 
-We have a lot of different ways of measuring such value, and two come to mind that might be useful.
+We have a lot of different ways of measuring such value, and a few come to mind that might be useful.
 
 **Sampling based on resources used** -- For determining which traces to store, you could examine the compute resources used nearby the trace in question, and sample more aggressively when the trace looks likely to be costing you more money. You may not be trading dollars for stocks, but you *are* trading dollars for compute resources, and oftentimes the source of a problem that vexes you will have clear signals that something is going wacky like elevated CPU, network, or disk usage.
 
