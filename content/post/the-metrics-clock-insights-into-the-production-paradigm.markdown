@@ -1,11 +1,13 @@
 ---
-title: "The Metrics Clock: Insights Into the Production Paradigm"
+title: Improving Observability and AIOps with Smarter Sampling
 layout: post
 date: 2021-08-27T06:02:16.043Z
 categories:
   - programming
 ---
-López de Prado has a paper, [The Volume Clock](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2034858), where he talks about sampling bars based not on the mere ticking of the clock, but rather when information actually arrives to the market, for instance when enough dollars or shares have changed hands. I submit that a similar operation could be applied in DevOps to make sampling smarter and potentially to obtain better results in machine learning use cases for operational telemetry ("[AIOps](https://www.gartner.com/smarterwithgartner/how-to-get-started-with-aiops/)", if you will).
+In the field of financial machine learning, López de Prado has a paper, [The Volume Clock](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2034858), where he talks about sampling observations for model training based not on the mere ticking of the clock, but rather when information actually arrives to the market. For instance, bars might be generated when enough dollars or shares have changed hands instead of every N units of time.
+
+I submit that a similar operation could be applied in DevOps to make sampling smarter and potentially to obtain better results in machine learning use cases for operational telemetry ("[AIOps](https://www.gartner.com/smarterwithgartner/how-to-get-started-with-aiops/)", if you will).
 
 ## Better Bars
 
@@ -45,7 +47,7 @@ One of the features in Honeycomb's [Refinery](https://github.com/honeycombio/ref
 
 For instance, a common key to sample on is the HTTP status code. Your service hopefully serves up a lot of HTTP 200 status codes, and very few 500 level status codes indicating an internal server error. Instead of capturing 1/N of both types, we can track how often they occur and sample a lot more of the 500s, relatively speaking.
 
-That's a good improvement over sampling randomly, but the idea of sampling according to when new information arrives has me wondering if we can push it much, much, further. For instance, unlike sampling dollar bars, it does not relate directly to the underlying value or cost associated with the traces it's examining.
+That's a good improvement over sampling randomly, but the idea of sampling relative to _value_, like the way that dollar bars work, has me wondering if we can push it much further. For instance, unlike sampling dollar bars, it does not relate directly to the underlying value or cost associated with the traces it's examining.
 
 We have a lot of different ways of measuring such value, and two come to mind that might be useful.
 
@@ -57,8 +59,16 @@ This is most obviously expressed in the infrastructure metrics that almost every
 
 Perhaps someone out there is crazy enough to experiment with ideas such as attaching the Opportunity Amount from SFDC (representing how much $ the customer is projected to be worth) to their tracing data and sampling based on that. You can even imagine yet more sophisticated systems that do projections and factor in yet more dimensions to the mix such as the users' value as an evangelist based on their number of Twitter followers, how important their title looks on LinkedIn, etc. While we all like to feel like we're the most important, I'm sure you will agree that fixing a bug seen by a CTO with purchasing power or a Twitter celebrity is more important than patching issues encountered by some rando.
 
+**Sampling based on excess usage of "operational capital"** -- Of course, underlying resource usage or customer value are only a few obvious dimensions through which we can implement the idea of "value based sampling". You could probably argue that, say, slow requests also use up our "operational capital" in a way, by both frustrating users and sometimes directly [impacting the bottom line](https://www.gigaspaces.com/blog/amazon-found-every-100ms-of-latency-cost-them-1-in-sales). When I was at Honeycomb, we even encouraged users to codify this way of measuring impact as [SLOs](https://www.honeycomb.io/slo). Perhaps we could sample more frequently when we're deviating from the our baseline "budget"?
+
+In de Prado's work some of the more sophisticated bar sampling techniques deal with [information imbalance](https://towardsdatascience.com/information-driven-bars-for-financial-machine-learning-imbalance-bars-dda9233058f0) -- trying to sample when a time series has sufficiently diverged from past history in order to detect large traders who are splitting their orders up into much smaller chunks. The current `EMADynamicSampler` in Honeycomb's Refinery contains some breadcrumbs along the path to fully realizing this idea. We know 
+
 ## The Future
 
-All this is just the beginning of me writing down some thoughts on more useful, information-based sampling . I've focused on tracing above since it's more or less what I know best, but I see no reason the underlying philosophy couldn't be applied to metrics, logs, APM and more. For instance, why are we limited to a static time based scrape interval for metrics systems? _A lot_ can happen in fifteen seconds, and while we don't want to overload a host that's already wheezing along with excessive scrapes, perhaps we could collect telemetry more dynamically based on an evaluation of where the problems are likely to be.
+I've focused on tracing above since it's more or less what I know best, but I see no reason the information-centric approaches couldn't be applied to metrics, logs, APM and more. For instance, why are you limited to a static time based scrape interval for metrics systems? _A lot_ can happen in fifteen seconds, and while we don't want to overload a host that's already wheezing along with excessive scrapes, perhaps we could collect telemetry more dynamically based on an evaluation of where the problems are likely to be. We could even consider launching probes, such as the kind that [eBPF](https://ebpf.io/) offers, on the fly when our system realizes that useful information is being generated in a particular hotspot.
 
-Then, when we inevitably search and visualize it later on, our tools could have a better head start in terms of surfacing the information that we actually care about, instead of simply painting us a time based picture that often leaves us scratching our heads and wanting more. I haven't even covered the potential implications for doing machine learning and augmenting humans' ability to 
+Then, when we inevitably search and visualize it later on, our tools would have a better head start in terms of surfacing the information that we actually care about, instead of simply painting us a time based picture that often leaves us scratching our heads and wanting more.
+
+Likewise, doing machine learning on observability data has a lot of the same issues that doing it on financial time series data has. The data is noisy, it is not IID, and it is usually not generated in a way that's focused on preserving information efficiency (though at least your "opponents" in observability are not trying to hide their tracks like they are in finance). Hopefully, most of the time in your production systems you are not having some critical issue or a prelude to one that would be useful for a model to pick up on and surface to you. If that's true, then sampling data uniformly would be a mistake.
+
+Instead creators of AIOps systems should look for ways to generate training data that is closer to IID and preserves the right information. That will lead to higher precision down the line, and consequently, lower fatigue with automated alerts or insights.
