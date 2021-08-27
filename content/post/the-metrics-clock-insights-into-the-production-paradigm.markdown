@@ -3,7 +3,11 @@ title: Improving Observability and AIOps with Smarter Sampling
 layout: post
 date: 2021-08-27T06:02:16.043Z
 categories:
-  - programming
+  - devops
+  - monitoring
+  - observability
+  - sampling
+  - tracing
 ---
 In the field of financial machine learning, López de Prado has a paper, [The Volume Clock](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2034858), where he talks about sampling observations for model training based not on the mere ticking of the clock, but rather when information actually arrives to the market. For instance, bars might be generated when enough dollars or shares have changed hands instead of every N units of time.
 
@@ -59,9 +63,13 @@ This is most obviously expressed in the infrastructure metrics that almost every
 
 **Sampling based on the value of the underlying customer** -- Not all customers are created equal. Some actually have negative value for us (perhaps they are on a Free tier with no hope of ever upgrading), whereas some represent $XY,000,000 per year contracts. While not as straightforward as a metrics-based method as outlined above, it could reflexively help solve the fear of losing out on important telemetry. Almost by definition, at the end of the day we want to keep data that is worth a lot of money to our company, and ignore data that is worth less.
 
+![](/static/images/dollars_sampling.png)
+
 Perhaps someone out there is crazy enough to experiment with ideas such as attaching the Opportunity Amount from SFDC (representing how much $ the customer is projected to be worth) to their tracing data and sampling based on that. You can even imagine yet more sophisticated systems that do projections and factor in yet more dimensions to the mix such as the users' value as an evangelist based on their number of Twitter followers, how important their title looks on LinkedIn, etc. While we all like to feel like we're the most important, I'm sure you will agree that fixing a bug seen by a CTO with purchasing power or a Twitter celebrity is more important than patching issues encountered by some rando.
 
 **Sampling based on excess usage of "operational capital"** -- Of course, underlying resource usage or customer value are only a few obvious dimensions through which we can implement the idea of "value based sampling". You could probably argue that, say, slow requests also use up our "operational capital" in a way, by both frustrating users and sometimes directly [impacting the bottom line](https://www.gigaspaces.com/blog/amazon-found-every-100ms-of-latency-cost-them-1-in-sales). When I was at Honeycomb, we even encouraged users to codify this way of measuring impact as [SLOs](https://www.honeycomb.io/slo). Perhaps we could sample more frequently when we're deviating from the our baseline "budget"?
+
+![](/static/images/latency_sampling.png)
 
 In de Prado's work some of the more sophisticated bar sampling techniques deal with [information imbalance](https://towardsdatascience.com/information-driven-bars-for-financial-machine-learning-imbalance-bars-dda9233058f0) -- trying to sample when a time series has sufficiently diverged from past history in order to detect large traders who are splitting their orders up. The current `EMADynamicSampler` in Honeycomb's Refinery is a first step towards this direction -- it will sample traces more aggressively when the *count for a particular value of a field* diverges from its exponentially weighted moving average, i.e., when it's abnormal. Think a sudden burst of HTTP 500 level errors when previously there weren't too many happening concurrently.
 
