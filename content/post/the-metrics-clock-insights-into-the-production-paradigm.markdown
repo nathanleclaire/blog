@@ -23,7 +23,11 @@ But since I came across the concepts introduced in The Volume Clock and related 
 
 It is well known that financial data in general is not [independent and identically distributed](https://en.wikipedia.org/wiki/Independent_and_identically_distributed_random_variables), as each observation is influenced by its predecessors, and the distribution of returns tends to be highly [leptokurtic](https://en.wikipedia.org/wiki/Fat-tailed_distribution) (i.e., it has fat tails -- "risk happens fast"). Time bars exacerbate this problem because they bundle up too much information in one observation rather than emitting observations *as new information arrives*.
 
-Other ways of generating your training data, that try to get us closer to our goal of IID   therefore have both theoretical and [empirical](https://towardsdatascience.com/information-driven-bars-for-financial-machine-learning-imbalance-bars-dda9233058f0) support. Most straightforwardly, this might take the form of, say, emitting a new bar when a certain amount of dollars has changed hands, ticking the "clock" according to the underlying value exchanged, and not a static measurement of time. Most of the action in trading, for instance, hovers around the open and the close of the exchange for the day. It makes sense to emit more bars in those times, where more information has arrived than during the middle of the session when everyone is out to lunch and little is happening.
+Other ways of generating your training data, that try to get you closer to your goal of IID therefore have both theoretical and [empirical](https://towardsdatascience.com/information-driven-bars-for-financial-machine-learning-imbalance-bars-dda9233058f0) support. From the linked article:
+
+> Similar to other alternative bars (tick and volume bars) the overall auto-correlation is lower in imbalance bars than in traditional time-based candlesticks. As we explained in the original article, this is a good feature because it means data points are more independent of each other.
+
+Most straightforwardly, preprocessing raw trade data into these alternative bars takes the form of emitting a new bar when a certain amount of volume has occurred, such as when N shares have changed hands, or N dollars have. Most of the action in trading, for instance, hovers around the open and the close of the exchange for the day. It makes sense to emit more bars in those times, where more information has arrived than during the middle of the session when everyone is out to lunch and little is happening.
 
 The algorithm to do so is along these lines:
 
@@ -45,7 +49,7 @@ What if we could do something similar in observability to improve our sampling e
 
 ## To Observability
 
-Dollar bars work partially because they shift the lens to focusing on what we actually care about, i.e., money exchanged and new information, not the ticking of the clock. Can we apply similar operations in observability to get better results? I think so. For instance, let's look at sampling tracing data.
+Dollar bars work partially because they shift the lens to focusing on what you actually care about, i.e., money exchanged and new information, not the ticking of the clock. Can we apply similar operations in observability to get better results? I think so. For instance, let's look at sampling tracing data.
 
 One of the features in Honeycomb's [Refinery](https://github.com/honeycombio/refinery), a proxy for sampling distributed tracing data before sending it to a storage system, is the introduction of novel sampling methods such as [dynamic sampling](https://docs.honeycomb.io/manage-data-volume/refinery/sampling-methods/#dynamic-sampling) that improve on grabbing traces randomly. In dynamic sampling, the sampler maintains a map of how often it has seen a particular value of a span field, and samples more frequently seen values more aggressively, resulting in a "compression" of sorts that keeps more of the novel data such as failure states, and assuages the concern that we might not have what we need when we go to look for it.
 
