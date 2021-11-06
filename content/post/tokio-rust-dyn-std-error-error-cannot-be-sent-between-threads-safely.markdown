@@ -1,7 +1,7 @@
 ---
 title: Tokio/Rust dyn std::error::Error cannot be sent between threads safely
 layout: post
-date: 2021-11-06T05:28:22.311Z
+date: 2021-11-06T21:25:29.644Z
 categories:
   - programming
 ---
