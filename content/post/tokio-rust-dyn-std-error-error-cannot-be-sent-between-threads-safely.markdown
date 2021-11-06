@@ -5,7 +5,7 @@ date: 2021-11-06T21:25:29.644Z
 categories:
   - programming
 ---
-![crabs demonstrating multithreading](/static/images/crab_threads.png)
+![crabs demonstrating multithreading](/images/crab_threads.png)
 
 And for good measure, we'll also talk about error `borrowed value does not live long enough`, `argument requires that var is borrowed for 'static`, `dropped here while still borrowed`...
 
@@ -57,7 +57,7 @@ ticks::iqfeed_ticks(&line.unwrap(), &output_dir.to_owned(), no_mkt_hours)
 
 As a Golang YOLO heathen I was accustomed to not thinking too much about where I was handing off memory and its lifetime, etc. Prior to multithreading it was fine, but once I moved to async, the compiler suddenly didn't like that very much, throwing off an error about a (seemingly unrelated, but ultimately very related) variable.
 
-![dropped here while borrowed compiler error](/static/images/subcmdrust.png)
+![dropped here while borrowed compiler error](/images/subcmdrust.png)
 
 Well, of course I suspect the shared value passed to every method, but it was torturous to figure out what I was doing wrong. Ultimately, it turns out that I wanted to clone or copy instead of borrowing. I had been too liberal in my application of the `&` operator when I shouldn't have been.
 
