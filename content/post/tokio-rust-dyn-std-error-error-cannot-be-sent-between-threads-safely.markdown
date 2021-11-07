@@ -75,7 +75,7 @@ Well, when it comes to sharing that across threads, it's NO GOOD as far as the R
 
 OK, so we know it's complaining because we're reusing the same borrowed value across multiple threads, so what's the solution? **Ownership**. Instead of borrowing the value directly, we can redefine an owned version unique to each thread that will be captured when we `move` the `async` future. (I think I got all that correct, if any Rustaceans out there have some clarifying feedback, I welcome it!)
 
-So what do we do? When we loop over, we want to get an owned version of the string with `to_owned`. Surprisingly straightforward solution, but I was really having a hard time wrapping my head around the various layers, the difference between `&str`, `str`, `String`, and so on. Now everything is happy because `line` is unique to each iteration (hence the borrow is OK), `out` is owned`, and`no_mkt_hours`is`Copy`-ed because it's a`bool`, not a`&bool`.
+So what do we do? When we loop over, we want to get an owned version of the string with `to_owned`. Surprisingly straightforward solution, but I was really having a hard time wrapping my head around the various layers, the difference between `&str`, `str`, `String`, and so on. Now everything is happy because `line` is unique to each iteration (hence the borrow is OK), `out` is owned, and`no_mkt_hours` is `Copy`-ed because it's a `bool`, not a `&bool`.
 
 ```
 for line in lines {
