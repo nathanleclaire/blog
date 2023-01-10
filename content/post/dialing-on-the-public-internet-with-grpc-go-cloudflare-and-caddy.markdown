@@ -29,19 +29,18 @@ ction error: desc = "error reading server preface: http2: frame too large"
 
 Needed to get system certs
 
-* ```
-    systemCertPool, err := x509.SystemCertPool()
-    if err != nil {
-            log.Fatal("can't get system cert pool", err)
-    }
-    conn, err := grpc.Dial(cliCtx.Args().Get(0), grpc.WithTransportCredentials(insecure.NewCredentials()))
-    conn, err := grpc.Dial(cliCtx.Args().Get(0), grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{
-            RootCAs: systemCertPool,
-    })))
-      if err != nil {
-              logrus.Fatalf("fail to dial: %v", err)
-      }
-  ```
+```
+systemCertPool, err := x509.SystemCertPool()
+if err != nil {
+        log.Fatal("can't get system cert pool", err)
+}
+conn, err := grpc.Dial(cliCtx.Args().Get(0), grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{
+        RootCAs: systemCertPool,
+})))
+if err != nil {
+        logrus.Fatalf("fail to dial: %v", err)
+}
+```
 
 ```
 $ amostra work dns:///dev.100brushes.com
