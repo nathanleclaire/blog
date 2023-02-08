@@ -740,4 +740,7 @@ input#archive-search {
   text-align: center;
   text-decoration: none;
   color: white;
+  margin: 0px auto;
+  display: block;
+  width: 200px;
 }
