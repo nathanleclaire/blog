@@ -729,3 +729,15 @@ input#archive-search {
 .col-three-quarters > p {
     margin-top: 0px;
 }
+
+.call-to-action {
+  background-color: rgb(204, 85, 0);
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 20px;
+  border-width: 2px;
+  border-style: solid;
+  text-align: center;
+  text-decoration: none;
+  color: white;
+}
