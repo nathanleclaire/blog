@@ -15,7 +15,7 @@ At any rate, here’s a writeup of what I tried, what worked, and what didn’t.
 
 From around 2020, I became interested in "Advances in Financial Machine Learning" by Lopez de Prado and focused on gaining an edge in the market. I processed tick data into aggregate features and used [mlfinlab](https://github.com/hudson-and-thames/mlfinlab) in a project I called “Balrog” or “Ogmi” when launched publicly. It included some Rust code for processing that I’ve now open sourced.
 
-![](/static/images/untitled.png)
+![](/images/untitled.png)
 
 This tool offered access to mlfinlab primitives via a Django API. However, as a sole developer, it was difficult to maintain the pipeline and the predictions were sadly inaccurate, resulting in losses. Despite marketing it as a "bet sizing engine", which I still think has potential in **\***some**\*** field, it is brutal to compete with larger and more experienced players in the world of finance.
 
@@ -38,11 +38,11 @@ I successfully recruited Sven Dowideit, an old friend from Docker and boot2docke
 
 However, it was still a thrilling time. We felt wind in our sails again for the first time in **\***years**\*** chasing after the vision we had at Docker to revolutionize computing and make it truly decentralized. We tried to raise investor money but got too ambitious and ruined our chances by chasing a higher valuation. Meanwhile, interest rates were rising, and people were getting rekt across the board.
 
-![Untitled](/static/images/untitled-1.png)
+![Untitled](/images/untitled-1.png)
 
 We pivoted to making DAOnetes, a decentralized platform that tokenizes workloads and enables multi-sig workflows for workload orchestration. DAOnetes, awesomely, supported private peer-to-peer Wireguard networking through a smart contract, which solves the Tailscale-in-the-middle issue (i.e., having to trust an intermediary to bootstrap private networking). Our goal was for DAOnetes to be the backbone of the Metaverse, enabling more peer-to-peer interactions and a decentralized yet loosely trusted network for participants.
 
-![Untitled](/static/images/untitled-2.png)
+![Untitled](/images/untitled-2.png)
 
 Unfortunately, we found that there was currently not much demand for this idea the way we tried it. DAOs didn’t actually do much programming, and even crypto bros pretty much just wanted to use AWS or whatever.
 
@@ -68,7 +68,7 @@ As mentioned on Programming is Terrible:
 
 I wanted something BiDi, and I got it by writing it myself. It's a lot of fun, especially being able to prioritize user requested tasks in the queue while my GPU still works on less important tasks. The fans are constantly blasting away, but it's a good time.
 
-![Untitled](/static/images/untitled-3.png)
+![Untitled](/images/untitled-3.png)
 
 Things were going well at first, and I think I am hitting on a few user pain points. However, looking at what I’ve been accomplished in the past few months, I feel like exhaustion and self consciousness has led me to drop the ball on important tasks like conducting user interviews, shipping at a fast pace, and doing marketing.
 
