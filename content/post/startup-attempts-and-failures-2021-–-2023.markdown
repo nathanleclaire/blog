@@ -5,10 +5,6 @@ date: 2023-04-05T04:23:07.602Z
 categories:
   - programming
 ---
-# Blogs
-
-### Startup Attempts and Failures, 2021 – 2023
-
 In 2021, I quit my job at Honeycomb to set out on my own and try to build a company. At first, I wasn’t sure the exact model I’d follow, and had a (perhaps too lofty) aspiration that maybe I’d have a hybrid model, doing a bit of consulting, a bit of real estate, and a bit of product/SaaS/4-hour-workweek livin’ the dream. And, of course, if I happened to hit on something big, I could go raise venture and pursue that.
 
 It was also a great opportunity to take a much-needed break from seven years of high growth startup life, and if nothing else, I’m glad I did that. I made many connections along the way from, say, flying to Miami for a podcast meetup on a whim that I otherwise wouldn’t have. Life follows a non-linear path in that way.
