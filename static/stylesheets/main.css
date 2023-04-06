@@ -330,7 +330,7 @@ iframe {
 }
 
 div#content {
-    margin: 0% 61%; /* default margin for larger screens */
+    margin: 0% 35%; /* default margin for larger screens */
 }
 
 @media only screen and (max-width: 767px) {
