@@ -5,6 +5,7 @@ date: 2023-04-06T00:31:24.753Z
 categories:
   - programming
 ---
+![](/images/00000-2150862428.png)
 
 Lately, I've been working on [Tensorscale](https://www.tensorscale.ai/), which was born out of my frustration with not being able to access my perfectly good GPU while working elsewhere on Stable Diffusion projects. Even if I was just sitting on my couch, the problem remained the same. Gradio public sharing or [ngrok](https://ngrok.com/) were potential solutions that could have allowed me to access the automatic1111 web UI, but they had some issues for my use cases.
 
