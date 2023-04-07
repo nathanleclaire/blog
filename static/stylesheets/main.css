@@ -46,7 +46,11 @@ em {
 }
 
 pre {
-    background-color: #fefefe !important;
+    background-color: #fdfeff !important;
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid lightgray;
+    
 }
 
 h1 {
