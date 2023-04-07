@@ -45,6 +45,10 @@ em {
     font-family: "Lato", sans-serif;
 }
 
+pre {
+    background-color: #fefefe !important;
+}
+
 h1 {
     margin-top: 0.9em;
     font-size: 1.3em;
