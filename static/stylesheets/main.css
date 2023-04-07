@@ -205,9 +205,7 @@ article p .word1,article p .word2,article p .word3 {
 pre {
     line-height: 1.3em;
     position: relative;
-    border: 1px solid #dfdfdf;
     -webkit-border-radius: 4px;
-    border-radius: 4px;
     overflow-x: scroll;
 }
 
