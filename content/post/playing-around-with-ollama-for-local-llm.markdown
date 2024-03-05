@@ -9,13 +9,13 @@ categories:
   - llama
 ---
 
-<img style="max-height: 512px" src="/images/img_6907.jpeg" />
+![](/images/img_6907.jpeg?height=512px)
 
 It should come as no surprise to anyone who's involved in the tech industry that Large Language Models (LLMs) are a huge trend. Recently, I've had the opportunity to work with a new LLM tool called "ollama", which was developed by some friends of mine from Docker. The experience so far has been quite impressive, to say the least.
 
 # Running
 
-<img style="max-height: 512px" src="/images/img_6910.jpeg" />
+![](/images/img_6910.jpeg?height=512px)
 
 One of the standout features of ollama is its automatic “scheduling” functionality, which works efficiently across multiple GPUs and OSX metal alike. This feature makes trying big models easy as hell, making it a joy to work with. Another element I appreciate about ollama is the ease it provides for creating “characters” and playing around with parameters such as temperature or base model. This allows for an expansive range of creative freedom.
 
@@ -29,7 +29,7 @@ I foresee the complex and tangled Langchain eventually being replaced by a templ
 
 # Philosophy
 
-<img style="max-height: 512px" src="/images/img_6909.jpeg" />
+![](/images/img_6909.jpeg?height=512px)
 
 The concept of local LLMs is immensely important for several reasons. There’s a privacy perspective - many people, including myself, are uncomfortable with how systems like OpenAI don’t allow us to see the inner workings. Imagine if Google were to moralize to such an extent that it prevented you from accessing information about gun control due to its association with guns. It's essential that our narratives can encompass conflict, violence, and sex. That’s the basis of all media and it reflects the moral complexities of human life. Uncensored models are ultimately beneficial despite allowing some to engage in disturbing activities.
 
@@ -37,7 +37,7 @@ There are also numerous practical reasons for local LLMs. It’s inefficient to 
 
 # Hands on
 
-<img style="max-height: 512px" src="/images/untitled.jpeg" />
+![](/images/untitled.jpeg?height=512px)
 
 I consider myself fortunate to have two thicc consumer GPUs at my disposal. This has enabled me to run models like Mixtral, that are shockingly good compared to even just a year ago, at pretty reasonable quantizations and speeds. I can only imagine the human creativity we will unlock once all the pieces, including aware continue to chug along and everyone has GPT 3.5 or 4 level capabilities sitting on their desk.
 
