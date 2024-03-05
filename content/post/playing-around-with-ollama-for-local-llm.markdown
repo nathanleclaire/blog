@@ -37,7 +37,7 @@ There are also numerous practical reasons for local LLMs. It’s inefficient to 
 
 # Hands on
 
-![](/images/untitled.jpeg?height=512px)
+![](/images/untitled.png?height=512px)
 
 I consider myself fortunate to have two thicc consumer GPUs at my disposal. This has enabled me to run models like Mixtral, that are shockingly good compared to even just a year ago, at pretty reasonable quantizations and speeds. I can only imagine the human creativity we will unlock once all the pieces, including aware continue to chug along and everyone has GPT 3.5 or 4 level capabilities sitting on their desk.
 
