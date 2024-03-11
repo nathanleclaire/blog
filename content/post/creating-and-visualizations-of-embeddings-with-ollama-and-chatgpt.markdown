@@ -1,5 +1,5 @@
 ---
-title: Creating and Visualizations of Embeddings with Ollama and ChatGPT
+title: Creating and Visualizing Embeddings with Ollama and ChatGPT
 layout: post
 date: 2024-03-11T01:56:06.220Z
 categories:
