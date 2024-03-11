@@ -9,13 +9,15 @@ To effectively utilize Language Models (LLMs) with text, you first need to conve
 
 It's incredibly easy with a tool like Ollama - just make a curl call:
 
-`$ curl -s http://localhost:11434/api/embeddings -d "{"model":"nomic-embed-text","prompt":" $(cat /tmp/prompt) "}" | jq . 
+```
+$ curl -s http://localhost:11434/api/embeddings -d "{"model":"nomic-embed-text","prompt":" $(cat /tmp/prompt) "}" | jq . 
 {
   "embedding": [
     0.6371732354164124,
     0.45353594422340393,
     -4.1606903076171875,
-    0.021639127284288406...`
+    0.021639127284288406...
+```
 
 Now, we are dealing with a series of floating point numbers. It's important to understand what they mean and how we can visualize them more effectively. To enhance the results of RAG and LLM, we need to comprehend both intuitively and practically why and how certain elements get clustered together.
 
