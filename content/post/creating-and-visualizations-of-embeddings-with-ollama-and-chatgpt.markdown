@@ -41,6 +41,10 @@ I'm unsure if colors add much value to these style charts. You could consider ma
 
 [This article](https://www.alignmentforum.org/posts/pHPmMGEMYefk9jLeh/llm-basics-embedding-spaces-transformer-token-vectors-are) discusses visualizing embeddings on a hypersphere, and plugging it in to ChatGPT gave an interesting, albeit limited and potentially incorrect, implementation/idea:
 
+![](/images/hypersphere_1.png)
+
+
+
 > \
 > The visualization above represents a projection of the token embeddings onto a 3D hypersphere. This projection is created by normalizing the embeddings and taking their first three components to represent their position in a three-dimensional space.
 >
