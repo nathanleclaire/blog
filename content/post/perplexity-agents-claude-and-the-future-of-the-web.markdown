@@ -5,8 +5,6 @@ date: 2024-06-14T04:43:17.644Z
 categories:
   - ai
 ---
-# Perplexity Agents, Claude, and the Future of the Web
-
 So, uh, #agents is getting thrown around a lot these days and it's a confusing landscape out there. But I want to talk about recent experiences with my new obsessions like [Perplexity](https://www.perplexity.ai/), which in my opinion is one of the first approaches at a breakthrough, agent-native system. I’ve also been playing with this cool tool called [WebSim](https://websim.ai/) (as in Web Simulator), which feels like another stab at a truly AI-native app (rather than just something which bolts on LLMs or other models to existing tools). Some thoughts on the directions we’re headed and why I think Claude Opus is uniquely positioned to be the vanguard LLM of this new wave…
 
 ## The Rise of Perplexity and Perplexity Pages
