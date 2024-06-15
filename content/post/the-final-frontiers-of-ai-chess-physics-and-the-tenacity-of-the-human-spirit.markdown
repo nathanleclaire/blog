@@ -50,7 +50,7 @@ Right now, the high-performing models like GPT-4 don't have LoRA (or even regula
 
 ## The Final Boss: Spatial Reasoning and Physics Simulation
 
-![a stylized design illustration of a red apple hanging down on black and white background while isaac newton sites](/static/images/newton-with-apple.png)
+![a stylized design illustration of a red apple hanging down on black and white background while isaac newton sites](/images/newton-with-apple.png)
 
 The real final frontier though, I think, is spatial knowledge, awareness, and “world simulation”. It's a really difficult problem for AIs to rotate shapes and reason in 3D space. That’s why many remaining CAPTCHAs seem to be variants of “select the objects of the same class” or “point this hand in the right orientation”. Developing a true, conceivable physical world model is what these models struggle with most right now. True multimodality, like the Omni models, and physical reasoning engines are the key research directions to push on.
 
