@@ -18,7 +18,7 @@ Are we doomed for computers to always get better at us than everything we do? Wh
 
 ## The AI Capabilities Wall
 
-![a stylized illustration of people shoveling money into a giant burning pile of GPUs](/static/images/light-money-on-fire-with-gpus.png)
+![a stylized illustration of people shoveling money into a giant burning pile of GPUs](/images/light-money-on-fire-with-gpus.png)
 
 It’s not clear that the current trend of AI improvement will continue linearly, in fits and starts, or at all. It’s possible that we’ve hit a capability wall. [Transformers don’t scale ‘well’.](https://www.perplexity.ai/search/Limits-of-scaling-utGtpCyoTWKaRweRtNjOEA) ¹
 
