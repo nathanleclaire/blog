@@ -8,8 +8,6 @@ categories:
   - ai
   - programming
 ---
-# Prompt Engineering to Grow Yourself a Nanoservice Garden
-
 ![An anime-style digital illustration of a boy sitting at a desk with a laptop. The desk has plants and flowers growing on it. Around him are floating icons and windows representing various computer applications. The color scheme is primarily green and white, giving a fresh and natural feel to the tech-focused image.](/images/gpt-garden-tech-nature-workspace.png)
 
 About a year ago, riding high on my first access to gpt-4-32k, I cobbled together a project that embodied a vision I'd been dreaming on: what if software engineering evolved into a kind of "DJ-ing" with natural language instead of clunky code? Could we usher in the next million creators of "bicycles for the mind"? I imagined a world where everyone could nurture their own garden of software, conjuring up bits and pieces to remix with others' creations. (Devin wasn't around then, but it seems to be inching towards this idea, albeit via a different route.)
