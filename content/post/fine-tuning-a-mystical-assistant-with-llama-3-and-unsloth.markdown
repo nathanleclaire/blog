@@ -38,7 +38,7 @@ from bs4 import BeautifulSoup
 import logging
 from datasets import load_dataset
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 BASE_URL = "https://sacred-texts.com/eso/sta/sta{:02d}.htm"
 OUTPUT_DIR = "secret_teachings_content"
@@ -48,7 +48,7 @@ NUM_PAGES = 50
 def fetch_and_save_content(url, filename):
     if os.path.exists(filename):
         logging.info(f"File {filename} already exists, skipping download")
-        with open(filename, 'r', encoding='utf-8') as f:
+        with open(filename, "r", encoding="utf-8") as f:
             return f.read()
     
     logging.info(f"Fetching content from {url}")
@@ -56,19 +56,19 @@ def fetch_and_save_content(url, filename):
     response.raise_for_status()
     
     content = response.text
-    with open(filename, 'w', encoding='utf-8') as f:
+    with open(filename, "w", encoding="utf-8") as f:
         f.write(content)
     
     return content
 
 def parse_content(html_content):
-    soup = BeautifulSoup(html_content, 'html.parser')
-    paragraphs = soup.find_all('p')
+    soup = BeautifulSoup(html_content, "html.parser")
+    paragraphs = soup.find_all("p")
     return [p.get_text().strip() for p in paragraphs if p.get_text().strip()]
 
 def split_paragraph(paragraph):
-    sentences = paragraph.split('. ')
-    return [s.strip() + '.' for s in sentences if s.strip()]
+    sentences = paragraph.split(". ")
+    return [s.strip() + "." for s in sentences if s.strip()]
 
 def generate_conversation(paragraph):
     sentences = split_paragraph(paragraph)
@@ -89,7 +89,7 @@ def generate_training_data(content_dir):
     conversations = []
     for filename in os.listdir(content_dir):
         if filename.endswith(".html"):
-            with open(os.path.join(content_dir, filename), 'r', encoding='utf-8') as f:
+            with open(os.path.join(content_dir, filename), "r", encoding="utf-8") as f:
                 content = f.read()
             paragraphs = parse_content(content)
             for paragraph in paragraphs:
@@ -111,7 +111,7 @@ def main():
     training_data = generate_training_data(OUTPUT_DIR)
 
     logging.info(f"Saving training data to {JSON_OUTPUT}")
-    with open(JSON_OUTPUT, 'w', encoding='utf-8') as f:
+    with open(JSON_OUTPUT, "w", encoding="utf-8") as f:
         json.dump(training_data, f, ensure_ascii=False, indent=2)
 
     logging.info("Process completed successfully")

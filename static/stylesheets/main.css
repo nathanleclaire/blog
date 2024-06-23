@@ -20,7 +20,8 @@ body {
     padding: 0;
     border-top: 8px solid #333;
     font-family: "Lato", sans-serif;
-    font-size: 16px;
+    font-size: 20px;
+    line-height: 32px;
     color: #333;
 }
 
@@ -36,7 +37,8 @@ body {
         width: 90%;
     }
     article {
-        font-size: 18px !important;
+        font-size: 20px !important;
+        line-height: 32px !important;
     }
 }
 
@@ -51,21 +53,6 @@ pre {
     padding: 16px;
     border: 1px solid lightgray;
     
-}
-
-h1 {
-    margin-top: 0.9em;
-    font-size: 1.3em;
-    font-weight: normal;
-    font-style: normal;
-    text-align: center;
-}
-
-h2 {
-    margin-top: 0.9em;
-    font-size: 1em;
-    font-weight: bold;
-    font-style: normal;
 }
 
 .wrap>footer {
@@ -178,14 +165,6 @@ article header {
     text-align: center;
 }
 
-article header h1 {
-    font-size: 1.5em;
-    font-weight: bold;
-    font-style: normal;
-    line-height: 1em;
-    text-align: center;
-}
-
 article header time {
     font-size: 0.9em;
     font-style: normal;
@@ -200,9 +179,11 @@ article hr {
 }
 
 #content img {
-    max-width: 100%;
-    margin: 4px auto;
-    display: block;
+  max-width: 100%;
+  max-height: 512px;
+  margin: 4px auto;
+  display: block;
+  height: auto;
 }
 
 article p .word1,article p .word2,article p .word3 {
@@ -328,11 +309,14 @@ iframe {
 }
 
 div#content {
-    margin: 0% 26%; /* default margin for larger screens */
+    margin: 0% 12%; /* default margin for larger screens */
 }
 
 @media only screen and (max-width: 767px) {
   /* small screens */
+  #wrap {
+    padding: 0px 10px;
+  }
   div#content {
     margin: 0% 5px; /* 5px margin on small screens */
   }
@@ -387,10 +371,6 @@ a {
 
 li.title {
     text-align: left;
-}
-
-h1,h2,h3,h4,h5,h6 {
-    font-weight: bold;
 }
 
 input#reader-email {
@@ -752,4 +732,13 @@ input#archive-search {
   margin: 0px auto;
   display: block;
   width: 200px;
+}
+
+p > code {
+  border-radius: 6px;
+  padding: 1px;
+  margin: 1px;
+  color: rgb(31, 35, 40, 0.9);
+  background-color: rgba(175, 184, 193, 0.2);
+  border: 1px solid rgb(31, 35, 40);
 }
