@@ -2,7 +2,7 @@ backend:
   name: github
   repo: nathanleclaire/blog
 publish_mode: editorial_workflow
-media_folder: "/images"
+media_folder: "/static/images"
 collections:
 - name: "Posts"
   extension: "markdown"
