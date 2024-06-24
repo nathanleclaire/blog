@@ -5,8 +5,6 @@ date: 2024-06-24T01:48:04.416Z
 categories:
   - programming
 ---
-# Fine tuning a Mystical Assistant LLM with Llama 3 and Unsloth
-
 ![Cozy occult library ](/images/fine-tuning-mystical-assistant-library.png.png)
 
 Having done a fair amount of experimentation with Stable Diffusion fine tuning, both Dreambooth and LoRA based, I have been eager to try out LLM fine tuning, and the recent releases of Llama models make that dream more realizable than ever. In particular, [Unsloth](https://github.com/unslothai/unsloth), with its promise of dramatically reduced memory usage has caught my eye. Since I definitely think smaller fine tuning methods like LoRA will play a huge role in evolving the future of LLMs, as evidenced by LoRA assisted small models demonstrating [better than GPT-4 level performance on specific tasks](https://predibase.com/blog/lora-land-fine-tuned-open-source-llms-that-outperform-gpt-4), its ability to integrate with LoRA is definitely a plus.
