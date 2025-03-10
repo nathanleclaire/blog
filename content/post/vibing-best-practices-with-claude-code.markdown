@@ -5,7 +5,7 @@ date: 2025-03-10T00:43:27.233Z
 categories:
   - programming
 ---
-![](/static/images/third_eye_vibe.webp)
+![](/images/third_eye_vibe.webp)
 
 We’ve been seeing a new meme recently that has been repeated ad nauseum, and I’m already more sick of hearing it than I am of seeing Vance memes, but hey, I’m going to go ahead and throw some more fuel on the memetic dumpster fire. For those of you that landed here from Twitter or whatever, I’m Nathan LeClaire — ex-Docker, ex-Honeycomb hacker, Golang, and open source enthusiast, who, like many these days, is getting sucked into AI enthusiasm.
 
@@ -128,7 +128,7 @@ In other projects, when I’ve leaned on LLMs for implementation, I benefited a 
 
 ## Don’t Be Afraid to Give Up
 
-![Silly claude pup chewing on wires while nate is in dismay](/static/images/silly_claude_pup.webp)
+![Silly claude pup chewing on wires while nate is in dismay](/images/silly_claude_pup.webp)
 
 Keeping the bonkers puppy of a token generator from getting too carried away and coding up a pile of bugs that I will drown in before I can fix them is a perpetual challenge. It’s great that we can crank out so much code! Unfortunately, it means we are generating code that rots faster than ever, and any step in the wrong direction, starts compounding negatively very quickly. If the LLM gets confused about your intents, we are still in a world where it will somewhat latch on to previous, bad results in the thread, and it’s worth just… giving up and starting over in a new thread.
 
