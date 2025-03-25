@@ -1,24 +1,18 @@
 ---
-layout: post
-title: "Using BCC/eBPF for Tracing Superpowers with Golang"
-date: "2017-12-28"
-comments: true
-draft: true
-categories: ["tracing", "golang", "ebpf", "performance"]
+title: An introduction to eBPF / BCC for "Tracing Superpowers"
 ---
-
-Recently a technology called [eBPF](), popularized by Netflix performance
-engineer [Brendan Gregg](), has been gaining popularity due to a large amount
+Recently a technology called [eBPF](http://prototype-kernel.readthedocs.io/en/latest/bpf/), popularized by Netflix performance
+engineer [Brendan Gregg](http://www.brendangregg.com/ebpf.html), has been gaining popularity due to a large amount
 of promise for its potential to provide performant tracing (partially by doing
 aggregations of calculations and events in-kernel without needing to ship
 boatloads of information to userspace). Linux tracing and performance analysis
 in its current form is a patchwork quilt of various tools, explained well in
-[b0rk's article here]().
+[b0rk's article here](https://jvns.ca/blog/2017/07/05/linux-tracing-systems/).
 
 I won't cover too much eBPF/Linux Tracing 101 since they're well detailed in
 other places. Instead I want to focus on explaining some insights and practical
 advice for being productive with BCC (the layer on top of eBPF which makes it
-actually usable for us mere mortals) and Golang.
+actually usable for us mere mortals). In a follow up post, I also would like to go into some details about [using it with Golang](https://github.com/iovisor/gobpf).
 
 ## Getting Started
 
@@ -29,39 +23,36 @@ kills momentum quite like that, so I'll say a few words on it.
 
 First, check your versions carefully:
 
-- Kernel version
-- BCC version
-- `gobpf` version
+* Kernel version
+* BCC version
+* `gobpf` version
 
 Download both https://github.com/iovisor/bcc and
 https://github.com/iovisor/gobpf and compile and install BCC first. You _must_
 have a recent kernel (in the 4.x range, preferably >=4.9) and I wouldn't even
 bother looking in your package managers (it's too new and development moves too
 fast), just go straight to the source and get the latest versions. Luckily,
-most of the deps are clearly outlined in the [BCC repo](), and there are some
+most of the deps are clearly outlined in the [BCC repo](<>), and there are some
 Dockerfiles in that repo which should be able to give you a general idea of how
 to install it too.
 
-I recommend figuring out which version of BCC gobpf master is using, and `git
-checkout` that tag in the BCC repo. Otherwise, errors complaining about not
-passing the right arg count for a BCC method to C and so on might cramp your
-style when you go to play with gobpf.
-
-Then, compile/package BCC, and then the examples in gobpf should work. For
+Then, compile/package BCC, and then the examples in `tools/` in the repo, as well as things like https://github.com/iovisor/gobpf, should work. For
 instance, I'm on Debian, so I did `sudo debuild -b -uc -us`, which dropped all
 of the associated `.deb` files into `..` relative to the source repo, so then I
 needed only to `sudo dpkg -i` them. It's worth noting that in order to get the
 build to finish I did have to comment out [this
-line](https://github.com/iovisor/bcc/blob/master/debian/rules#L16).
+line](https://github.com/iovisor/bcc/blob/master/debian/rules#L16) to skip some tests that were failing. Caveat emptor.
 
-You'll need to run programs with `sudo`, so you'll likely need to do something
-like:
+You'll need to run programs with `sudo` when using BCC/eBPF:
 
 ```
-$ cd examples/bcc/bash_readline
-$ go build -i
-$ sudo ./bash_readline
+$ sudo ./tools/cpudist.py
 ```
+
+_(optional) If you want to check out the Golang bindings_: I recommend figuring out which version of BCC gobpf master is using (just go look at recently merged PRs, it should be possible to divine), and `git
+checkout` that tag in the BCC repo before installing. Otherwise, errors complaining about not
+passing the right arg count for a BCC method to C and so on might cramp your
+style when you go to play with gobpf.
 
 ## Learning to use BCC
 
@@ -81,9 +72,9 @@ analysis. That's exactly what BCC is, _but_ the actual bits which run in-kernel
 are usually first written in C and passed off to BCC to compile down to eBPF
 bytecode. Partially you need to do this so you can actually import and work
 with the relevant kernel data structures. So, you'll need to read and write
-some C, but don't worry, [#CIsFun]().
+some C, but don't worry, [\#CIsFun](<>).
 
-One thing to keep in mind: The BCC programs make use of [macros]() and a bit of
+One thing to keep in mind: The BCC programs make use of [macros](<>) and a bit of
 BCC magic that generates C code from, e.g., things that _look_ like method
 calls. In a lot of cases you can simply abstract away your thinking about
 things like `BPF_HASH(...)`, which will declare a hash table to be used to
@@ -102,7 +93,7 @@ which are essentially templated Python parameters in the script itself that are
 transformed into a BCC trace _before_ submitting the trace for compilation,
 confused with these C macros or transformations which are part of BCC itself.
 
-I recommend having the [BCC reference guide]() open at all times. It's full of
+I recommend having the [BCC reference guide](<>) open at all times. It's full of
 invaluable details about the various data types and BCC constructs.
 
 ## Anatomy of a BCC program
@@ -182,12 +173,13 @@ script to modify the default behavior. More on that in a second.
 </p>
 </div>
 <div class="col-three-quarters">
-<pre><code>from __future__ import print_function
+<pre><code>from \_\_future\_\_ import print_function
 from bcc import BPF
 from time import sleep, strftime
 import argparse
 
 # arguments
+
 examples = """examples:
     ./biolatency            # summarize block I/O latency as a histogram
     ./biolatency 1 10       # print 1 second summaries, 10 times
@@ -216,6 +208,7 @@ args = parser.parse_args()
 countdown = int(args.count)
 debug = 0
 </code></pre>
+
 </div>
 </div>
 </div>
@@ -224,7 +217,7 @@ debug = 0
 <div class="row"> <div class="col-one-quarter">
 <p>Ah, now we get the good stuff.  This is where the BPF program I was talking
 about above is defined. First we start off with some imports. These are needed
-because we are going to hooking into a <a href="#">[FIXME]trace event</a>
+because we are going to hooking into a <a href="#">\[FIXME]trace event</a>
 provided to us by the kernel and reading some of its properties.</p>
 </div>
 <div class="col-three-quarters">
@@ -290,7 +283,7 @@ interpolation of `STORAGE`, and the rendered interpolation of `STORE` (where
 <div class="row">
 <div class="col-one-third">template:
 <pre><code>typedef struct disk_key {
-    char disk[DISK_NAME_LEN];
+    char disk\[DISK_NAME_LEN];
     u64 slot;
 } disk_key_t;
 BPF_HASH(
@@ -306,7 +299,7 @@ STORE
 </div>
 <div class="col-one-third">one histogram:
 <pre><code>typedef struct disk_key {
-    char disk[DISK_NAME_LEN];
+    char disk\[DISK_NAME_LEN];
     u64 slot;
 } disk_key_t;
 BPF_HASH(
@@ -320,6 +313,7 @@ dist.increment(
     bpf_log2l(delta)
 );
 </code></pre>
+
 <p>
 <code>bpf_log2l()</code> buckets observed latency (<code>delta</code>) into a
 powers-of-2 bucket "slot". This ensures that the number of buckets does not
@@ -329,7 +323,7 @@ on right.
 </div>
 <div class="col-one-third">per-disk histogram:
 <pre><code>typedef struct disk_key {
-    char disk[DISK_NAME_LEN];
+    char disk\[DISK_NAME_LEN];
     u64 slot;
 } disk_key_t;
 BPF_HASH(
@@ -352,6 +346,7 @@ bpf_probe_read(
 );
 dist.increment(key);
 </code></pre>
+
 </div>
 </div>
 </div>
@@ -394,23 +389,6 @@ With all of that set up, let's take a look at the trace functions themselves.
 We'll have two "hooks": one that runs when we hit a "request start" event,
 where we will start a timer, and one that runs when the disk request finishes.
 
-By the way, if you're curious how you can get a list of all of the tracepoints
-available, the `tplist` tool from the BCC repo does exactly that. e.g.:
-
-```
-$ sudo ./tools/tplist.py | grep open | head
-hda_controller:azx_pcm_open
-nfsd:read_opened
-nfsd:write_opened
-syscalls:sys_enter_mq_open
-syscalls:sys_exit_mq_open
-syscalls:sys_enter_open_by_handle_at
-syscalls:sys_exit_open_by_handle_at
-syscalls:sys_enter_open
-syscalls:sys_exit_open
-syscalls:sys_enter_openat
-```
-
 <div class="container">
 <div class="row">
 <div class="col-one-quarter">
@@ -450,6 +428,7 @@ int trace_req_completion(struct pt_regs *ctx, struct request *req)
     return 0;
 }
 </code></pre>
+
 </div>
 </div>
 </div>
@@ -493,25 +472,64 @@ while (1):
 
 ## Getting data to userspace
 
+There are a couple of different options for getting information from a BCC trace to userspace:
+
+1. Reading map values directly using `bpf_read_key`
+2. Submitting them using `perf`
+
 ## Kprobes vs. Uprobes vs. Tracepoints
 
 `tplist`
 
 ## About `bpf_trace_printk`
 
-## WTF is the ELF thing?
+## Clutch scripts
 
-You might know of elves from Dungons and Dragons, but you likely are guessing
-that this elf refers to the [Executable Linking Format](). But why the hell is
-there an `elf` directory ? Personally, I found my eyes gloss over trying to
-read the README and understand it (though I eventually)
+At least two scripts from `tools/` in the BCC repository are worth calling out quite directly.
 
-Well, consider this dilemma: You write some sweet programs using BCC that
-execute traces, 
+The `tplist` tool will show all tracepoints available. It is a great way to deduce what you might want to hook into using the tracepoint style of BCC traces.
 
-## `[]byte` vs. `string` in table entries
+```
+$ sudo ./tools/tplist.py | grep open | head
+hda_controller:azx_pcm_open
+nfsd:read_opened
+nfsd:write_opened
+syscalls:sys_enter_mq_open
+syscalls:sys_exit_mq_open
+syscalls:sys_enter_open_by_handle_at
+syscalls:sys_exit_open_by_handle_at
+syscalls:sys_enter_open
+syscalls:sys_exit_open
+syscalls:sys_enter_openat
+```
+
+It works at both the system and individual binary / library level. For instance, you can list USDT tracepoints available in a running Java process, e.g. Kafka:
+
+```
+$ pidof java
+28858 27936
+
+$ sudo ./tools/tplist.py -p 28858 | head
+/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.24 libstdcxx:catch
+/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.24 libstdcxx:throw
+/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.24 libstdcxx:rethrow
+/usr/lib/jvm/java-9-openjdk-amd64/lib/server/libjvm.so hotspot:class__loaded
+/usr/lib/jvm/java-9-openjdk-amd64/lib/server/libjvm.so hotspot:class__unloaded
+/usr/lib/jvm/java-9-openjdk-amd64/lib/server/libjvm.so hotspot:method__compile__begin
+/usr/lib/jvm/java-9-openjdk-amd64/lib/server/libjvm.so hotspot:method__compile__end
+/usr/lib/jvm/java-9-openjdk-amd64/lib/server/libjvm.so hotspot:class__initialization__required
+/usr/lib/jvm/java-9-openjdk-amd64/lib/server/libjvm.so hotspot:class__initialization__erroneous
+/usr/lib/jvm/java-9-openjdk-amd64/lib/server/libjvm.so hotspot:class__initialization__super__failed
+```
+
+I would also highly recommend becoming familiar with the `tools/reset-trace.sh` script to, well, reset traces - especially if you are doing more custom instrumentation. I've found that things like the Go bindings don't always do quite the best job of cleaning up after themselves, and it can become a pain to try and differentiate the output of one trace from the next when a reset of state isn't happening between traces.
+
+```
+$ sudo ./tools/reset-trace.sh
+```
+
+As always, _read the code_! That will be your best education and guide to learn these tools.
 
 ## A word on what to do with results
 
 If you've gotten this far, you deserve some pretty graphs. So here you go!
-
