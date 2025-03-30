@@ -5,7 +5,6 @@ date: 2025-03-30T22:32:12.125Z
 categories:
   - programming
 ---
-# Emotional Recall: Strengthening Spaced Repetition with AI
 
 ![A surreal drawing shows a man retrieving a book labeled with the Chinese character 忆 (memory) from a library inside his own head.](/images/phrenology_head_character.png)
 
