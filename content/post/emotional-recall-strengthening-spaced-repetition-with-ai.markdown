@@ -62,7 +62,7 @@ Of course, you cannot spend much time in the Anki community without coming acros
 
 To quote directly. On personalization:
 
-> One of the most effective ways of enhancing memories is to provide them with a link to your personal life. In the example below you will save time if you use a personal reference rather than trying to paint a picture that would aptly illustrate the question.
+> One of the most effective ways of enhancing memories is to provide them with a link to your personal life ... you will save time if you use a personal reference rather than trying to paint a picture that would aptly illustrate the question.
 
 And on emotional states:
 
