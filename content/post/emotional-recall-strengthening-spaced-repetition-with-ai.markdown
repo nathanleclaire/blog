@@ -37,12 +37,15 @@ Here is an example prompt for that:
 > You are a memory and recall expert. For the following words, create example sentences with seven to ten words of {{c1::<clozed>}} deletions for use in an Anki deck, showing English translations and a Portuguese sentence that will allow the user to fill in a blank. The output format should be along these lines:
 >
 > English Example 1 | Portuguese sentence 1 with {{c1::<clozed>}}
+> 
 > English Example 2 | {{c1::cloze}} is a blah blah blah in Example 2 in Portuguese
 >
 > The goal is to learn the following words:
 >
 > são
+> 
 > é
+> 
 > caipirinha
 >
 > Generate the output in a Markdown block.
