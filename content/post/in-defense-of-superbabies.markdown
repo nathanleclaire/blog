@@ -12,27 +12,26 @@ I’m Nathan LeClaire, open source enthusiast and DevOps philosopher, and this p
 Its conclusion I find both cliché in terms of being LessWrong-ey (The *brave*, *aligned* thing is to have a super baby, because they can solve alignment!) and a bit uncanny:
 
 > If it turns out we can’t safely create digital gods and command them to carry out our will… No one has a backup plan. Superbabies is a backup plan.
-> 
 
 But are super babies really defensible ethically, socially, and aesthetically? I think so, with some caveats. This article is my attempt to explore why I think so.
 
-![/images/superbabies-0.png](a meme about virgin philosopher vs. chad germline editor)
+![a meme about virgin philosopher vs. chad germline editor](/images/superbabies-0.png)
 
 The motivation to want to have superbaby characteristics such as cancer-proofing or increased IQ (given that one is inclined to have a baby in the first place) seems obvious to me - *because it will ensure your future childrens’ prosperity,* no different from sending them to great schools, getting them excellent nutrition, or teaching them life skills.
 
-But there is a big debate whether having a superbaby is agreeable for **first order effects** **(*Is the action of creating a superbaby inherently right or wrong?*), **second order effects** (*Do the effects on the individual and society tip the balance towards unethical?*) and **aesthetic** **(*Does having a superbaby align with living a good life?*).
+But there is a big debate whether having a superbaby is agreeable for **first order effects** (*Is the action of creating a superbaby inherently right or wrong?*), **second order effects** (*Do the effects on the individual and society tip the balance towards unethical?*) and **aesthetic** (*Does having a superbaby align with living a good life?*).
 
 ## A Tale of Three Babies
 
 To assist in our explorations and reasoning, let’s create an anchor point of three hypothetical thought babies, born in the year 2025 and fast forwarded to their adult life in 2050. They are:
 
-1. **Liam**, ****your run of the mill, non-super standard model baby created the old fashioned way.
+1. **Liam**, your run of the mill, non-super standard model baby created the old fashioned way.
 2. **Calum**, a baby birthed after sifting through 5000 embryos, selected for desirable traits such as IQ and height, but also increased **empathy** and personification of the **higher masculine nature.**
 3. **Manny**, who was gene edited to perceive a wider spectrum of color than any non-edited human.
 
 With these individuals, we will try to see some abstract ideas and concepts through a more concrete and narrative lens.
 
-![/images/superbabies-1.png](a three panel comic showing the three babies)
+![a three panel comic showing the three babies](/images/superbabies-1.png)
 
 ## Ethics: Is the Action of Creating a Superbaby Unethical?
 
@@ -44,7 +43,7 @@ Gene editing, on the other hand, is more complicated. The act itself, physically
 
 Still, we often override individual sovereignty in favor of the greater good, and we do bring new drugs and technologies to market despite the risks. So in terms of the inherent worth of the act, a “light touch” in genetic editing is acceptable, when aimed at preventing disease or improving existing human traits. But pushing beyond what currently formed humans can do (like giving Manny the ability to see color outside the visible spectrum) crosses a bigger ethical line.
 
-![/images/superbabies-2.png](a set of scales with DNA as the middle pillar)
+![a set of scales with DNA as the middle pillar](/images/superbabies-2.png)
 
 Counter-balancing genetic editing with guard rails likely also makes it more palatable. Effort should be focused on ensuring diversity remains in our populations’ genomes. We should, at a minimum, come up with a coefficient representing information loss from the parent genomes and set a genetic “speed limit”.
 
@@ -64,17 +63,17 @@ Yet there’s another side to selecting such traits — say we do see Calums cre
 
 And the net benefit to society at large in terms of disease reduction could be immense. If we delete cancer, isn’t that **kind of miraculous**? Perhaps we will be playing God in miniature, but it will be in kind of an awesome, manifest-the-kingdom-of-heaven way?
 
-![/images/superbabies-3.png](an illustration of god editing DNA)
+![an illustration of god editing DNA](/images/superbabies-3.png)
 
 ## Aesthetics: Is Having a Superbaby Beautiful or Ugly?
 
-![/images/superbabies-4.png](a poetic image with green lights)
+![a poetic image with green lights](/images/superbabies-4.png)
 
 When sharing my thoughts on super babies with a friend of mine once, he had a good point - paraphrasing him - *“But isn’t [the stochasticity] the beauty of life? Aren’t our scars, and our ugliness, and our healing, what makes us human, and what highlights the highs of life by contrast?”*
 
 Which, to me, stands as an independent point of “is this inherently bad” or “is this wise” - it’s more aesthetic and personal, more of a question of if you are dooming your future progeny to never experience life as a lived art form. Which is a valid concern! Would we have [Carravaggio’s “Medusa”](https://en.wikipedia.org/wiki/Medusa_%28Caravaggio%29) if he did not brawl and murder and face exile? Will widespread gene editing doom us to be a civilization of [Corporate Memphis](https://en.wikipedia.org/wiki/Corporate_Memphis)?
 
-![/images/superbabies-5.png](a corporate memphis version of caravaggio's medusa)
+![a corporate memphis version of caravaggio's medusa](/images/superbabies-5.png)
 
 I find this argument **more** sympathetic given its mystique and romanticism than trying to make an outright levy on ethics - it somehow manages to capture the “X Factor” that we all can see in human nature, and it’s more ontological than ethical - Is it still **human** if we produce a super baby? A surprisingly small quantity of DNA information is all that separates us from animals we deliberately cultivate and eat. It won’t take much revision to the genetic code before we have worse answers than ever to *“Who are we?”* and a new question of *“Are we still Homo sapiens?”*.
 
