@@ -160,6 +160,7 @@ func main() {
         messages <- 3
     }()
     go func() {
+        // we should wait for completion here?
         for i := range messages {
             fmt.Println(i)
         }
