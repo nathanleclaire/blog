@@ -1,7 +1,7 @@
 ---
 title: "Prompt Engineering is Alive and Well in 2025 - Five Tips"
 layout: post
-date: 2025-01-01T12:00:00.000Z
+date: 2025-07-01T12:00:00.000Z
 categories:
   - programming
 ---
