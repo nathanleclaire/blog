@@ -23,6 +23,7 @@
   --color-background: #ffffff;
   --color-background-secondary: #f5f5f7;
   --color-border: #d2d2d7;
+  --color-code-bg: #f0f0f3;
 }
 
 *::selection {
@@ -72,13 +73,32 @@ em {
     font-family: "Lato", sans-serif;
 }
 
+/* Code Block Component */
 pre {
-    background: var(--color-background-secondary);
-    border: none;
+    background: var(--color-code-bg);
     border-radius: 12px;
     padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow-x: auto;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
     margin: 2rem 0;
+    transition: box-shadow .2s ease;
+}
+
+pre:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Scrollbar subtlety (WebKit) */
+pre::-webkit-scrollbar {
+    height: 8px;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
 }
 
 .wrap>footer {
@@ -173,12 +193,14 @@ input:focus {
 }
 
 blockquote {
-    font-style: italic;
-    font-size: var(--font-size-base);
-    border-left: 4px solid var(--color-accent);
-    padding: 1rem 1.5rem;
     margin: 2rem 0;
-    background: var(--color-background-secondary);
+    padding-inline: 1.5rem;
+    border-inline-start: 3px solid var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 5%, var(--color-background-secondary) 95%);
+    font-style: normal;           /* remove heavy italics */
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text);
     border-radius: 0 8px 8px 0;
 }
 
@@ -266,25 +288,13 @@ article p .word1,article p .word2,article p .word3 {
     font-variant: small-caps;
 }
 
-pre {
-    line-height: 1.3em;
-    position: relative;
-    -webkit-border-radius: 4px;
-    overflow-x: scroll;
-}
 
-@media only screen and (min-width: 0px) and (max-width: 1200px) {
-    pre {
-        margin: 0px auto;
-        width: 90%;
-    }
-}
 
 code {
-    background: var(--color-background-secondary);
+    background: var(--color-code-bg);
     padding: 0.125rem 0.375rem;
     border-radius: 4px;
-    font-size: 0.875em;
+    font-size: 0.825rem;
     font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
 }
 
@@ -293,11 +303,6 @@ pre>code {
     background: transparent;
 }
 
-pre {
-    font-size: 0.875rem;
-    line-height: 1.5;
-    font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
-}
 
 .pagination {
     position: relative;
@@ -365,10 +370,6 @@ div.highlight {
     display: none;
 }
 
-pre {
-    margin: 0em auto;
-    padding: 0.7em;
-}
 
 @media only screen and (min-width: 0px) and (max-width: 1200px) {
     figure {
