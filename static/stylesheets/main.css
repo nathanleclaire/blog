@@ -23,7 +23,32 @@
   --color-background: #ffffff;
   --color-background-secondary: #f5f5f7;
   --color-border: #d2d2d7;
-  --color-code-bg: #f0f0f3;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text: #f2f2f7;
+    --color-text-secondary: #98989d;
+    --color-link: #0a84ff;
+    --color-link-hover: #409cff;
+    --color-accent: #ff6b35;
+    --color-background: #000000;
+    --color-background-secondary: #1c1c1e;
+    --color-border: #48484a;
+  }
+  
+  /* Dark mode syntax highlighting */
+  pre code span.token.comment  { color: #98989d; }
+  pre code span.token.keyword  { color: #ff79c6; }
+  pre code span.token.string   { color: #8be9fd; }
+  pre code span.token.function { color: #50fa7b; }
+  pre code span.token.number   { color: #ffb86c; }
+  pre code span.token.operator { color: #ff5555; }
+  
+  /* Dark mode scrollbar */
+  pre::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+  }
 }
 
 *::selection {
@@ -50,7 +75,7 @@ body {
     padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, "Lato", sans-serif;
     font-size: var(--font-size-base);
-    line-height: var(--line-height-relaxed);
+    line-height: 1.6;
     color: var(--color-text);
     background: var(--color-background);
 }
@@ -75,7 +100,7 @@ em {
 
 /* Code Block Component */
 pre {
-    background: var(--color-code-bg);
+    background: var(--color-background-secondary);
     border-radius: 12px;
     padding: 1.5rem;
     overflow-x: auto;
@@ -85,6 +110,7 @@ pre {
     line-height: 1.5;
     margin: 2rem 0;
     transition: box-shadow .2s ease;
+    border: 1px solid var(--color-border);
 }
 
 pre:hover {
@@ -100,6 +126,14 @@ pre::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.2);
     border-radius: 4px;
 }
+
+/* Syntax highlighting - macOS Monterey Xcode palette */
+pre code span.token.comment  { color: #6e6e73; }
+pre code span.token.keyword  { color: #bf5af2; }
+pre code span.token.string   { color: #0a84ff; }
+pre code span.token.function { color: #ff375f; }
+pre code span.token.number   { color: #ff9500; }
+pre code span.token.operator { color: #5e5ce6; }
 
 .wrap>footer {
     margin-top: 4rem;
@@ -165,13 +199,14 @@ header .navi ul li a:hover {
     background-color: var(--color-background-secondary);
 }
 
-header .navi ul li a:active {
-    color: #ff540B;
+header .navi ul li a:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+    border-radius: 10px;
 }
 
-header .navi ul li a:hover {
-    text-decoration: underline;
-    color: #333;
+header .navi ul li a:active {
+    color: #ff540B;
 }
 
 a {
@@ -182,7 +217,7 @@ a {
 
 a:hover {
     text-decoration: underline;
-    color: var(--color-link-hover);
+    color: color-mix(in srgb, var(--color-accent) 80%, black);
 }
 
 a:focus,
@@ -194,14 +229,14 @@ input:focus {
 
 blockquote {
     margin: 2rem 0;
-    padding-inline: 1.5rem;
-    border-inline-start: 3px solid var(--color-accent);
-    background: color-mix(in srgb, var(--color-accent) 5%, var(--color-background-secondary) 95%);
-    font-style: normal;           /* remove heavy italics */
+    padding: 1.5rem;
+    border-left: 3px solid var(--color-border);
+    background: var(--color-background-secondary);
+    font-style: normal;
     font-size: var(--font-size-base);
     line-height: var(--line-height-relaxed);
-    color: var(--color-text);
-    border-radius: 0 8px 8px 0;
+    color: var(--color-text-secondary);
+    border-radius: 8px;
 }
 
 article {
@@ -230,14 +265,21 @@ article h1,article h2,article h3 {
 
 article h1 {
     font-size: var(--font-size-2xl);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin-bottom: 0.5rem;
 }
 
 article h2 {
     font-size: var(--font-size-xl);
+    font-weight: 700;
+    letter-spacing: -0.015em;
 }
 
 article h3 {
     font-size: var(--font-size-lg);
+    font-weight: 700;
+    letter-spacing: -0.015em;
 }
 
 article p {
@@ -254,7 +296,7 @@ article h1 a:hover,article h2 a:hover,article h3 a:hover {
 
 article header {
     margin: 0px;
-    padding: 0;
+    padding: 2rem 0;
     border: 0px;
     text-align: center;
 }
@@ -269,8 +311,9 @@ article hr {
     margin: 3.9em!important;
     height: 1px;
     border: none;
-    color: #dfdfdf;
-    background-color: #dfdfdf;
+    color: var(--color-border);
+    background-color: var(--color-border);
+    opacity: 0.6;
 }
 
 #content img {
@@ -281,6 +324,34 @@ article hr {
   height: auto;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  object-fit: cover;
+}
+
+/* Hero images - first image after article header */
+article header + p > img:first-child {
+  margin-top: 1rem;
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+}
+
+/* Figure wrapper for images */
+figure {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+figure img {
+  margin: 0;
+  width: 100%;
+  height: auto;
+}
+
+figure figcaption {
+  margin-top: 0.5rem;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-style: italic;
 }
 
 article p .word1,article p .word2,article p .word3 {
@@ -291,16 +362,18 @@ article p .word1,article p .word2,article p .word3 {
 
 
 code {
-    background: var(--color-code-bg);
-    padding: 0.125rem 0.375rem;
-    border-radius: 4px;
-    font-size: 0.825rem;
+    background: var(--color-background-secondary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
     font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
+    border: 1px solid var(--color-border);
 }
 
 pre>code {
     padding: 0;
     background: transparent;
+    border: none;
 }
 
 
@@ -371,11 +444,6 @@ div.highlight {
 }
 
 
-@media only screen and (min-width: 0px) and (max-width: 1200px) {
-    figure {
-        margin: 0px;
-    }
-}
 
 iframe {
     width: 100%;
@@ -392,7 +460,7 @@ iframe {
 div#content {
     max-width: 680px;
     margin: 0 auto;
-    padding: 2rem 1.5rem;
+    padding: 4rem 1.5rem;
 }
 
 @media only screen and (max-width: 767px) {
@@ -401,14 +469,14 @@ div#content {
     padding: 0px;
   }
   div#content {
-    padding: 1rem;
+    padding: 2.5rem 1rem;
   }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
   /* medium screens */
   div#content {
-    padding: 1.5rem;
+    padding: 4rem 1.5rem;
   }
 }
 
@@ -457,15 +525,42 @@ article {
     }
 }
 
-.caption {
-    font-style: italic;
-    text-align: center;
-    font-family: "Lato", sans-serif;
-    font-size: 0.8em;
-}
 
 li.title {
     text-align: left;
+}
+
+/* Archive page styling */
+#post-list {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+#post-list h1 {
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+#post-list table {
+    width: 100%;
+    margin: 0 !important;
+}
+
+#post-list .post-row {
+    border-bottom: 1px solid var(--color-border);
+}
+
+#post-list .title-cell {
+    padding: 1rem 0;
+    text-align: left;
+}
+
+#post-list .date-cell {
+    padding: 1rem 0;
+    text-align: right;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
 }
 
 input#reader-email {
@@ -730,17 +825,7 @@ input#archive-search {
     display: block;
 }
 
-.title-cell {
-    width: 80%;
-}
 
-.date-cell {
-    float: right;
-}
-
-.post-row > td {
-    padding-bottom: 10px;
-}
 
 .container:before,
 .container:after {

@@ -1,2 +1,4 @@
-<img src="{{ .Get "src" }}">
-<div class="caption">{{ .Get "caption" }}</div>
+<figure>
+    <img src="{{ .Get "src" }}" alt="{{ .Get "caption" | default (printf "Image: %s" (.Get "src")) }}" loading="lazy" decoding="async">
+    {{ with .Get "caption" }}<figcaption>{{ . }}</figcaption>{{ end }}
+</figure>
