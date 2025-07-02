@@ -163,6 +163,24 @@ header {
     z-index: 90; /* Below system UI */
     text-align: center;
     transition: all 0.2s ease-out;
+    margin-bottom: 1.5rem; /* Tighter connection to content */
+}
+
+/* Unified left alignment on larger screens */
+@media (min-width: 680px) {
+    header {
+        text-align: left;
+        padding-left: max(1.5rem, env(safe-area-inset-left));
+        padding-right: max(1.5rem, env(safe-area-inset-right));
+    }
+    
+    header .title,
+    header .slogan,
+    header .navi {
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 header .title {
@@ -178,6 +196,15 @@ header .title a {
 
 header .title a:hover {
     color: var(--color-accent);
+}
+
+/* Motto/slogan styling */
+header .slogan {
+    color: var(--color-text-secondary);
+    font-style: normal;
+    font-weight: 400;
+    margin-top: 0.25rem;
+    margin-bottom: 1rem;
 }
 
 header .navi {
@@ -201,10 +228,13 @@ header .navi ul li a {
     display: inline-block;
     padding: 0.5rem 0.75rem;
     border-radius: 8px;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    font-weight: 600;
+    color: var(--color-accent);
 }
 
 header .navi ul li a:hover {
+    text-decoration: underline;
     background-color: var(--color-background-secondary);
 }
 
@@ -520,8 +550,24 @@ iframe {
 
 .nateface {
     display: block;
-    border-radius: 75px;
-    margin: 5px auto;
+    border-radius: 50%;
+    width: min(96px, 20vw);
+    height: min(96px, 20vw);
+    margin: 0.5rem auto;
+}
+
+@media (min-width: 680px) {
+    .nateface {
+        margin: 0.5rem 0;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 0.75rem;
+    }
+    
+    header .title a {
+        display: flex;
+        align-items: center;
+    }
 }
 
 div#content {
@@ -631,6 +677,20 @@ article {
     float: none;
     position: relative;
     width: 100%;
+}
+
+/* Contact list styling */
+#sidebar-email,
+.contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0 0;
+    font-size: var(--font-size-sm);
+}
+
+#sidebar-email li,
+.contact-list li {
+    margin: 0.25rem 0;
 }
 
 #shameless-self-promotion {

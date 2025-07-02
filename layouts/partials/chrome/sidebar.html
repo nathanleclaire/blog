@@ -1,27 +1,27 @@
 <div id="sidebar">
-    <header>
+    <header role="banner">
         <div class="title">
             <a href="{{.Site.BaseURL}}">
-            <img src="/images/nateface.jpeg" class="nateface" loading="lazy" decoding="async" alt="Nathan LeClaire" />{{ .Site.Title }}
+            <img src="/images/nateface.jpeg" class="nateface" loading="lazy" decoding="async" alt="Nathan LeClaire" aria-label="Author avatar" />{{ .Site.Title }}
             </a>
         </div>
         <p class="slogan">I care, I share, I'm Nathan LeClaire.</p>
-        <div class="navi">
+        <nav class="navi" role="navigation" aria-label="Main navigation">
             <ul>
                 <li><a href="/about/">About</a>
                 </li>
                 <li><a href="/post">Archives</a>
                 </li>
             </ul>
-        </div>
+        </nav>
   
-        <div id="sidebar-email">
-            <div>
+        <ul id="sidebar-email" class="contact-list" role="list">
+            <li>
                 mail: <a href="mailto:nathan.leclaire@gmail.com">nathan.leclaire@gmail.com</a>
-            </div>
-            <div>
+            </li>
+            <li>
                 twitter: <a href="https://twitter.com/intent/follow?screen_name=dotpem" target="_blank">@dotpem</a>
-            </div>
-        </div>
+            </li>
+        </ul>
     </header>
 </div>
