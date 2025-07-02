@@ -89,7 +89,34 @@ em {
     font-family: "Inter", sans-serif;
 }
 
-/* Code styling handled by Desert theme */
+/* Minimal code block styling following Apple HIG */
+pre {
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* Ensure JetBrains Mono is used */
+code, pre, kbd, samp {
+    font-family: "JetBrains Mono", monospace;
+    font-feature-settings: "calt" 1;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Inline code - minimal styling */
+code {
+    padding: 0.125rem 0.375rem;
+    border-radius: 6px;
+}
+
+/* Code inside pre blocks shouldn't have extra styling */
+pre code {
+    padding: 0;
+    border-radius: 0;
+    background: none;
+}
 
 
 /* Syntax highlighting handled by Google Code Prettify themes */
@@ -1063,4 +1090,31 @@ input#archive-search {
   width: 200px;
 }
 
-/* Code styling handled by Desert theme */
+/* Minimal code block styling following Apple HIG */
+pre {
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* Ensure JetBrains Mono is used */
+code, pre, kbd, samp {
+    font-family: "JetBrains Mono", monospace;
+    font-feature-settings: "calt" 1;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Inline code - minimal styling */
+code {
+    padding: 0.125rem 0.375rem;
+    border-radius: 6px;
+}
+
+/* Code inside pre blocks shouldn't have extra styling */
+pre code {
+    padding: 0;
+    border-radius: 0;
+    background: none;
+}
