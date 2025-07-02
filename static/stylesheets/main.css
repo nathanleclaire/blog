@@ -244,11 +244,7 @@ header .navi ul li a:hover {
     opacity: 0.8;
 }
 
-header .navi ul li a:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 4px;
-    border-radius: 10px;
-}
+/* Already handled by global focus-visible styles */
 
 header .navi ul li a:active {
     color: var(--color-link-hover);
@@ -265,9 +261,16 @@ a:hover {
     color: color-mix(in srgb, var(--color-accent) 80%, black);
 }
 
+/* Remove outline on mouse click, keep for keyboard navigation */
 a:focus,
 button:focus,
 input:focus {
+    outline: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
     outline: 2px solid var(--color-link);
     outline-offset: 2px;
 }
@@ -383,12 +386,18 @@ article header time {
 }
 
 article hr {
-    margin: 3.9em!important;
+    margin: 1.5rem 0;
     height: 1px;
     border: none;
     color: var(--color-border);
     background-color: var(--color-border);
     opacity: 0.6;
+}
+
+/* Tighter spacing when hr immediately follows header */
+article header + hr {
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
 }
 
 #content img {
@@ -750,7 +759,8 @@ li.title {
 
 #post-list table {
     width: 100%;
-    margin: 0 !important;
+    margin: 0;
+    border-collapse: collapse;
 }
 
 #post-list .post-row {
@@ -758,12 +768,12 @@ li.title {
 }
 
 #post-list .title-cell {
-    padding: 1rem 0;
+    padding: 0.5rem 0;
     text-align: left;
 }
 
 #post-list .date-cell {
-    padding: 1rem 0;
+    padding: 0.5rem 0;
     text-align: right;
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
