@@ -149,7 +149,7 @@ header {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--color-border);
-    padding: 1.5rem 0;
+    padding: 1rem 0;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -296,7 +296,7 @@ article h1 a:hover,article h2 a:hover,article h3 a:hover {
 
 article header {
     margin: 0px;
-    padding: 2rem 0;
+    padding: 0 0 1rem 0;
     border: 0px;
     text-align: center;
 }
