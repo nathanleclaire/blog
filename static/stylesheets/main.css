@@ -217,7 +217,7 @@ header .navi ul {
     padding: 0;
     list-style: none;
     display: flex;
-    gap: 0.5rem;
+    gap: 1rem;
 }
 
 header .navi ul li {
@@ -690,27 +690,27 @@ article {
 .contact-list {
     list-style: none;
     padding: 0;
-    margin: 0.75rem 0 0 0;
+    margin: 0.75rem auto 0 auto;
     font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
 }
 
 #sidebar-email li,
 .contact-list li {
-    display: inline;
-    margin: 0;
+    margin: 0.25rem 0;
 }
 
-#sidebar-email li:not(:last-child)::after,
-.contact-list li:not(:last-child)::after {
-    content: " · ";
-    color: var(--color-text-secondary);
-    margin: 0 0.5rem;
-}
-
-/* Remove the label for cleaner design */
+/* Add a subtle label */
 #sidebar-email::before {
-    display: none;
+    content: "REACH ME";
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.5rem;
+    opacity: 0.6;
 }
 
 #shameless-self-promotion {
