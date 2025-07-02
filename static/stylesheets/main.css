@@ -154,7 +154,7 @@ pre::-webkit-scrollbar-thumb {
 
 header {
     background: var(--color-background);
-    padding: 1.5rem 0;
+    padding: 1.25rem 0;
     text-align: center;
     border-bottom: 1px solid var(--color-border);
     margin-bottom: 2rem;
@@ -164,16 +164,21 @@ header {
 @media (min-width: 680px) {
     header {
         text-align: left;
-        padding-left: max(1.5rem, env(safe-area-inset-left));
-        padding-right: max(1.5rem, env(safe-area-inset-right));
     }
     
     header .title,
     header .slogan,
-    header .navi {
+    header .navi,
+    header .contact-list {
         max-width: 680px;
         margin-left: auto;
         margin-right: auto;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+    
+    header .navi ul {
+        justify-content: flex-start;
     }
 }
 
@@ -181,6 +186,7 @@ header .title {
     font-weight: 600;
     font-size: 1.6rem;
     line-height: 1.2;
+    margin-bottom: 0.25rem;
 }
 
 header .title a {
@@ -199,7 +205,7 @@ header .slogan {
     font-style: normal;
     font-weight: 400;
     margin-top: 0.25rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 header .navi {
@@ -207,25 +213,29 @@ header .navi {
 }
 
 header .navi ul {
-    margin: 0.3em 0 0.3em 0;
+    margin: 0.5rem 0;
     padding: 0;
     list-style: none;
+    display: flex;
+    gap: 0.5rem;
 }
 
 header .navi ul li {
     display: inline-block;
     margin: 0;
     padding: 0;
+    list-style: none;
 }
 
 header .navi ul li a {
     text-decoration: none;
     display: inline-block;
-    padding: 0.5rem 0.75rem;
+    padding: 0.25rem 0.5rem;
+    margin: -0.25rem -0.5rem;
     border-radius: 8px;
     transition: all 0.2s ease;
     font-weight: 600;
-    color: var(--color-accent);
+    color: var(--color-link);
 }
 
 header .navi ul li a:hover {
@@ -241,7 +251,7 @@ header .navi ul li a:focus-visible {
 }
 
 header .navi ul li a:active {
-    color: #ff540B;
+    color: var(--color-link-hover);
 }
 
 a {
@@ -561,7 +571,7 @@ iframe {
     }
     
     header .title a {
-        display: flex;
+        display: inline-flex;
         align-items: center;
     }
 }
@@ -680,27 +690,27 @@ article {
 .contact-list {
     list-style: none;
     padding: 0;
-    margin: 1rem 0 0 0;
+    margin: 0.75rem 0 0 0;
     font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
 }
 
 #sidebar-email li,
 .contact-list li {
-    margin: 0.25rem 0;
+    display: inline;
+    margin: 0;
 }
 
-/* Add a subtle label */
-#sidebar-email::before {
-    content: "REACH ME";
-    display: block;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+#sidebar-email li:not(:last-child)::after,
+.contact-list li:not(:last-child)::after {
+    content: " · ";
     color: var(--color-text-secondary);
-    margin-bottom: 0.5rem;
-    opacity: 0.6;
+    margin: 0 0.5rem;
+}
+
+/* Remove the label for cleaner design */
+#sidebar-email::before {
+    display: none;
 }
 
 #shameless-self-promotion {
