@@ -92,8 +92,9 @@ em {
 /* Minimal code block styling following Apple HIG */
 pre {
     border-radius: 12px;
-    overflow: hidden;
+    overflow: auto;
     margin: 1.5rem 0;
+    padding: 1.25rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
@@ -1093,8 +1094,9 @@ input#archive-search {
 /* Minimal code block styling following Apple HIG */
 pre {
     border-radius: 12px;
-    overflow: hidden;
+    overflow: auto;
     margin: 1.5rem 0;
+    padding: 1.25rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
