@@ -12,13 +12,13 @@ But prompt engineering is still well needed to get the best results with smarter
 
 ### Be Specific and Tell Them The Steps
 
-![A cartoon character pointing to a speech bubble saying "TELL THEM THE STEPS" with numbered circles 1, 2, 3](/images/prompt-engineering-2025-tell-steps.png)
+![A cartoon character pointing to a speech bubble saying "TELL THEM THE STEPS" with numbered circles 1, 2, 3](/images/prompt-engineering-2025-tell-steps.png "Step-by-step decomposition remains the bread and butter of getting agents to actually do what you want.")
 
 Even with built-in [Chain Of Thought](https://arxiv.org/abs/2201.11903) semantics, the models are *guessing* how to decompose your problem into steps. They still benefit from taking direct input on which steps they should follow. Understanding this is key to unlocking agents' utility.
 
 As an example, look here at a sample Perplexity prompt. You can get *really* specific about what it should do, and this will prevent the agent from getting confused about what you mean by "mash up their writing styles". Instead, you directly tell it - look up examples, combine their style. Agents can't conjure up context or preferences out of thin air.
 
-![Screenshot of a Perplexity AI interface showing a multi-step prompt about looking up writing samples from various authors and synthesizing their styles](/images/prompt-engineering-2025-perplexity-example.png)
+![Screenshot of a Perplexity AI interface showing a multi-step prompt about looking up writing samples from various authors and synthesizing their styles](/images/prompt-engineering-2025-perplexity-example.png "Notice how I don't just say 'mash up their styles' but explicitly tell it to find examples and combine them.")
 
 The way these agentic systems like o3 or Perplexity are working now is they decompose your original query, e.g., *"fix my Clerk auth"*, into multiple steps and then they form an [OODA](https://en.wikipedia.org/wiki/OODA_loop) loop of sorts and try to reconcile those steps to being "done". This is a great approach! It's not dissimilar to what humans do - we break down a large problem into concrete, small task sets, and follow up on their progress until they are done, removing obstacles as we go. But like people, AIs still go off the rails in this process.
 
@@ -38,7 +38,7 @@ Even though agents are autonomous and powerful, they still need help and specifi
 
 ### Use Perplexity as a Prompt Engineer
 
-![A cartoon character thinking while looking at a computer screen with "CRAFT A PROMPT" displayed](/images/prompt-engineering-2025-craft-prompt.png)
+![A cartoon character thinking while looking at a computer screen with "CRAFT A PROMPT" displayed](/images/prompt-engineering-2025-craft-prompt.png "Why write prompts yourself when Perplexity can crawl the entire internet's worth of prompt engineering guides for you?")
 
 There is a ton of content on how to make great prompts on the web today! This is good news for any tool that has web search, and in my opinion, Perplexity is the best in class at this, for a variety of reasons (it seems to dig up by far the most sources, and I love the flexibility in switching models to various providers). And it makes a hell of a prompt engineer, because damn, who has the wherewithal to craft bespoke personas and output formats for every single thread?
 
@@ -52,13 +52,13 @@ Or get even more specific by providing links to follow:
 > Using the principles outlined at [https://cloud.google.com/discover/what-is-prompt-engineering](https://cloud.google.com/discover/what-is-prompt-engineering) and sites/articles it references, prompt engineer me a prompt to do <XYZ>.
 > 
 
-![Screenshot of Perplexity AI showing a prompt engineering query with search results and documentation sources](/images/prompt-engineering-2025-perplexity-search.png)
+![Screenshot of Perplexity AI showing a prompt engineering query with search results and documentation sources](/images/prompt-engineering-2025-perplexity-search.png "Perplexity digs up relevant sources faster than you can type 'site:reddit.com prompt engineering tips'.")
 
 It will *probably* spit out a better prompt than one you could make on your own, which you can scribble down for future use in your library of prompts. You do have a personal library of prompts, right?
 
 ### Keep a Personal Library
 
-![A cartoon woman holding a notebook labeled "PROMPTS" while pointing upward](/images/prompt-engineering-2025-library.png)
+![A cartoon woman holding a notebook labeled "PROMPTS" while pointing upward](/images/prompt-engineering-2025-library.png "Your prompts are spells, and every wizard needs a spellbook.")
 
 If you make a great prompt once, there's no need to lose it into the aether forever - you'll get your best results long term, if you consistently track and evaluate your own personal prompt/template library. This has saved me from, e.g., typing "give me a recipe for XYZ" and getting watered down results to generating high class recipes that are specific to the templates I like because whenever I want to plan a meal, I copy the five paragraphs pre-made prompt I have to generate Bon Appetit style dishes with seasonal Cali ingredients. You could even probably automate filling these prompts in apps with this with shortcuts on your phone.
 
@@ -66,7 +66,7 @@ In the future, I think this will be happening for all of us transparently someho
 
 ### Do Poor Man's RAG
 
-![A cartoon man holding a document showing "context = {....}" code notation](/images/prompt-engineering-2025-poor-mans-rag.png)
+![A cartoon man holding a document showing "context = {....}" code notation](/images/prompt-engineering-2025-poor-mans-rag.png "Who needs fancy vector databases when you can just dump your entire codebase into a 200k context window?")
 
 Modern large context windows let you dump in entire projects. This opens up a lot of interesting possibilities.
 
@@ -102,7 +102,7 @@ Gemini Pro long context has been absolutely fantastic in this regard. It will in
 
 ### Chain Together Smart Tools and Enthusiastic Ones
 
-![A cartoon octopus wearing glasses holding a checklist next to a small dog at a keyboard](/images/prompt-engineering-2025-chain-tools.png)
+![A cartoon octopus wearing glasses holding a checklist next to a small dog at a keyboard](/images/prompt-engineering-2025-chain-tools.png "Let the smart octopus make the plan, then unleash the enthusiastic coding puppy.")
 
 I have been more than impressed with Claude Code, but even with the planning mode and Opus 4, it seems to get stuck and benefit from inputs from elsewhere. A newer, smarter model drops practically every week.
 
@@ -124,13 +124,13 @@ After the planning prompt, add relevant details, and copy-paste in mountains of 
 
 ### Bonus Tip: Edit and New Thread Frequently
 
-![A split panel showing a distressed person with virus-like creatures on the left, and a happy person working at a laptop on the right](/images/prompt-engineering-2025-edit-thread.png)
+![A split panel showing a distressed person with virus-like creatures on the left, and a happy person working at a laptop on the right](/images/prompt-engineering-2025-edit-thread.png "Context taint is real - sometimes you just need to burn it all down and start fresh.")
 
 I'm sure many people probably still aren't realizing that oftentimes starting a new thread, or editing the existing prompt you are using, will prevent the model from continuing to go off the rails. ("Fix it! No, not like that, like this! No, that still doesn't work.") Because with these systems, it seems like "context taint" is a real thing - once the model starts going off into a wrong direction, it becomes that much harder to correct it back on track. So it often works better to update what you said originally to be more clear by editing it, or starting a new thread, than to continue doubling down on some asinine answer that isn't working.
 
 ### Double Bonus: YELL AT IT
 
-![A cartoon person in a lab coat reading a large open book with text below describing prompt engineering](/images/prompt-engineering-2025-yell.png)
+![A cartoon person in a lab coat reading a large open book with text below describing prompt engineering](/images/prompt-engineering-2025-yell.png "Even OpenAI's o3 system prompt is basically just yelling at the model in all caps.")
 
 Prompt engineering isn't always some esoteric discipline. Sometimes it is things like, EMPHASIZE PARTICULAR ASPECTS MORE. Even the big shops themselves do it. They write it all caps or bold stuff in the system prompt to emphasize things - a huge hack job if I ever saw one.
 
@@ -148,7 +148,7 @@ As well as try to enforce safe guards that way (lol):
 
 Not to mention calling a whole bunch of stuff out as IMPORTANT! Even very advanced models still respond well to blunt highlighting of details.
 
-### **Prompt engineering isn't dead; it's getting more subtle**
+### Prompt engineering isn't dead; it's getting more subtle
 
 As models get larger and agents get more autonomous, the *illusion* is that you can skip the promptcraft. But in practice, you just sit at a higher level of the same discipline: state your intent with precision, feed the model rich context, and measure the outcome.
 
