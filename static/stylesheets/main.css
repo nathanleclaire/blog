@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300..800;1,300..800&display=swap');
 
 :root {
   /* Typography scale - aligned with Dynamic Type */
@@ -39,10 +40,6 @@
   
   /* Dark mode syntax highlighting handled by Google Code Prettify themes */
   
-  /* Dark mode scrollbar */
-  pre::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-  }
 }
 
 *::selection {
@@ -92,26 +89,8 @@ em {
     font-family: "Inter", sans-serif;
 }
 
-/* Code Block Component - let Prettify handle most styling */
-pre {
-    border-radius: 12px;
-    padding: 1.5rem;
-    overflow-x: auto;
-    font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    margin: 2rem 0;
-}
+/* Code styling handled by Desert theme */
 
-/* Scrollbar subtlety (WebKit) */
-pre::-webkit-scrollbar {
-    height: 8px;
-}
-
-pre::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-}
 
 /* Syntax highlighting handled by Google Code Prettify themes */
 
@@ -261,11 +240,6 @@ blockquote {
 }
 
 
-/* Code within blockquotes */
-blockquote code {
-    font-family: "SF Mono", Monaco, monospace;
-    font-size: 0.875rem;
-}
 
 
 /* Nested paragraphs in blockquotes */
@@ -445,20 +419,7 @@ article p .word1,article p .word2,article p .word3 {
 
 
 
-code {
-    background: var(--color-background-secondary);
-    padding: 0.25rem 0.5rem;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
-    border: 1px solid var(--color-border);
-}
-
-pre>code {
-    padding: 0;
-    background: transparent;
-    border: none;
-}
+/* Let Desert theme handle all code styling */
 
 
 .pagination {
@@ -1102,11 +1063,4 @@ input#archive-search {
   width: 200px;
 }
 
-p > code {
-  border-radius: 6px;
-  padding: 1px;
-  margin: 1px;
-  color: rgb(31, 35, 40, 0.9);
-  background-color: rgba(175, 184, 193, 0.2);
-  border: 1px solid rgb(31, 35, 40);
-}
+/* Code styling handled by Desert theme */
