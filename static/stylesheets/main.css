@@ -440,38 +440,6 @@ figure figcaption {
   padding: 0 1rem;
 }
 
-/* Full-width bleed images that break out of content column */
-.fullbleed {
-  width: 100vw;
-  margin-left: 50%;
-  transform: translateX(-50%);
-  position: relative;
-  padding: 2rem 0;
-  background: var(--color-background);
-}
-
-/* Center the image within the full-width canvas */
-.fullbleed .article-image,
-.fullbleed figure {
-  width: min(90%, 800px);
-  margin: 0 auto;
-}
-
-/* Responsive adjustments for mobile */
-@media (max-width: 768px) {
-  .fullbleed {
-    padding: 1.5rem 0;
-  }
-  
-  .fullbleed .article-image,
-  .fullbleed figure {
-    width: 100%;
-    max-width: none;
-    padding: 0 1rem;
-    box-sizing: border-box;
-  }
-}
-
 article p .word1,article p .word2,article p .word3 {
     font-size: 0.9em;
     font-variant: small-caps;
