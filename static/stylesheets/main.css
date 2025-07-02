@@ -153,17 +153,11 @@ pre::-webkit-scrollbar-thumb {
 }
 
 header {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--color-border);
-    padding: 1rem 0;
-    position: sticky;
-    top: 0;
-    z-index: 90; /* Below system UI */
+    background: var(--color-background);
+    padding: 1.5rem 0;
     text-align: center;
-    transition: all 0.2s ease-out;
-    margin-bottom: 1.5rem; /* Tighter connection to content */
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 2rem;
 }
 
 /* Unified left alignment on larger screens */
@@ -184,8 +178,9 @@ header {
 }
 
 header .title {
-    font-weight: bold;
-    font-size: 2em;
+    font-weight: 600;
+    font-size: 1.6rem;
+    line-height: 1.2;
 }
 
 header .title a {
@@ -235,7 +230,8 @@ header .navi ul li a {
 
 header .navi ul li a:hover {
     text-decoration: underline;
-    background-color: var(--color-background-secondary);
+    background-color: transparent;
+    opacity: 0.8;
 }
 
 header .navi ul li a:focus-visible {
@@ -325,11 +321,11 @@ article h1,article h2,article h3 {
 }
 
 article h1 {
-    font-size: clamp(1.75rem, 5vw, 2.25rem); /* Dynamic scaling */
+    font-size: clamp(1.875rem, 5vw, 2.5rem); /* Slightly larger for main event */
     font-weight: 600; /* Semibold, not bold */
-    letter-spacing: -0.015em;
+    letter-spacing: -0.02em;
     margin-bottom: 1.5rem;
-    line-height: 1.2;
+    line-height: 1.15;
     text-align: left; /* Leading-edge alignment */
 }
 
@@ -686,11 +682,25 @@ article {
     padding: 0;
     margin: 1rem 0 0 0;
     font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
 }
 
 #sidebar-email li,
 .contact-list li {
     margin: 0.25rem 0;
+}
+
+/* Add a subtle label */
+#sidebar-email::before {
+    content: "REACH ME";
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.5rem;
+    opacity: 0.6;
 }
 
 #shameless-self-promotion {
