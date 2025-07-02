@@ -152,8 +152,9 @@ header {
     padding: 1rem 0;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 90; /* Below system UI */
     text-align: center;
+    transition: all 0.2s ease-out;
 }
 
 header .title {
@@ -302,14 +303,17 @@ article header {
     padding: 1.5rem 0 2rem 0; /* Generous breathing room */
     border: 0px;
     text-align: left; /* Left-align for multi-line titles */
+    position: relative;
 }
 
 article header time {
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
     font-style: normal;
+    font-weight: 400;
     display: block;
     margin-top: 0.5rem;
+    text-align: left; /* Align with title */
 }
 
 article hr {
@@ -338,6 +342,34 @@ article header + p > img:first-child {
   width: 100%;
   max-height: 400px;
   object-fit: cover;
+  position: relative;
+}
+
+/* Gradient overlay for hero images */
+article header + p {
+  position: relative;
+}
+
+article header + p::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to bottom, 
+    rgba(255, 255, 255, 0.9), 
+    rgba(255, 255, 255, 0));
+  pointer-events: none;
+  z-index: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  article header + p::before {
+    background: linear-gradient(to bottom, 
+      rgba(0, 0, 0, 0.9), 
+      rgba(0, 0, 0, 0));
+  }
 }
 
 /* Figure wrapper for images */
@@ -509,6 +541,60 @@ div.content>h1 {
 
 article {
     animation: fadeIn 0.5s ease-out;
+}
+
+/* Collapsing header styles */
+.article-header-sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.75rem 0;
+    z-index: 95;
+    transform: translateY(-100%);
+    transition: transform 0.2s ease-out;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.article-header-sticky.visible {
+    transform: translateY(0);
+}
+
+.article-header-sticky h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    text-align: center;
+    padding: 0 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.article-header-sticky time {
+    display: none; /* Hide date in collapsed state */
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .article-header-sticky {
+        background: rgba(0, 0, 0, 0.95);
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .article-header-sticky {
+        transition: none;
+    }
+    
+    article {
+        animation: none;
+    }
 }
 
 #sidebar {

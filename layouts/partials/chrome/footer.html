@@ -4,6 +4,50 @@ list = document.querySelectorAll('pre code');
 for (var i = 0; i < list.length; ++i) {
    list[i].classList.add('prettyprint');
 }
+
+// Collapsing header on scroll
+(function() {
+    var articleHeader = document.querySelector('article header');
+    if (!articleHeader) return;
+    
+    var title = articleHeader.querySelector('h1');
+    var time = articleHeader.querySelector('time');
+    if (!title) return;
+    
+    // Create sticky header
+    var stickyHeader = document.createElement('div');
+    stickyHeader.className = 'article-header-sticky';
+    stickyHeader.innerHTML = '<h1>' + title.textContent + '</h1>';
+    document.body.appendChild(stickyHeader);
+    
+    var headerOffset = articleHeader.offsetTop + articleHeader.offsetHeight;
+    var isSticky = false;
+    
+    function checkScroll() {
+        var shouldBeSticky = window.pageYOffset > headerOffset;
+        
+        if (shouldBeSticky && !isSticky) {
+            stickyHeader.classList.add('visible');
+            isSticky = true;
+        } else if (!shouldBeSticky && isSticky) {
+            stickyHeader.classList.remove('visible');
+            isSticky = false;
+        }
+    }
+    
+    // Check on scroll with throttling
+    var scrollTimeout;
+    window.addEventListener('scroll', function() {
+        if (scrollTimeout) return;
+        scrollTimeout = setTimeout(function() {
+            scrollTimeout = null;
+            checkScroll();
+        }, 16); // ~60fps
+    });
+    
+    // Check on load
+    checkScroll();
+})();
 </script>
 <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
 <script>
