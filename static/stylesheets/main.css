@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Lato');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
   /* Typography scale - aligned with Dynamic Type */
@@ -37,17 +37,7 @@
     --color-border: #48484a;
   }
   
-  /* Dark mode syntax highlighting - Google Code Prettify */
-  .com { color: #98989d; } /* Comment */
-  .str, .atv { color: #8be9fd; } /* String */
-  .kwd { color: #ff79c6; } /* Keyword */
-  .pun { color: #f8f8f2; } /* Punctuation */
-  .pln { color: var(--color-text); } /* Plain text */
-  .typ { color: #50fa7b; } /* Type */
-  .lit { color: #ffb86c; } /* Literal/Number */
-  .tag { color: #ff79c6; } /* HTML/XML tag */
-  .atn { color: #50fa7b; } /* Attribute name */
-  .dec { color: #ff79c6; } /* Declaration */
+  /* Dark mode syntax highlighting handled by Google Code Prettify themes */
   
   /* Dark mode scrollbar */
   pre::-webkit-scrollbar-thumb {
@@ -77,7 +67,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, "Lato", sans-serif;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
     font-size: var(--font-size-base);
     line-height: 1.6;
     color: var(--color-text);
@@ -99,26 +89,18 @@ body {
 
 em {
     font-style: italic;
-    font-family: "Lato", sans-serif;
+    font-family: "Inter", sans-serif;
 }
 
-/* Code Block Component */
+/* Code Block Component - let Prettify handle most styling */
 pre {
-    background: var(--color-background-secondary);
     border-radius: 12px;
     padding: 1.5rem;
     overflow-x: auto;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
     font-size: 0.875rem;
     line-height: 1.5;
     margin: 2rem 0;
-    transition: box-shadow .2s ease;
-    border: 1px solid var(--color-border);
-}
-
-pre:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 /* Scrollbar subtlety (WebKit) */
@@ -131,17 +113,7 @@ pre::-webkit-scrollbar-thumb {
     border-radius: 4px;
 }
 
-/* Syntax highlighting - Google Code Prettify */
-.com { color: #6e6e73; } /* Comment */
-.str, .atv { color: #0a84ff; } /* String */
-.kwd { color: #bf5af2; } /* Keyword */
-.pun { color: #5e5ce6; } /* Punctuation */
-.pln { color: var(--color-text); } /* Plain text */
-.typ { color: #ff375f; } /* Type */
-.lit { color: #ff9500; } /* Literal/Number */
-.tag { color: #bf5af2; } /* HTML/XML tag */
-.atn { color: #ff375f; } /* Attribute name */
-.dec { color: #bf5af2; } /* Declaration */
+/* Syntax highlighting handled by Google Code Prettify themes */
 
 .wrap>footer {
     margin-top: 4rem;
@@ -337,7 +309,7 @@ article h1 {
     font-size: clamp(1.875rem, 5vw, 2.5rem); /* Slightly larger for main event */
     font-weight: 600; /* Semibold, not bold */
     letter-spacing: -0.02em;
-    margin-bottom: 1.5rem;
+    margin: 0;
     line-height: 1.15;
     text-align: left; /* Leading-edge alignment */
 }
@@ -368,8 +340,8 @@ article h1 a:hover,article h2 a:hover,article h3 a:hover {
 }
 
 article header {
-    margin: 0px;
-    padding: 1.5rem 0 2rem 0; /* Generous breathing room */
+    margin: 0;
+    padding: 0;
     border: 0px;
     text-align: left; /* Left-align for multi-line titles */
     position: relative;
@@ -495,7 +467,7 @@ pre>code {
 }
 
 .pagination a {
-    font-family: "Lato", sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 0.9em;
     color: #333;
 }
@@ -524,14 +496,14 @@ pre>code {
 
 .cat-year {
     padding-top: 1.4em;
-    font-family: "Lato", sans-serif;
+    font-family: "Inter", sans-serif;
     font-weight: bold;
     font-size: 1.2em;
 }
 
 .cat-month {
     margin: 1.9em 0 0.4em 1.9em;
-    font-family: "Lato", sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 0.9em;
 }
 
@@ -588,7 +560,7 @@ iframe {
 div#content {
     max-width: 680px;
     margin: 0 auto;
-    padding: 4rem 1.5rem;
+    padding: 0 1.5rem;
 }
 
 @media only screen and (max-width: 767px) {
@@ -597,7 +569,7 @@ div#content {
     padding: 0px;
   }
   div#content {
-    padding: 2.5rem 1rem;
+    padding: 0 1rem;
   }
   
   /* Smaller title on mobile but still scales */
@@ -609,7 +581,7 @@ div#content {
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
   /* medium screens */
   div#content {
-    padding: 4rem 1.5rem;
+    padding: 0 1.5rem;
   }
 }
 
@@ -937,7 +909,7 @@ li.title {
 #mc_embed_signup {
     background: #fff;
     clear: left;
-    font: 14px "Lato", sans-serif;
+    font: 14px "Inter", sans-serif;
 }
 
 #mce-EMAIL {
