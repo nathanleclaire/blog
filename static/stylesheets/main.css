@@ -378,7 +378,7 @@ article header + hr {
 .article-image,
 figure {
   width: min(80%, 600px);
-  margin: 1.5rem 0;
+  margin: 1.5rem auto;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
   border-radius: 12px;
   overflow: hidden;
@@ -402,7 +402,10 @@ figure {
 @media (min-width: 680px) {
   .article-image,
   figure {
-    margin: 2rem 0;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    box-sizing: border-box;
+    margin: 2rem auto;
   }
 }
 
@@ -417,7 +420,8 @@ figure {
 /* Legacy img styling for backwards compatibility */
 #content img:not(figure img) {
   max-width: min(80%, 600px);
-  margin: 1rem 0;
+  margin: 1rem auto;
+  display: block;
   height: auto;
   border-radius: 12px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
