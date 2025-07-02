@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Lato');
 
 :root {
-  /* Typography scale */
+  /* Typography scale - aligned with Dynamic Type */
   --font-size-xs: 0.875rem;
   --font-size-sm: 1rem;
   --font-size-base: 1.125rem;
   --font-size-lg: 1.25rem;
   --font-size-xl: 1.5rem;
-  --font-size-2xl: 2rem;
-  --font-size-3xl: 3rem;
+  --font-size-2xl: 1.75rem;  /* 28pt equivalent */
+  --font-size-3xl: 2.125rem; /* 34pt equivalent */
   
   --line-height-tight: 1.25;
   --line-height-base: 1.5;
@@ -264,10 +264,12 @@ article h1,article h2,article h3 {
 }
 
 article h1 {
-    font-size: var(--font-size-2xl);
-    font-weight: 700;
+    font-size: clamp(1.75rem, 5vw, 2.25rem); /* Dynamic scaling */
+    font-weight: 600; /* Semibold, not bold */
     letter-spacing: -0.015em;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    text-align: left; /* Leading-edge alignment */
 }
 
 article h2 {
@@ -288,6 +290,7 @@ article p {
 
 article h1 a,article h2 a,article h3 a {
     color: var(--color-text);
+    text-decoration: none; /* Clean, pure text */
 }
 
 article h1 a:hover,article h2 a:hover,article h3 a:hover {
@@ -296,15 +299,17 @@ article h1 a:hover,article h2 a:hover,article h3 a:hover {
 
 article header {
     margin: 0px;
-    padding: 0 0 1rem 0;
+    padding: 1.5rem 0 2rem 0; /* Generous breathing room */
     border: 0px;
-    text-align: center;
+    text-align: left; /* Left-align for multi-line titles */
 }
 
 article header time {
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
     font-style: normal;
+    display: block;
+    margin-top: 0.5rem;
 }
 
 article hr {
@@ -329,7 +334,7 @@ article hr {
 
 /* Hero images - first image after article header */
 article header + p > img:first-child {
-  margin-top: 1rem;
+  margin-top: 0; /* Image follows the header padding rhythm */
   width: 100%;
   max-height: 400px;
   object-fit: cover;
@@ -470,6 +475,11 @@ div#content {
   }
   div#content {
     padding: 2.5rem 1rem;
+  }
+  
+  /* Smaller title on mobile but still scales */
+  article h1 {
+    font-size: clamp(1.5rem, 6vw, 2rem);
   }
 }
 
