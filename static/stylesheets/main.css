@@ -37,13 +37,17 @@
     --color-border: #48484a;
   }
   
-  /* Dark mode syntax highlighting */
-  pre code span.token.comment  { color: #98989d; }
-  pre code span.token.keyword  { color: #ff79c6; }
-  pre code span.token.string   { color: #8be9fd; }
-  pre code span.token.function { color: #50fa7b; }
-  pre code span.token.number   { color: #ffb86c; }
-  pre code span.token.operator { color: #ff5555; }
+  /* Dark mode syntax highlighting - Google Code Prettify */
+  .com { color: #98989d; } /* Comment */
+  .str, .atv { color: #8be9fd; } /* String */
+  .kwd { color: #ff79c6; } /* Keyword */
+  .pun { color: #f8f8f2; } /* Punctuation */
+  .pln { color: var(--color-text); } /* Plain text */
+  .typ { color: #50fa7b; } /* Type */
+  .lit { color: #ffb86c; } /* Literal/Number */
+  .tag { color: #ff79c6; } /* HTML/XML tag */
+  .atn { color: #50fa7b; } /* Attribute name */
+  .dec { color: #ff79c6; } /* Declaration */
   
   /* Dark mode scrollbar */
   pre::-webkit-scrollbar-thumb {
@@ -127,13 +131,17 @@ pre::-webkit-scrollbar-thumb {
     border-radius: 4px;
 }
 
-/* Syntax highlighting - macOS Monterey Xcode palette */
-pre code span.token.comment  { color: #6e6e73; }
-pre code span.token.keyword  { color: #bf5af2; }
-pre code span.token.string   { color: #0a84ff; }
-pre code span.token.function { color: #ff375f; }
-pre code span.token.number   { color: #ff9500; }
-pre code span.token.operator { color: #5e5ce6; }
+/* Syntax highlighting - Google Code Prettify */
+.com { color: #6e6e73; } /* Comment */
+.str, .atv { color: #0a84ff; } /* String */
+.kwd { color: #bf5af2; } /* Keyword */
+.pun { color: #5e5ce6; } /* Punctuation */
+.pln { color: var(--color-text); } /* Plain text */
+.typ { color: #ff375f; } /* Type */
+.lit { color: #ff9500; } /* Literal/Number */
+.tag { color: #bf5af2; } /* HTML/XML tag */
+.atn { color: #ff375f; } /* Attribute name */
+.dec { color: #bf5af2; } /* Declaration */
 
 .wrap>footer {
     margin-top: 4rem;
@@ -229,15 +237,37 @@ input:focus {
 }
 
 blockquote {
-    margin: 2rem 0;
-    padding: 1.5rem;
-    border-left: 3px solid var(--color-border);
-    background: var(--color-background-secondary);
+    margin: 1rem 0; /* Half line-height for better flow */
+    padding: 0 0 0 1rem; /* 16pt left padding */
+    border-left: 2px solid var(--color-border); /* Thin vertical rule */
+    background: transparent; /* No fill */
     font-style: normal;
     font-size: var(--font-size-base);
     line-height: var(--line-height-relaxed);
-    color: var(--color-text-secondary);
-    border-radius: 8px;
+    color: var(--color-text); /* Full contrast */
+    border-radius: 0;
+    position: relative;
+}
+
+
+/* Code within blockquotes */
+blockquote code {
+    font-family: "SF Mono", Monaco, monospace;
+    font-size: 0.875rem;
+}
+
+
+/* Nested paragraphs in blockquotes */
+blockquote p {
+    margin: 0.5rem 0;
+}
+
+blockquote p:first-child {
+    margin-top: 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
 }
 
 article {
